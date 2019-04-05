@@ -1,0 +1,55 @@
+Metadata-Version: 2.1
+Name: astral
+Version: 1.10.1
+Summary: Calculations for the position of the sun and moon.
+Home-page: https://github.com/sffjunkie/astral
+Author: Simon Kennedy
+Author-email: sffjunkie+code@gmail.com
+License: Apache-2.0
+Project-URL: Documentation, https://astral.readthedocs.io/en/stable/index.html
+Project-URL: Source, https://github.com/sffjunkie/astral
+Project-URL: Issues, https://github.com/sffjunkie/astral/issues
+Keywords: sun moon sunrise sunset dawn dusk
+Platform: UNKNOWN
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: Apache Software License
+Requires-Dist: pytz
+Provides-Extra: googlegeocoder
+Requires-Dist: requests; extra == 'googlegeocoder'
+
+Astral
+======
+
+|travis_status| |pypi_ver|
+
+.. |travis_status| image:: https://travis-ci.org/sffjunkie/astral.svg?branch=master
+    :target: https://travis-ci.org/sffjunkie/astral
+
+.. |pypi_ver| image:: https://img.shields.io/pypi/v/astral.svg
+    :target: https://pypi.org/project/astral/
+
+This is 'astral' a Python module which calculates
+
+    * Times for various positions of the sun: dawn, sunrise, solar noon,
+      sunset, dusk, solar elevation, solar azimuth and rahukaalam.
+    * The phase of the moon.
+
+For documentation see the https://astral.readthedocs.io/en/stable/index.html
+
+GoogleGeocoder
+~~~~~~~~~~~~~~
+
+`GoogleGeocoder` uses the mapping services provided by Google
+
+Access to the `GoogleGeocoder` requires you to agree to be bound by
+Google Maps/Google Earth APIs Terms of Service found at
+https://developers.google.com/maps/terms which includes but is not limited to
+having a Google Account.
+
+More information on Google's maps service can be found at
+https://developers.google.com/maps/documentation/
+
+

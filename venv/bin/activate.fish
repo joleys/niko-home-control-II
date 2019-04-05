@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/fiva/PycharmProjects/hass-nhc2/venv"
+set -gx VIRTUAL_ENV "/Users/fiva/PycharmProjects/hass-nhc2/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

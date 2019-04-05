@@ -1,132 +1,133 @@
-"""
-Example of a custom MQTT component.
-
-Shows how to communicate with MQTT. Follows a topic on MQTT and updates the
-state of an entity to the last message received on that topic.
-
-Also offers a service 'set_state' that will publish a message on the topic that
-will be passed via MQTT to our message received listener. Call the service with
-example payload {"new_state": "some new state"}.
-
-Configuration:
-
-To use the mqtt_example component you will need to add the following to your
-configuration.yaml file.
-
-mqtt_basic:
-  topic: "home-assistant/mqtt_example"
-"""
-
 import logging
 
-from homeassistant.components import mqtt
-from homeassistant.components.light import ATTR_BRIGHTNESS, Light, PLATFORM_SCHEMA
-from homeassistant.const import CONF_PROFILE_CREATION_ID
-import homeassistant.helpers.config_validation as cv
-import voluptuous as vol
 import json
+from typing import List, Callable
 
-# List of component names (string) your component depends upon.
-DEPENDENCIES = ['mqtt']
+import paho.mqtt.client as mqtt
+
+from .nhc2light import NHC2Light
+from .nhc2switch import NHC2Switch
 
 TOPIC_SUFFIX_CMD = '/control/devices/cmd'
 TOPIC_SUFFIX_RSP = '/control/devices/rsp'
 TOPIC_SUFFIX_EVT = '/control/devices/evt'
+TOPIC_PUBLIC_CMD = 'public/system/cmd'
+TOPIC_PUBLIC_RSP = 'public/system/rsp'
 
-CONFIG_SCHEMA = vol.Schema({
-    vol.Required(CONF_PROFILE_CREATION_ID): cv.string
-})
+TLS_VERSION = 2
+MQTT_PROTOCOL = mqtt.MQTTv311
+MQTT_TRANSPORT = "tcp"
 
-
-def setup_platform(hass, config, add_devices, discovery_info=None):
-    """Setup the MQTT example component."""
-    profileCreationId = config.get(CONF_PROFILE_CREATION_ID)
-    topicCmd = profileCreationId + TOPIC_SUFFIX_CMD
-    topicRsp = profileCreationId + TOPIC_SUFFIX_RSP
-    topicEvt = profileCreationId + TOPIC_SUFFIX_EVT
-
-    mqtt.publish(hass, topicCmd, '{"Method":"devices.list"}')
-
-    # Listen to a message on MQTT.
-    def message_received(topicRsp, payload, qos):
-        response = json.load(payload)
-        if response.Method == 'devices.list':
-            devices = response.Params[0].Devices
-            lights = [x for x in devices if x.Model == 'light']
-            # Add devices
-            add_devices(NHC2Light(light, hass, topicCmd) for light in lights)
-            # Return boolean to indicate that initialization was successfully.
-            return True
-
-    mqtt.subscribe(hass, topicRsp, message_received)
+_LOGGER = logging.getLogger(__name__)
 
 
-class NHC2Light(Light):
-    """Representation of an Awesome Light."""
+class NHC2:
+    def __init__(self, address, port, username, password, ca_path):
+        client = mqtt.Client(protocol=MQTT_PROTOCOL, transport=MQTT_TRANSPORT)
+        client.username_pw_set(username, password)
+        client.tls_set(ca_path)
+        client.tls_insecure_set(True)
+        self._client = client
+        self._address = address
+        self._port = port
+        self._profile_creation_id = username
+        self._all_devices = None
+        self._device_callbacks = None
+        self._lights = None
+        self._lights_callback: Callable[[List[NHC2Light]], None]
+        self._switches = None
+        self._switches_callback = Callable[[List[NHC2Switch]], None]
+        self._system_info = None
+        self._system_info_callback = Callable[[List[NHC2Switch]], None]
+        self._lights_updates_callback = Callable[[List], None]
+        self._switches_updates_callback = Callable[[List], None]
 
-    def __init__(self, light, hass, topicCmd):
-        """Initialize an AwesomeLight."""
-        self._hass = hass
-        self._topicCmd = topicCmd
-        self._light = light
-        self._name = light.Name
-        self._state = light.Properties[0].Status == 'Off'
-        self._brightness = None
+    def __del__(self):
+        self._client.disconnect()
 
-    @property
-    def name(self):
-        """Return the display name of this light."""
-        return self._name
+    def connect(self):
 
-    @property
-    def brightness(self):
-        """Return the brightness of the light.
+        def _on_message(client, userdata, message):
+            topic = message.topic
+            response = json.loads(message.payload)
+            if topic == TOPIC_PUBLIC_RSP and response['Method'] == 'systeminfo.publish':
+                # Make sure we don't get a second response
+                client.unsubscribe(TOPIC_PUBLIC_CMD)
+                self._system_info = response
+                self._system_info_callback(self._system_info)
+            if topic == (self._profile_creation_id + TOPIC_SUFFIX_RSP):
+                # Make sure we don't get a second response
+                client.unsubscribe(self._profile_creation_id + TOPIC_SUFFIX_RSP)
+                if response['Method'] == 'devices.list':
+                    devices = self._get_devices(response)
+                    self._device_callbacks = {x['Uuid']: {'callbackHolder': None} for x in devices}
+                    lights = [x for x in devices if x['Model'] == 'light']
+                    switches = [x for x in devices if x['Model'] == 'switched-generic']
+                    self._lights = []
+                    for light in lights:
+                        self._lights.append(NHC2Light(light, self._device_callbacks[light['Uuid']], self._client, self._profile_creation_id))
+                    self._switches = []
+                    for switch in switches:
+                        self._switches.append(NHC2Switch(switch, self._device_callbacks[switch['Uuid']], self._client, self._profile_creation_id))
 
-        This method is optional. Removing it indicates to Home Assistant
-        that brightness is not supported for this light.
-        """
-        return self._brightness
+                    self._lights_callback(self._lights)
+                    self._switches_callback(self._lights)
+                return
+            if topic == (self._profile_creation_id + TOPIC_SUFFIX_EVT):
+                if response['Method'] == 'devices.displayname_changed' or response['Method'] == 'devices.status' or \
+                        response['Method'] == 'devices.changed' or response['Method'] == 'devices.param_changed' or \
+                        response['Method'] == 'devices.added':
+                    devices = self._get_devices(response)
+                    for device in devices:
+                        if self._device_callbacks and self._device_callbacks[device['Uuid']]:
+                            self._device_callbacks[device['Uuid']]['callbackHolder'](device)
+                return
 
-    @property
-    def is_on(self):
-        return self._state
+        def _on_connect(client, userdata, flags, rc):
+            client.subscribe(self._profile_creation_id + TOPIC_SUFFIX_RSP, qos=1)
+            client.subscribe(TOPIC_PUBLIC_RSP, qos=1)
+            client.subscribe(self._profile_creation_id + TOPIC_SUFFIX_EVT, qos=1)
+            client.publish(TOPIC_PUBLIC_CMD, '{"Method":"systeminfo.publish"}', 1)
+            client.publish(self._profile_creation_id + TOPIC_SUFFIX_CMD, '{"Method":"devices.list"}', 1)
 
-    def turn_on(self, **kwargs):
-        command = {
-            "Method": "devices.control",
-            "Params": [
-                {
-                    "Devices": [
-                        {
-                            "Properties": [
-                                {
-                                    "Status": "On"
-                                }
-                            ],
-                            "Uuid": self._light.Uuid
-                        }
-                    ]
-                }
-            ]
-        }
-        mqtt.publish(self._hass, self._topicCmd, json.dumps(command))
+        self._client.on_message = _on_message
+        self._client.on_connect = _on_connect
 
-    def turn_off(self, **kwargs):
-        command = {
-            "Method": "devices.control",
-            "Params": [
-                {
-                    "Devices": [
-                        {
-                            "Properties": [
-                                {
-                                    "Status": "Off"
-                                }
-                            ],
-                            "Uuid": self._light.Uuid
-                        }
-                    ]
-                }
-            ]
-        }
-        mqtt.publish(self._hass, self._topicCmd, json.dumps(command))
+        self._client.connect(self._address, self._port)
+        _LOGGER.debug('NHC2 - Starting the loop')
+
+        self._client.loop_start()
+
+    def disconnect(self):
+        self._client.loop_stop()
+        self._client.disconnect()
+
+    def _get_devices(self, response):
+        params = response['Params']
+        param_with_devices = next(filter((lambda x: x and 'Devices' in x), params), None)
+        return param_with_devices['Devices']
+
+    def get_systeminfo(self, callback):
+        self._system_info_callback = callback
+        if self._system_info:
+            self._system_info_callback(self._system_info)
+
+    def get_lights(self, callback):
+        self._lights_callback = callback
+        if self._lights:
+            self._lights_callback(self._lights)
+
+    def get_lights_updates(self, callback):
+        self._lights_updates_callback = callback
+
+    def get_switches(self, callback):
+        self._switches_callback = callback
+        if self._switches:
+            self._switches_callback(self._switches)
+
+    def get_switches_updates(self, callback):
+        self._switches_updates_callback = callback
+
+    def _emit_switches(self):
+        self._switches_callback(self._switches)
+

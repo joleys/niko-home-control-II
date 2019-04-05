@@ -1,0 +1,12 @@
+MANIFEST.in
+README.md
+setup.cfg
+setup.py
+tests/test_lib.py
+voluptuous_serialize/__init__.py
+voluptuous_serialize.egg-info/PKG-INFO
+voluptuous_serialize.egg-info/SOURCES.txt
+voluptuous_serialize.egg-info/dependency_links.txt
+voluptuous_serialize.egg-info/requires.txt
+voluptuous_serialize.egg-info/top_level.txt
+voluptuous_serialize.egg-info/zip-safe

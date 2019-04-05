@@ -1,0 +1,2 @@
+multidict>=4.0
+idna>=2.0

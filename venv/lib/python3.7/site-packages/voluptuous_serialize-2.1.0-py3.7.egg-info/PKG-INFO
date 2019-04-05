@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: voluptuous-serialize
+Version: 2.1.0
+Summary: Convert voluptuous schemas to dictionaries
+Home-page: http://github.com/balloob/voluptuous-serialize
+Author: Paulus Schoutsen
+Author-email: Paulus@PaulusSchoutsen.nl
+License: Apache License 2.0
+Description: UNKNOWN
+Platform: UNKNOWN

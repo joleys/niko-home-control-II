@@ -1,0 +1,84 @@
+Metadata-Version: 2.1
+Name: homeassistant
+Version: 0.90.2
+Summary: Open-source home automation platform running on Python 3.
+Home-page: https://home-assistant.io/
+Author: The Home Assistant Authors
+Author-email: hello@home-assistant.io
+License: Apache License 2.0
+Download-URL: https://github.com/home-assistant/home-assistant/archive/0.90.2.zip
+Project-URL: Bug Reports, https://github.com/home-assistant/home-assistant/issues
+Project-URL: Dev Docs, https://developers.home-assistant.io/
+Project-URL: Discord, https://discordapp.com/invite/c5DvZ4e
+Project-URL: Forum, https://community.home-assistant.io/
+Keywords: home,automation
+Platform: any
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Topic :: Home Automation
+Requires-Python: >=3.5.3
+Requires-Dist: aiohttp (==3.5.4)
+Requires-Dist: astral (==1.10.1)
+Requires-Dist: async-timeout (==3.0.1)
+Requires-Dist: attrs (==18.2.0)
+Requires-Dist: bcrypt (==3.1.6)
+Requires-Dist: certifi (>=2018.04.16)
+Requires-Dist: jinja2 (>=2.10)
+Requires-Dist: PyJWT (==1.6.4)
+Requires-Dist: cryptography (==2.5)
+Requires-Dist: pip (>=8.0.3)
+Requires-Dist: python-slugify (==1.2.6)
+Requires-Dist: pytz (>=2018.07)
+Requires-Dist: pyyaml (<4,>=3.13)
+Requires-Dist: requests (==2.21.0)
+Requires-Dist: ruamel.yaml (==0.15.88)
+Requires-Dist: voluptuous (==0.11.5)
+Requires-Dist: voluptuous-serialize (==2.1.0)
+
+Home Assistant |Build Status| |Coverage Status| |Chat Status|
+=================================================================================
+
+Home Assistant is a home automation platform running on Python 3. It is able to track and control all devices at home and offer a platform for automating control.
+
+To get started:
+
+.. code:: bash
+
+    python3 -m pip install homeassistant
+    hass --open-ui
+
+Check out `home-assistant.io <https://home-assistant.io>`__ for `a
+demo <https://home-assistant.io/demo/>`__, `installation instructions <https://home-assistant.io/getting-started/>`__,
+`tutorials <https://home-assistant.io/getting-started/automation-2/>`__ and `documentation <https://home-assistant.io/docs/>`__.
+
+|screenshot-states|
+
+Featured integrations
+---------------------
+
+|screenshot-components|
+
+The system is built using a modular approach so support for other devices or actions can be implemented easily. See also the `section on architecture <https://developers.home-assistant.io/docs/en/architecture_index.html>`__ and the `section on creating your own
+components <https://developers.home-assistant.io/docs/en/creating_component_index.html>`__.
+
+If you run into issues while using Home Assistant or during development
+of a component, check the `Home Assistant help section <https://home-assistant.io/help/>`__ of our website for further help and information.
+
+.. |Build Status| image:: https://travis-ci.org/home-assistant/home-assistant.svg?branch=master
+   :target: https://travis-ci.org/home-assistant/home-assistant
+.. |Coverage Status| image:: https://img.shields.io/coveralls/home-assistant/home-assistant.svg
+   :target: https://coveralls.io/r/home-assistant/home-assistant?branch=master
+.. |Chat Status| image:: https://img.shields.io/discord/330944238910963714.svg
+   :target: https://discord.gg/c5DvZ4e
+.. |screenshot-states| image:: https://raw.github.com/home-assistant/home-assistant/master/docs/screenshots.png
+   :target: https://home-assistant.io/demo/
+.. |screenshot-components| image:: https://raw.github.com/home-assistant/home-assistant/dev/docs/screenshot-components.png
+   :target: https://home-assistant.io/components/
+
+

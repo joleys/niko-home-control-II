@@ -1,0 +1,24 @@
+Metadata-Version: 1.1
+Name: switch
+Version: 1.1.0
+Summary: The missing switch statement
+Home-page: https://github.com/canni/switch
+Author: Dariusz Górecki
+Author-email: darek.krk@gmail.com
+License: BSD License
+Description: UNKNOWN
+Keywords: switch
+Platform: any
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.5
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.1
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Programming Language :: Python :: 3.3
