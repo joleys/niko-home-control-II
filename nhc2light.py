@@ -1,3 +1,5 @@
+import datetime
+
 from .nhc2entity import NHC2Entity
 import json
 import logging
@@ -37,7 +39,6 @@ class NHC2Light(NHC2Entity):
         self._change_status('Off')
 
     def _change_status(self, status: str):
-        print('changing to ', status)
         command = {"Method": "devices.control", "Params": [
             {"Devices": [{"Properties": [{"Status": status}], "Uuid": self._uuid}]}
         ]}

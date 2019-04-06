@@ -1,3 +1,4 @@
+import datetime
 import logging
 
 import json
@@ -48,6 +49,7 @@ class NHC2:
     def connect(self):
 
         def _on_message(client, userdata, message):
+            _LOGGER.debug('GOT A MESSAGE')
             topic = message.topic
             response = json.loads(message.payload)
             if topic == TOPIC_PUBLIC_RSP and response['Method'] == 'systeminfo.publish':

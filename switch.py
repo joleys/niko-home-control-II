@@ -12,6 +12,7 @@ KEY_GATEWAY = 'nhc2_gateway'
 KEY_SWITCHES = 'nhc2_switches'
 
 
+_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
@@ -35,7 +36,8 @@ class NHC2HassSwitch(SwitchDevice):
         self._nhc2switch = nhc2switch
 
         def on_change():
-            self.async_write_ha_state()
+            _LOGGER.debug('Requesting update')
+            self.schedule_update_ha_state()
 
         nhc2switch.on_change = on_change
 

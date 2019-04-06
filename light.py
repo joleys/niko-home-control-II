@@ -12,6 +12,7 @@ KEY_GATEWAY = 'nhc2_gateway'
 KEY_LIGHTS = 'nhc2_lights'
 
 
+_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
@@ -36,7 +37,8 @@ class NHC2HassLight(Light):
         self._nhc2light = nhc2light
 
         def on_change():
-            self.async_write_ha_state()
+            _LOGGER.debug('Requesting update')
+            self.schedule_update_ha_state()
 
         nhc2light.on_change = on_change
 

@@ -4,10 +4,7 @@ from nhc2 import NHC2
 
 
 def glc(devices):
-    print('got devices')
-    print(devices)
     lights = devices.lights
-    print(len(lights))
     for light in lights:
         light.turn_off()
 
