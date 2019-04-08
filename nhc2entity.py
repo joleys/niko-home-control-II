@@ -8,7 +8,6 @@ _LOGGER = logging.getLogger(__name__)
 class NHC2Entity(ABC):
 
     def __init__(self, dev, callbackContainer, client, profile_creation_id):
-        _LOGGER.debug('Creating a NHC2Entry - ' + dev['Name'])
         self._client = client
         self._profile_creation_id = profile_creation_id
         self._uuid = dev['Uuid']
@@ -20,35 +19,34 @@ class NHC2Entity(ABC):
         self._callback_mutex = threading.RLock()
         self._on_state_change = None
         self._callback_mutex = threading.RLock()
-        self._process_dev(dev, callbackContainer)
         self._on_change = None
         self._after_update_callback = None
-        _LOGGER.debug('Creating a NHC2Entry DONE - ' + dev['Name'])
 
-    def _process_dev(self, dev, callbackContainer=None):
-        hasChanged = False
+    def update_dev(self, dev, callbackContainer=None):
+        has_changed = False
         if self._uuid == dev['Uuid']:
             if 'Name' in dev and self._name != dev['Name']:
                 self._name = dev['Name']
-                hasChanged = True
+                has_changed = True
             if 'DisplayName' in dev and self._name != dev['DisplayName']:
                 self._name = dev['DisplayName']
-                hasChanged = True
+                has_changed = True
             if 'Online' in dev and self._online != dev['Online'] == 'True':
                 self._online = dev['Online'] == 'True'
-                hasChanged = True
+                has_changed = True
             if 'Model' in dev and self._model != dev['Model']:
                 self._model = dev['Model']
-                hasChanged = True
+                has_changed = True
             if 'Type' in dev and self._type != dev['Type']:
                 self._type = dev['Type']
-                hasChanged = True
+                has_changed = True
             if callbackContainer:
                 self._callbackContainer = callbackContainer
                 if 'callbackHolder' in self._callbackContainer:
-                    hasChanged = True
                     self._callbackContainer['callbackHolder'] = self._update
-        return hasChanged
+                    has_changed = True
+                    _LOGGER.debug('Hook for updates on device %s known as %s has been set', self.uuid, self.name)
+        return has_changed
 
     @property
     def uuid(self):

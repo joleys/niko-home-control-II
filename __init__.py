@@ -99,7 +99,7 @@ async def async_setup_entry(hass, entry):
 
     hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, on_hass_stop)
 
-    _LOGGER.debug('NHC2 - Connecting to ' + entry.data[CONF_HOST] + ':' + str(entry.data[CONF_PORT]))
+    _LOGGER.debug('NHC2 - Connecting to %s:%s', entry.data[CONF_HOST], str(entry.data[CONF_PORT]))
     gateway.connect()
 
     nhc2_sysinfo = await nhc2_get_sysinfo(hass.loop, gateway)
@@ -120,14 +120,12 @@ async def async_setup_entry(hass, entry):
         manufacturer='Niko',
         name='Home Control II',
         model='Connected controller',
-        sw_version= nhc_version + ' - CoCo Image: '+ coco_image,
+        sw_version=nhc_version + ' - CoCo Image: ' + coco_image,
     )
 
-    _LOGGER.debug('NHC2 - Preparing to capture devices.')
     hass.async_create_task(hass.config_entries.async_forward_entry_setup(
         entry, 'light'
     ))
-
 
     hass.async_create_task(hass.config_entries.async_forward_entry_setup(
         entry, 'switch'

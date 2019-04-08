@@ -8,7 +8,7 @@ This 'custom_component' provides you with a NHC2 Platform 'Niko Home Control II 
 
 ## How to get it running
 
-Besides adding all the files inside a folder called '<config-folder>/custom_components/nhc2/',
+Besides adding all the files inside a folder called \*CONFIG_FOLDER\*/custom_components/nhc2/,
 (since only config trough the web UI is provided (at this point))
 hass requires you to add 'nhc2' to the static list in `homeassistant/config_entries.py`
 
