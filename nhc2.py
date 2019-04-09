@@ -120,15 +120,30 @@ class NHC2:
                 return
 
         def _on_connect(client, userdata, flags, rc):
-            client.subscribe(self._profile_creation_id + TOPIC_SUFFIX_RSP, qos=1)
-            client.subscribe(TOPIC_PUBLIC_RSP, qos=1)
-            client.subscribe(self._profile_creation_id + TOPIC_SUFFIX_EVT, qos=1)
-            client.subscribe(self._profile_creation_id + TOPIC_SUFFIX_SYS_EVT, qos=1)
-            client.publish(TOPIC_PUBLIC_CMD, '{"Method":"systeminfo.publish"}', 1)
-            client.publish(self._profile_creation_id + TOPIC_SUFFIX_CMD, '{"Method":"devices.list"}', 1)
+            if rc == 0:
+                client.subscribe(self._profile_creation_id + TOPIC_SUFFIX_RSP, qos=1)
+                client.subscribe(TOPIC_PUBLIC_RSP, qos=1)
+                client.subscribe(self._profile_creation_id + TOPIC_SUFFIX_EVT, qos=1)
+                client.subscribe(self._profile_creation_id + TOPIC_SUFFIX_SYS_EVT, qos=1)
+                client.publish(TOPIC_PUBLIC_CMD, '{"Method":"systeminfo.publish"}', 1)
+                client.publish(self._profile_creation_id + TOPIC_SUFFIX_CMD, '{"Method":"devices.list"}', 1)
+            else:
+                raise Exception('Could not connect to nhc2')
+
+        def _on_disconnect(client, userdata, rc):
+            _LOGGER.debug('We have a disconnect :(')
+
+            for uuid, device_callback in self._device_callbacks.items():
+                _LOGGER.debug('Setting offline of %s', device_callback['entity'].name)
+                _LOGGER.debug('Setting offline uuid %s', uuid)
+                offline = {'Online': 'False', 'Uuid': uuid}
+                _LOGGER.debug('Setting offline of %s', device_callback['entity'].name)
+                _LOGGER.debug('Setting offline uuid %s', uuid)
+                device_callback['callbackHolder'](offline)
 
         self._client.on_message = _on_message
         self._client.on_connect = _on_connect
+        self._client.on_disconnect = _on_disconnect
 
         self._client.connect(self._address, self._port)
 

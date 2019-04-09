@@ -31,8 +31,9 @@ class NHC2Entity(ABC):
             if 'DisplayName' in dev and self._name != dev['DisplayName']:
                 self._name = dev['DisplayName']
                 has_changed = True
-            if 'Online' in dev and self._online != dev['Online'] == 'True':
+            if 'Online' in dev and self._online != (dev['Online'] == 'True'):
                 self._online = dev['Online'] == 'True'
+                _LOGGER.debug('IMPORTANT %s in now %s',self._name,('Online!' if self._online else 'Offline!'))
                 has_changed = True
             if 'Model' in dev and self._model != dev['Model']:
                 self._model = dev['Model']

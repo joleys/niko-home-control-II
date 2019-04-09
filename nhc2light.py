@@ -13,6 +13,7 @@ class NHC2Light(NHC2Entity):
         self.update_dev(dev, callbackContainer)
         _LOGGER.debug('Setup of NHC2 switch device %s with name %s completed.', self.uuid, self.name)
 
+    @property
     def is_on(self):
         return self._state
 
