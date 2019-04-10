@@ -1,20 +1,18 @@
 from .nhc2entity import NHC2Entity
 import json
-import logging
 
 TOPIC_SUFFIX_CMD = '/control/devices/cmd'
 
-_LOGGER = logging.getLogger(__name__)
-
 
 class NHC2Light(NHC2Entity):
-    def __init__(self, dev, callbackContainer, client, profile_creation_id):
-        super().__init__(dev, callbackContainer, client, profile_creation_id)
-        self.update_dev(dev, callbackContainer)
 
     @property
     def is_on(self):
         return self._state
+
+    def __init__(self, dev, callbackContainer, client, profile_creation_id):
+        super().__init__(dev, callbackContainer, client, profile_creation_id)
+        self.update_dev(dev, callbackContainer)
 
     def turn_on(self):
         self._change_status('On')
@@ -22,11 +20,11 @@ class NHC2Light(NHC2Entity):
     def turn_off(self):
         self._change_status('Off')
 
-    def update_dev(self, dev, callbackContainer=None):
-        has_changed = super().update_dev(dev, callbackContainer)
+    def update_dev(self, dev, callback_container=None):
+        has_changed = super().update_dev(dev, callback_container)
         status_object = self._extract_status_object(dev)
         if self._check_for_status_change(status_object):
-            self._state = self._status_prop_in_object_is_On(status_object)
+            self._state = self._status_prop_in_object_is_on(status_object)
             has_changed = True
         return has_changed
 
@@ -45,13 +43,13 @@ class NHC2Light(NHC2Entity):
         else:
             return None
 
-    def _status_prop_in_object_is_On(self, property_object_with_status):
+    def _status_prop_in_object_is_on(self, property_object_with_status):
         return property_object_with_status['Status'] == 'On'
 
     def _check_for_status_change(self, property_object_with_status):
         return property_object_with_status \
                and 'Status' in property_object_with_status \
-               and self._state != (self._status_prop_in_object_is_On(property_object_with_status))
+               and self._state != (self._status_prop_in_object_is_on(property_object_with_status))
 
     def _change_status(self, status: str):
         command = {"Method": "devices.control", "Params": [
