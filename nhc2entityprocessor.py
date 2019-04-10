@@ -18,8 +18,8 @@ def nhc2_entity_processor(hass, config_entry, async_add_entities, key, obj_creat
         for entity in entities:
             (new_entities, existing_entities)[entity.uuid in active_uuids].append(entity)
 
-        _LOGGER.debug('Existing UUIDs: %s', ', '.join(list(map(lambda x: x.uuid, new_entities))))
-        _LOGGER.debug('New UUIDs: %s', ', '.join(list(map(lambda x: x.uuid, existing_entities))))
+        _LOGGER.debug('Existing UUIDs: %s', ', '.join(list(map(lambda x: x.uuid, existing_entities))))
+        _LOGGER.debug('New UUIDs: %s', ', '.join(list(map(lambda x: x.uuid, new_entities))))
 
         # Process the new entities
         new_hass_entities = []
