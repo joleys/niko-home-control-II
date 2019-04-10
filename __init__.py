@@ -1,4 +1,5 @@
 """Support for NHC2."""
+import asyncio
 import logging
 import os
 
@@ -71,14 +72,18 @@ async def async_setup(hass, config):
 
     return True
 
+def nhc2_get_sysinfo(loop, _nhc2):
+    fut = loop.create_future()
+    _nhc2.get_systeminfo(
+        lambda sys_info: fut.set_result(sys_info)
+    )
+    return fut
+
+async def _get_systinfo(hass, gateway):
+    return await nhc2_get_sysinfo(hass.loop, gateway)
+
 
 async def async_setup_entry(hass, entry):
-    def nhc2_get_sysinfo(loop, _nhc2):
-        fut = loop.create_future()
-        _nhc2.get_systeminfo(
-            lambda sys_info: fut.set_result(sys_info)
-        )
-        return fut
     """Create a NHC2 gateway."""
     # host, identity, key, allow_tradfri_groups
     from .nhc2 import NHC2
@@ -101,33 +106,35 @@ async def async_setup_entry(hass, entry):
 
     _LOGGER.debug('NHC2 - Connecting to %s:%s', entry.data[CONF_HOST], str(entry.data[CONF_PORT]))
     gateway.connect()
+    try:
+        # NHC2 should respond fast, so there should be no need to wait...
+        nhc2_sysinfo = await asyncio.wait_for(_get_systinfo(hass, gateway), timeout=20.0)
+        params = nhc2_sysinfo['Params']
+        system_info = next(filter((lambda x: x and 'SystemInfo' in x), params), None)['SystemInfo']
+        s_w_versions = next(filter((lambda x: x and 'SWversions' in x), system_info), None)['SWversions']
+        coco_image = next(filter((lambda x: x and 'CocoImage' in x), s_w_versions), None)['CocoImage']
+        nhc_version = next(filter((lambda x: x and 'NhcVersion' in x), s_w_versions), None)['NhcVersion']
+        dev_reg = await hass.helpers.device_registry.async_get_registry()
+        dev_reg.async_get_or_create(
+            config_entry_id=entry.entry_id,
+            connections=set(),
+            identifiers={
+                (DOMAIN, entry.data[CONF_USERNAME])
+            },
+            manufacturer='Niko',
+            name='Home Control II',
+            model='Connected controller',
+            sw_version=nhc_version + ' - CoCo Image: ' + coco_image,
+        )
 
-    nhc2_sysinfo = await nhc2_get_sysinfo(hass.loop, gateway)
+        hass.async_create_task(hass.config_entries.async_forward_entry_setup(
+            entry, 'light'
+        ))
 
-    params = nhc2_sysinfo['Params']
-    system_info = next(filter((lambda x: x and 'SystemInfo' in x), params), None)['SystemInfo']
-    s_w_versions = next(filter((lambda x: x and 'SWversions' in x), system_info), None)['SWversions']
-    coco_image = next(filter((lambda x: x and 'CocoImage' in x), s_w_versions), None)['CocoImage']
-    nhc_version = next(filter((lambda x: x and 'NhcVersion' in x), s_w_versions), None)['NhcVersion']
-    # gateway.get_systeminfo(lambda x: _LOGGER.debug('got sysinfo ' + str(x)))
-    dev_reg = await hass.helpers.device_registry.async_get_registry()
-    dev_reg.async_get_or_create(
-        config_entry_id=entry.entry_id,
-        connections=set(),
-        identifiers={
-            (DOMAIN, entry.data[CONF_USERNAME])
-        },
-        manufacturer='Niko',
-        name='Home Control II',
-        model='Connected controller',
-        sw_version=nhc_version + ' - CoCo Image: ' + coco_image,
-    )
+        hass.async_create_task(hass.config_entries.async_forward_entry_setup(
+            entry, 'switch'
+        ))
+        return True
+    except asyncio.TimeoutError:
+        return False
 
-    hass.async_create_task(hass.config_entries.async_forward_entry_setup(
-        entry, 'light'
-    ))
-
-    hass.async_create_task(hass.config_entries.async_forward_entry_setup(
-        entry, 'switch'
-    ))
-    return True
