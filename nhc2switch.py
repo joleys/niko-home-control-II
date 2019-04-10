@@ -11,7 +11,6 @@ class NHC2Switch(NHC2Entity):
     def __init__(self, dev, callbackContainer, client, profile_creation_id):
         super().__init__(dev, callbackContainer, client, profile_creation_id)
         self.update_dev(dev, callbackContainer)
-        _LOGGER.debug('Setup of NHC2 switch device %s with name %s completed.', self.uuid, self.name)
 
     @property
     def is_on(self):

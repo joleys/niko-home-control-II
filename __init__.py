@@ -104,16 +104,20 @@ async def async_setup_entry(hass, entry):
 
     hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, on_hass_stop)
 
-    _LOGGER.debug('NHC2 - Connecting to %s:%s', entry.data[CONF_HOST], str(entry.data[CONF_PORT]))
+    _LOGGER.debug('Connecting to %s:%s', entry.data[CONF_HOST], str(entry.data[CONF_PORT]))
     gateway.connect()
     try:
         # NHC2 should respond fast, so there should be no need to wait...
         nhc2_sysinfo = await asyncio.wait_for(_get_systinfo(hass, gateway), timeout=20.0)
+        _LOGGER.debug('Retrieved sysinfo')
         params = nhc2_sysinfo['Params']
         system_info = next(filter((lambda x: x and 'SystemInfo' in x), params), None)['SystemInfo']
         s_w_versions = next(filter((lambda x: x and 'SWversions' in x), system_info), None)['SWversions']
         coco_image = next(filter((lambda x: x and 'CocoImage' in x), s_w_versions), None)['CocoImage']
         nhc_version = next(filter((lambda x: x and 'NhcVersion' in x), s_w_versions), None)['NhcVersion']
+
+        _LOGGER.debug('Sysinfo: NhcVersion %s - CocoImage %s', nhc_version, coco_image)
+
         dev_reg = await hass.helpers.device_registry.async_get_registry()
         dev_reg.async_get_or_create(
             config_entry_id=entry.entry_id,

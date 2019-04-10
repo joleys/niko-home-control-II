@@ -61,57 +61,41 @@ class NHC2:
                     client.unsubscribe(self._profile_creation_id + TOPIC_SUFFIX_RSP)
                     devices = self._get_devices(response)
                     existing_uuids = list(self._device_callbacks.keys())
-                    _LOGGER.debug("Existing UUIDs count: "+str(len(existing_uuids)))
-                    _LOGGER.debug("Existing UUIDs: "+json.dumps(existing_uuids))
 
                     for x in devices:
                         if x['Uuid'] not in existing_uuids:
                             self._device_callbacks[x['Uuid']] = {'callbackHolder': None, 'entity': None}
-                            _LOGGER.debug('Creating new callback for '+x['Name'])
 
                     lights = [x for x in devices if x['Model'] == 'light']
                     switches = [x for x in devices if x['Model'] == 'switched-generic']
-                    _LOGGER.debug("New Lights count: "+str(len(lights)))
-                    _LOGGER.debug("New Switches count: "+str(len(switches)))
 
                     self._lights = []
                     for light in lights:
                         if self._device_callbacks[light['Uuid']] and self._device_callbacks[light['Uuid']]['entity'] and self._device_callbacks[light['Uuid']]['entity'].uuid:
-                            _LOGGER.debug('updating existing light')
                             self._device_callbacks[light['Uuid']]['entity'].update_dev(light)
                         else:
-                            _LOGGER.debug('creating new light')
                             self._device_callbacks[light['Uuid']]['entity'] = NHC2Light(light, self._device_callbacks[light['Uuid']], self._client, self._profile_creation_id)
-                        _LOGGER.debug('appending light to list')
                         self._lights.append(self._device_callbacks[light['Uuid']]['entity'])
                     self._switches = []
                     for switch in switches:
                         if self._device_callbacks[switch['Uuid']] and self._device_callbacks[switch['Uuid']]['entity'] and \
                                 self._device_callbacks[switch['Uuid']]['entity'].uuid:
-                            _LOGGER.debug('updating existing switch')
                             self._device_callbacks[switch['Uuid']]['entity'].update_dev(switch)
                         else:
-                            _LOGGER.debug('creating new switch')
                             self._device_callbacks[switch['Uuid']]['entity'] = NHC2Switch(switch, self._device_callbacks[
                                 switch['Uuid']], self._client, self._profile_creation_id)
-                        _LOGGER.debug('appending switch to list')
                         self._switches.append(self._device_callbacks[switch['Uuid']]['entity'])
-
-                    _LOGGER.debug("New Lights sent of count: "+str(len(self._lights)))
-                    _LOGGER.debug("New Switches sent of count: "+str(len(self._switches)))
 
                     self._lights_callback(self._lights)
                     self._switches_callback(self._switches)
                 return
             if topic == (self._profile_creation_id + TOPIC_SUFFIX_SYS_EVT) and response['Method'] == 'systeminfo.published':
                 # If the connected controller publishes sysinfo... we expect something to have changed.
-                _LOGGER.debug('NONO, we not know :)')
                 client.subscribe(self._profile_creation_id + TOPIC_SUFFIX_RSP, qos=1)
                 client.publish(self._profile_creation_id + TOPIC_SUFFIX_CMD, '{"Method":"devices.list"}')
                 return
             if topic == (self._profile_creation_id + TOPIC_SUFFIX_EVT)\
                and (response['Method'] == 'devices.status' or response['Method'] == 'devices.changed'):
-                _LOGGER.debug('Status Update')
                 devices = self._get_devices(response)
                 for device in devices:
                     if device['Uuid'] and self._device_callbacks[device['Uuid']]:
@@ -131,14 +115,8 @@ class NHC2:
                 raise Exception('Could not connect to nhc2')
 
         def _on_disconnect(client, userdata, rc):
-            _LOGGER.debug('We have a disconnect :(')
-
             for uuid, device_callback in self._device_callbacks.items():
-                _LOGGER.debug('Setting offline of %s', device_callback['entity'].name)
-                _LOGGER.debug('Setting offline uuid %s', uuid)
                 offline = {'Online': 'False', 'Uuid': uuid}
-                _LOGGER.debug('Setting offline of %s', device_callback['entity'].name)
-                _LOGGER.debug('Setting offline uuid %s', uuid)
                 device_callback['callbackHolder'](offline)
 
         self._client.on_message = _on_message
