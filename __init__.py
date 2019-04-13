@@ -140,5 +140,7 @@ async def async_setup_entry(hass, entry):
         ))
         return True
     except asyncio.TimeoutError:
+
+        _LOGGER.debug('Connection to %s:%s FAILED :(', entry.data[CONF_HOST], str(entry.data[CONF_PORT]))
         return False
 

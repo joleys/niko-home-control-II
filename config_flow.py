@@ -1,7 +1,7 @@
 """Config flow to configure IPMA component."""
 import voluptuous as vol
 
-from homeassistant import config_entries, data_entry_flow
+from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_PORT, CONF_USERNAME, CONF_PASSWORD
 import homeassistant.helpers.config_validation as cv
 
@@ -9,7 +9,7 @@ from .const import DOMAIN
 
 
 @config_entries.HANDLERS.register(DOMAIN)
-class Nhc2FlowHandler(data_entry_flow.FlowHandler):
+class Nhc2FlowHandler(config_entries.ConfigFlow):
     """Config flow for NHC2 platform."""
 
     VERSION = 1
@@ -19,14 +19,14 @@ class Nhc2FlowHandler(data_entry_flow.FlowHandler):
         """Init NHC2FlowHandler."""
         self._errors = {}
 
-    # async def async_step_import(self, user_input):
-    #     """Import a config entry."""
-    #     # if self._async_current_entries():
-    #     #     return self.async_abort(reason="single_instance_allowed")
-    #
-    #     return self.async_create_entry(
-    #         title="configuration.yaml", data=user_input
-    #     )
+    async def async_step_import(self, user_input):
+        """Import a config entry."""
+        if self._async_current_entries():
+            return self.async_abort(reason="single_instance_allowed")
+
+        return self.async_create_entry(
+            title="configuration.yaml", data=user_input
+        )
 
     async def async_step_user(self, user_input=None):
         """Handle a flow initialized by the user."""

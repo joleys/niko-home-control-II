@@ -12,13 +12,32 @@ __LIMITED__ to switches/lights as it stands now
 
 ## How to get it running
 
+There a two methods to setup. I would recommend using the first one, as it gives you more control and is more easy. 
+
+### Method 1 - Using configuration.yaml
+
+1. Add all the files inside a folder called `<CONFIG_FOLDER>/custom_components/nhc2/`
+2. Add config to your `configuration.yaml file`
+
+example:
+
+```yaml
+nhc2:
+  host: '192.168.0.2'
+  port: 8883
+  username: 'abcdefgh-ijkl-mnop-qrst-uvwxyz012345'
+  password: !secret nhc2_password
+```
+
+### Method II -  Using Integrations Web UI
+
 1. Add all the files inside a folder called `<CONFIG_FOLDER>/custom_components/nhc2/`
 2. Add 'nhc2' to the static list `FLOWS` in `homeassistant/config_entries.py` (this in until HA can auto populate this for custom components)
 3. Create credentials (see next paragraph)
 4. Do the __Niko Connected Controller__ setup in `Setting > Integrations` the Web Ui  
 
 see: [Home Assistant dev docs - Integration Configuration](https://developers.home-assistant.io/docs/en/config_entries_config_flow_handler.html) 
-## The credentials
+## How to get the credentials
 
 First you will need to add a touchscreen profile to the controller setup.
 (see [Creating and modifying touchscreen profiles](http://guide.niko.eu/pages/viewpage.action?pageId=10978290))
