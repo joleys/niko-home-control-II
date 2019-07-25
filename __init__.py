@@ -12,7 +12,7 @@ from .config_flow import Nhc2FlowHandler  # noqa  pylint_disable=unused-import
 from .const import DOMAIN, KEY_GATEWAY
 from .helpers import extract_versions
 
-REQUIREMENTS = ['nhc2-coco==0.0.4']
+REQUIREMENTS = ['nhc2-coco==0.0.5']
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -30,12 +30,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 class NHC2HassSwitch(SwitchDevice):
     """Representation of an NHC2 Switch."""
 
-    def __init__(self, nhc2switch: CoCoSwitch):
+    def __init__(self, nhc2switch: CoCoSwitch, optimistic=True):
         """Initialize a switch."""
         self._nhc2switch = nhc2switch
+        self._optimistic = optimistic
+        self._is_on = nhc2switch.is_on
         nhc2switch.on_change = self._on_change
 
     def _on_change(self):
+        self._is_on = self._nhc2switch.is_on
         self.schedule_update_ha_state()
 
     def turn_off(self, **kwargs) -> None:
@@ -49,10 +52,16 @@ class NHC2HassSwitch(SwitchDevice):
     async def async_turn_on(self, **kwargs):
         """Instruct the switch to turn on."""
         self._nhc2switch.turn_on()
+        if self._optimistic:
+            self._is_on = True
+            self.schedule_update_ha_state()
 
     async def async_turn_off(self, **kwargs):
         """Instruct the switch to turn off."""
         self._nhc2switch.turn_off()
+        if self._optimistic:
+            self._is_on = False
+            self.schedule_update_ha_state()
 
     def nhc2_update(self, nhc2switch: CoCoSwitch):
         """Update the NHC2 switch with a new object."""
@@ -88,7 +97,7 @@ class NHC2HassSwitch(SwitchDevice):
     @property
     def is_on(self):
         """Return true if the light is on."""
-        return self._nhc2switch.is_on
+        return self._is_on
 
     @property
     def device_info(self):
