@@ -1,6 +1,6 @@
 """Support for NHC2 switches."""
 import logging
-from homeassistant.components.switch import SwitchDevice
+from homeassistant.components.switch import SwitchEntity
 
 from .helpers import nhc2_entity_processor
 from nhc2_coco import CoCo, CoCoSwitch
@@ -27,7 +27,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     )
 
 
-class NHC2HassSwitch(SwitchDevice):
+class NHC2HassSwitch(SwitchEntity):
     """Representation of an NHC2 Switch."""
 
     def __init__(self, nhc2switch: CoCoSwitch, optimistic=True):

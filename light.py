@@ -1,7 +1,7 @@
 """Support for NHC2 lights."""
 import logging
 from typing import List
-from homeassistant.components.light import Light
+from homeassistant.components.light import LightEntity
 
 from .helpers import nhc2_entity_processor
 from nhc2_coco import CoCoLight, CoCo
@@ -25,7 +25,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     )
 
 
-class NHC2HassLight(Light):
+class NHC2HassLight(LightEntity):
     """Representation of an NHC2 Light."""
 
     def __init__(self, nhc2light: CoCoLight, optimistic=True):
