@@ -4,7 +4,7 @@ License: [MIT](LICENSE)
 
 This 'custom_component' provides you with a NHC2 Platform
 
-It uses the pypi package [nhc2-coco](https://github.com/filipvh/nhc2-coco) that I've written too.
+I've taken up the work that filipvh started, without him this wouldn't at all possible. 
 
 __LIMITED__ to switches/lights as it stands now
 
