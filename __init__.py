@@ -6,13 +6,13 @@ import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_PORT, CONF_USERNAME, \
-    CONF_PASSWORD
+    CONF_PASSWORD, CONF_PATH
 from homeassistant.const import EVENT_HOMEASSISTANT_STOP
 from .config_flow import Nhc2FlowHandler  # noqa  pylint_disable=unused-import
-from .const import DOMAIN, KEY_GATEWAY
+from .const import DOMAIN, KEY_GATEWAY, CONF_SWITCHES_AS_LIGHTS
 from .helpers import extract_versions
 
-REQUIREMENTS = ['nhc2-coco==0.0.5']
+REQUIREMENTS = ['nhc2-coco==0.0.8']
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -24,7 +24,8 @@ CONFIG_SCHEMA = vol.Schema({
         vol.Required(CONF_HOST): cv.string,
         vol.Required(CONF_PORT): cv.port,
         vol.Required(CONF_USERNAME): cv.string,
-        vol.Required(CONF_PASSWORD): cv.string
+        vol.Required(CONF_PASSWORD): cv.string,
+        vol.Required(CONF_SWITCHES_AS_LIGHTS, default=False): bool
     })
 }, extra=vol.ALLOW_EXTRA)
 
@@ -40,12 +41,17 @@ async def async_setup(hass, config):
     port = conf.get(CONF_PORT)
     username = conf.get(CONF_USERNAME)
     password = conf.get(CONF_PASSWORD)
+    switches_as_lights = conf.get(CONF_SWITCHES_AS_LIGHTS)
 
     hass.async_create_task(hass.config_entries.flow.async_init(
         DOMAIN, context={'source': config_entries.SOURCE_IMPORT},
-        data={CONF_HOST: host, CONF_PORT: port,
-              CONF_USERNAME: username,
-              CONF_PASSWORD: password}
+        data={
+            CONF_HOST: host,
+            CONF_PORT: port,
+            CONF_USERNAME: username,
+            CONF_PASSWORD: password,
+            CONF_SWITCHES_AS_LIGHTS: switches_as_lights
+        }
     ))
 
     return True
@@ -59,7 +65,8 @@ async def async_setup_entry(hass, entry):
         entry.data[CONF_HOST],
         entry.data[CONF_USERNAME],
         entry.data[CONF_PASSWORD],
-        entry.data[CONF_PORT]
+        entry.data[CONF_PORT],
+        switches_as_lights=entry.data[CONF_SWITCHES_AS_LIGHTS]
     )
 
     async def on_hass_stop(event):
@@ -93,6 +100,7 @@ async def async_setup_entry(hass, entry):
                 hass.config_entries.async_forward_entry_setup(
                     entry, 'switch')
             )
+
         return process_sysinfo
 
     hass.data.setdefault(KEY_GATEWAY, {})[entry.entry_id] = coco

@@ -1,7 +1,7 @@
 """Support for NHC2 lights."""
 import logging
 from typing import List
-from homeassistant.components.light import LightEntity
+from homeassistant.components.light import LightEntity, SUPPORT_BRIGHTNESS, ATTR_BRIGHTNESS
 
 from .helpers import nhc2_entity_processor
 from nhc2_coco import CoCoLight, CoCo
@@ -33,10 +33,16 @@ class NHC2HassLight(LightEntity):
         self._nhc2light = nhc2light
         self._optimistic = optimistic
         self._is_on = nhc2light.is_on
+        if self._nhc2light.support_brightness:
+            self._brightness = int((self._nhc2light.brightness + 1) * 2.54)
+        else:
+            self._brightness = None
         nhc2light.on_change = self._on_change
 
     def _on_change(self):
         self._is_on = self._nhc2light.is_on
+        if self._nhc2light.support_brightness:
+            self._brightness = int((self._nhc2light.brightness + 1) * 2.54)
         self.schedule_update_ha_state()
 
     def turn_off(self, **kwargs) -> None:
@@ -50,8 +56,15 @@ class NHC2HassLight(LightEntity):
     async def async_turn_on(self, **kwargs):
         """Instruct the light to turn on."""
         self._nhc2light.turn_on()
+        brightness = kwargs.get(ATTR_BRIGHTNESS)
+
+        if self._nhc2light.support_brightness and brightness is not None:
+            self._nhc2light.brightness(int((brightness/2.54)-1))
+
         if self._optimistic:
             self._is_on = True
+            if self._nhc2light.support_brightness and brightness is not None:
+                self._brightness = int((int((brightness/2.54)-1) + 1) * 2.54)
             self.schedule_update_ha_state()
 
     async def async_turn_off(self, **kwargs):
@@ -93,6 +106,11 @@ class NHC2HassLight(LightEntity):
         return self._nhc2light.online
 
     @property
+    def brightness(self):
+        """Return the brightness of this light between 0..255."""
+        return self._brightness
+
+    @property
     def is_on(self):
         """Return true if the light is on."""
         return self._is_on
@@ -109,3 +127,10 @@ class NHC2HassLight(LightEntity):
             'model': LIGHT,
             'via_hub': (DOMAIN, self._nhc2light.profile_creation_id),
         }
+
+    @property
+    def supported_features(self):
+        """Return supported features."""
+        if self._nhc2light.support_brightness:
+            return SUPPORT_BRIGHTNESS
+        return 0

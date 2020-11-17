@@ -1,0 +1,6 @@
+{
+  "domain": "nhc2",
+  "name": "NiKo Home Control 2",
+  "requirements": ["nhc2-coco==0.1.2"],
+  "config_flow": true
+}
