@@ -1,18 +1,18 @@
 """Support for Niko Home Control II - CoCo."""
 import logging
 
-import voluptuous as vol
-
 import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.const import CONF_HOST, CONF_PORT, CONF_USERNAME, \
-    CONF_PASSWORD, CONF_PATH
+from homeassistant.const import CONF_HOST, CONF_USERNAME, \
+    CONF_PASSWORD
 from homeassistant.const import EVENT_HOMEASSISTANT_STOP
+
 from .config_flow import Nhc2FlowHandler  # noqa  pylint_disable=unused-import
 from .const import DOMAIN, KEY_GATEWAY, CONF_SWITCHES_AS_LIGHTS
 from .helpers import extract_versions
 
-REQUIREMENTS = ['nhc2-coco==0.0.8']
+REQUIREMENTS = ['nhc2-coco==0.1.3']
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,7 +22,6 @@ KEY_GATEWAY = KEY_GATEWAY
 CONFIG_SCHEMA = vol.Schema({
     DOMAIN: vol.Schema({
         vol.Required(CONF_HOST): cv.string,
-        vol.Required(CONF_PORT): cv.port,
         vol.Required(CONF_USERNAME): cv.string,
         vol.Required(CONF_PASSWORD): cv.string,
         vol.Required(CONF_SWITCHES_AS_LIGHTS, default=False): bool
@@ -38,7 +37,6 @@ async def async_setup(hass, config):
         return True
 
     host = conf.get(CONF_HOST)
-    port = conf.get(CONF_PORT)
     username = conf.get(CONF_USERNAME)
     password = conf.get(CONF_PASSWORD)
     switches_as_lights = conf.get(CONF_SWITCHES_AS_LIGHTS)
@@ -47,7 +45,6 @@ async def async_setup(hass, config):
         DOMAIN, context={'source': config_entries.SOURCE_IMPORT},
         data={
             CONF_HOST: host,
-            CONF_PORT: port,
             CONF_USERNAME: username,
             CONF_PASSWORD: password,
             CONF_SWITCHES_AS_LIGHTS: switches_as_lights
@@ -65,7 +62,6 @@ async def async_setup_entry(hass, entry):
         entry.data[CONF_HOST],
         entry.data[CONF_USERNAME],
         entry.data[CONF_PASSWORD],
-        entry.data[CONF_PORT],
         switches_as_lights=entry.data[CONF_SWITCHES_AS_LIGHTS]
     )
 
@@ -106,9 +102,8 @@ async def async_setup_entry(hass, entry):
     hass.data.setdefault(KEY_GATEWAY, {})[entry.entry_id] = coco
     hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, on_hass_stop)
 
-    _LOGGER.debug('Connecting to %s:%s',
-                  entry.data[CONF_HOST],
-                  str(entry.data[CONF_PORT])
+    _LOGGER.debug('Connecting to %s with %s',
+                  entry.data[CONF_HOST], entry.data[CONF_USERNAME]
                   )
     coco.connect()
     dev_reg = await hass.helpers.device_registry.async_get_registry()
