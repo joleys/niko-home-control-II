@@ -19,7 +19,7 @@
       }
     },
     "abort": {
-      "already_configured": "Niko Home Control II is already configured"
+      "single_instance_allowed": "Controller and profile already added."
     },
     "error": {
       "cannot_connect": "Unable to connect to the Connected Controller."

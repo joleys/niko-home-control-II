@@ -12,7 +12,7 @@ Note: Make sure you have a recent version of Home Assistant!
 
 1. Add all the files inside a folder called `<CONFIG_FOLDER>/custom_components/nhc2/`
 2. Go to Configuration > Integrations
-3. Add an integration, search for Niko Home Control 2, and click on it
+3. Add an integration, search for Niko Home Control II, and click on it
 4. Follow the wizard
 
 ## What can you do to help?

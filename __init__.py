@@ -5,14 +5,14 @@ import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_USERNAME, \
-    CONF_PASSWORD
+    CONF_PASSWORD, CONF_ADDRESS
 from homeassistant.const import EVENT_HOMEASSISTANT_STOP
 
 from .config_flow import Nhc2FlowHandler  # noqa  pylint_disable=unused-import
 from .const import DOMAIN, KEY_GATEWAY, CONF_SWITCHES_AS_LIGHTS
 from .helpers import extract_versions
 
-REQUIREMENTS = ['nhc2-coco==0.1.3']
+REQUIREMENTS = ['nhc2-coco==0.1.4']
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -24,7 +24,8 @@ CONFIG_SCHEMA = vol.Schema({
         vol.Required(CONF_HOST): cv.string,
         vol.Required(CONF_USERNAME): cv.string,
         vol.Required(CONF_PASSWORD): cv.string,
-        vol.Required(CONF_SWITCHES_AS_LIGHTS, default=False): bool
+        vol.Optional(CONF_ADDRESS): cv.string,
+        vol.Optional(CONF_SWITCHES_AS_LIGHTS, default=False): bool
     })
 }, extra=vol.ALLOW_EXTRA)
 
@@ -39,6 +40,7 @@ async def async_setup(hass, config):
     host = conf.get(CONF_HOST)
     username = conf.get(CONF_USERNAME)
     password = conf.get(CONF_PASSWORD)
+    address = conf.get(CONF_ADDRESS)
     switches_as_lights = conf.get(CONF_SWITCHES_AS_LIGHTS)
 
     hass.async_create_task(hass.config_entries.flow.async_init(
@@ -47,6 +49,7 @@ async def async_setup(hass, config):
             CONF_HOST: host,
             CONF_USERNAME: username,
             CONF_PASSWORD: password,
+            CONF_ADDRESS: address,
             CONF_SWITCHES_AS_LIGHTS: switches_as_lights
         }
     ))
