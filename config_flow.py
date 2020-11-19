@@ -75,7 +75,7 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
         #     profile[0]
         _LOGGER.debug(self.hass.config_entries.async_entries(DOMAIN))
 
-        self._selected_coco = list(filter(lambda x: x[0] == user_input[CONF_HOST], self._all_cocos))[0]
+        self._selected_coco = list(filter(lambda x: x[0] == user_input[CONF_HOST] or x[3] == user_input[CONF_HOST], self._all_cocos))[0]
         return await self._show_user_config_form(self._selected_coco)
 
     async def _show_host_config_form(self, all_cocos):
