@@ -4,7 +4,7 @@ import logging
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_USERNAME, \
-    CONF_PASSWORD, CONF_ADDRESS
+    CONF_PASSWORD, CONF_ADDRESS, CONF_PORT
 from nhc2_coco.coco_discover_profiles import CoCoDiscoverProfiles
 
 from .const import DOMAIN, CONF_SWITCHES_AS_LIGHTS
@@ -51,6 +51,7 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
                     data={
                         CONF_HOST: self._selected_coco[0] if self._selected_coco[3] is None else self._selected_coco[3],
                         CONF_ADDRESS: self._selected_coco[1],
+                        CONF_PORT: 8884 if user_input[CONF_USERNAME] == 'hobby' else 8883,
                         CONF_USERNAME: user_input[CONF_USERNAME],
                         CONF_PASSWORD: user_input[CONF_PASSWORD],
                         CONF_SWITCHES_AS_LIGHTS: user_input[CONF_SWITCHES_AS_LIGHTS]
@@ -62,6 +63,13 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
         disc = CoCoDiscoverProfiles()
 
         self._all_cocos = await disc.get_all_profiles()
+        for coco in self._all_cocos:
+            if coco[2] is not None:
+                coco[2].append({
+                    'Uuid': 'hobby',
+                    'Name': 'hobby',
+                    'Type': 'hobby'
+                })
         if self._all_cocos is None or len(self._all_cocos) == 0:
             return self.async_abort(reason="no_controller_found")
 
@@ -75,7 +83,8 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
         #     profile[0]
         _LOGGER.debug(self.hass.config_entries.async_entries(DOMAIN))
 
-        self._selected_coco = list(filter(lambda x: x[0] == user_input[CONF_HOST] or x[3] == user_input[CONF_HOST], self._all_cocos))[0]
+        self._selected_coco = \
+        list(filter(lambda x: x[0] == user_input[CONF_HOST] or x[3] == user_input[CONF_HOST], self._all_cocos))[0]
         return await self._show_user_config_form(self._selected_coco)
 
     async def _show_host_config_form(self, all_cocos):
