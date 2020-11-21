@@ -22,7 +22,11 @@
       "single_instance_allowed": "Controller and profile already added."
     },
     "error": {
-      "cannot_connect": "Unable to connect to the Connected Controller."
+      "login_check_fail_1": "Connection refused - incorrect protocol version",
+      "login_check_fail_2": "Connection refused - invalid client identifier",
+      "login_check_fail_3": "Connection refused - server unavailable",
+      "login_check_fail_4": "Connection refused - bad username or password",
+      "login_check_fail_5": "Connection refused - not authorised"
     }
   }
 }

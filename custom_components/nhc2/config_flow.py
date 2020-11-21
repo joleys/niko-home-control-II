@@ -6,6 +6,7 @@ from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_USERNAME, \
     CONF_PASSWORD, CONF_ADDRESS, CONF_PORT
 from nhc2_coco.coco_discover_profiles import CoCoDiscoverProfiles
+from nhc2_coco.coco_login_validation import CoCoLoginValidation
 
 from .const import DOMAIN, CONF_SWITCHES_AS_LIGHTS
 
@@ -21,9 +22,9 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
 
     def __init__(self):
         """Init NHC2FlowHandler."""
-        self._errors = {}
         self._all_cocos = []
         self._selected_coco = None
+        self._errors = {}
 
     async def async_step_import(self, user_input):
         """Import a config entry."""
@@ -39,26 +40,38 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
         self._errors = {}
 
         if user_input is not None:
+            # TODO We might want to check this before showing dialogs in the future
             matches = list(filter(lambda x: ((x.data[CONF_ADDRESS] == self._selected_coco[1]) and (
                     x.data[CONF_USERNAME] == user_input[CONF_USERNAME])),
                                   self.hass.config_entries.async_entries(DOMAIN)))
-            _LOGGER.debug('found %d matches' % len(matches))
+
+            if len(matches) > 0:
+                return self.async_abort(reason="single_instance_allowed")
+
             user_name = list(filter(lambda x: (x.get('Uuid') == user_input[CONF_USERNAME]), self._selected_coco[2]))[
                 0].get('Name')
-            if len(matches) < 1:
-                return self.async_create_entry(
-                    title=user_name + ' (' + self._selected_coco[1].replace(':', '') + ')',
-                    data={
-                        CONF_HOST: self._selected_coco[0] if self._selected_coco[3] is None else self._selected_coco[3],
-                        CONF_ADDRESS: self._selected_coco[1],
-                        CONF_PORT: 8884 if user_input[CONF_USERNAME] == 'hobby' else 8883,
-                        CONF_USERNAME: user_input[CONF_USERNAME],
-                        CONF_PASSWORD: user_input[CONF_PASSWORD],
-                        CONF_SWITCHES_AS_LIGHTS: user_input[CONF_SWITCHES_AS_LIGHTS]
-                    }
-                )
+            host = self._selected_coco[0] if self._selected_coco[3] is None else self._selected_coco[3]
+            username = user_input[CONF_USERNAME]
+            password = user_input[CONF_PASSWORD]
+            port = 8884 if user_input[CONF_USERNAME] == 'hobby' else 8883
+            validator = CoCoLoginValidation(host, username, password, port)
+            check = await validator.check_connection()
 
-            return self.async_abort(reason="single_instance_allowed")
+            if check > 0:
+                self._errors["base"] = ("login_check_fail_%d" % check)
+                return await self._show_user_config_form(selected_coco=self._selected_coco)
+
+            return self.async_create_entry(
+                title=user_name + ' (' + self._selected_coco[1].replace(':', '') + ')',
+                data={
+                    CONF_HOST: host,
+                    CONF_ADDRESS: self._selected_coco[1],
+                    CONF_PORT: port,
+                    CONF_USERNAME: username,
+                    CONF_PASSWORD: password,
+                    CONF_SWITCHES_AS_LIGHTS: user_input[CONF_SWITCHES_AS_LIGHTS]
+                }
+            )
 
         disc = CoCoDiscoverProfiles()
 
@@ -77,14 +90,11 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
             self._all_cocos)
 
     async def async_step_host(self, user_input=None):
-        #
-        # users
-        # for profile in self.all_cocos:
-        #     profile[0]
+        self._errors = {}
         _LOGGER.debug(self.hass.config_entries.async_entries(DOMAIN))
 
         self._selected_coco = \
-        list(filter(lambda x: x[0] == user_input[CONF_HOST] or x[3] == user_input[CONF_HOST], self._all_cocos))[0]
+            list(filter(lambda x: x[0] == user_input[CONF_HOST] or x[3] == user_input[CONF_HOST], self._all_cocos))[0]
         return await self._show_user_config_form(self._selected_coco)
 
     async def _show_host_config_form(self, all_cocos):
@@ -98,10 +108,10 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
                 first = dkey
         return self.async_show_form(
             step_id='host',
+            errors=self._errors,
             data_schema=vol.Schema({
                 vol.Required(CONF_HOST, default=first): vol.In(host_listing)
             }),
-            errors=self._errors,
         )
 
     async def _show_user_config_form(self, selected_coco=None):
@@ -116,10 +126,10 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
                 first = dkey
         return self.async_show_form(
             step_id='user',
+            errors=self._errors,
             data_schema=vol.Schema({
                 vol.Required(CONF_USERNAME, default=first): vol.In(profile_listing),
                 vol.Required(CONF_PASSWORD, default=None): str,
                 vol.Optional(CONF_SWITCHES_AS_LIGHTS, default=False): bool
             }),
-            errors=self._errors,
         )
