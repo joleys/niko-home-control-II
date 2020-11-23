@@ -59,7 +59,7 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
 
             if check > 0:
                 self._errors["base"] = ("login_check_fail_%d" % check)
-                return await self._show_user_config_form(selected_coco=self._selected_coco)
+                return await self._show_user_config_form()
 
             return self.async_create_entry(
                 title=user_name + ' (' + self._selected_coco[1].replace(':', '') + ')',
@@ -78,16 +78,22 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
         self._all_cocos = await disc.get_all_profiles()
         for coco in self._all_cocos:
             if coco[2] is not None:
-                coco[2].append({
+                coco[2].insert(0, {
                     'Uuid': 'hobby',
                     'Name': 'hobby',
                     'Type': 'hobby'
                 })
-        if self._all_cocos is None or len(self._all_cocos) == 0:
-            return self.async_abort(reason="no_controller_found")
 
-        return await self._show_host_config_form(
-            self._all_cocos)
+        found_coco_count = len(self._all_cocos) if self._all_cocos else 0
+        # If there is only one controller, we continue to the next step
+        if found_coco_count == 1:
+            self._selected_coco = self._all_cocos[0]
+            return await self._show_user_config_form()
+
+        if found_coco_count > 1:
+            return await self._show_host_config_form()
+
+        return self.async_abort(reason="no_controller_found")
 
     async def async_step_host(self, user_input=None):
         self._errors = {}
@@ -95,13 +101,13 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
 
         self._selected_coco = \
             list(filter(lambda x: x[0] == user_input[CONF_HOST] or x[3] == user_input[CONF_HOST], self._all_cocos))[0]
-        return await self._show_user_config_form(self._selected_coco)
+        return await self._show_user_config_form()
 
-    async def _show_host_config_form(self, all_cocos):
+    async def _show_host_config_form(self):
         """Show the configuration form to edit NHC2 data."""
         host_listing = {}
         first = None
-        for i, x in enumerate(all_cocos):
+        for i, x in enumerate(self._all_cocos):
             dkey = x[0] if x[3] is None else x[3]
             host_listing[dkey] = [x[3] + ' (' + x[0] + ')']
             if i == 0:
@@ -114,19 +120,23 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
             }),
         )
 
-    async def _show_user_config_form(self, selected_coco=None):
+    async def _show_user_config_form(self):
         """Show the configuration form to edit NHC2 data."""
         profile_listing = {}
-        profiles = selected_coco[2]
+        profiles = self._selected_coco[2]
         first = None
         for i, x in enumerate(profiles):
             dkey = x.get('Uuid')
-            profile_listing[dkey] = x.get('Name') + ' (' + x.get('Uuid') + ')'
+            profile_listing[dkey] = x.get('Name')
             if i == 0:
                 first = dkey
         return self.async_show_form(
             step_id='user',
             errors=self._errors,
+            description_placeholders={
+                "host": self._selected_coco[3] if self._selected_coco[3] is not None else self._selected_coco[0],
+                "address": self._selected_coco[1]
+            },
             data_schema=vol.Schema({
                 vol.Required(CONF_USERNAME, default=first): vol.In(profile_listing),
                 vol.Required(CONF_PASSWORD, default=None): str,

@@ -2,7 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "description": "Select the profile you wish to use. Profiles can be create in the 'Niko Home Control programming software' under Dashboard > Touchscreens.",
+        "description": "Configuring controller {host} ({address}).\n One option is to activate the 'Niko Hobby API' on the Connected Services page at: https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview or you can use a touchscreen profile. Touchscreen profiles can be create in the 'Niko Home Control programming software' under Dashboard > Touchscreens.",
         "title": "Connect to your Niko Connected Controller II",
         "data": {
           "username": "Profile",

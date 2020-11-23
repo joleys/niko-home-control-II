@@ -1,0 +1,32 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Configureren controller {host} ({address}).\n Een optie is het activeren van de 'Niko Hobby API' op de Geconnecteerde services pagina: https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview of je gebruikt een touchscreen profiel.  Touchsceen profielen kunnen aangemaakt worden in de 'Niko Home Control programming software' onder Dashboard > Touchscreens",
+        "title": "Verbinden met je Niko Connected Controller II",
+        "data": {
+          "username": "Profiel",
+          "password": "Wachtwoord",
+          "switches_as_lights": "Importeer schakelaars (relais) als lichten"
+        }
+      },
+      "host": {
+        "description": "Als er geen hostnaam (alleen IP) wordt weergegeven, moet deze statisch zijn.",
+        "title": "Kies een Niko Connected Controller II",
+        "data": {
+          "host": "Controller"
+        }
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Controller en profiel reeds toegevoegd."
+    },
+    "error": {
+      "login_check_fail_1": "Verbinding geweigerd - onjuiste protocolversie",
+      "login_check_fail_2": "Verbinding geweigerd - ongeldige client-ID",
+      "login_check_fail_3": "Verbinding geweigerd - server niet beschikbaar",
+      "login_check_fail_4": "Verbinding geweigerd - onjuiste gebruikersnaam of wachtwoord",
+      "login_check_fail_5": "Verbinding geweigerd - niet geautoriseerd"
+    }
+  }
+}
