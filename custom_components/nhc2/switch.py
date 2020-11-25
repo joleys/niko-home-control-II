@@ -1,6 +1,7 @@
 """Support for NHC2 switches."""
 import logging
 from homeassistant.components.switch import SwitchEntity
+from nhc2_coco.coco_device_class import CoCoDeviceClass
 
 from .helpers import nhc2_entity_processor
 from nhc2_coco import CoCo, CoCoSwitch
@@ -18,7 +19,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     hass.data.setdefault(KEY_ENTITY, {})[config_entry.entry_id] = []
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
     _LOGGER.debug('Platform is starting')
-    gateway.get_switches(
+    gateway.get_devices(CoCoDeviceClass.SWITCHES,
         nhc2_entity_processor(hass,
                               config_entry,
                               async_add_entities,
