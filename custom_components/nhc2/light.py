@@ -1,12 +1,12 @@
 """Support for NHC2 lights."""
 import logging
-from typing import List
-from homeassistant.components.light import LightEntity, SUPPORT_BRIGHTNESS, ATTR_BRIGHTNESS
 
-from .helpers import nhc2_entity_processor
+from homeassistant.components.light import LightEntity, SUPPORT_BRIGHTNESS, ATTR_BRIGHTNESS
 from nhc2_coco import CoCoLight, CoCo
+from nhc2_coco.coco_device_class import CoCoDeviceClass
 
 from .const import DOMAIN, KEY_GATEWAY, BRAND, LIGHT
+from .helpers import nhc2_entity_processor
 
 KEY_GATEWAY = KEY_GATEWAY
 KEY_ENTITY = 'nhc2_lights'
@@ -19,10 +19,10 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     hass.data.setdefault(KEY_ENTITY, {})[config_entry.entry_id] = []
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
     _LOGGER.debug('Platform is starting')
-    gateway.get_lights(
-        nhc2_entity_processor(hass, config_entry, async_add_entities,
-                              KEY_ENTITY, lambda x: NHC2HassLight(x))
-    )
+    gateway.get_devices(CoCoDeviceClass.LIGHTS,
+                        nhc2_entity_processor(hass, config_entry, async_add_entities,
+                                              KEY_ENTITY, lambda x: NHC2HassLight(x))
+                        )
 
 
 class NHC2HassLight(LightEntity):
@@ -59,12 +59,12 @@ class NHC2HassLight(LightEntity):
         brightness = kwargs.get(ATTR_BRIGHTNESS)
 
         if self._nhc2light.support_brightness and brightness is not None:
-            self._nhc2light.brightness(int((brightness/2.54)-1))
+            self._nhc2light.brightness(int((brightness / 2.54) - 1))
 
         if self._optimistic:
             self._is_on = True
             if self._nhc2light.support_brightness and brightness is not None:
-                self._brightness = int((int((brightness/2.54)-1) + 1) * 2.54)
+                self._brightness = int((int((brightness / 2.54) - 1) + 1) * 2.54)
             self.schedule_update_ha_state()
 
     async def async_turn_off(self, **kwargs):

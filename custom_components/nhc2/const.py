@@ -6,5 +6,6 @@ KEY_GATEWAY = 'nhc2_gateway'
 BRAND = 'Niko'
 LIGHT = 'Light'
 SWITCH = 'Switch'
+COVER = 'Cover'
 CONF_SWITCHES_AS_LIGHTS = 'switches_as_lights'
 DEFAULT_PORT = 8883
