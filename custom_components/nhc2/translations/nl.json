@@ -2,7 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "description": "Configureren controller {host} ({address}).\n Een optie is het activeren van de 'Niko Hobby API' op de Geconnecteerde services pagina: https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview of je gebruikt een touchscreen profiel.  Touchsceen profielen kunnen aangemaakt worden in de 'Niko Home Control programming software' onder Dashboard > Touchscreens",
+        "description": "Configureren controller {host}.\n Een optie is het activeren van de 'Niko Hobby API' op de Geconnecteerde services pagina: https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview of je gebruikt een touchscreen profiel.  Touchsceen profielen kunnen aangemaakt worden in de 'Niko Home Control programming software' onder Dashboard > Touchscreens",
         "title": "Verbinden met je Niko Connected Controller II",
         "data": {
           "username": "Profiel",
@@ -15,6 +15,13 @@
         "title": "Kies een Niko Connected Controller II",
         "data": {
           "host": "Controller"
+        }
+      },
+      "manual_host": {
+        "description": "Geef een host- of IP-adres op",
+        "title": "Niko Connected Controller II",
+        "data": {
+          "host": "Adres/IP"
         }
       }
     },
