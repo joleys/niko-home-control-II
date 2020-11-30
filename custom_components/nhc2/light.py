@@ -34,7 +34,7 @@ class NHC2HassLight(LightEntity):
         self._optimistic = optimistic
         self._is_on = nhc2light.is_on
         if self._nhc2light.support_brightness:
-            self._brightness = int((self._nhc2light.brightness + 1) * 2.54)
+            self._brightness = round(self._nhc2light.brightness * 2.55)
         else:
             self._brightness = None
         nhc2light.on_change = self._on_change
@@ -42,7 +42,7 @@ class NHC2HassLight(LightEntity):
     def _on_change(self):
         self._is_on = self._nhc2light.is_on
         if self._nhc2light.support_brightness:
-            self._brightness = int((self._nhc2light.brightness + 1) * 2.54)
+            self._brightness = round(self._nhc2light.brightness * 2.55)
         self.schedule_update_ha_state()
 
     def turn_off(self, **kwargs) -> None:
@@ -59,12 +59,10 @@ class NHC2HassLight(LightEntity):
         brightness = kwargs.get(ATTR_BRIGHTNESS)
 
         if self._nhc2light.support_brightness and brightness is not None:
-            self._nhc2light.brightness(int((brightness / 2.54) - 1))
+            self._nhc2light.set_brightness(round((brightness) / 2.55))
 
         if self._optimistic:
             self._is_on = True
-            if self._nhc2light.support_brightness and brightness is not None:
-                self._brightness = int((int((brightness / 2.54) - 1) + 1) * 2.54)
             self.schedule_update_ha_state()
 
     async def async_turn_off(self, **kwargs):
