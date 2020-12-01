@@ -2,12 +2,12 @@
 import logging
 
 from homeassistant.components.cover import CoverEntity, SUPPORT_OPEN, SUPPORT_CLOSE, SUPPORT_STOP, SUPPORT_SET_POSITION, \
-    ATTR_POSITION
+    ATTR_POSITION, DEVICE_CLASS_SHUTTER, DEVICE_CLASS_BLIND, DEVICE_CLASS_GATE
 from nhc2_coco import CoCo
 from nhc2_coco.coco_device_class import CoCoDeviceClass
 from nhc2_coco.coco_shutter import CoCoShutter
 
-from .const import DOMAIN, KEY_GATEWAY, BRAND, COVER
+from .const import DOMAIN, KEY_GATEWAY, BRAND, COVER, ROLL_DOWN_SHUTTER, SUN_BLIND, GATE, VENETIAN_BLIND
 from .helpers import nhc2_entity_processor
 
 KEY_GATEWAY = KEY_GATEWAY
@@ -42,6 +42,20 @@ class NHC2HassCover(CoverEntity):
     def current_cover_position(self):
         """Return current position of cover. 0 is closed, 100 is open."""
         return self._nhc2shutter.position
+
+    @property
+    def device_class(self):
+        model = self._nhc2shutter.model
+        if model == ROLL_DOWN_SHUTTER:
+            return DEVICE_CLASS_SHUTTER
+        if model == SUN_BLIND:
+            return DEVICE_CLASS_BLIND
+        if model == GATE:
+            return DEVICE_CLASS_GATE
+        if model == VENETIAN_BLIND:
+            return DEVICE_CLASS_BLIND
+        # If model not known, we choose 'generic' by returning None
+        return None
 
     @property
     def supported_features(self) -> int:
