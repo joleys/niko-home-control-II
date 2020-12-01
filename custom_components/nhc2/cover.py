@@ -53,7 +53,7 @@ class NHC2HassCover(CoverEntity):
         if model == GATE:
             return DEVICE_CLASS_GATE
         if model == VENETIAN_BLIND:
-            return DEVICE_CLASS_BLIND
+            return DEVICE_CLASS_SHUTTER
         # If model not known, we choose 'generic' by returning None
         return None
 
