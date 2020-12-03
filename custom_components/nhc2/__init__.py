@@ -105,6 +105,11 @@ async def async_setup_entry(hass, entry):
                     entry, 'switch')
             )
 
+            hass.async_create_task(
+                hass.config_entries.async_forward_entry_setup(
+                    entry, 'cover')
+            )
+
         return process_sysinfo
 
     hass.data.setdefault(KEY_GATEWAY, {})[entry.entry_id] = coco
