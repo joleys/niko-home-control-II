@@ -36,12 +36,13 @@ class NHC2HassCover(CoverEntity):
     def __init__(self, nhc2shutter: CoCoShutter):
         """Initialize a switch."""
         self._nhc2shutter = nhc2shutter
+        self._position = nhc2shutter.position
         self._is_closed = (nhc2shutter.position == 0)
         nhc2shutter.on_change = self._on_change
 
     def current_cover_position(self):
         """Return current position of cover. 0 is closed, 100 is open."""
-        return self._nhc2shutter.position
+        return self._position
 
     @property
     def device_class(self):
@@ -64,6 +65,7 @@ class NHC2HassCover(CoverEntity):
 
     def _on_change(self):
         self._is_closed = (self._nhc2shutter.position == 0)
+        self._position = self._nhc2shutter.position
         self.schedule_update_ha_state()
 
     def open_cover(self, **kwargs) -> None:
