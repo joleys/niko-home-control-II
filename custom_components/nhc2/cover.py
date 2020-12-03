@@ -1,4 +1,4 @@
-"""Support for NHC2 switches."""
+"""Support for NHC2 covers."""
 import logging
 
 from homeassistant.components.cover import CoverEntity, SUPPORT_OPEN, SUPPORT_CLOSE, SUPPORT_STOP, SUPPORT_SET_POSITION, \
@@ -31,7 +31,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
 
 class NHC2HassCover(CoverEntity):
-    """Representation of an NHC2 Switch."""
+    """Representation of an NHC2 Cover."""
 
     def __init__(self, nhc2shutter: CoCoShutter):
         """Initialize a switch."""
@@ -63,7 +63,7 @@ class NHC2HassCover(CoverEntity):
         return SUPPORT_OPEN | SUPPORT_CLOSE | SUPPORT_STOP | SUPPORT_SET_POSITION
 
     def _on_change(self):
-        self._is_closed = (self._nhc2shutter == 0)
+        self._is_closed = (self._nhc2shutter.position == 0)
         self.schedule_update_ha_state()
 
     def open_cover(self, **kwargs) -> None:

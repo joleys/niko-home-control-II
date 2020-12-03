@@ -20,8 +20,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
     _LOGGER.debug('Platform is starting')
     gateway.get_devices(CoCoDeviceClass.LIGHTS,
-                        nhc2_entity_processor(hass, config_entry, async_add_entities,
-                                              KEY_ENTITY, lambda x: NHC2HassLight(x))
+                        nhc2_entity_processor(hass,
+                                              config_entry,
+                                              async_add_entities,
+                                              KEY_ENTITY,
+                                              lambda x: NHC2HassLight(x))
                         )
 
 
