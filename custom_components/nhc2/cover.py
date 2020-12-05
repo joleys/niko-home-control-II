@@ -40,6 +40,7 @@ class NHC2HassCover(CoverEntity):
         self._is_closed = (nhc2shutter.position == 0)
         nhc2shutter.on_change = self._on_change
 
+    @property
     def current_cover_position(self):
         """Return current position of cover. 0 is closed, 100 is open."""
         return self._position
