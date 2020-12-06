@@ -7,6 +7,7 @@ BRAND = 'Niko'
 LIGHT = 'Light'
 SWITCH = 'Switch'
 COVER = 'Cover'
+FAN = 'Fan'
 CONF_SWITCHES_AS_LIGHTS = 'switches_as_lights'
 DEFAULT_PORT = 8883
 KEY_MANUAL = 'MANUAL_IP_HOST'

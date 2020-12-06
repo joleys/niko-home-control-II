@@ -12,7 +12,7 @@ from .config_flow import Nhc2FlowHandler  # noqa  pylint_disable=unused-import
 from .const import DOMAIN, KEY_GATEWAY, CONF_SWITCHES_AS_LIGHTS
 from .helpers import extract_versions
 
-REQUIREMENTS = ['nhc2-coco==1.2.4']
+REQUIREMENTS = ['nhc2-coco==1.3.2']
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -108,6 +108,11 @@ async def async_setup_entry(hass, entry):
             hass.async_create_task(
                 hass.config_entries.async_forward_entry_setup(
                     entry, 'cover')
+            )
+
+            hass.async_create_task(
+                hass.config_entries.async_forward_entry_setup(
+                    entry, 'fan')
             )
 
         return process_sysinfo
