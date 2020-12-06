@@ -76,9 +76,9 @@ class NHC2HassFan(FanEntity):
     @property
     def speed_list(self) -> list:
         """Get the list of available speeds."""
-        return [SPEED_HIGH,
-                SPEED_LOW,
+        return [SPEED_LOW,
                 SPEED_MEDIUM,
+                SPEED_HIGH,
                 SPEED_BOOST]
 
     @property
