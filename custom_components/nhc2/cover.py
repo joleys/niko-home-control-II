@@ -1,13 +1,13 @@
-"""Support for NHC2 switches."""
+"""Support for NHC2 covers."""
 import logging
 
 from homeassistant.components.cover import CoverEntity, SUPPORT_OPEN, SUPPORT_CLOSE, SUPPORT_STOP, SUPPORT_SET_POSITION, \
-    ATTR_POSITION
+    ATTR_POSITION, DEVICE_CLASS_SHUTTER, DEVICE_CLASS_BLIND, DEVICE_CLASS_GATE
 from nhc2_coco import CoCo
 from nhc2_coco.coco_device_class import CoCoDeviceClass
 from nhc2_coco.coco_shutter import CoCoShutter
 
-from .const import DOMAIN, KEY_GATEWAY, BRAND, COVER
+from .const import DOMAIN, KEY_GATEWAY, BRAND, COVER, ROLL_DOWN_SHUTTER, SUN_BLIND, GATE, VENETIAN_BLIND
 from .helpers import nhc2_entity_processor
 
 KEY_GATEWAY = KEY_GATEWAY
@@ -31,17 +31,33 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
 
 class NHC2HassCover(CoverEntity):
-    """Representation of an NHC2 Switch."""
+    """Representation of an NHC2 Cover."""
 
     def __init__(self, nhc2shutter: CoCoShutter):
         """Initialize a switch."""
         self._nhc2shutter = nhc2shutter
+        self._position = nhc2shutter.position
         self._is_closed = (nhc2shutter.position == 0)
         nhc2shutter.on_change = self._on_change
 
+    @property
     def current_cover_position(self):
         """Return current position of cover. 0 is closed, 100 is open."""
-        return self._nhc2shutter.position
+        return self._position
+
+    @property
+    def device_class(self):
+        model = self._nhc2shutter.model
+        if model == ROLL_DOWN_SHUTTER:
+            return DEVICE_CLASS_SHUTTER
+        if model == SUN_BLIND:
+            return DEVICE_CLASS_BLIND
+        if model == GATE:
+            return DEVICE_CLASS_GATE
+        if model == VENETIAN_BLIND:
+            return DEVICE_CLASS_SHUTTER
+        # If model not known, we choose 'generic' by returning None
+        return None
 
     @property
     def supported_features(self) -> int:
@@ -49,7 +65,8 @@ class NHC2HassCover(CoverEntity):
         return SUPPORT_OPEN | SUPPORT_CLOSE | SUPPORT_STOP | SUPPORT_SET_POSITION
 
     def _on_change(self):
-        self._is_closed = (self._nhc2shutter == 0)
+        self._is_closed = (self._nhc2shutter.position == 0)
+        self._position = self._nhc2shutter.position
         self.schedule_update_ha_state()
 
     def open_cover(self, **kwargs) -> None:

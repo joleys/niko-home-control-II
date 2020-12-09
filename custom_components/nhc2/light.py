@@ -20,8 +20,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
     _LOGGER.debug('Platform is starting')
     gateway.get_devices(CoCoDeviceClass.LIGHTS,
-                        nhc2_entity_processor(hass, config_entry, async_add_entities,
-                                              KEY_ENTITY, lambda x: NHC2HassLight(x))
+                        nhc2_entity_processor(hass,
+                                              config_entry,
+                                              async_add_entities,
+                                              KEY_ENTITY,
+                                              lambda x: NHC2HassLight(x))
                         )
 
 
@@ -34,7 +37,10 @@ class NHC2HassLight(LightEntity):
         self._optimistic = optimistic
         self._is_on = nhc2light.is_on
         if self._nhc2light.support_brightness:
-            self._brightness = round(self._nhc2light.brightness * 2.55)
+            if self._is_on is False:
+                self._brightness = 0
+            else:
+                self._brightness = round(self._nhc2light.brightness * 2.55)
         else:
             self._brightness = None
         nhc2light.on_change = self._on_change
@@ -42,7 +48,10 @@ class NHC2HassLight(LightEntity):
     def _on_change(self):
         self._is_on = self._nhc2light.is_on
         if self._nhc2light.support_brightness:
-            self._brightness = round(self._nhc2light.brightness * 2.55)
+            if self._is_on is False:
+                self._brightness = 0
+            else:
+                self._brightness = round(self._nhc2light.brightness * 2.55)
         self.schedule_update_ha_state()
 
     def turn_off(self, **kwargs) -> None:
