@@ -59,6 +59,13 @@ async def async_setup(hass, config):
 
     return True
 
+FORWARD_PLATFORMS = (
+    "climate",
+    "switch",
+    "light",
+    "fan",
+    "cover"
+)
 
 async def async_setup_entry(hass, entry):
     """Create a NHC2 gateway."""
@@ -95,25 +102,11 @@ async def async_setup_entry(hass, entry):
                 sw_version=nhc_version + ' - CoCo Image: ' + coco_image,
             )
 
-            hass.async_create_task(
-                hass.config_entries.async_forward_entry_setup(
-                    entry, 'light')
-            )
-
-            hass.async_create_task(
-                hass.config_entries.async_forward_entry_setup(
-                    entry, 'switch')
-            )
-
-            hass.async_create_task(
-                hass.config_entries.async_forward_entry_setup(
-                    entry, 'cover')
-            )
-
-            hass.async_create_task(
-                hass.config_entries.async_forward_entry_setup(
-                    entry, 'fan')
-            )
+            for platform in FORWARD_PLATFORMS:
+                _LOGGER.info("Forwarding platform: %s", platform)
+                hass.async_create_task(
+                    hass.config_entries.async_forward_entry_setup(entry, platform)
+                )
 
         return process_sysinfo
 
