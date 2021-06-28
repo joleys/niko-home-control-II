@@ -15,7 +15,7 @@ def nhc2_entity_processor(hass,
     """Loops the entities list and creates, updates or deletes HA entities."""
     @callback
     def process_entities(entities):
-        _LOGGER.debug('Processing of entities started')
+        _LOGGER.debug('Processing of %s entities started', key)
         # Collect a list of active UUIDs
         active_uuids = list(map(lambda x: x.uuid,
                                 hass.data[key][config_entry.entry_id]))
