@@ -1,7 +1,7 @@
 {
   "domain": "nhc2",
   "name": "Niko Home Control II",
-  "requirements": ["nhc2-coco==1.3.3"],
+  "requirements": ["nhc2-coco==1.4.1"],
   "config_flow": true,
   "issue_tracker": "https://github.com/filipvh/hass-nhc2/issues",
   "documentation": "https://github.com/filipvh/hass-nhc2/blob/master/README.md",
