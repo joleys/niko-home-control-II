@@ -4,8 +4,7 @@ import logging
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.const import CONF_HOST, CONF_USERNAME, \
-    CONF_PASSWORD, CONF_ADDRESS, CONF_PORT
+from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, CONF_ADDRESS, CONF_PORT
 from homeassistant.const import EVENT_HOMEASSISTANT_STOP
 
 from .config_flow import Nhc2FlowHandler  # noqa  pylint_disable=unused-import
@@ -64,7 +63,8 @@ FORWARD_PLATFORMS = (
     "switch",
     "light",
     "fan",
-    "cover"
+    "cover",
+    "sensor"
 )
 
 async def async_setup_entry(hass, entry):
