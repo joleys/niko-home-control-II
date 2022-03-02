@@ -123,7 +123,7 @@ class NHC2HassThermostat(ClimateEntity):
     @property
     def current_temperature(self):
         """Return the current temperature."""
-        return self._current_temperature
+        return self._nhc2thermostat.current_temperature
 
     @property
     def target_temperature(self):
