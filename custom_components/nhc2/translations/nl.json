@@ -15,8 +15,7 @@
         "title": "Kies een Niko Connected Controller II",
         "data": {
           "host": "Controller"
-        }
-      },
+        },
       "manual_host": {
         "description": "Geef een host- of IP-adres op",
         "title": "Niko Connected Controller II",
