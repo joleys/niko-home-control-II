@@ -3,11 +3,11 @@ import logging
 from typing import Any
 
 from homeassistant.components.fan import SPEED_HIGH, SPEED_LOW, SPEED_MEDIUM, FanEntity, SUPPORT_SET_SPEED
-from nhc2_coco import CoCo
-from nhc2_coco.coco_device_class import CoCoDeviceClass
-from nhc2_coco.coco_fan import CoCoFan
-from nhc2_coco.coco_fan_speed import CoCoFanSpeed
-from nhc2_coco.coco_switched_fan import CoCoSwitchedFan
+from nhccoco import CoCo
+from nhccoco.coco_device_class import CoCoDeviceClass
+from nhccoco.coco_fan import CoCoFan
+from nhccoco.coco_fan_speed import CoCoFanSpeed
+from nhccoco.coco_switched_fan import CoCoSwitchedFan
 
 from .const import DOMAIN, KEY_GATEWAY, BRAND, FAN
 from .helpers import nhc2_entity_processor

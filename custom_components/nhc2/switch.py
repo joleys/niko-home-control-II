@@ -4,7 +4,8 @@ from homeassistant.components.switch import SwitchEntity
 from nhc2_coco.coco_device_class import CoCoDeviceClass
 
 from .helpers import nhc2_entity_processor
-from nhc2_coco import CoCo, CoCoSwitch
+from nhccoco.coco import CoCo
+from nhccoco.coco_switch import CoCoSwitch
 
 from .const import DOMAIN, KEY_GATEWAY, BRAND, SWITCH
 
