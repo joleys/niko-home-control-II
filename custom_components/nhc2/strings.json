@@ -11,18 +11,18 @@
            }
         },
         "host":{
-           "description":"If no hostname (only IP) is shown, it must be static.",
-           "title":"Choose a Niko Connected Controller II",
-           "data":{
-              "host":"Controller"
-           },
-           "manual_host":{
-              "description":"Provide a host or IP address",
-              "title":"Niko Connected Controller II",
-              "data":{
-                 "host":"Address/IP"
-              }
-           }
+          "description":"If no hostname (only IP) is shown, it must be static.",
+          "title":"Choose a Niko Connected Controller II",
+          "data":{
+            "host":"Controller"
+          }
+        },
+        "manual_host":{
+          "description":"Provide a host or IP address",
+          "title":"Niko Connected Controller II",
+          "data":{
+            "host":"Address/IP"
+          }
         },
         "abort":{
            "single_instance_allowed":"Controller and profile already added.",

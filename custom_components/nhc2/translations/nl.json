@@ -15,25 +15,26 @@
         "title": "Kies een Niko Connected Controller II",
         "data": {
           "host": "Controller"
-        },
+        }
+      },
       "manual_host": {
         "description": "Geef een host- of IP-adres op",
         "title": "Niko Connected Controller II",
         "data": {
           "host": "Adres/IP"
         }
+      },
+      "abort": {
+        "single_instance_allowed": "Controller en profiel reeds toegevoegd.",
+        "no_controller_found": "Controller niet gevonden."
+      },
+      "error": {
+        "login_check_fail_1": "Verbinding geweigerd - onjuiste protocolversie",
+        "login_check_fail_2": "Verbinding geweigerd - ongeldige client-ID",
+        "login_check_fail_3": "Verbinding geweigerd - server niet beschikbaar",
+        "login_check_fail_4": "Verbinding geweigerd - onjuiste gebruikersnaam of wachtwoord",
+        "login_check_fail_5": "Verbinding geweigerd - niet geautoriseerd"
       }
-    },
-    "abort": {
-      "single_instance_allowed": "Controller en profiel reeds toegevoegd.",
-      "no_controller_found": "Controller niet gevonden."
-    },
-    "error": {
-      "login_check_fail_1": "Verbinding geweigerd - onjuiste protocolversie",
-      "login_check_fail_2": "Verbinding geweigerd - ongeldige client-ID",
-      "login_check_fail_3": "Verbinding geweigerd - server niet beschikbaar",
-      "login_check_fail_4": "Verbinding geweigerd - onjuiste gebruikersnaam of wachtwoord",
-      "login_check_fail_5": "Verbinding geweigerd - niet geautoriseerd"
     }
   }
 }
