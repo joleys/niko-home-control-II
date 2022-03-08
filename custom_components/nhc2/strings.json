@@ -25,8 +25,7 @@
         }
       },
       "abort": {
-        "single_instance_allowed": "Controller and profile already added.",
-        "no_controller_found": "No controller was found."
+        "single_instance_allowed": "Controller and profile already added."
       },
       "error": {
         "login_check_fail_1": "Connection refused - incorrect protocol version",

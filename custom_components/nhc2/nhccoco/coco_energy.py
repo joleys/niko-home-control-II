@@ -18,12 +18,10 @@ class CoCoEnergyMeter(CoCoEntity):
         has_changed = super().update_dev(dev, callback_container)
         status_value = extract_property_value_from_device(dev, ENERGY_POWER)
         if status_value:
-            _LOGGER.debug(status_value)
             self._state = status_value
             has_changed = True
         status_value = extract_property_value_from_device(dev, ENERGY_REPORT)
         if status_value == 'False':
-            _LOGGER.debug(status_value)
             self._command_device_control(self._uuid, ENERGY_REPORT, 'True')
         return has_changed
 
