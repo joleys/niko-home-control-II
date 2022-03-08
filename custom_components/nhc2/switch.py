@@ -1,11 +1,11 @@
 """Support for NHC2 switches."""
 import logging
 from homeassistant.components.switch import SwitchEntity
-from nhc2_coco.coco_device_class import CoCoDeviceClass
 
 from .helpers import nhc2_entity_processor
-from nhccoco.coco import CoCo
-from nhccoco.coco_switch import CoCoSwitch
+from .nhccoco.coco import CoCo
+from .nhccoco.coco_switch import CoCoSwitch
+from .nhccoco.coco_device_class import CoCoDeviceClass
 
 from .const import DOMAIN, KEY_GATEWAY, BRAND, SWITCH
 

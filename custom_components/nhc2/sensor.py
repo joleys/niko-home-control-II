@@ -5,9 +5,9 @@ from homeassistant.components.sensor import PLATFORM_SCHEMA, STATE_CLASS_MEASURE
 from homeassistant.const import ENERGY_KILO_WATT_HOUR, POWER_WATT, DEVICE_CLASS_ENERGY, DEVICE_CLASS_POWER
 from homeassistant.core import CALLBACK_TYPE, callback
 
-from nhccoco.coco import CoCo
-from nhccoco.coco_energy import CoCoEnergyMeter
-from nhccoco.coco_device_class import CoCoDeviceClass
+from .nhccoco.coco import CoCo
+from .nhccoco.coco_energy import CoCoEnergyMeter
+from .nhccoco.coco_device_class import CoCoDeviceClass
 
 from .const import DOMAIN, ENERGY, KEY_GATEWAY, BRAND
 from .helpers import nhc2_entity_processor
