@@ -144,7 +144,7 @@ class CoCo:
 
     def get_devices(self, device_class: CoCoDeviceClass, callback: Callable):
         self._devices_callback[device_class] = callback
-        if self._devices and device_class in self._devices:
+        if self._devices and device_class in self._devices: 
             self._devices_callback[device_class](self._devices[device_class])
 
     def _publish_device_control_commands(self):
