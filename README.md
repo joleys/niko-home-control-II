@@ -29,6 +29,27 @@ Note: Make sure you have a recent version of Home Assistant!
 3. Add an integration, search for Niko Home Control II, and click on it
 4. Follow the wizard
 
+## Adding an Energy Meter?
+
+This currently requires some manual action in your configuration.yaml.
+
+You need to add (and possibly tweek) the following:
+    sensor:
+        - platform: integration
+            source: sensor.elektriciteitsmeting
+            name: energy_elektriciteit
+            unit_prefix: k
+            round: 3
+            method: left
+
+    utility_meter:
+        energy_daily:
+            source: sensor.energy_elektriciteit
+            cycle: daily
+        energy_monthly:
+            source: sensor.energy_elektriciteit
+            cycle: monthly
+
 ## Found a bug?
 
 When and if you find a bug, please document it as good as possible (how to reproduce, logs, screenshots, etc)
