@@ -7,11 +7,18 @@ You can use a touchscreen profile or the Hobby API account.
 
 This integration communicates directly with the controller. You only need internet when activating/renewing the Hobby API. If you use a touch screen profile, this isn't even needed.
 
+## Acknowledgements
+
+This custom component is a spin-off of the hard and excellent work by @filipvh.  Thanks!
+
 ## What works now?
 
 - Lights
 - Switches (relais)
 - Sockets
+- Thermostats
+- Fans
+- Energy Meters
 
 ## How to get it running
 
