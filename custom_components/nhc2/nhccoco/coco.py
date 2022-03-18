@@ -15,6 +15,7 @@ from .coco_switch import CoCoSwitch
 from .coco_switched_fan import CoCoSwitchedFan
 from .coco_climate import CoCoThermostat
 from .coco_energy import CoCoEnergyMeter
+from .coco_garagedoor import CoCoGaragedoor
 from .coco_generic import CoCoGeneric
 
 from .const import *
@@ -30,6 +31,7 @@ DEVICE_SETS = {
     CoCoDeviceClass.LIGHTS: {INTERNAL_KEY_CLASS: CoCoLight, INTERNAL_KEY_MODELS: LIST_VALID_LIGHTS},
     CoCoDeviceClass.THERMOSTATS: {INTERNAL_KEY_CLASS: CoCoThermostat, INTERNAL_KEY_MODELS: LIST_VALID_THERMOSTATS},
     CoCoDeviceClass.ENERGYMETERS: {INTERNAL_KEY_CLASS: CoCoEnergyMeter, INTERNAL_KEY_MODELS: LIST_VALID_ENERGYMETERS},
+    CoCoDeviceClass.GARAGEDOORS: {INTERNAL_KEY_CLASS: CoCoGaragedoor, INTERNAL_KEY_MODELS: LIST_VALID_GARAGEDOORS},
     CoCoDeviceClass.GENERIC: {INTERNAL_KEY_CLASS: CoCoGeneric, INTERNAL_KEY_MODELS: LIST_VALID_GENERICS}
 }
 
@@ -97,6 +99,7 @@ class CoCo:
             elif topic == (self._profile_creation_id + MQTT_TOPIC_SUFFIX_EVT) and \
                     (response[KEY_METHOD] == MQTT_METHOD_DEVICES_STATUS or response[KEY_METHOD] == MQTT_METHOD_DEVICES_CHANGED):
                 devices = extract_devices(response)
+                
                 for device in devices:
                     try:
                         if KEY_UUID in device:
@@ -158,7 +161,7 @@ class CoCo:
             sem.release()
             if device_commands_to_process is not None:
                 command = process_device_commands(device_commands_to_process)
-                _LOGGER.debug(json.dumps(command))
+                #_LOGGER.debug(json.dumps(command))
                 self._client.publish(self._profile_creation_id + MQTT_TOPIC_SUFFIX_CMD, json.dumps(command), 1)
             sleep(0.05)
 
@@ -200,6 +203,7 @@ class CoCo:
         self.initialize_devices(CoCoDeviceClass.SHUTTERS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.THERMOSTATS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.ENERGYMETERS, actionable_devices)
+        self.initialize_devices(CoCoDeviceClass.GARAGEDOORS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.GENERIC, actionable_devices)
 
     def initialize_devices(self, device_class, actionable_devices):

@@ -5,6 +5,7 @@ from .coco_switch import CoCoSwitch
 from .coco_fan import CoCoFan
 from .coco_climate import CoCoThermostat
 from .coco_energy import CoCoEnergyMeter
+from .coco_garagedoor import CoCoGaragedoor
 from .coco_device_class import CoCoDeviceClass
 
 __all__ = ["CoCo",
@@ -14,4 +15,5 @@ __all__ = ["CoCo",
            "CoCoFan",
            "CoCoThermostat",
            "CoCoEnergyMeter",
+           "CoCoGaragedoor",
            "CoCoDeviceClass"]

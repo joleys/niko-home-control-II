@@ -1,10 +1,6 @@
-import logging
-
 from .coco_entity import CoCoEntity
 from .const import ENERGY_POWER, ENERGY_REPORT
 from .helpers import extract_property_value_from_device
-
-_LOGGER = logging.getLogger(__name__)
 
 
 class CoCoEnergyMeter(CoCoEntity):

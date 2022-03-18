@@ -10,4 +10,5 @@ class CoCoDeviceClass(Enum):
     SWITCHED_FANS = 'switched-fans'
     THERMOSTATS = 'thermostats'
     ENERGYMETERS = 'energymeters'
+    GARAGEDOORS = 'garagedoors'
     GENERIC = 'generic'

@@ -2,10 +2,11 @@
 import logging
 
 from homeassistant.components.cover import CoverEntity, SUPPORT_OPEN, SUPPORT_CLOSE, SUPPORT_STOP, SUPPORT_SET_POSITION, \
-    ATTR_POSITION, DEVICE_CLASS_SHUTTER, DEVICE_CLASS_BLIND, DEVICE_CLASS_GATE
+    ATTR_POSITION, DEVICE_CLASS_SHUTTER, DEVICE_CLASS_BLIND, DEVICE_CLASS_GATE, DEVICE_CLASS_GARAGE
 from .nhccoco.coco import CoCo
 from .nhccoco.coco_device_class import CoCoDeviceClass
 from .nhccoco.coco_shutter import CoCoShutter
+from .nhccoco.coco_garagedoor import CoCoGaragedoor
 
 from .const import DOMAIN, KEY_GATEWAY, BRAND, COVER, ROLL_DOWN_SHUTTER, SUN_BLIND, GATE, VENETIAN_BLIND
 from .helpers import nhc2_entity_processor
@@ -28,6 +29,110 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                                               KEY_ENTITY,
                                               lambda x: NHC2HassCover(x))
                         )
+
+async def async_setup_entry(hass, config_entry, async_add_entities):
+    """Load NHC2 covers based on a config entry."""
+    hass.data.setdefault(KEY_ENTITY, {})[config_entry.entry_id] = []
+    gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
+    _LOGGER.debug('Platform is starting')
+    gateway.get_devices(CoCoDeviceClass.GARAGEDOORS,
+                        nhc2_entity_processor(hass,
+                                              config_entry,
+                                              async_add_entities,
+                                              KEY_ENTITY,
+                                              lambda x: NHC2HassGaragedoor(x))
+                        )
+
+class NHC2HassGaragedoor(CoverEntity):
+    """Representation of an NHC2 Garagedoor."""
+
+    def __init__(self, nhc2garagedoor: CoCoGaragedoor):
+        """Initialize a garagedoor."""
+        self._nhc2garagedoor = nhc2garagedoor
+        self._state = self._nhc2garagedoor.status
+        nhc2garagedoor.on_change = self._on_change
+
+    @property
+    def is_closed(self):
+        """Return True if garagedoor is closed, else None."""
+        if self._state == 'CLOSED':
+            return True
+        if self._state == 'OPEN':
+            return False
+        return None
+
+    @property
+    def is_closing(self):
+        """Return if the garagedoor is closing or not."""
+        return self._state == 'CLOSING'
+
+    @property
+    def is_opening(self):
+        """Return if the garagedoor is opening or not."""
+        return self._state == 'OPENING'
+
+    @property
+    def device_class(self):
+        return DEVICE_CLASS_GARAGE
+
+    @property
+    def supported_features(self) -> int:
+        """Flag supported features."""
+        return SUPPORT_OPEN | SUPPORT_CLOSE
+
+    def _on_change(self):
+        self._state = self._nhc2garagedoor.status
+        self.schedule_update_ha_state()
+        _LOGGER.debug('update gate state: %s', self._state)
+
+    async def async_open_cover(self, **kwargs):
+        """Instruct the garagedoor to open."""
+        self._nhc2garagedoor.open()
+
+    async def async_close_cover(self, **kwargs):
+        """Instruct the garagedoor to close."""
+        self._nhc2garagedoor.close()
+
+    @property
+    def unique_id(self):
+        """Return the garagedoor's UUID."""
+        return self._nhc2garagedoor.uuid
+
+    @property
+    def uuid(self):
+        """Return the garagedoor's UUID."""
+        return self._nhc2garagedoor.uuid
+
+    @property
+    def should_poll(self):
+        """Return false, since the garagedoor will push state."""
+        return False
+
+    @property
+    def name(self):
+        """Return the garagedoor's name."""
+        return self._nhc2garagedoor.name
+
+    @property
+    def available(self):
+        """Return true if the garagedoor is online."""
+        #return self._nhc2garagedoor.online
+
+        # force True > asked NIKO for additional information why the controller returns False
+        return True
+
+    @property
+    def device_info(self):
+        """Return the device info."""
+        return {
+            'identifiers': {
+                (DOMAIN, self.unique_id)
+            },
+            'name': self.name,
+            'manufacturer': BRAND,
+            'model': GATE,
+            'via_hub': (DOMAIN, self._nhc2garagedoor.profile_creation_id),
+        }
 
 
 class NHC2HassCover(CoverEntity):
@@ -68,22 +173,6 @@ class NHC2HassCover(CoverEntity):
         self._is_closed = (self._nhc2shutter.position == 0)
         self._position = self._nhc2shutter.position
         self.schedule_update_ha_state()
-
-    def open_cover(self, **kwargs) -> None:
-        """Pass - not in use."""
-        pass
-
-    def close_cover(self, **kwargs) -> None:
-        """Pass - not in use."""
-        pass
-
-    def stop_cover(self, **kwargs) -> None:
-        """Pass - not in use."""
-        pass
-
-    def set_cover_position(self, **kwargs) -> None:
-        """Pass - not in use."""
-        pass
 
     async def async_open_cover(self, **kwargs):
         """Instruct the cover to open."""
