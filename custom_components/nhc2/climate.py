@@ -1,10 +1,7 @@
 """Support for Niko Home Control II Thermostats."""
 import logging
 
-from homeassistant.components.climate import (
-    ATTR_TEMPERATURE,
-    ClimateEntity
-)
+from homeassistant.components.climate import ATTR_TEMPERATURE, ClimateEntity
 
 from homeassistant.components.climate.const import (
     ATTR_FAN_MODE,
@@ -90,8 +87,6 @@ class NHC2HassThermostat(ClimateEntity):
         self._nhc2thermostat = nhc2thermostat
         self._current_temperature = nhc2thermostat.current_temperature
         nhc2thermostat.on_change = self._on_change
-        _LOGGER.debug("Init new thermostat: %s", nhc2thermostat.name)
-        _LOGGER.info(self.name + " temperature: " + str(self._current_temperature))
 
     def _on_change(self):
         self.schedule_update_ha_state()

@@ -5,6 +5,13 @@ from .helpers import extract_property_value_from_device, extract_property_defini
 
 class CoCoFan(CoCoEntity):
 
+    def __init__(self, dev, callback_container, client, profile_creation_id, command_device_control):
+        super().__init__(dev, callback_container, client, profile_creation_id, command_device_control)
+        self._fan_speed = None
+        self.update_dev(dev, callback_container)
+
+        self.get_fanspeed_params(dev)
+
     @property
     def fan_speed(self):
         return self._fan_speed
@@ -12,13 +19,6 @@ class CoCoFan(CoCoEntity):
     @property
     def fan_speeds(self):
         return self._fan_speeds
-
-    def __init__(self, dev, callback_container, client, profile_creation_id, command_device_control):
-        super().__init__(dev, callback_container, client, profile_creation_id, command_device_control)
-        self._fan_speed = None
-        self.update_dev(dev, callback_container)
-
-        self.get_fanspeed_params(dev)
 
     def change_speed(self, speed):
         self._command_device_control(self._uuid, KEY_FAN_SPEED, speed)

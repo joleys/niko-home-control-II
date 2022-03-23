@@ -63,7 +63,6 @@ class NHC2HassFan(FanEntity):
     @property
     def percentage(self) -> int:
         """Return the current speed percentage."""
-        _LOGGER.debug('Return percentage (%s) of fan (%s).', self._percentage, self.uuid)
         return self._percentage
 
     @property

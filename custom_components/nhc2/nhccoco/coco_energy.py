@@ -25,3 +25,7 @@ class CoCoEnergyMeter(CoCoEntity):
         has_changed = self.update_dev(dev)
         if has_changed:
             self._state_changed()
+
+    @property
+    def state(self):
+        return self._state

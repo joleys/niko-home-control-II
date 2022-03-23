@@ -37,7 +37,7 @@ class NHC2HassEnergyMeter(SensorEntity):
     def __init__(self, nhc2energymeter: CoCoEnergyMeter, optimistic=True):
         """Initialize an energy meter."""
         self._nhc2energymeter = nhc2energymeter
-        self._state = self._nhc2energymeter._state
+        self._state = self._nhc2energymeter.state
         nhc2energymeter.on_change = self._on_change
 
     @property
@@ -61,7 +61,7 @@ class NHC2HassEnergyMeter(SensorEntity):
         return self._state
 
     def _on_change(self):
-        self._state = self._nhc2energymeter._state
+        self._state = self._nhc2energymeter.state
         self.schedule_update_ha_state()
 
     @property

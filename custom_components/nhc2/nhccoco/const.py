@@ -11,12 +11,12 @@ VALUE_DIMMER = 'dimmer'
 
 LIST_VALID_LIGHTS = ['light', VALUE_DIMMER]
 LIST_VALID_SWITCHES = ['socket', 'switched-generic']
-LIST_VALID_SHUTTERS = ['rolldownshutter', 'sunblind', 'gate', 'venetianblind']
+LIST_VALID_COVERS = ['rolldownshutter', 'sunblind', 'gate', 'venetianblind', 'garagedoor']
 LIST_VALID_FANS = ['fan']
 LIST_VALID_SWITCHED_FANS = ['switched-fan']
 LIST_VALID_THERMOSTATS = ['thermostat']
 LIST_VALID_ENERGYMETERS = ['electricity-clamp']
-LIST_VALID_GARAGEDOORS = ['garagedoor']
+LIST_VALID_ACCESSCONTROL = ['accesscontrol']
 LIST_VALID_GENERICS = ['generic']
 
 DEVICE_CONTROL_BUFFER_SIZE = 16

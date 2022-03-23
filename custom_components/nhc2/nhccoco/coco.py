@@ -10,12 +10,12 @@ import paho.mqtt.client as mqtt
 from .coco_device_class import CoCoDeviceClass
 from .coco_fan import CoCoFan
 from .coco_light import CoCoLight
-from .coco_shutter import CoCoShutter
 from .coco_switch import CoCoSwitch
 from .coco_switched_fan import CoCoSwitchedFan
 from .coco_climate import CoCoThermostat
 from .coco_energy import CoCoEnergyMeter
-from .coco_garagedoor import CoCoGaragedoor
+from .coco_cover import CoCoCover
+from .coco_accesscontrol import CoCoAccessControl
 from .coco_generic import CoCoGeneric
 
 from .const import *
@@ -26,12 +26,12 @@ sem = threading.Semaphore()
 DEVICE_SETS = {
     CoCoDeviceClass.SWITCHED_FANS: {INTERNAL_KEY_CLASS: CoCoSwitchedFan, INTERNAL_KEY_MODELS: LIST_VALID_SWITCHED_FANS},
     CoCoDeviceClass.FANS: {INTERNAL_KEY_CLASS: CoCoFan, INTERNAL_KEY_MODELS: LIST_VALID_FANS},
-    CoCoDeviceClass.SHUTTERS: {INTERNAL_KEY_CLASS: CoCoShutter, INTERNAL_KEY_MODELS: LIST_VALID_SHUTTERS},
+    CoCoDeviceClass.COVERS: {INTERNAL_KEY_CLASS: CoCoCover, INTERNAL_KEY_MODELS: LIST_VALID_COVERS},
     CoCoDeviceClass.SWITCHES: {INTERNAL_KEY_CLASS: CoCoSwitch, INTERNAL_KEY_MODELS: LIST_VALID_SWITCHES},
     CoCoDeviceClass.LIGHTS: {INTERNAL_KEY_CLASS: CoCoLight, INTERNAL_KEY_MODELS: LIST_VALID_LIGHTS},
     CoCoDeviceClass.THERMOSTATS: {INTERNAL_KEY_CLASS: CoCoThermostat, INTERNAL_KEY_MODELS: LIST_VALID_THERMOSTATS},
     CoCoDeviceClass.ENERGYMETERS: {INTERNAL_KEY_CLASS: CoCoEnergyMeter, INTERNAL_KEY_MODELS: LIST_VALID_ENERGYMETERS},
-    CoCoDeviceClass.GARAGEDOORS: {INTERNAL_KEY_CLASS: CoCoGaragedoor, INTERNAL_KEY_MODELS: LIST_VALID_GARAGEDOORS},
+    CoCoDeviceClass.ACCESSCONTROL: {INTERNAL_KEY_CLASS: CoCoAccessControl, INTERNAL_KEY_MODELS: LIST_VALID_ACCESSCONTROL},
     CoCoDeviceClass.GENERIC: {INTERNAL_KEY_CLASS: CoCoGeneric, INTERNAL_KEY_MODELS: LIST_VALID_GENERICS}
 }
 
@@ -200,10 +200,9 @@ class CoCo:
         self.initialize_devices(CoCoDeviceClass.FANS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.SWITCHES, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.LIGHTS, actionable_devices)
-        self.initialize_devices(CoCoDeviceClass.SHUTTERS, actionable_devices)
+        self.initialize_devices(CoCoDeviceClass.COVERS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.THERMOSTATS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.ENERGYMETERS, actionable_devices)
-        self.initialize_devices(CoCoDeviceClass.GARAGEDOORS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.GENERIC, actionable_devices)
 
     def initialize_devices(self, device_class, actionable_devices):
