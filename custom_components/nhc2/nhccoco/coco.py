@@ -23,6 +23,7 @@ from .helpers import *
 
 _LOGGER = logging.getLogger(__name__)
 sem = threading.Semaphore()
+
 DEVICE_SETS = {
     CoCoDeviceClass.SWITCHED_FANS: {INTERNAL_KEY_CLASS: CoCoSwitchedFan, INTERNAL_KEY_MODELS: LIST_VALID_SWITCHED_FANS},
     CoCoDeviceClass.FANS: {INTERNAL_KEY_CLASS: CoCoFan, INTERNAL_KEY_MODELS: LIST_VALID_FANS},

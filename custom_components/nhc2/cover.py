@@ -49,7 +49,7 @@ class NHC2HassCover(CoverEntity):
         if self._position == 'OPEN':
             return False
         return None
-
+    
     @property
     def is_closing(self):
         """Return if the cover is closing or not."""

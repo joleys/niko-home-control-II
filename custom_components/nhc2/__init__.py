@@ -76,8 +76,6 @@ async def async_setup_entry(hass, entry):
         switches_as_lights=entry.data[CONF_SWITCHES_AS_LIGHTS]
     )
 
-
-
     async def on_hass_stop(event):
         """Close connection when hass stops."""
         coco.disconnect()
