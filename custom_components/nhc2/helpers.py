@@ -24,8 +24,7 @@ def nhc2_entity_processor(hass,
         # Sort out existing and new entities
         new_entities, existing_entities = [], []
         for entity in entities:
-            (new_entities, existing_entities)[entity.uuid in active_uuids]\
-                .append(entity)
+            (new_entities, existing_entities)[entity.uuid in active_uuids].append(entity)
 
         _LOGGER.debug('Existing UUIDs: %s', ', '
                       .join(list(map(lambda x: x.uuid, existing_entities))))

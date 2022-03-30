@@ -26,39 +26,45 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                                               config_entry,
                                               async_add_entities,
                                               KEY_ENTITY,
-                                              lambda x: NHC2HassCover(x, "alfa"))
+                                              lambda x: NHC2HassCover(x))
                         )
 
 class NHC2HassCover(CoverEntity):
     """Representation of an NHC2 Cover (shutters, blinds, garage doors)."""
 
-    def __init__(self, nhc2cover: CoCoCover, parm):
+    def __init__(self, nhc2cover: CoCoCover):
         """Initialize a cover."""
         self._nhc2cover = nhc2cover
-        self._status = self._nhc2cover.status
+        self._state = self._nhc2cover.state
         self._model = self._nhc2cover.model
         self._position = self._nhc2cover.position
         nhc2cover.on_change = self._on_change
-        _LOGGER.debug('Function argument: %s', parm)
 
     @property
     def is_closed(self):
         """Return True if cover is closed, else None."""
-        if self._position == 'CLOSED':
-            return True
-        if self._position == 'OPEN':
-            return False
+        if self._model == GARAGE_DOOR:
+            if self._state == 'CLOSED':
+                return True
+            if self._state == 'OPEN':
+                return False
+        else:
+            return (self._position == 0)
         return None
     
     @property
     def is_closing(self):
         """Return if the cover is closing or not."""
-        return self._position == 'CLOSING'
+        if self._model == GARAGE_DOOR:
+            return self._state == 'CLOSING'
+        return None
 
     @property
     def is_opening(self):
         """Return if the cover is opening or not."""
-        return self._position == 'OPENING'
+        if self._model == GARAGE_DOOR:
+            return self._state == 'OPENING'
+        return None
 
     @property
     def current_cover_position(self):
@@ -91,10 +97,10 @@ class NHC2HassCover(CoverEntity):
             return SUPPORT_OPEN | SUPPORT_CLOSE | SUPPORT_STOP | SUPPORT_SET_POSITION
 
     def _on_change(self):
-        self._status = self._nhc2cover.status
+        self._state = self._nhc2cover.state
         self._position = self._nhc2cover.position
         self.schedule_update_ha_state()
-        _LOGGER.debug('update cover state: %s', self._status)
+        _LOGGER.debug('update cover state: %s', self._state)
         _LOGGER.debug('update cover position: %s', self._position)
 
     async def async_open_cover(self, **kwargs):

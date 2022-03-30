@@ -21,8 +21,8 @@ class CoCoCover(CoCoEntity):
         return self._position
 
     @property
-    def status(self):
-        return self._status
+    def state(self):
+        return self._state
 
     def open(self):
         if self._model == GARAGE_DOOR:
@@ -55,13 +55,13 @@ class CoCoCover(CoCoEntity):
         state_value = extract_property_value_from_device(dev, KEY_BASICSTATE)
         if state_value is not None and self._status != state_value:
             if self._status == GATE_VALUE_CLOSE and state_value == GATE_MOVING:
-                self._position = 'OPENING'
+                self._state = 'OPENING'
             elif self._status == GATE_VALUE_OPEN and state_value == GATE_MOVING:
-                self._position = 'CLOSING'
+                self._state = 'CLOSING'
             elif state_value == GATE_VALUE_CLOSE:
-                self._position = 'CLOSED'
+                self._state = 'CLOSED'
             elif state_value == GATE_VALUE_OPEN:
-                self._position = 'OPEN'
+                self._state = 'OPEN'
             self._status = state_value
             has_changed = True
         position_value = extract_property_value_from_device(dev, KEY_POSITION)
