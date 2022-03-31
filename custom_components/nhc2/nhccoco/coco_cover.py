@@ -12,6 +12,7 @@ class CoCoCover(CoCoEntity):
     def __init__(self, dev, callback_container, client, profile_creation_id, command_device_control):
         super().__init__(dev, callback_container, client, profile_creation_id, command_device_control)
         self._position = None
+        self._state = None
         self._status = None
         self._model = super().model
         self.update_dev(dev, callback_container)
