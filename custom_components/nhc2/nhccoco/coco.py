@@ -213,16 +213,13 @@ class CoCo:
         if device_class not in self._devices:
             self._devices[device_class] = []
         for base_device in base_devices:
-            if self._device_callbacks[base_device[KEY_UUID]] and self._device_callbacks[base_device[KEY_UUID]][
-                KEY_ENTITY] and \
+            if self._device_callbacks[base_device[KEY_UUID]] and self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY] and \
                     self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY].uuid:
                 self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY].update_dev(base_device)
             else:
                 self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY] = \
                     DEVICE_SETS[device_class][INTERNAL_KEY_CLASS](base_device,
-                                                                  self._device_callbacks[
-                                                                      base_device[
-                                                                          KEY_UUID]],
+                                                                  self._device_callbacks[base_device[KEY_UUID]],
                                                                   self._client,
                                                                   self._profile_creation_id,
                                                                   self._add_device_control)
