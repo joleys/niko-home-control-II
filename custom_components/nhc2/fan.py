@@ -60,6 +60,12 @@ class NHC2HassFan(FanEntity):
         self._percentage = ordered_list_item_to_percentage(self._fan_speeds, self._nhc2fan.fan_speed)
         self.schedule_update_ha_state()
 
+    def nhc2_update(self, nhc2fan: CoCoFan):
+        """Update the NHC2 fan with a new object."""
+        self._nhc2fan = nhc2fan
+        nhc2fan.on_change = self._on_change
+        self.schedule_update_ha_state()
+
     @property
     def percentage(self) -> int:
         """Return the current speed percentage."""
