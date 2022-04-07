@@ -119,6 +119,12 @@ class NHC2HassCover(CoverEntity):
         """Instruct the cover to stop."""
         self._nhc2cover.set_position(kwargs[ATTR_POSITION])
 
+    def nhc2_update(self, nhc2cover: CoCoCover):
+        """Update the NHC2 cover with a new object."""
+        self._nhc2cover = nhc2cover
+        nhc2cover.on_change = self._on_change
+        self.schedule_update_ha_state()
+
     @property
     def unique_id(self):
         """Return the cover's UUID."""
