@@ -29,9 +29,9 @@ from homeassistant.components.climate.const import (
     SUPPORT_TARGET_TEMPERATURE_RANGE
 )
 
-from nhc2_coco import CoCo
-from nhc2_coco.coco_climate import CoCoThermostat
-from nhc2_coco.coco_device_class import CoCoDeviceClass
+from .coco import CoCo
+from .coco_climate import CoCoThermostat
+from .coco_device_class import CoCoDeviceClass
 
 from .const import DOMAIN, KEY_GATEWAY, BRAND, CLIMATE
 from .helpers import nhc2_entity_processor

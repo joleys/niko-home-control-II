@@ -5,8 +5,8 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_USERNAME, \
     CONF_PASSWORD, CONF_ADDRESS, CONF_PORT
-from nhc2_coco.coco_discover_profiles import CoCoDiscoverProfiles
-from nhc2_coco.coco_login_validation import CoCoLoginValidation
+from .coco_discover_profiles import CoCoDiscoverProfiles
+from .coco_login_validation import CoCoLoginValidation
 
 from .const import DOMAIN, CONF_SWITCHES_AS_LIGHTS, KEY_MANUAL
 

@@ -1,10 +1,10 @@
 {
   "domain": "nhc2",
   "name": "Niko Home Control II",
-  "requirements": ["nhc2-coco==1.4.1"],
+  "requirements": ["paho-mqtt==1.6.1"],
   "config_flow": true,
   "issue_tracker": "https://github.com/filipvh/hass-nhc2/issues",
   "documentation": "https://github.com/filipvh/hass-nhc2/blob/master/README.md",
   "codeowners": ["@filipvh"],
-  "version": "2021.4.1"
+  "version": "2022.3.1"
 }

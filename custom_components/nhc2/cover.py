@@ -3,9 +3,9 @@ import logging
 
 from homeassistant.components.cover import CoverEntity, SUPPORT_OPEN, SUPPORT_CLOSE, SUPPORT_STOP, SUPPORT_SET_POSITION, \
     ATTR_POSITION, DEVICE_CLASS_SHUTTER, DEVICE_CLASS_BLIND, DEVICE_CLASS_GATE
-from nhc2_coco import CoCo
-from nhc2_coco.coco_device_class import CoCoDeviceClass
-from nhc2_coco.coco_shutter import CoCoShutter
+from .coco import CoCo
+from .coco_device_class import CoCoDeviceClass
+from .coco_shutter import CoCoShutter
 
 from .const import DOMAIN, KEY_GATEWAY, BRAND, COVER, ROLL_DOWN_SHUTTER, SUN_BLIND, GATE, VENETIAN_BLIND
 from .helpers import nhc2_entity_processor
