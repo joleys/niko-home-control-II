@@ -1,6 +1,6 @@
 {
     "name": "Niko Home Control II",
-    "domains": ["light", "switch", "cover", "fan", "sensor"],
+    "domains": ["light", "switch", "cover", "fan", "sensor", "climate"],
     "iot_class": ["Local Push"],
     "render_readme": true,
     "homeassistant": "0.114.1"

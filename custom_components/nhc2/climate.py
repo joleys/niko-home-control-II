@@ -1,4 +1,5 @@
 """Support for Niko Home Control II Thermostats."""
+
 import logging
 
 from homeassistant.components.climate import ATTR_TEMPERATURE, ClimateEntity
