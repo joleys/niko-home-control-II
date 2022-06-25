@@ -195,11 +195,6 @@ class NHC2HassThermostat(ClimateEntity):
     def unique_id(self):
         """Return the thermostats UUID."""
         return self._nhc2thermostat.uuid
-    
-    @property
-    def uuid(self):
-        """Return the thermostats UUID."""
-        return self._nhc2thermostat.uuid
 
     @property
     def device_info(self):
