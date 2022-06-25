@@ -1,6 +1,8 @@
+from pickle import TRUE
+from turtle import pos
 from .coco_entity import CoCoEntity
 from .const import KEY_BASICSTATE, KEY_POSITION, GATE_VALUE_OPEN, GATE_VALUE_CLOSE, GATE_VALUE_TRIGGERED, \
-                   GATE_MOVING, VALUE_OPEN, VALUE_STOP, VALUE_CLOSE, KEY_ACTION
+                   GATE_MOVING, VALUE_OPEN, VALUE_STOP, VALUE_CLOSE, KEY_ACTION, GATE_ALIGNED
 from ..const import GARAGE_DOOR
 from .helpers import extract_property_value_from_device
 
@@ -54,6 +56,8 @@ class CoCoCover(CoCoEntity):
     def update_dev(self, dev, callback_container=None):
         has_changed = super().update_dev(dev, callback_container)
         state_value = extract_property_value_from_device(dev, KEY_BASICSTATE)
+        position_value = extract_property_value_from_device(dev, KEY_POSITION)
+        aligned_value = extract_property_value_from_device(dev, GATE_ALIGNED)
         if state_value is not None and self._status != state_value:
             if self._status == GATE_VALUE_CLOSE and state_value == GATE_MOVING:
                 self._state = 'OPENING'
@@ -65,8 +69,10 @@ class CoCoCover(CoCoEntity):
                 self._state = 'OPEN'
             self._status = state_value
             has_changed = True
-        position_value = extract_property_value_from_device(dev, KEY_POSITION)
         if position_value is not None and self._position != int(position_value):
+            self._position = int(position_value)
+            has_changed = True
+        if aligned_value == True:
             self._position = int(position_value)
             has_changed = True
         return has_changed

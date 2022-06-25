@@ -204,6 +204,7 @@ class CoCo:
         self.initialize_devices(CoCoDeviceClass.COVERS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.THERMOSTATS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.ENERGYMETERS, actionable_devices)
+        self.initialize_devices(CoCoDeviceClass.ACCESSCONTROL, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.GENERIC, actionable_devices)
 
     def initialize_devices(self, device_class, actionable_devices):
