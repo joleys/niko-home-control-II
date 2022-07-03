@@ -51,6 +51,7 @@ GATE_VALUE_OPEN = 'On'
 GATE_VALUE_CLOSE = 'Off'
 GATE_VALUE_TRIGGERED = 'Triggered'
 GATE_MOVING = 'Intermediate'
+KEY_ALIGNED = "Aligned"
 
 THERM_PROGRAM = 'Program'
 THERM_OVERRULEACTION = 'OverruleActive'
