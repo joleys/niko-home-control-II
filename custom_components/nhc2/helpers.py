@@ -50,9 +50,9 @@ def nhc2_entity_processor(hass,
         _LOGGER.debug('Update done.')
 
         # List UUIDs that should be removed
-        uuids_from_entities = list(map(lambda x: x.uuid, entities))
+        uuids_from_entities = list(map(lambda x: x.uuid, existing_entities))
         uuids_to_remove = \
-            [i for i in uuids_from_entities + active_uuids
+            [i for i in uuids_from_entities #+ active_uuids
              if i not in uuids_from_entities]
         _LOGGER.debug('UUIDs to remove: %s', ', '.join(uuids_to_remove))
 
