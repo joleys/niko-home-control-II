@@ -113,7 +113,7 @@ async def async_setup_entry(hass, entry):
                   entry.data[CONF_HOST], entry.data[CONF_USERNAME]
                   )
     coco.connect()
-    dev_reg = await hass.helpers.device_registry.async_get_registry()
+    dev_reg = hass.helpers.device_registry.async_get(hass)
     coco.get_systeminfo(get_process_sysinfo(dev_reg))
 
     return True
