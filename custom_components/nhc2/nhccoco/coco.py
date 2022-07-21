@@ -105,12 +105,13 @@ class CoCo:
                     try:
                         if KEY_UUID in device:
                             self._device_callbacks[device[KEY_UUID]][INTERNAL_KEY_CALLBACK](device)
-                    except:
+                    except Exception as e:
+                        _LOGGER.warning(f'Failed to invoke callback: {e}')
                         pass
 
         def _on_connect(client, userdata, flags, rc):
             if rc == 0:
-                _LOGGER.info('Connected!')
+                _LOGGER.info('Connected')
                 client.subscribe(self._profile_creation_id + MQTT_TOPIC_SUFFIX_RSP, qos=1)
                 client.subscribe(self._profile_creation_id + MQTT_TOPIC_PUBLIC_RSP, qos=1)
                 client.subscribe(self._profile_creation_id + MQTT_TOPIC_SUFFIX_EVT, qos=1)
@@ -127,8 +128,11 @@ class CoCo:
         def _on_disconnect(client, userdata, rc):
             _LOGGER.warning('Disconnected')
             for uuid, device_callback in self._device_callbacks.items():
-                offline = {'Online': 'False', KEY_UUID: uuid}
-                device_callback[INTERNAL_KEY_CALLBACK](offline)
+                if device_callback[INTERNAL_KEY_CALLBACK]:
+                    offline = {'Online': 'False', KEY_UUID: uuid}
+                    device_callback[INTERNAL_KEY_CALLBACK](offline)
+                else:
+                    _LOGGER.info(f'No callback for device with UUID {uuid}')
 
         self._client.on_message = _on_message
         self._client.on_connect = _on_connect

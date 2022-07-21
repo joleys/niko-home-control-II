@@ -1,8 +1,11 @@
 import threading
+import logging
 from abc import ABC, abstractmethod
 
-from .const import KEY_NAME, CALLBACK_HOLDER_PROP, KEY_TYPE, KEY_MODEL, KEY_ONLINE, KEY_DISPLAY_NAME
+from .const import KEY_NAME, INTERNAL_KEY_CALLBACK, KEY_TYPE, KEY_MODEL, KEY_ONLINE, KEY_DISPLAY_NAME
 from .helpers import dev_prop_changed
+
+_LOGGER = logging.getLogger(__name__)
 
 class CoCoEntity(ABC):
 
@@ -49,11 +52,8 @@ class CoCoEntity(ABC):
         self._type = None
         self._command_device_control = command_device_control
         self._callback_mutex = threading.RLock()
-        self._on_change = (lambda: print('%s (%s) has no _on_change callback set!' % (self._name, self._uuid)))
-        self._callback_container = (
-            lambda: print('%s (%s) has no _callback_container callback set!' % (self._name, self._uuid)))
-        self._after_update_callback = (
-            lambda: print('%s (%s) has no _after_update_callback callback set!' % (self._name, self._uuid)))
+        self._on_change = (lambda: _LOGGER.warning('%s (%s) has no _on_change callback set!' % (self._name, self._uuid)))
+        self._callback_container = callback_container
 
     def update_dev(self, dev, callback_container=None):
         has_changed = False
@@ -74,9 +74,9 @@ class CoCoEntity(ABC):
             has_changed = True
         if callback_container:
             self._callback_container = callback_container
-            if CALLBACK_HOLDER_PROP in self._callback_container:
-                self._callback_container[CALLBACK_HOLDER_PROP] = self._update
-                has_changed = True
+        if not INTERNAL_KEY_CALLBACK in self._callback_container or self._callback_container[INTERNAL_KEY_CALLBACK] == None:
+            self._callback_container[INTERNAL_KEY_CALLBACK] = self._update
+            has_changed = True
         return has_changed
 
     @abstractmethod
