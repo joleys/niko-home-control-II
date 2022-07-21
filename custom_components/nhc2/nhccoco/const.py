@@ -68,8 +68,6 @@ INTERNAL_KEY_CALLBACK = 'callbackHolder'
 INTERNAL_KEY_MODELS = 'models'
 INTERNAL_KEY_CLASS = 'class'
 
-CALLBACK_HOLDER_PROP = 'callbackHolder'
-
 MQTT_METHOD_SYSINFO_PUBLISH = 'systeminfo.publish'
 MQTT_METHOD_SYSINFO_PUBLISHED = 'systeminfo.published'
 MQTT_METHOD_DEVICES_LIST = 'devices.list'
