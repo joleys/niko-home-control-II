@@ -16,6 +16,7 @@ from .coco_climate import CoCoThermostat
 from .coco_energy import CoCoEnergyMeter
 from .coco_cover import CoCoCover
 from .coco_accesscontrol import CoCoAccessControl
+from .coco_button import CoCoButton
 from .coco_generic import CoCoGeneric
 
 from .const import *
@@ -33,6 +34,7 @@ DEVICE_SETS = {
     CoCoDeviceClass.THERMOSTATS: {INTERNAL_KEY_CLASS: CoCoThermostat, INTERNAL_KEY_MODELS: LIST_VALID_THERMOSTATS},
     CoCoDeviceClass.ENERGYMETERS: {INTERNAL_KEY_CLASS: CoCoEnergyMeter, INTERNAL_KEY_MODELS: LIST_VALID_ENERGYMETERS},
     CoCoDeviceClass.ACCESSCONTROL: {INTERNAL_KEY_CLASS: CoCoAccessControl, INTERNAL_KEY_MODELS: LIST_VALID_ACCESSCONTROL},
+    CoCoDeviceClass.BUTTONS: {INTERNAL_KEY_CLASS: CoCoButton, INTERNAL_KEY_MODELS: LIST_VALID_BUTTONS},
     CoCoDeviceClass.GENERIC: {INTERNAL_KEY_CLASS: CoCoGeneric, INTERNAL_KEY_MODELS: LIST_VALID_GENERICS}
 }
 
@@ -209,6 +211,7 @@ class CoCo:
         self.initialize_devices(CoCoDeviceClass.THERMOSTATS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.ENERGYMETERS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.ACCESSCONTROL, actionable_devices)
+        self.initialize_devices(CoCoDeviceClass.BUTTONS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.GENERIC, actionable_devices)
 
     def initialize_devices(self, device_class, actionable_devices):

@@ -17,6 +17,7 @@ LIST_VALID_SWITCHED_FANS = ['switched-fan']
 LIST_VALID_THERMOSTATS = ['thermostat']
 LIST_VALID_ENERGYMETERS = ['electricity-clamp']
 LIST_VALID_ACCESSCONTROL = ['accesscontrol']
+LIST_VALID_BUTTONS = ['alloff']
 LIST_VALID_GENERICS = ['generic']
 
 DEVICE_CONTROL_BUFFER_SIZE = 16
