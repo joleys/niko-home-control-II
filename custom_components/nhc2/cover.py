@@ -4,9 +4,9 @@ from telnetlib import GA
 
 from homeassistant.components.cover import CoverEntity, SUPPORT_OPEN, SUPPORT_CLOSE, SUPPORT_STOP, SUPPORT_SET_POSITION, \
     ATTR_POSITION, DEVICE_CLASS_SHUTTER, DEVICE_CLASS_BLIND, DEVICE_CLASS_GATE, DEVICE_CLASS_GARAGE
-from .nhccoco.coco import CoCo
-from .nhccoco.coco_device_class import CoCoDeviceClass
-from .nhccoco.coco_cover import CoCoCover
+from .coco import CoCo
+from .coco_device_class import CoCoDeviceClass
+from .coco_shutter import CoCoShutter
 
 from .const import DOMAIN, GARAGE_DOOR, KEY_GATEWAY, BRAND, COVER, ROLL_DOWN_SHUTTER, SUN_BLIND, GATE, VENETIAN_BLIND
 from .helpers import nhc2_entity_processor

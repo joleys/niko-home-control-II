@@ -2,9 +2,8 @@
 import logging
 
 from homeassistant.components.light import LightEntity, SUPPORT_BRIGHTNESS, ATTR_BRIGHTNESS
-from .nhccoco.coco import CoCo
-from .nhccoco.coco_light import CoCoLight
-from .nhccoco.coco_device_class import CoCoDeviceClass
+from .coco import CoCoLight, CoCo
+from .coco_device_class import CoCoDeviceClass
 
 from .const import DOMAIN, KEY_GATEWAY, BRAND, LIGHT
 from .helpers import nhc2_entity_processor
