@@ -62,7 +62,8 @@ FORWARD_PLATFORMS = (
     "light",
     "fan",
     "cover",
-    "sensor"
+    "sensor",
+    "button"
 )
 
 async def async_setup_entry(hass, entry):

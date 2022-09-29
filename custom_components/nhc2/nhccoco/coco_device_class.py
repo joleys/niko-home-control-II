@@ -10,4 +10,5 @@ class CoCoDeviceClass(Enum):
     THERMOSTATS = 'thermostats'
     ENERGYMETERS = 'energymeters'
     ACCESSCONTROL = 'accesscontrol'
+    BUTTONS = 'buttons'
     GENERIC = 'generic'

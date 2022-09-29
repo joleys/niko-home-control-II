@@ -19,6 +19,7 @@ This custom component is a spin-off of the hard and excellent work by @filipvh. 
 - Thermostats
 - Fans
 - Energy Meters
+- Alloff
 
 ## How to get it running
 
