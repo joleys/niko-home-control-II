@@ -7,6 +7,7 @@ from homeassistant.components.cover import CoverEntity, SUPPORT_OPEN, SUPPORT_CL
 from .coco import CoCo
 from .coco_device_class import CoCoDeviceClass
 from .coco_shutter import CoCoShutter
+from .coco_cover import CoCoCover
 
 from .const import DOMAIN, GARAGE_DOOR, KEY_GATEWAY, BRAND, COVER, ROLL_DOWN_SHUTTER, SUN_BLIND, GATE, VENETIAN_BLIND
 from .helpers import nhc2_entity_processor

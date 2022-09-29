@@ -13,9 +13,9 @@ from . import DOMAIN, PLATFORMS
 
 _LOGGER = logging.getLogger(__name__)
 
-from .nhccoco.coco import CoCo
-from .nhccoco.coco_device_class import CoCoDeviceClass
-from .nhccoco.coco_accesscontrol import CoCoAccessControl
+from .coco import CoCo
+from .coco_device_class import CoCoDeviceClass
+from .coco_accesscontrol import CoCoAccessControl
 
 from .const import DOMAIN, KEY_GATEWAY, BRAND
 from .helpers import nhc2_entity_processor

@@ -31,15 +31,17 @@ MQTT_PROTOCOL = mqtt.MQTTv311
 MQTT_TRANSPORT = "tcp"
 MQTT_CERT_FILE = '/coco_ca.pem'
 
-
 VALUE_DIMMER = 'dimmer'
 
 LIST_VALID_LIGHTS = ['light', VALUE_DIMMER]
 LIST_VALID_SWITCHES = ['socket', 'switched-generic']
 LIST_VALID_SHUTTERS = ['rolldownshutter', 'sunblind', 'gate', 'venetianblind']
+LIST_VALID_COVERS = ['rolldownshutter', 'sunblind', 'gate', 'venetianblind', 'garagedoor']
 LIST_VALID_FANS = ['fan']
 LIST_VALID_SWITCHED_FANS = ['switched-fan']
 LIST_VALID_THERMOSTATS = ['thermostat']
+LIST_VALID_ENERGYMETERS = ['electricity-clamp']
+LIST_VALID_ACCESSCONTROL = ['accesscontrol']
 LIST_VALID_GENERICS = ['generic']
 
 DEVICE_CONTROL_BUFFER_SIZE = 16
@@ -70,11 +72,20 @@ VALUE_STOP = 'Stop'
 VALUE_CLOSE = 'Close'
 VALUE_TRIGGERED = 'Triggered'
 
+GATE_VALUE_OPEN = 'On'
+GATE_VALUE_CLOSE = 'Off'
+GATE_VALUE_TRIGGERED = 'Triggered'
+GATE_MOVING = 'Intermediate'
+KEY_ALIGNED = "Aligned"
+
 THERM_PROGRAM = 'Program'
 THERM_OVERRULEACTION = 'OverruleActive'
 THERM_OVERRULESETPOINT = 'OverruleSetpoint'
 THERM_OVERRULETIME = 'OverruleTime'
 THERM_ECOSAVE = 'EcoSave'
+
+ENERGY_REPORT = 'ReportInstantUsage'
+ENERGY_POWER = 'ElectricalPower'
 
 DEV_TYPE_ACTION = 'action'
 

@@ -1,6 +1,6 @@
 import logging
 
-from .coco_entity import CoCoEntity
+from custom_components.nhc2.coco_entity import CoCoEntity
 
 _LOGGER = logging.getLogger(__name__)
 

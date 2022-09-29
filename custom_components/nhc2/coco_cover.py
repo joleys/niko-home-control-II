@@ -1,8 +1,8 @@
-from .coco_entity import CoCoEntity
-from .const import KEY_BASICSTATE, KEY_POSITION, GATE_VALUE_OPEN, GATE_VALUE_CLOSE, GATE_VALUE_TRIGGERED, \
+from custom_components.nhc2.coco_entity import CoCoEntity
+from custom_components.nhc2.const import KEY_BASICSTATE, KEY_POSITION, GATE_VALUE_OPEN, GATE_VALUE_CLOSE, GATE_VALUE_TRIGGERED, \
                    GATE_MOVING, VALUE_OPEN, VALUE_STOP, VALUE_CLOSE, KEY_ACTION, KEY_ALIGNED
-from ..const import GARAGE_DOOR
-from .helpers import extract_property_value_from_device
+from custom_components.nhc2.const import GARAGE_DOOR
+from custom_components.nhc2.helpers import extract_property_value_from_device
 
 import logging
 _LOGGER = logging.getLogger(__name__)
