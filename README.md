@@ -34,7 +34,7 @@ Note: Make sure you have a recent version of Home Assistant!
 
 This currently requires some manual action in your configuration.yaml.
 
-You need to add (and possibly tweek) the following:
+You need to add (and possibly tweak) the following:
 
     sensor:
         - platform: integration
