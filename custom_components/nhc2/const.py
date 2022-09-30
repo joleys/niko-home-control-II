@@ -20,3 +20,7 @@ SUN_BLIND = 'sunblind'
 GATE = 'gate'
 VENETIAN_BLIND = 'venetianblind'
 GARAGE_DOOR = 'garagedoor'
+
+SERVICE_SET_LIGHT_BRIGHTNESS = 'set_light_brightness'
+
+ATTR_LIGHT_BRIGHTNESS = 'light_brightness'

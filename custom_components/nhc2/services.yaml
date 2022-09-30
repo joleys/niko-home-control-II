@@ -1,0 +1,17 @@
+# Describes the format for available Niko Home Control II services
+set_light_brightness:
+  name: Set brightness for light
+  description: Sets the brightness for a light.
+  target:
+    entity:
+      domain: light
+      multiple: true
+  fields:
+    light_brightness:
+      name: Brightness
+      description: The brightness as a percentage.
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 100

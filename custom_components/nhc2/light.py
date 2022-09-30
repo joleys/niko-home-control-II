@@ -1,6 +1,8 @@
 """Support for NHC2 lights."""
 import logging
 
+import voluptuous as vol
+
 from homeassistant.components.light import LightEntity, SUPPORT_BRIGHTNESS, ATTR_BRIGHTNESS
 from homeassistant.helpers import entity_platform
 from homeassistant.exceptions import HomeAssistantError
@@ -9,7 +11,7 @@ from .nhccoco.coco import CoCo
 from .nhccoco.coco_light import CoCoLight
 from .nhccoco.coco_device_class import CoCoDeviceClass
 
-from .const import DOMAIN, KEY_GATEWAY, BRAND, LIGHT
+from .const import DOMAIN, KEY_GATEWAY, BRAND, LIGHT, SERVICE_SET_LIGHT_BRIGHTNESS, ATTR_LIGHT_BRIGHTNESS
 from .helpers import nhc2_entity_processor
 
 KEY_GATEWAY = KEY_GATEWAY
@@ -30,6 +32,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                                               KEY_ENTITY,
                                               lambda x: NHC2HassLight(x))
                         )
+
+    platform = entity_platform.async_get_current_platform()
+    platform.async_register_entity_service(
+        SERVICE_SET_LIGHT_BRIGHTNESS,
+        {
+            vol.Required(ATTR_LIGHT_BRIGHTNESS): vol.Range(0, 100)
+        },
+        "_service_set_light_brightness",
+    )
 
 
 class NHC2HassLight(LightEntity):
