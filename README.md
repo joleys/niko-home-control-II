@@ -21,6 +21,15 @@ This custom component is a spin-off of the hard and excellent work by @filipvh. 
 - Energy Meters
 - Alloff
 
+## Service
+### Set brightness for light
+The integration exposes a service to set the brightness of a light. This can be 
+used to set the brightness without turning the lights on. For instance if you want 
+your lights to have a certain brightness at night.
+
+See Developer Tools → Services → Niko Home Control II: Set brightness for light.
+
+
 ## How to get it running
 
 Note: Make sure you have a recent version of Home Assistant!
