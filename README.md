@@ -9,7 +9,7 @@ This integration communicates directly with the controller. You only need intern
 
 ## Acknowledgements
 
-This custom component is a spin-off of the hard and excellent work by @filipvh.  Thanks!
+This custom component is a [spin-off of the hard and excellent work by @filipvh](https://github.com/filipvh/hass-nhc2). Thanks!
 
 ## What works now?
 
