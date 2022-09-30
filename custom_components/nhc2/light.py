@@ -2,6 +2,9 @@
 import logging
 
 from homeassistant.components.light import LightEntity, SUPPORT_BRIGHTNESS, ATTR_BRIGHTNESS
+from homeassistant.helpers import entity_platform
+from homeassistant.exceptions import HomeAssistantError
+
 from .nhccoco.coco import CoCo
 from .nhccoco.coco_light import CoCoLight
 from .nhccoco.coco_device_class import CoCoDeviceClass
@@ -142,3 +145,15 @@ class NHC2HassLight(LightEntity):
         if self._nhc2light.support_brightness:
             return SUPPORT_BRIGHTNESS
         return 0
+
+    async def _service_set_light_brightness(self, light_brightness: int) -> bool:
+        """Service to set brightness."""
+        _LOGGER.debug(f'Service set_light_brightness called: change brightness to {light_brightness} for {self._nhc2light.name}')
+
+        if not self._nhc2light.support_brightness:
+            _LOGGER.error(f'Light {self._nhc2light.name} does not support brightness')
+            raise HomeAssistantError(f'Light {self._nhc2light.name} does not support brightness')
+            return False
+
+        self._nhc2light.set_brightness(light_brightness)
+        return True
