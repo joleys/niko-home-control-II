@@ -193,6 +193,8 @@ class CoCo:
             filter(lambda d: d[KEY_TYPE] == "thermostat", extract_devices(response))))
         actionable_devices.extend(list(
             filter(lambda d: d[KEY_TYPE] == "centralmeter", extract_devices(response))))
+        actionable_devices.extend(list(
+            filter(lambda d: d[KEY_TYPE] == "smartplug", extract_devices(response))))
 
         # Only prepare for devices that don't already exist
         # TODO - Can't we do this when we need it (in initialize_devices ?)
