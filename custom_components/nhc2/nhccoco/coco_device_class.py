@@ -11,4 +11,5 @@ class CoCoDeviceClass(Enum):
     ENERGYMETERS = 'energymeters'
     ACCESSCONTROL = 'accesscontrol'
     BUTTONS = 'buttons'
+    SMARTPLUGS = 'smartplugs'
     GENERIC = 'generic'
