@@ -39,6 +39,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                                               lambda x: NHC2HassSmartPlug(x))
                         )
 
+
 class NHC2HassEnergyMeter(SensorEntity):
     """Representation of an NHC2 Energy Meter."""
 
@@ -105,68 +106,13 @@ class NHC2HassEnergyMeter(SensorEntity):
             'via_hub': (DOMAIN, self._nhc2energymeter.profile_creation_id),
         }
 
-class NHC2HassSmartPlug(SensorEntity):
-    """Representation of an NHC2 Smart plug."""
 
+class NHC2HassSmartPlug(NHC2HassEnergyMeter):
     def __init__(self, nhc2smartplug: CoCoSmartPlug, optimistic=True):
-        """Initialize a smart plug."""
-        self._nhc2smartplug = nhc2smartplug
-        self._state = self._nhc2smartplug.state
-        nhc2smartplug.on_change = self._on_change
-
-    @property
-    def native_unit_of_measurement(self):
-        """Return the unit the value is expressed in."""
-        return POWER_WATT
-
-    @property
-    def device_class(self):
-        """Return the device class the sensor belongs to."""
-        return DEVICE_CLASS_POWER
-
-    @property
-    def state_class(self):
-        """Return the state class the sensor belongs to."""
-        return STATE_CLASS_MEASUREMENT
-
-    @property
-    def state(self):
-        """Return the state of the sensor."""
-        return self._state
-
-    def _on_change(self):
-        self._state = self._nhc2smartplug.state
-        self.schedule_update_ha_state()
-
-    @property
-    def unique_id(self):
-        """Return the energy meters UUID."""
-        return self._nhc2smartplug.uuid
-
-    @property
-    def uuid(self):
-        """Return the energy meters UUID."""
-        return self._nhc2smartplug.uuid
-
-    @property
-    def should_poll(self):
-        """Return false, since the energy meters will push state."""
-        return False
-
-    @property
-    def name(self):
-        """Return the energy meters name."""
-        return self._nhc2smartplug.name
+        super().__init__(nhc2smartplug, optimistic)
 
     @property
     def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self.unique_id)
-            },
-            'name': self.name,
-            'manufacturer': BRAND,
-            'model': SMARTPLUG,
-            'via_hub': (DOMAIN, self._nhc2smartplug.profile_creation_id),
-        }
+        data = super().device_info
+        data['model'] = SMARTPLUG
+        return data
