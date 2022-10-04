@@ -20,6 +20,7 @@ This custom component is a spin-off of the hard and excellent work by @filipvh. 
 - Fans
 - Energy Meters
 - Alloff
+- Power metering for Zigbee Smart plugs
 
 ## How to get it running
 
