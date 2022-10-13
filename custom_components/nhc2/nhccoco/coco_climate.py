@@ -1,17 +1,8 @@
 import logging
 
 from .helpers import status_prop_in_object_is_on, extract_property_definitions, extract_property_value_from_device
-from .const import THERM_PROGRAM, THERM_OVERRULEACTION, THERM_OVERRULESETPOINT, THERM_OVERRULETIME, THERM_ECOSAVE
+from .const import THERM_PROGRAM, THERM_OVERRULEACTION, THERM_OVERRULESETPOINT, THERM_OVERRULETIME, THERM_ECOSAVE, TEMP_CELSIUS, HVAC_MODE_HEAT_COOL
 from .coco_entity import CoCoEntity
-
-from homeassistant.components.climate import (
-    TEMP_CELSIUS,
-    SUPPORT_TARGET_TEMPERATURE,
-    SUPPORT_TARGET_TEMPERATURE_RANGE,
-    SUPPORT_PRESET_MODE, 
-    HVAC_MODE_HEAT,
-    HVAC_MODE_HEAT_COOL
-)
 
 _LOGGER = logging.getLogger(__name__)
 
