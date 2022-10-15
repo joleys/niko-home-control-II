@@ -1,35 +1,44 @@
-"""Support for NHC2 lights."""
+"""Support for NHC2 CentralMeter and NHC2 Smart plugs."""
 import logging
 
 from homeassistant.components.sensor import PLATFORM_SCHEMA, STATE_CLASS_MEASUREMENT, STATE_CLASS_MEASUREMENT, STATE_CLASS_TOTAL_INCREASING, SensorEntity
 from homeassistant.const import ENERGY_KILO_WATT_HOUR, POWER_WATT, DEVICE_CLASS_ENERGY, DEVICE_CLASS_POWER
-from homeassistant.core import CALLBACK_TYPE, callback
 
 from .nhccoco.coco import CoCo
 from .nhccoco.coco_energy import CoCoEnergyMeter
+from .nhccoco.coco_smartplug import CoCoSmartPlug
 from .nhccoco.coco_device_class import CoCoDeviceClass
 
-from .const import DOMAIN, ENERGY, KEY_GATEWAY, BRAND
+from .const import DOMAIN, ENERGY, SMARTPLUG, KEY_GATEWAY, BRAND
 from .helpers import nhc2_entity_processor
 
 KEY_GATEWAY = KEY_GATEWAY
-KEY_ENTITY = 'nhc2_energymeters'
 
 _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Load NHC2 energy meters based on a config entry."""
-    hass.data.setdefault(KEY_ENTITY, {})[config_entry.entry_id] = []
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
     _LOGGER.debug('Platform is starting')
+    hass.data.setdefault('nhc2_energymeters', {})[config_entry.entry_id] = []
     gateway.get_devices(CoCoDeviceClass.ENERGYMETERS,
                         nhc2_entity_processor(hass,
                                               config_entry,
                                               async_add_entities,
-                                              KEY_ENTITY,
+                                              'nhc2_energymeters',
                                               lambda x: NHC2HassEnergyMeter(x))
                         )
+
+    hass.data.setdefault('nhc2_smartplugs', {})[config_entry.entry_id] = []
+    gateway.get_devices(CoCoDeviceClass.SMARTPLUGS,
+                        nhc2_entity_processor(hass,
+                                              config_entry,
+                                              async_add_entities,
+                                              'nhc2_smartplugs',
+                                              lambda x: NHC2HassSmartPlug(x))
+                        )
+
 
 class NHC2HassEnergyMeter(SensorEntity):
     """Representation of an NHC2 Energy Meter."""
@@ -96,3 +105,14 @@ class NHC2HassEnergyMeter(SensorEntity):
             'model': ENERGY,
             'via_hub': (DOMAIN, self._nhc2energymeter.profile_creation_id),
         }
+
+
+class NHC2HassSmartPlug(NHC2HassEnergyMeter):
+    def __init__(self, nhc2smartplug: CoCoSmartPlug, optimistic=True):
+        super().__init__(nhc2smartplug, optimistic)
+
+    @property
+    def device_info(self):
+        data = super().device_info
+        data['model'] = SMARTPLUG
+        return data

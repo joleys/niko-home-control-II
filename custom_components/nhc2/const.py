@@ -11,6 +11,7 @@ FAN = 'Fan'
 CLIMATE = 'Thermostat'
 ENERGY = 'CentralMeter'
 BUTTON = 'Button'
+SMARTPLUG = 'SmartPlug'
 CONF_SWITCHES_AS_LIGHTS = 'switches_as_lights'
 DEFAULT_PORT = 8883
 KEY_MANUAL = 'MANUAL_IP_HOST'
