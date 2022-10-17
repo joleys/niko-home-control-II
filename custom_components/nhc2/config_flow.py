@@ -120,8 +120,12 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
         host_listing = {}
         first = None
         for i, x in enumerate(self._all_cocos):
-            dkey = x[0] if x[3] is None else x[3]
-            host_listing[dkey] = [x[3] + ' (' + x[0] + ')']
+            if x[3] is None:
+                dkey = x[0]
+                host_listing[dkey] = [x[0]]
+            else:
+                dkey = x[3]
+                host_listing[dkey] = [x[3] + ' (' + x[0] + ')']
             if i == 0:
                 first = dkey
         host_listing[KEY_MANUAL] = 'Manual Input'
