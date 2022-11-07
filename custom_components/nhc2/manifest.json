@@ -1,7 +1,7 @@
 {
   "domain": "nhc2",
   "name": "Niko Home Control II",
-  "requirements": [ "paho-mqtt==1.6.1" ],
+  "requirements": [ "paho-mqtt==1.6.1", "getmac==0.8.3" ],
   "config_flow": true,
   "issue_tracker": "https://github.com/joleys/niko-home-control-II",
   "documentation": "https://github.com/joleys/niko-home-control-II/blob/master/README.md",
