@@ -24,9 +24,17 @@
           "host": "Adres/IP"
         }
       },
+      "reauth_confirm": {
+        "title": "Het wachtwoord is verlopen voor Niko Connected Controller II",
+        "description": "Het wachtwoord voor de Niko Hobby API is verlopen. Haal een nieuw wachtwoor dop via [My Niko Home Control →  Geconnecteerde services](https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview).",
+        "data": {
+          "password": "Wachtwoord"
+        }
+      },
       "abort": {
         "single_instance_allowed": "Controller en profiel reeds toegevoegd.",
-        "no_controller_found": "Geen controller gevonden."
+        "no_controller_found": "Geen controller gevonden.",
+        "reauth_successful": "Herauthenticatie succesvol."
       },
       "error": {
         "login_check_fail_1": "Verbinding geweigerd - onjuiste protocolversie",

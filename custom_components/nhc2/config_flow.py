@@ -171,3 +171,32 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
                 vol.Required(CONF_HOST, default=None): str
             }),
         )
+
+    async def async_step_reauth(self, user_input=None):
+        return await self.async_step_reauth_confirm()
+
+    async def async_step_reauth_confirm(self, user_input=None):
+        config_entry = self.hass.config_entries.async_get_entry(self.context["entry_id"])
+
+        if user_input is not None:
+            data = config_entry.data.copy()
+            data[CONF_PASSWORD] = user_input[CONF_PASSWORD]
+
+            validator = CoCoLoginValidation(data[CONF_HOST], data[CONF_USERNAME], data[CONF_PASSWORD], data[CONF_PORT])
+            check = await validator.check_connection()
+
+            if check > 0:
+                _LOGGER.error("Authentication failed: %d", check)
+                self._errors["base"] = ("login_check_fail_%d" % check)
+            else:
+                self.hass.config_entries.async_update_entry(config_entry, data=data)
+                await self.hass.config_entries.async_reload(config_entry.entry_id)
+                return self.async_abort(reason="reauth_successful")
+
+        return self.async_show_form(
+            step_id="reauth_confirm",
+            errors=self._errors,
+            data_schema=vol.Schema({
+                vol.Required(CONF_PASSWORD, default=None): str,
+            }),
+        )

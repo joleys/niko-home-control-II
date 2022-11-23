@@ -24,9 +24,17 @@
           "host": "Address/IP"
         }
       },
+      "reauth_confirm": {
+        "title": "Niko Hobby API password expired for Niko Connected Controller II",
+        "description": "The password for the Niko Hobby API has expired. Please retrieve a new password at [My Niko Home Control →  Connected services](https://mynikohomecontrol.niko.eu/enus/ConnectedServices/Overview).",
+        "data": {
+          "password": "Password"
+        }
+      },
       "abort": {
         "single_instance_allowed": "Controller and profile already added.",
-        "no_controller_found": "No controller was found."
+        "no_controller_found": "No controller was found.",
+        "reauth_successful": "Re-authentication successful."
       },
       "error": {
         "login_check_fail_1": "Connection refused - incorrect protocol version",
