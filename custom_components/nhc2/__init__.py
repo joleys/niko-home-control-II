@@ -10,6 +10,7 @@ from homeassistant.const import EVENT_HOMEASSISTANT_STOP
 from .config_flow import Nhc2FlowHandler  # noqa  pylint_disable=unused-import
 from .const import DOMAIN, KEY_GATEWAY, CONF_SWITCHES_AS_LIGHTS
 from .helpers import extract_versions
+from .nhccoco.const import MQTT_RC_CODES
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -56,6 +57,7 @@ async def async_setup(hass, config):
 
     return True
 
+
 FORWARD_PLATFORMS = (
     "climate",
     "switch",
@@ -65,6 +67,7 @@ FORWARD_PLATFORMS = (
     "sensor",
     "button"
 )
+
 
 async def async_setup_entry(hass, entry):
     """Create a NHC2 gateway."""
@@ -107,13 +110,26 @@ async def async_setup_entry(hass, entry):
 
         return process_sysinfo
 
+    def on_connection_refused(connection_result):
+        # Possible values for connection_result:
+        # 1: Connection refused - incorrect protocol version
+        # 2: Connection refused - invalid client identifier
+        # 3: Connection refused - server unavailable
+        # 4: Connection refused - bad username or password
+        # 5: Connection refused - not authorised
+
+        _LOGGER.error(MQTT_RC_CODES[connection_result])
+
+        if connection_result == 5:
+            coco.disconnect()
+            entry.async_start_reauth(hass)
+
     hass.data.setdefault(KEY_GATEWAY, {})[entry.entry_id] = coco
     hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, on_hass_stop)
 
-    _LOGGER.debug('Connecting to %s with %s',
-                  entry.data[CONF_HOST], entry.data[CONF_USERNAME]
-                  )
-    coco.connect()
+    _LOGGER.debug('Connecting to %s with %s', entry.data[CONF_HOST], entry.data[CONF_USERNAME])
+    coco.connect(on_connection_refused)
+
     dev_reg = hass.helpers.device_registry.async_get(hass)
     coco.get_systeminfo(get_process_sysinfo(dev_reg))
 
