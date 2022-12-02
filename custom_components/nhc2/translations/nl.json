@@ -26,23 +26,23 @@
       },
       "reauth_confirm": {
         "title": "Het wachtwoord is verlopen voor Niko Connected Controller II",
-        "description": "Het wachtwoord voor de Niko Hobby API is verlopen. Haal een nieuw wachtwoor dop via [My Niko Home Control →  Geconnecteerde services](https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview).",
+        "description": "Het wachtwoord voor de Niko Hobby API is verlopen. Haal een nieuw wachtwoord op via [My Niko Home Control →  Geconnecteerde services](https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview).",
         "data": {
           "password": "Wachtwoord"
         }
-      },
-      "abort": {
-        "single_instance_allowed": "Controller en profiel reeds toegevoegd.",
-        "no_controller_found": "Geen controller gevonden.",
-        "reauth_successful": "Herauthenticatie succesvol."
-      },
-      "error": {
-        "login_check_fail_1": "Verbinding geweigerd - onjuiste protocolversie",
-        "login_check_fail_2": "Verbinding geweigerd - ongeldige client-ID",
-        "login_check_fail_3": "Verbinding geweigerd - server niet beschikbaar",
-        "login_check_fail_4": "Verbinding geweigerd - onjuiste gebruikersnaam of wachtwoord",
-        "login_check_fail_5": "Verbinding geweigerd - niet geautoriseerd"
       }
+    },
+    "abort": {
+      "single_instance_allowed": "Controller en profiel reeds toegevoegd.",
+      "no_controller_found": "Geen controller gevonden.",
+      "reauth_successful": "Authenticatie geslaag. [Herstart Home Assistant](/config/system) om de nieuwe instellingen te laden."
+    },
+    "error": {
+      "login_check_fail_1": "Verbinding geweigerd - onjuiste protocolversie",
+      "login_check_fail_2": "Verbinding geweigerd - ongeldige client-ID",
+      "login_check_fail_3": "Verbinding geweigerd - server niet beschikbaar",
+      "login_check_fail_4": "Verbinding geweigerd - onjuiste gebruikersnaam of wachtwoord",
+      "login_check_fail_5": "Verbinding geweigerd - niet geautoriseerd"
     }
   }
 }

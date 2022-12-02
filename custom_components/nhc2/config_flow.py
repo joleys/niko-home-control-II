@@ -190,7 +190,6 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
                 self._errors["base"] = ("login_check_fail_%d" % check)
             else:
                 self.hass.config_entries.async_update_entry(config_entry, data=data)
-                await self.hass.config_entries.async_reload(config_entry.entry_id)
                 return self.async_abort(reason="reauth_successful")
 
         return self.async_show_form(
