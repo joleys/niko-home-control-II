@@ -13,3 +13,4 @@ class CoCoDeviceClass(Enum):
     BUTTONS = 'buttons'
     SMARTPLUGS = 'smartplugs'
     GENERIC = 'generic'
+    VIRTUAL = 'virtual'

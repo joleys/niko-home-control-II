@@ -19,6 +19,7 @@ from .coco_accesscontrol import CoCoAccessControl
 from .coco_button import CoCoButton
 from .coco_smartplug import CoCoSmartPlug
 from .coco_generic import CoCoGeneric
+from .coco_virtual import CoCoVirtual
 
 from .const import *
 from .helpers import *
@@ -37,7 +38,8 @@ DEVICE_SETS = {
     CoCoDeviceClass.ACCESSCONTROL: {INTERNAL_KEY_CLASS: CoCoAccessControl, INTERNAL_KEY_MODELS: LIST_VALID_ACCESSCONTROL},
     CoCoDeviceClass.BUTTONS: {INTERNAL_KEY_CLASS: CoCoButton, INTERNAL_KEY_MODELS: LIST_VALID_BUTTONS},
     CoCoDeviceClass.SMARTPLUGS: {INTERNAL_KEY_CLASS: CoCoSmartPlug, INTERNAL_KEY_MODELS: LIST_VALID_SMARTPLUGS},
-    CoCoDeviceClass.GENERIC: {INTERNAL_KEY_CLASS: CoCoGeneric, INTERNAL_KEY_MODELS: LIST_VALID_GENERICS}
+    CoCoDeviceClass.GENERIC: {INTERNAL_KEY_CLASS: CoCoGeneric, INTERNAL_KEY_MODELS: LIST_VALID_GENERICS},
+    CoCoDeviceClass.VIRTUAL: {INTERNAL_KEY_CLASS: CoCoVirtual, INTERNAL_KEY_MODELS: LIST_VALID_VIRTUAL}
 }
 
 
@@ -196,7 +198,6 @@ class CoCo:
 
     # Processes response on devices.list
     def _process_devices_list(self, response):
-
         # Only add devices that are actionable
         actionable_devices = list(
             filter(lambda d: d[KEY_TYPE] == DEV_TYPE_ACTION, extract_devices(response)))
@@ -206,6 +207,8 @@ class CoCo:
             filter(lambda d: d[KEY_TYPE] == "centralmeter", extract_devices(response))))
         actionable_devices.extend(list(
             filter(lambda d: d[KEY_TYPE] == "smartplug", extract_devices(response))))
+        actionable_devices.extend(list(
+            filter(lambda d: d[KEY_TYPE] == "virtual", extract_devices(response))))
 
         # Only prepare for devices that don't already exist
         # TODO - Can't we do this when we need it (in initialize_devices ?)
@@ -227,6 +230,7 @@ class CoCo:
         self.initialize_devices(CoCoDeviceClass.BUTTONS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.SMARTPLUGS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.GENERIC, actionable_devices)
+        self.initialize_devices(CoCoDeviceClass.VIRTUAL, actionable_devices)
 
     def initialize_devices(self, device_class, actionable_devices):
 

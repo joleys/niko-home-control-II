@@ -1,8 +1,8 @@
 """Support for NHC2 CentralMeter and NHC2 Smart plugs."""
 import logging
 
-from homeassistant.components.sensor import PLATFORM_SCHEMA, STATE_CLASS_MEASUREMENT, STATE_CLASS_MEASUREMENT, STATE_CLASS_TOTAL_INCREASING, SensorEntity
-from homeassistant.const import ENERGY_KILO_WATT_HOUR, POWER_WATT, DEVICE_CLASS_ENERGY, DEVICE_CLASS_POWER
+from homeassistant.components.sensor import PLATFORM_SCHEMA, STATE_CLASS_MEASUREMENT, SensorEntity
+from homeassistant.const import POWER_WATT, DEVICE_CLASS_POWER
 
 from .nhccoco.coco import CoCo
 from .nhccoco.coco_energy import CoCoEnergyMeter
