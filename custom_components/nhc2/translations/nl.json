@@ -26,7 +26,7 @@
       },
       "reauth_confirm": {
         "title": "Het wachtwoord is verlopen voor Niko Connected Controller II",
-        "description": "Het wachtwoord voor de Niko Hobby API is verlopen. Haal een nieuw wachtwoord op via [My Niko Home Control →  Geconnecteerde services](https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview).",
+        "description": "Het wachtwoord voor de Niko Hobby API is verlopen. Haal een nieuw wachtwoord op via [My Niko Home Control →  Geconnecteerde services](https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview).\nHeb je het het geconfigureerd via `configuration.yaml` dan moet je het daar aanpassen.",
         "data": {
           "password": "Wachtwoord"
         }
