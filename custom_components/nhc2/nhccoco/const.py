@@ -58,11 +58,15 @@ GATE_VALUE_TRIGGERED = 'Triggered'
 GATE_MOVING = 'Intermediate'
 KEY_ALIGNED = "Aligned"
 
+GARAGE_DOOR = 'garagedoor'
+
 THERM_PROGRAM = 'Program'
 THERM_OVERRULEACTION = 'OverruleActive'
 THERM_OVERRULESETPOINT = 'OverruleSetpoint'
 THERM_OVERRULETIME = 'OverruleTime'
 THERM_ECOSAVE = 'EcoSave'
+TEMP_CELSIUS = "°C"
+HVAC_MODE_HEAT_COOL = "heat_cool"
 
 ENERGY_REPORT = 'ReportInstantUsage'
 ENERGY_POWER = 'ElectricalPower'
