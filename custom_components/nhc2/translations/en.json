@@ -2,8 +2,8 @@
   "config": {
     "step": {
       "user": {
-        "description": "Configuring controller {host}.\n One option is to activate the 'Niko Hobby API' on the Connected Services page at: https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview or you can use a touchscreen profile. Touchscreen profiles can be create in the 'Niko Home Control programming software' under Dashboard > Touchscreens.",
         "title": "Connect to your Niko Connected Controller II",
+        "description": "Configuring controller {host}.\n One option is to activate the 'Niko Hobby API' on the Connected Services page at: https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview or you can use a touchscreen profile. Touchscreen profiles can be create in the 'Niko Home Control programming software' under Dashboard > Touchscreens.",
         "data": {
           "username": "Profile",
           "password": "Password",
@@ -11,30 +11,38 @@
         }
       },
       "host": {
-        "description": "If no hostname (only IP) is shown, it must be static.",
         "title": "Choose a Niko Connected Controller II",
+        "description": "If no hostname (only IP) is shown, it must be static.",
         "data": {
           "host": "Controller"
         }
       },
       "manual_host": {
-        "description": "Provide a host or IP address",
         "title": "Niko Connected Controller II",
+        "description": "Provide a host or IP address",
         "data": {
           "host": "Address/IP"
         }
       },
-      "abort": {
-        "single_instance_allowed": "Controller and profile already added.",
-        "no_controller_found": "No controller was found."
-      },
-      "error": {
-        "login_check_fail_1": "Connection refused - incorrect protocol version",
-        "login_check_fail_2": "Connection refused - invalid client identifier",
-        "login_check_fail_3": "Connection refused - server unavailable",
-        "login_check_fail_4": "Connection refused - bad username or password",
-        "login_check_fail_5": "Connection refused - not authorised"
+      "reauth_confirm": {
+        "title": "Niko Hobby API password expired for Niko Connected Controller II",
+        "description": "The password for the Niko Hobby API has expired. Please retrieve a new password at [My Niko Home Control →  Connected services](https://mynikohomecontrol.niko.eu/enus/ConnectedServices/Overview).\nIf you have stored the key in a `configuration.yaml` file you should change it there.",
+        "data": {
+          "password": "Password"
+        }
       }
+    },
+    "abort": {
+      "single_instance_allowed": "Controller and profile already added.",
+      "no_controller_found": "No controller was found.",
+      "reauth_successful": "Authentication successful. [Restart Home Assistant](/config/system) to apply the changes."
+    },
+    "error": {
+      "login_check_fail_1": "Connection refused - incorrect protocol version",
+      "login_check_fail_2": "Connection refused - invalid client identifier",
+      "login_check_fail_3": "Connection refused - server unavailable",
+      "login_check_fail_4": "Connection refused - bad username or password",
+      "login_check_fail_5": "Connection refused - not authorised"
     }
   }
 }
