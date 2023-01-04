@@ -47,6 +47,12 @@ class NHC2HassBinarySensor(BinarySensorEntity):
         self._is_on = self._nhc2virtual.is_on
         self.schedule_update_ha_state()
 
+    def nhc2_update(self, nhc2virtual: CoCoVirtual):
+        """Update the NHC2 Virtual with a new object."""
+        self._nhc2virtual = nhc2virtual
+        nhc2virtual.on_change = self._on_change
+        self.schedule_update_ha_state()
+
     @property
     def unique_id(self):
         """Return the virtual device UUID."""
