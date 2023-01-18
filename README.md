@@ -13,14 +13,40 @@ This custom component is a [spin-off of the hard and excellent work by @filipvh]
 
 ## What works now?
 
-- Lights
-- Switches (relais)
-- Sockets
-- Thermostats
-- Fans
-- Energy Meters
-- Alloff
-- Power metering for Zigbee Smart plugs
+* NHC Dimmer Action
+* NHC Relay Action (light, socket, switched-fan, switched-generic)
+
+
+## Not yet supported
+* NHC Access Control Action
+* NHC All Off Action
+* NHC Audio Control Action
+* NHC Basic Alarm Action
+* NHC BellButton Action
+* NHC Fan Action
+* NHC Free Start Stop Actions
+* NHC Garage Door Action
+* NHC House Mode Action
+* NHC HVAC Thermostat
+* NHC Thermostat (thermostat | touchswitch)
+* NHC Touch Switch
+* NHC Mood Action
+* NHC Motor Action (rolldownshutter | sunblind | gate | venetianblind)
+* NHC Panic Mode Action
+* NHC PIR Action
+* NHC Presence Simulation Action
+* NHC Virtual flag
+* NHC Reynaers Action
+* NHC Velux Action
+* NHC Zigbee Smart plug
+* Generic Zigbee Smart plug
+* Sonos Speaker
+* Bose Speaker
+* Electricity Metering module (with clamp)
+* Energy Home
+* Generic Ventilation Implementation
+* Generic Heating/Cooling Implementation
+* Generic Warm Water Implementation
 
 ## Service
 ### Set brightness for light

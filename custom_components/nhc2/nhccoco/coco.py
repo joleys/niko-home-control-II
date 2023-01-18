@@ -23,6 +23,9 @@ from .coco_generic import CoCoGeneric
 
 from .devices.dimmer_action import CocoDimmerAction
 from .devices.light_action import CocoLightAction
+from .devices.socket_action import CocoSocketAction
+from .devices.switched_fan_action import CocoSwitchedFanAction
+from .devices.switched_generic_action import CocoSwitchedGenericAction
 
 from .const import *
 from .helpers import *
