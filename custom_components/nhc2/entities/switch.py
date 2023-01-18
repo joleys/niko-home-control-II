@@ -1,4 +1,4 @@
-from homeassistant.components.switch import SwitchEntity
+from homeassistant.components.switch import SwitchEntity, SwitchDeviceClass
 
 from ..const import DOMAIN, BRAND
 
@@ -41,6 +41,13 @@ class Nhc2SwitchEntity(SwitchEntity):
     @property
     def is_on(self) -> bool:
         return self._device.is_on
+
+    @property
+    def device_class(self) -> str:
+        if self._device.model == 'socket':
+            return SwitchDeviceClass.OUTLET
+
+        return SwitchDeviceClass.SWITCH
 
     def turn_off(self, **kwargs) -> None:
         """Pass - not in use."""
