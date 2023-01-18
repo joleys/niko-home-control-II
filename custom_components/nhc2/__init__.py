@@ -8,7 +8,7 @@ from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, CONF_AD
 from homeassistant.const import EVENT_HOMEASSISTANT_STOP
 
 from .config_flow import Nhc2FlowHandler  # noqa  pylint_disable=unused-import
-from .const import DOMAIN, KEY_GATEWAY, CONF_SWITCHES_AS_LIGHTS
+from .const import DOMAIN, KEY_GATEWAY, CONF_SWITCHES_AS_LIGHTS, BRAND
 from .helpers import extract_versions
 
 _LOGGER = logging.getLogger(__name__)
@@ -42,17 +42,19 @@ async def async_setup(hass, config):
     port = conf.get(CONF_PORT)
     switches_as_lights = conf.get(CONF_SWITCHES_AS_LIGHTS)
 
-    hass.async_create_task(hass.config_entries.flow.async_init(
-        DOMAIN, context={'source': config_entries.SOURCE_IMPORT},
-        data={
-            CONF_HOST: host,
-            CONF_USERNAME: username,
-            CONF_PASSWORD: password,
-            CONF_ADDRESS: address,
-            CONF_PORT: port,
-            CONF_SWITCHES_AS_LIGHTS: switches_as_lights
-        }
-    ))
+    hass.async_create_task(
+        hass.config_entries.flow.async_init(
+            DOMAIN, context={'source': config_entries.SOURCE_IMPORT},
+            data={
+                CONF_HOST: host,
+                CONF_USERNAME: username,
+                CONF_PASSWORD: password,
+                CONF_ADDRESS: address,
+                CONF_PORT: port,
+                CONF_SWITCHES_AS_LIGHTS: switches_as_lights
+            }
+        )
+    )
 
     return True
 
@@ -93,7 +95,7 @@ async def async_setup_entry(hass, entry):
                 identifiers={
                     (DOMAIN, entry.data[CONF_USERNAME])
                 },
-                manufacturer='Niko',
+                manufacturer=BRAND,
                 name='Home Control II',
                 model='Connected controller',
                 sw_version=nhc_version + ' - CoCo Image: ' + coco_image,
