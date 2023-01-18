@@ -6,7 +6,6 @@ from time import sleep
 from typing import Callable
 import sys
 
-
 import paho.mqtt.client as mqtt
 
 from .coco_device_class import CoCoDeviceClass
@@ -242,7 +241,17 @@ class CoCo:
         for device in devices:
             instance = None
             try:
-                classname = 'Coco' + str.title(str.replace(device["Model"], '-', ' ')) + str.title(device["Type"])
+                classname = str.replace(
+                    str.title(
+                        str.replace(
+                            'Coco ' + device["Model"] + ' ' + device["Type"],
+                            '-',
+                            ' '
+                        )
+                    ),
+                    ' ',
+                    ''
+                )
                 instance = getattr(sys.modules[__name__], classname)(json_to_map(device))
                 device_instances[instance.uuid] = instance
             except Exception as e:
