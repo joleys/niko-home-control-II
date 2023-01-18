@@ -98,19 +98,19 @@ class CoCo:
                     response[KEY_METHOD] == MQTT_METHOD_SYSINFO_PUBLISHED:
                 # If the connected controller publishes sysinfo... we expect something to have changed.
                 client.subscribe(self._profile_creation_id + MQTT_TOPIC_SUFFIX_RSP, qos=1)
-                client.publish(self._profile_creation_id + MQTT_TOPIC_SUFFIX_CMD,
-                               json.dumps({KEY_METHOD: MQTT_METHOD_DEVICES_LIST}), 1)
+                client.publish(self._profile_creation_id + MQTT_TOPIC_SUFFIX_CMD, json.dumps({KEY_METHOD: MQTT_METHOD_DEVICES_LIST}), 1)
 
             elif topic == (self._profile_creation_id + MQTT_TOPIC_SUFFIX_EVT) and \
                     (response[KEY_METHOD] == MQTT_METHOD_DEVICES_STATUS or response[KEY_METHOD] == MQTT_METHOD_DEVICES_CHANGED):
                 devices = extract_devices(response)
-                
+
                 for device in devices:
                     try:
                         if KEY_UUID in device:
-                            self._device_callbacks[device[KEY_UUID]][INTERNAL_KEY_CALLBACK](device)
+                            self._device_instances[device[KEY_UUID]].on_change(topic, device)
+                            # self._device_callbacks[device[KEY_UUID]][INTERNAL_KEY_CALLBACK](device)
                     except Exception as e:
-                        _LOGGER.warning(f'Failed to invoke callback: {e}')
+                        _LOGGER.debug(f'Failed to invoke callback: {e}')
                         pass
 
         def _on_connect(client, userdata, flags, rc):
@@ -156,8 +156,16 @@ class CoCo:
 
     def get_devices(self, device_class: CoCoDeviceClass, callback: Callable):
         self._devices_callback[device_class] = callback
-        if self._devices and device_class in self._devices: 
+        if self._devices and device_class in self._devices:
             self._devices_callback[device_class](self._devices[device_class])
+
+    def get_device_instances(self, device_class):
+        devices = []
+        for device in self._device_instances.values():
+            if isinstance(device, device_class):
+                devices.append(device)
+
+        return devices
 
     def _publish_device_control_commands(self):
         while self._keep_thread_running:
@@ -187,47 +195,52 @@ class CoCo:
 
     # Processes response on devices.list
     def _process_devices_list(self, response):
+        devices = extract_devices(response)
+        self._device_instances = convert_to_device_instances(devices)
+
+        # for uuid, device in self._device_instances.items():
+        #     self._device_callbacks[uuid] = device.on_change
 
         # Only add devices that are actionable
-        actionable_devices = list(
-            filter(lambda d: d[KEY_TYPE] == DEV_TYPE_ACTION, extract_devices(response)))
-        actionable_devices.extend(list(
-            filter(lambda d: d[KEY_TYPE] == "thermostat", extract_devices(response))))
-        actionable_devices.extend(list(
-            filter(lambda d: d[KEY_TYPE] == "centralmeter", extract_devices(response))))
-        actionable_devices.extend(list(
-            filter(lambda d: d[KEY_TYPE] == "smartplug", extract_devices(response))))
+        # actionable_devices = list(
+        #     filter(lambda d: d[KEY_TYPE] == DEV_TYPE_ACTION, extract_devices(response)))
+        # actionable_devices.extend(list(
+        #     filter(lambda d: d[KEY_TYPE] == "thermostat", extract_devices(response))))
+        # actionable_devices.extend(list(
+        #     filter(lambda d: d[KEY_TYPE] == "centralmeter", extract_devices(response))))
+        # actionable_devices.extend(list(
+        #     filter(lambda d: d[KEY_TYPE] == "smartplug", extract_devices(response))))
 
         # Only prepare for devices that don't already exist
-        # TODO - Can't we do this when we need it (in initialize_devices ?)
-        existing_uuids = list(self._device_callbacks.keys())
-        for actionable_device in actionable_devices:
-            if actionable_device[KEY_UUID] not in existing_uuids:
-                self._device_callbacks[actionable_device[KEY_UUID]] = \
-                    {INTERNAL_KEY_CALLBACK: None, KEY_ENTITY: None}
+        # # TODO - Can't we do this when we need it (in initialize_devices ?)
+        # existing_uuids = list(self._device_callbacks.keys())
+        # for actionable_device in actionable_devices:
+        #     if actionable_device[KEY_UUID] not in existing_uuids:
+        #         self._device_callbacks[actionable_device[KEY_UUID]] = \
+        #             {INTERNAL_KEY_CALLBACK: None, KEY_ENTITY: None}
 
         # Initialize
-        self.initialize_devices(CoCoDeviceClass.SWITCHED_FANS, actionable_devices)
-        self.initialize_devices(CoCoDeviceClass.FANS, actionable_devices)
-        self.initialize_devices(CoCoDeviceClass.SWITCHES, actionable_devices)
-        self.initialize_devices(CoCoDeviceClass.LIGHTS, actionable_devices)
-        self.initialize_devices(CoCoDeviceClass.COVERS, actionable_devices)
-        self.initialize_devices(CoCoDeviceClass.THERMOSTATS, actionable_devices)
-        self.initialize_devices(CoCoDeviceClass.ENERGYMETERS, actionable_devices)
-        self.initialize_devices(CoCoDeviceClass.ACCESSCONTROL, actionable_devices)
-        self.initialize_devices(CoCoDeviceClass.BUTTONS, actionable_devices)
-        self.initialize_devices(CoCoDeviceClass.SMARTPLUGS, actionable_devices)
-        self.initialize_devices(CoCoDeviceClass.GENERIC, actionable_devices)
+        # self.initialize_devices(CoCoDeviceClass.SWITCHED_FANS, actionable_devices)
+        # self.initialize_devices(CoCoDeviceClass.FANS, actionable_devices)
+        # self.initialize_devices(CoCoDeviceClass.SWITCHES, actionable_devices)
+        # self.initialize_devices(CoCoDeviceClass.LIGHTS, actionable_devices)
+        # self.initialize_devices(CoCoDeviceClass.COVERS, actionable_devices)
+        # self.initialize_devices(CoCoDeviceClass.THERMOSTATS, actionable_devices)
+        # self.initialize_devices(CoCoDeviceClass.ENERGYMETERS, actionable_devices)
+        # self.initialize_devices(CoCoDeviceClass.ACCESSCONTROL, actionable_devices)
+        # self.initialize_devices(CoCoDeviceClass.BUTTONS, actionable_devices)
+        # self.initialize_devices(CoCoDeviceClass.SMARTPLUGS, actionable_devices)
+        # self.initialize_devices(CoCoDeviceClass.GENERIC, actionable_devices)
 
     def initialize_devices(self, device_class, actionable_devices):
-
         base_devices = [x for x in actionable_devices if x[KEY_MODEL]
                         in DEVICE_SETS[device_class][INTERNAL_KEY_MODELS]]
         if device_class not in self._devices:
             self._devices[device_class] = []
         for base_device in base_devices:
-            if self._device_callbacks[base_device[KEY_UUID]] and self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY] and \
-                    self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY].uuid:
+            if self._device_callbacks[base_device[KEY_UUID]] \
+                    and self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY] \
+                    and self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY].uuid:
                 self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY].update_dev(base_device)
             else:
                 self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY] = \
@@ -236,6 +249,6 @@ class CoCo:
                                                                   self._client,
                                                                   self._profile_creation_id,
                                                                   self._add_device_control)
-                self._devices[device_class].append(self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY])
+            self._devices[device_class].append(self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY])
         if device_class in self._devices_callback:
             self._devices_callback[device_class](self._devices[device_class])

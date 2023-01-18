@@ -1,5 +1,9 @@
 from .const import KEY_DEVICES, KEY_PARAMS, KEY_PROPERTIES, KEY_UUID, KEY_METHOD, MQTT_METHOD_DEVICES_CONTROL
 
+import logging
+
+_LOGGER = logging.getLogger(__name__)
+
 
 def extract_devices(response):
     params = response[KEY_PARAMS]
@@ -16,6 +20,7 @@ def extract_property_value_from_device(device, property_key):
                 return property_object[property_key]
     return None
 
+
 def extract_property_definitions(response, parameter):
     if response and 'PropertyDefinitions' in response:
         properties = response['PropertyDefinitions']
@@ -24,11 +29,14 @@ def extract_property_definitions(response, parameter):
     else:
         return None
 
+
 def status_prop_in_object_is_on(property_object_with_status):
     return property_object_with_status['Status'] == 'On'
 
+
 def dev_prop_changed(field, dev, prop):
     return prop in dev and field != dev[prop]
+
 
 def process_device_commands(device_commands_to_process):
     devices = []
@@ -43,3 +51,26 @@ def process_device_commands(device_commands_to_process):
             KEY_DEVICES: devices
         }]
     }
+
+
+import sys
+from .devices.dimmer_action import CocoDimmerAction
+from .devices.light_action import CocoLightAction
+
+
+def convert_to_device_instances(devices: list):
+    device_instances = {}
+    for device in devices:
+        instance = None
+        try:
+            classname = 'Coco' + str.title(str.replace(device["Model"], '-', ' ')) + str.title(device["Type"])
+            instance = getattr(sys.modules[__name__], classname)(json_to_map(device))
+            device_instances[instance.uuid] = instance
+        except Exception as e:
+            _LOGGER.warning(f"Class {classname} not found {e}")
+
+    return device_instances
+
+
+def json_to_map(json):
+    return {k: v for k, v in json.items()}
