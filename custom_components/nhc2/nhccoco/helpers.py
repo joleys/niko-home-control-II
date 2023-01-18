@@ -53,24 +53,5 @@ def process_device_commands(device_commands_to_process):
     }
 
 
-import sys
-from .devices.dimmer_action import CocoDimmerAction
-from .devices.light_action import CocoLightAction
-
-
-def convert_to_device_instances(devices: list):
-    device_instances = {}
-    for device in devices:
-        instance = None
-        try:
-            classname = 'Coco' + str.title(str.replace(device["Model"], '-', ' ')) + str.title(device["Type"])
-            instance = getattr(sys.modules[__name__], classname)(json_to_map(device))
-            device_instances[instance.uuid] = instance
-        except Exception as e:
-            _LOGGER.warning(f"Class {classname} not found {e}")
-
-    return device_instances
-
-
 def json_to_map(json):
     return {k: v for k, v in json.items()}

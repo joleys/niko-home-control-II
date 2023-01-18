@@ -4,6 +4,8 @@ import os
 import threading
 from time import sleep
 from typing import Callable
+import sys
+
 
 import paho.mqtt.client as mqtt
 
@@ -19,6 +21,9 @@ from .coco_accesscontrol import CoCoAccessControl
 from .coco_button import CoCoButton
 from .coco_smartplug import CoCoSmartPlug
 from .coco_generic import CoCoGeneric
+
+from .devices.dimmer_action import CocoDimmerAction
+from .devices.light_action import CocoLightAction
 
 from .const import *
 from .helpers import *
@@ -196,7 +201,7 @@ class CoCo:
     # Processes response on devices.list
     def _process_devices_list(self, response):
         devices = extract_devices(response)
-        self._device_instances = convert_to_device_instances(devices)
+        self._device_instances = self._convert_to_device_instances(devices)
 
         # for uuid, device in self._device_instances.items():
         #     self._device_callbacks[uuid] = device.on_change
@@ -231,6 +236,19 @@ class CoCo:
         # self.initialize_devices(CoCoDeviceClass.BUTTONS, actionable_devices)
         # self.initialize_devices(CoCoDeviceClass.SMARTPLUGS, actionable_devices)
         # self.initialize_devices(CoCoDeviceClass.GENERIC, actionable_devices)
+
+    def _convert_to_device_instances(self, devices: list):
+        device_instances = {}
+        for device in devices:
+            instance = None
+            try:
+                classname = 'Coco' + str.title(str.replace(device["Model"], '-', ' ')) + str.title(device["Type"])
+                instance = getattr(sys.modules[__name__], classname)(json_to_map(device))
+                device_instances[instance.uuid] = instance
+            except Exception as e:
+                _LOGGER.warning(f"Class {classname} not found {e}")
+
+        return device_instances
 
     def initialize_devices(self, device_class, actionable_devices):
         base_devices = [x for x in actionable_devices if x[KEY_MODEL]
