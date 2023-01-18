@@ -31,9 +31,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
     _LOGGER.info('Found %s lights', len(device_instances))
     if len(device_instances) > 0:
-        async_add_entities([
-            Nhc2LightEntity(device_instance, hub, gateway) for device_instance in device_instances
-        ])
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2LightEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
 
     platform = entity_platform.async_get_current_platform()
     platform.async_register_entity_service(

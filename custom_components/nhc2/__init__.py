@@ -59,6 +59,7 @@ async def async_setup(hass, config):
     return True
 
 FORWARD_PLATFORMS = (
+    "binary_sensor",
     "climate",
     "switch",
     "light",

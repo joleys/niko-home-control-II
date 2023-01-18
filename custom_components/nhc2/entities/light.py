@@ -5,10 +5,6 @@ from ..const import DOMAIN, BRAND
 
 from ..nhccoco.devices.relay_action import CocoRelayAction
 
-import logging
-
-_LOGGER = logging.getLogger(__name__)
-
 
 class Nhc2LightEntity(LightEntity):
     _attr_has_entity_name = True
