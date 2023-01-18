@@ -5,13 +5,13 @@ from .const import THERM_PROGRAM, THERM_OVERRULEACTION, THERM_OVERRULESETPOINT, 
 from .coco_entity import CoCoEntity
 
 from homeassistant.components.climate import (
-    TEMP_CELSIUS,
     SUPPORT_TARGET_TEMPERATURE,
     SUPPORT_TARGET_TEMPERATURE_RANGE,
     SUPPORT_PRESET_MODE, 
     HVAC_MODE_HEAT,
     HVAC_MODE_HEAT_COOL
 )
+from homeassistant.const import UnitOfTemperature
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ class CoCoThermostat(CoCoEntity):
 
     @property
     def temperature_unit(self):
-        return TEMP_CELSIUS
+        return UnitOfTemperature.CELSIUS
 
     @property
     def target_temperature_low(self):
