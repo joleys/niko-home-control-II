@@ -123,3 +123,17 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Local Home Assistant instance for debugging
+.HA_VERSION
+.storage
+automations.yaml
+blueprints
+configuration.yaml
+docker-compose.yaml
+docs
+home-assistant.log.*
+home-assistant_v2.*
+scenes.yaml
+scripts.yaml
+secrets.yaml
