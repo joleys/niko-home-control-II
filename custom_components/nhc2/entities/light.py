@@ -1,9 +1,9 @@
 from homeassistant.components.light import LightEntity, ColorMode, ATTR_BRIGHTNESS
 from homeassistant.exceptions import HomeAssistantError
 
-from ..const import DOMAIN, BRAND, LIGHT
+from ..const import DOMAIN, BRAND
 
-from ..nhccoco.devices.light_action import CocoLightAction
+from ..nhccoco.devices.relay_action import CocoRelayAction
 
 import logging
 
@@ -14,7 +14,7 @@ class Nhc2LightEntity(LightEntity):
     _attr_has_entity_name = True
     _attr_name = None
 
-    def __init__(self, device_instance: CocoLightAction, hub, gateway):
+    def __init__(self, device_instance: CocoRelayAction, hub, gateway):
         """Initialize a light."""
         self._device = device_instance
         self._hub = hub
@@ -42,7 +42,7 @@ class Nhc2LightEntity(LightEntity):
             },
             'name': self._device.name,
             'manufacturer': BRAND,
-            'model': LIGHT,
+            'model': f'{self._device.model} ({self._device.type})',
             'via_device': self._hub
         }
 
