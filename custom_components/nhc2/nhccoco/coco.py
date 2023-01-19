@@ -24,6 +24,7 @@ from .coco_generic import CoCoGeneric
 from .devices.alloff_action import CocoAlloffAction
 from .devices.dimmer_action import CocoDimmerAction
 from .devices.light_action import CocoLightAction
+from .devices.naso_smartplug import CocoNasoSmartplug
 from .devices.socket_action import CocoSocketAction
 from .devices.switched_fan_action import CocoSwitchedFanAction
 from .devices.switched_generic_action import CocoSwitchedGenericAction
@@ -42,7 +43,8 @@ DEVICE_SETS = {
     CoCoDeviceClass.LIGHTS: {INTERNAL_KEY_CLASS: CoCoLight, INTERNAL_KEY_MODELS: LIST_VALID_LIGHTS},
     CoCoDeviceClass.THERMOSTATS: {INTERNAL_KEY_CLASS: CoCoThermostat, INTERNAL_KEY_MODELS: LIST_VALID_THERMOSTATS},
     CoCoDeviceClass.ENERGYMETERS: {INTERNAL_KEY_CLASS: CoCoEnergyMeter, INTERNAL_KEY_MODELS: LIST_VALID_ENERGYMETERS},
-    CoCoDeviceClass.ACCESSCONTROL: {INTERNAL_KEY_CLASS: CoCoAccessControl, INTERNAL_KEY_MODELS: LIST_VALID_ACCESSCONTROL},
+    CoCoDeviceClass.ACCESSCONTROL: {INTERNAL_KEY_CLASS: CoCoAccessControl,
+                                    INTERNAL_KEY_MODELS: LIST_VALID_ACCESSCONTROL},
     CoCoDeviceClass.BUTTONS: {INTERNAL_KEY_CLASS: CoCoButton, INTERNAL_KEY_MODELS: LIST_VALID_BUTTONS},
     CoCoDeviceClass.SMARTPLUGS: {INTERNAL_KEY_CLASS: CoCoSmartPlug, INTERNAL_KEY_MODELS: LIST_VALID_SMARTPLUGS},
     CoCoDeviceClass.GENERIC: {INTERNAL_KEY_CLASS: CoCoGeneric, INTERNAL_KEY_MODELS: LIST_VALID_GENERICS}

@@ -7,8 +7,12 @@ from .nhccoco.coco import CoCo
 from .entities.alloff_action_active import Nhc2AlloffActionActiveEntity
 from .entities.alloff_action_basicstate import Nhc2AlloffActionBasicStateEntity
 from .entities.dimmer_action_alligned import Nhc2DimmerActionAlignedEntity
+from .entities.naso_smartplug_feedback_enabled import Nhc2NasoSmartPlugFeedbackEnabledEntity
+from .entities.naso_smartplug_measuring_only import Nhc2NasoSmartPlugMeasuringOnlyEntity
+from .entities.naso_smartplug_report_instant_usage import Nhc2NasoSmartPlugReportInstantUsageEntity
 from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
+from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 
 from .const import DOMAIN, KEY_GATEWAY
 
@@ -40,5 +44,16 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             entities.append(Nhc2AlloffActionActiveEntity(device_instance, hub, gateway))
             entities.append(Nhc2AlloffActionBasicStateEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoNasoSmartplug)
+    _LOGGER.info('Found %s smartplugs', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2NasoSmartPlugReportInstantUsageEntity(device_instance, hub, gateway))
+            entities.append(Nhc2NasoSmartPlugFeedbackEnabledEntity(device_instance, hub, gateway))
+            entities.append(Nhc2NasoSmartPlugMeasuringOnlyEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

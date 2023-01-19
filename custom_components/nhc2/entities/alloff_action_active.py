@@ -21,7 +21,6 @@ class Nhc2AlloffActionActiveEntity(BinarySensorEntity):
 
         self._attr_state = self._device.status_all_off_active
         self._attr_state_class = None
-        # self._attr_entity_category = EntityCategory.DIAGNOSTIC
 
     @property
     def name(self) -> str:

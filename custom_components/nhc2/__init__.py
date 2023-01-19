@@ -58,6 +58,7 @@ async def async_setup(hass, config):
 
     return True
 
+
 FORWARD_PLATFORMS = (
     "binary_sensor",
     "climate",
@@ -68,6 +69,7 @@ FORWARD_PLATFORMS = (
     "sensor",
     "button"
 )
+
 
 async def async_setup_entry(hass, entry):
     """Create a NHC2 gateway."""
@@ -103,7 +105,6 @@ async def async_setup_entry(hass, entry):
             )
 
             for platform in FORWARD_PLATFORMS:
-                _LOGGER.info("Forwarding platform: %s", platform)
                 hass.async_create_task(
                     hass.config_entries.async_forward_entry_setup(entry, platform)
                 )

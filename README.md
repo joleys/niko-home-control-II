@@ -49,6 +49,24 @@ for light.
 
 Lights are exposed as lights. Others are exposed as switches.
 
+### NHC Zigbee Smart plug
+
+This is the energy metering linked to a zigbee smart plug. The smart plug itself is a different device.
+
+#### Entities
+
+* **Electrical Power Sensor**, the realtime power usage in W. Possitive means power consumed, negative is power
+  produced.
+* **Report Instant Usage Binary Sensor**, indicates if the Electrical Power is received. When disabled, it will
+  automatically be enabled.
+* **Feedback Enabled Binary Sensor**. On if the feedback led shows the relay status. Off if the feedback led is
+  disabled.
+* **Measuring Only Binary Sensor**. If on, the relay will always be on.
+
+#### Remarks
+
+The totals are not available as they are not exposed by the API.
+
 ## Not yet supported
 
 * NHC Access Control Action
@@ -70,7 +88,6 @@ Lights are exposed as lights. Others are exposed as switches.
 * NHC Virtual flag
 * NHC Reynaers Action
 * NHC Velux Action
-* NHC Zigbee Smart plug
 * Generic Zigbee Smart plug
 * Sonos Speaker
 * Bose Speaker
