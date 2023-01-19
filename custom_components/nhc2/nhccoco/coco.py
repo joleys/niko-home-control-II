@@ -81,6 +81,7 @@ class CoCo:
         self._devices_callback = {}
         self._system_info = None
         self._system_info_callback = lambda x: None
+        self._device_instances = {}
 
     def __del__(self):
         self._keep_thread_running = False
@@ -123,7 +124,7 @@ class CoCo:
 
         def _on_connect(client, userdata, flags, rc):
             if rc == 0:
-                _LOGGER.info('Connected')
+                _LOGGER.debug('Connected to MQTT broker')
                 client.subscribe(self._profile_creation_id + MQTT_TOPIC_SUFFIX_RSP, qos=1)
                 client.subscribe(self._profile_creation_id + MQTT_TOPIC_PUBLIC_RSP, qos=1)
                 client.subscribe(self._profile_creation_id + MQTT_TOPIC_SUFFIX_EVT, qos=1)
@@ -168,6 +169,11 @@ class CoCo:
             self._devices_callback[device_class](self._devices[device_class])
 
     def get_device_instances(self, device_class):
+        if len(self._device_instances) == 0:
+            _LOGGER.warning(f'No devices yet, probably waiting for device list.')
+            sleep(0.05)
+            return self.get_device_instances(device_class)
+
         devices = []
         for device in self._device_instances.values():
             if isinstance(device, device_class):
