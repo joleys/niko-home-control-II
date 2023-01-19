@@ -15,7 +15,7 @@ class CoCoDevice():
         self._parameters = json['Parameters'] if 'Parameters' in json else None
         self._properties = json['Properties'] if 'Properties' in json else None
 
-        self._after_change_callback = None
+        self._after_change_callbacks = []
         self._online = json['Online'] if 'Online' in json else None
 
     @property
@@ -64,6 +64,10 @@ class CoCoDevice():
         if self._online is None:
             return None
         return self._online == 'True'
+
+    @property
+    def after_change_callbacks(self):
+        return self._after_change_callbacks
 
     def extract_parameter_value(self, parameter_key: str) -> str:
         if self._parameters:

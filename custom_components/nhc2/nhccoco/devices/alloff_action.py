@@ -5,26 +5,18 @@ import logging
 _LOGGER = logging.getLogger(__name__)
 
 
-class CocoDimmerAction(CoCoDevice):
+class CocoAlloffAction(CoCoDevice):
     @property
-    def status_status(self) -> str:
-        return self.extract_property_value('Status')
+    def status_basic_state(self) -> str:
+        return self.extract_property_value('BasicState')
 
     @property
-    def status_brightness(self) -> int:
-        return int(self.extract_property_value('Brightness'))
-
-    @property
-    def status_aligned(self) -> bool:
-        return self.extract_property_value('Aligned') == 'True'
+    def status_all_off_active(self) -> str:
+        return self.extract_property_value('AllOffActive')
 
     @property
     def is_on(self) -> bool:
-        return self.status_status == 'On'
-
-    @property
-    def support_brightness(self) -> bool:
-        return True
+        return self.status_basic_state == 'On'
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')

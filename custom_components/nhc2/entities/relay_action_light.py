@@ -6,7 +6,7 @@ from ..const import DOMAIN, BRAND
 from ..nhccoco.devices.relay_action import CocoRelayAction
 
 
-class Nhc2LightEntity(LightEntity):
+class Nhc2RelayActionLightEntity(LightEntity):
     _attr_has_entity_name = True
     _attr_name = None
 
@@ -16,7 +16,7 @@ class Nhc2LightEntity(LightEntity):
         self._hub = hub
         self._gateway = gateway
 
-        self._device._after_change_callback = self.on_change
+        self._device.after_change_callbacks.append(self.on_change)
 
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid
@@ -38,7 +38,7 @@ class Nhc2LightEntity(LightEntity):
             },
             'name': self._device.name,
             'manufacturer': BRAND,
-            'model': f'{self._device.model} ({self._device.type})',
+            'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }
 

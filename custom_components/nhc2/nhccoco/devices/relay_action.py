@@ -15,5 +15,6 @@ class CocoRelayAction(CoCoDevice):
         if 'Properties' in payload:
             self.merge_properties(payload['Properties'])
 
-        if self._after_change_callback is not None:
-            self._after_change_callback()
+        if self._after_change_callbacks:
+            for callback in self._after_change_callbacks:
+                callback()

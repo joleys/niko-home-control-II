@@ -4,7 +4,10 @@ from homeassistant.const import CONF_USERNAME
 
 from .nhccoco.coco import CoCo
 
-from .entities.dimmers_are_alligned import Nhc2DimmersAreAlignedEntity
+from .entities.alloff_action_active import Nhc2AlloffActionActiveEntity
+from .entities.alloff_action_basicstate import Nhc2AlloffActionBasicStateEntity
+from .entities.dimmer_action_alligned import Nhc2DimmerActionAlignedEntity
+from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
 
 from .const import DOMAIN, KEY_GATEWAY
@@ -22,12 +25,20 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     hub = (DOMAIN, config_entry.data[CONF_USERNAME])
 
     device_instances = gateway.get_device_instances(CocoDimmerAction)
-    _LOGGER.info('Found %s devices', len(device_instances))
-
+    _LOGGER.info('Found %s dimmers', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            if isinstance(device_instance, CocoDimmerAction):
-                entities.append(Nhc2DimmersAreAlignedEntity(device_instance, hub, gateway))
+            entities.append(Nhc2DimmerActionAlignedEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoAlloffAction)
+    _LOGGER.info('Found %s alloffs', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2AlloffActionActiveEntity(device_instance, hub, gateway))
+            entities.append(Nhc2AlloffActionBasicStateEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

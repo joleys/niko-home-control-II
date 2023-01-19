@@ -5,21 +5,53 @@ License: [MIT](LICENSE)
 This custom component will allow you to integrate you Niko Connected Controller II in Home Assistant.
 You can use a touchscreen profile or the Hobby API account.
 
-This integration communicates directly with the controller. You only need internet when activating/renewing the Hobby API. If you use a touch screen profile, this isn't even needed.
+This integration communicates directly with the controller. You only need internet when activating/renewing the Hobby
+API. If you use a touch screen profile, this isn't even needed.
 
 ## Acknowledgements
 
-This custom component is a [spin-off of the hard and excellent work by @filipvh](https://github.com/filipvh/hass-nhc2). Thanks!
+This custom component is a [spin-off of the hard and excellent work by @filipvh](https://github.com/filipvh/hass-nhc2).
+Thanks!
 
 ## What works now?
 
-* NHC Dimmer Action
-* NHC Relay Action (light, socket, switched-fan, switched-generic)
+### NHC All Off Action
 
+This action is exposed as a button.
+
+#### Entities
+
+It has some extra entities that can be used in automations:
+
+* **AllOff Active Binary Sensor**, which represents the AllOffActive state. Be aware that this state is only updated as
+  the
+  button is pressed, not when all devices are off.
+* **AllOff Basic State Binary Sensor**, which represents th Basic State of the AllOff.
+
+### NHC Dimmer Action
+
+This action is exposed as a light.
+
+#### Entities
+
+* **Aligned Binary Sensor**, this is on when:
+    * all dimmers are on and have the same brightness
+    * all dimmers are off, regardless of the brightness
+
+#### Services
+
+The integration exposes a service to set the brightness of a light. This can be
+used to set the brightness without turning the lights on. For instance if you want
+your lights to have a certain brightness at night. See Developer Tools → Services → Niko Home Control II: Set brightness
+for light.
+
+### NHC Relay Action (light, socket, switched-fan, switched-generic)
+
+Lights are exposed as lights. Others are exposed as switches.
 
 ## Not yet supported
+
 * NHC Access Control Action
-* NHC All Off Action
 * NHC Audio Control Action
 * NHC Basic Alarm Action
 * NHC BellButton Action
@@ -47,15 +79,6 @@ This custom component is a [spin-off of the hard and excellent work by @filipvh]
 * Generic Ventilation Implementation
 * Generic Heating/Cooling Implementation
 * Generic Warm Water Implementation
-
-## Service
-### Set brightness for light
-The integration exposes a service to set the brightness of a light. This can be 
-used to set the brightness without turning the lights on. For instance if you want 
-your lights to have a certain brightness at night.
-
-See Developer Tools → Services → Niko Home Control II: Set brightness for light.
-
 
 ## How to get it running
 

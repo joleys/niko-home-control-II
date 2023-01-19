@@ -8,7 +8,7 @@ from homeassistant.helpers import entity_platform
 
 from .nhccoco.coco import CoCo
 
-from .entities.light import Nhc2LightEntity
+from .entities.relay_action_light import Nhc2RelayActionLightEntity
 from .nhccoco.devices.light_action import CocoLightAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
 
@@ -26,14 +26,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
     hub = (DOMAIN, config_entry.data[CONF_USERNAME])
 
-    device_instances = gateway.get_device_instances(CocoLightAction)
+    device_instances = []
+    device_instances += gateway.get_device_instances(CocoLightAction)
     device_instances += gateway.get_device_instances(CocoDimmerAction)
 
     _LOGGER.info('Found %s lights', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2LightEntity(device_instance, hub, gateway))
+            entities.append(Nhc2RelayActionLightEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

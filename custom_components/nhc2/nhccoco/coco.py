@@ -21,6 +21,7 @@ from .coco_button import CoCoButton
 from .coco_smartplug import CoCoSmartPlug
 from .coco_generic import CoCoGeneric
 
+from .devices.alloff_action import CocoAlloffAction
 from .devices.dimmer_action import CocoDimmerAction
 from .devices.light_action import CocoLightAction
 from .devices.socket_action import CocoSocketAction
