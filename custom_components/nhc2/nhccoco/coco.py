@@ -264,6 +264,23 @@ class CoCo:
                     ' ',
                     ''
                 )
+
+                # ignore some devices
+                if classname in [
+                    # These are devices, but don't receive any events through MQTT. So we can't do anything with them.
+                    'CocoDimcontrollerSmartpanel',
+                    'CocoDimmerSmartdimmer',
+                    'CocoExtensionbuttonx1Smartextensionpanel',
+                    'CocoGenericBrick',
+                    'CocoGenericGatewayfw',
+                    'CocoGenericRadio',
+                    'CocoGenericStick',
+                    'CocoLightSmartrelay',
+                    'CocoPushbuttonx1FeedbackSmartpanel',
+                    'CocoPushbuttonx1Smartpanel',
+                ]:
+                    continue
+
                 instance = getattr(sys.modules[__name__], classname)(json_to_map(device))
                 device_instances[instance.uuid] = instance
             except Exception as e:
