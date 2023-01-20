@@ -74,16 +74,16 @@ class Nhc2RelayActionLightEntity(LightEntity):
             brightness_percentage = int(round(brightness / 255 * 100))
 
             if brightness_percentage == 0:
-                await self._device.async_turn_off()
+                await self._device.turn_off(self._gateway)
                 return
 
-            self._gateway._add_device_control(self._device.uuid, "Brightness", str(brightness_percentage))
+            self._device.set_brightness(self._gateway, brightness_percentage)
 
-        self._gateway._add_device_control(self._device.uuid, "Status", "On")
+        self._device.turn_on(self._gateway)
         self.on_change()
 
-    async def async_turn_off(self, **kwargs):
-        self._gateway._add_device_control(self._device.uuid, "Status", "Off")
+    async def async_turn_off(self):
+        self._device.turn_off(self._gateway)
         self.on_change()
 
     async def _service_set_light_brightness(self, light_brightness: int) -> bool:
@@ -91,5 +91,5 @@ class Nhc2RelayActionLightEntity(LightEntity):
             raise HomeAssistantError(f'{self.name} does not support brightness.')
             return False
 
-        self._gateway._add_device_control(self._device.uuid, "Brightness", str(light_brightness))
+        self._device.set_brightness(self._gateway, light_brightness)
         return True

@@ -56,10 +56,10 @@ class Nhc2RelayActionSwitchEntity(SwitchEntity):
     def on_change(self):
         self.schedule_update_ha_state()
 
-    async def async_turn_on(self, **kwargs):
-        self._gateway._add_device_control(self._device.uuid, "Status", "On")
+    async def async_turn_on(self):
+        self._device.turn_on(self._gateway)
         self.on_change()
 
-    async def async_turn_off(self, **kwargs):
-        self._gateway._add_device_control(self._device.uuid, "Status", "Off")
+    async def async_turn_off(self):
+        self._device.turn_off(self._gateway)
         self.on_change()

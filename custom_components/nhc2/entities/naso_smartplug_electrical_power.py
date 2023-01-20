@@ -54,6 +54,6 @@ class Nhc2NasoSmartPlugElectricalPowerEntity(SensorEntity):
         # Re-enable reporting when it is turned off
         if self._device.report_instant_usage is False:
             _LOGGER.debug(f'{self.name} re-enabled')
-            self._gateway._add_device_control(self._device.uuid, "ReportInstantUsage", "True")
+            self._device.enable_report_instant_usage(self._gateway)
 
         self.schedule_update_ha_state()

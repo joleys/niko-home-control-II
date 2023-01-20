@@ -26,3 +26,6 @@ class CocoAlloffAction(CoCoDevice):
         if self._after_change_callbacks:
             for callback in self._after_change_callbacks:
                 callback()
+
+    def press(self, gateway):
+        gateway._add_device_control(self._device.uuid, "BasicState", "Triggered")

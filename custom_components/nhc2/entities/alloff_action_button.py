@@ -42,5 +42,5 @@ class Nhc2AlloffActionButtonEntity(ButtonEntity):
         self.schedule_update_ha_state()
 
     async def async_press(self):
-        self._gateway._add_device_control(self._device.uuid, "BasicState", "Triggered")
+        self._device.press(self._gateway)
         self.on_change()
