@@ -1,3 +1,8 @@
+from ..const import DEVICE_DESCRIPTOR_UUID, DEVICE_DESCRIPTOR_TYPE, DEVICE_DESCRIPTOR_TECHNOLOGY, \
+    DEVICE_DESCRIPTOR_MODEL, DEVICE_DESCRIPTOR_IDENTIFIER, DEVICE_DESCRIPTOR_NAME, DEVICE_DESCRIPTOR_TRAITS, \
+    DEVICE_DESCRIPTOR_PARAMETERS, DEVICE_DESCRIPTOR_PROPERTIES, DEVICE_DESCRIPTOR_ONLINE, \
+    DEVICE_DESCRIPTOR_ONLINE_VALUE_TRUE
+
 import logging
 
 _LOGGER = logging.getLogger(__name__)
@@ -5,18 +10,18 @@ _LOGGER = logging.getLogger(__name__)
 
 class CoCoDevice():
     def __init__(self, json: dict):
-        self._uuid = json['Uuid']
-        self._type = json['Type']
-        self._technology = json['Technology']
-        self._model = json['Model']
-        self._identifier = json['Identifier']
-        self._name = json['Name']
-        self._traits = json['Traits'] if 'Traits' in json else None
-        self._parameters = json['Parameters'] if 'Parameters' in json else None
-        self._properties = json['Properties'] if 'Properties' in json else None
+        self._uuid = json[DEVICE_DESCRIPTOR_UUID]
+        self._type = json[DEVICE_DESCRIPTOR_TYPE]
+        self._technology = json[DEVICE_DESCRIPTOR_TECHNOLOGY]
+        self._model = json[DEVICE_DESCRIPTOR_MODEL]
+        self._identifier = json[DEVICE_DESCRIPTOR_IDENTIFIER]
+        self._name = json[DEVICE_DESCRIPTOR_NAME]
+        self._traits = json[DEVICE_DESCRIPTOR_TRAITS] if DEVICE_DESCRIPTOR_TRAITS in json else None
+        self._parameters = json[DEVICE_DESCRIPTOR_PARAMETERS] if DEVICE_DESCRIPTOR_PARAMETERS in json else None
+        self._properties = json[DEVICE_DESCRIPTOR_PROPERTIES] if DEVICE_DESCRIPTOR_PROPERTIES in json else None
 
         self._after_change_callbacks = []
-        self._online = json['Online'] if 'Online' in json else None
+        self._online = json[DEVICE_DESCRIPTOR_ONLINE] if DEVICE_DESCRIPTOR_ONLINE in json else None
 
     @property
     def uuid(self) -> str:
@@ -63,7 +68,7 @@ class CoCoDevice():
         """Device is online"""
         if self._online is None:
             return None
-        return self._online == 'True'
+        return self._online == DEVICE_DESCRIPTOR_ONLINE_VALUE_TRUE
 
     @property
     def after_change_callbacks(self):

@@ -52,7 +52,7 @@ class Nhc2NasoSmartPlugElectricalPowerEntity(SensorEntity):
 
     def on_change(self):
         # Re-enable reporting when it is turned off
-        if self._device.report_instant_usage is False:
+        if self._device.is_report_instant_usage is False:
             _LOGGER.debug(f'{self.name} re-enabled')
             self._device.enable_report_instant_usage(self._gateway)
 

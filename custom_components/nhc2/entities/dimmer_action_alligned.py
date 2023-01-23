@@ -20,7 +20,7 @@ class Nhc2DimmerActionAlignedEntity(BinarySensorEntity):
         self._attr_unique_id = device_instance.uuid + '_aligned'
         self._attr_should_poll = False
 
-        self._attr_state = self._device.status_aligned
+        self._attr_state = self._device.is_aligned
         self._attr_state_class = None
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
 
@@ -43,7 +43,7 @@ class Nhc2DimmerActionAlignedEntity(BinarySensorEntity):
 
     @property
     def is_on(self) -> bool:
-        return self._device.status_aligned
+        return self._device.is_aligned
 
     def on_change(self):
         self.schedule_update_ha_state()

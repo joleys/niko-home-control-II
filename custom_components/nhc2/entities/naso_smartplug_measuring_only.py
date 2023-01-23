@@ -20,7 +20,7 @@ class Nhc2NasoSmartPlugMeasuringOnlyEntity(BinarySensorEntity):
         self._attr_unique_id = device_instance.uuid + '_measuring_only'
         self._attr_should_poll = False
 
-        self._attr_state = self._device.measuring_only
+        self._attr_state = self._device.is_measuring_only
         self._attr_state_class = None
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
 
@@ -43,7 +43,7 @@ class Nhc2NasoSmartPlugMeasuringOnlyEntity(BinarySensorEntity):
 
     @property
     def is_on(self) -> bool:
-        return self._device.measuring_only
+        return self._device.is_measuring_only
 
     def on_change(self):
         self.schedule_update_ha_state()

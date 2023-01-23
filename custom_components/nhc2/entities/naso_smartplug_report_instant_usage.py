@@ -20,7 +20,7 @@ class Nhc2NasoSmartPlugReportInstantUsageEntity(BinarySensorEntity):
         self._attr_unique_id = device_instance.uuid + '_report_instant_usage'
         self._attr_should_poll = False
 
-        self._attr_state = self._device.report_instant_usage
+        self._attr_state = self._device.is_report_instant_usage
         self._attr_state_class = None
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
 
@@ -43,7 +43,7 @@ class Nhc2NasoSmartPlugReportInstantUsageEntity(BinarySensorEntity):
 
     @property
     def is_on(self) -> bool:
-        return self._device.report_instant_usage
+        return self._device.is_report_instant_usage
 
     def on_change(self):
         self.schedule_update_ha_state()

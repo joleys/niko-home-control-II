@@ -19,7 +19,7 @@ class Nhc2AlloffActionBasicStateEntity(BinarySensorEntity):
         self._attr_unique_id = device_instance.uuid + '_alloff_basic_state'
         self._attr_should_poll = False
 
-        self._attr_state = self._device.status_basic_state
+        self._attr_state = self._device.is_basic_state_on
         self._attr_state_class = None
 
     @property
@@ -41,7 +41,7 @@ class Nhc2AlloffActionBasicStateEntity(BinarySensorEntity):
 
     @property
     def is_on(self) -> bool:
-        return self._device.status_basic_state == 'On'
+        return self._device.is_basic_state_on
 
     def on_change(self):
         self.schedule_update_ha_state()

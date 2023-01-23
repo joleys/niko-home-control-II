@@ -20,7 +20,7 @@ class Nhc2NasoSmartPlugFeedbackEnabledEntity(BinarySensorEntity):
         self._attr_unique_id = device_instance.uuid + '_feedback_enabled'
         self._attr_should_poll = False
 
-        self._attr_state = self._device.feedback_enabled
+        self._attr_state = self._device.is_feedback_enabled
         self._attr_state_class = None
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
 
@@ -42,8 +42,8 @@ class Nhc2NasoSmartPlugFeedbackEnabledEntity(BinarySensorEntity):
         }
 
     @property
-    def is_on(self) -> bool:
-        return self._device.feedback_enabled
+    def is_on(self) -> bool | None:
+        return self._device.is_feedback_enabled
 
     def on_change(self):
         self.schedule_update_ha_state()
