@@ -2,8 +2,8 @@
   "config": {
     "step": {
       "user": {
-        "description": "Configuring controller {host}.\n One option is to activate the 'Niko Hobby API' on the Connected Services page at: https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview or you can use a touchscreen profile. Touchscreen profiles can be create in the 'Niko Home Control programming software' under Dashboard > Touchscreens.",
         "title": "Connect to your Niko Connected Controller II",
+        "description": "Configuring controller {host}.\n One option is to activate the 'Niko Hobby API' on the Connected Services page at: https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview or you can use a touchscreen profile. Touchscreen profiles can be create in the 'Niko Home Control programming software' under Dashboard > Touchscreens.",
         "data": {
           "username": "Profile",
           "password": "Password",
@@ -11,15 +11,15 @@
         }
       },
       "host": {
-        "description": "If no hostname (only IP) is shown, it must be static.",
         "title": "Choose a Niko Connected Controller II",
+        "description": "If no hostname (only IP) is shown, it must be static.",
         "data": {
           "host": "Controller"
         }
       },
       "manual_host": {
-        "description": "Provide a host or IP address",
         "title": "Niko Connected Controller II",
+        "description": "Provide a host or IP address",
         "data": {
           "host": "Address/IP"
         }
