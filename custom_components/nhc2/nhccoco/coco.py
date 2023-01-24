@@ -10,7 +10,6 @@ import paho.mqtt.client as mqtt
 
 from .coco_device_class import CoCoDeviceClass
 from .coco_fan import CoCoFan
-from .coco_switch import CoCoSwitch
 from .coco_switched_fan import CoCoSwitchedFan
 from .coco_climate import CoCoThermostat
 from .coco_energy import CoCoEnergyMeter
