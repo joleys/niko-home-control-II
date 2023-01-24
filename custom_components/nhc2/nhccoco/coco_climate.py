@@ -1,6 +1,6 @@
 import logging
 
-from .helpers import status_prop_in_object_is_on, extract_property_definitions, extract_property_value_from_device
+from .helpers import extract_property_definitions, extract_property_value_from_device
 from .const import THERM_PROGRAM, THERM_OVERRULEACTION, THERM_OVERRULESETPOINT, THERM_OVERRULETIME, THERM_ECOSAVE
 from .coco_entity import CoCoEntity
 

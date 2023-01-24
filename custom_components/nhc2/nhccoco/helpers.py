@@ -30,10 +30,6 @@ def extract_property_definitions(response, parameter):
         return None
 
 
-def status_prop_in_object_is_on(property_object_with_status):
-    return property_object_with_status['Status'] == 'On'
-
-
 def dev_prop_changed(field, dev, prop):
     return prop in dev and field != dev[prop]
 
