@@ -65,6 +65,26 @@ used to set the brightness without turning the lights on. For instance if you wa
 your lights to have a certain brightness at night. See Developer Tools → Services → Niko Home Control II: Set brightness
 for light.
 
+### NHC Thermostat (untested)
+
+This is exposed as a climate entity.
+
+#### Todo
+
+* [ ] [Check if we can implement target_temperature_high, target_temperature_low, target_temperature_step](https://github.com/joleys/niko-home-control-II/blob/master/custom_components/nhc2/nhccoco/coco_climate.py#L103)
+* [ ] [Check if we can implement max_temp, min_temp](https://github.com/joleys/niko-home-control-II/blob/master/custom_components/nhc2/nhccoco/coco_climate.py#L112)
+* [ ] [Check if we can populate preset_modes from the description](https://github.com/joleys/niko-home-control-II/blob/master/custom_components/nhc2/nhccoco/coco_climate.py#L120)
+
+#### Entities
+
+* **Setpoint Temperature Sensor**, the desired setpoint in the current program.
+* **Overrule Active Binary Sensor**, marks if the overrule-time will be used instead of setpoint as defined in program
+  mode.
+* **Overrule Setpoint Temperature Sensor**, the current overruled setpoint temperature.
+* **Overrule Time Duration Sensor**, duration of the overrule period in minutes.
+* **EcoSave Binary Sensor**, marks if the EcoSave mode is active. When active the program keeps going, but the
+  setpointtemperature is altered (+3 when cooling, -3 when heating).
+
 ### NHC Relay Action (light, socket, switched-fan, switched-generic)
 
 Lights are exposed as lights. Others are exposed as switches.
@@ -96,7 +116,6 @@ The totals are not available as they are not exposed by the API.
 * NHC Garage Door Action
 * NHC House Mode Action
 * NHC HVAC Thermostat
-* NHC Thermostat (thermostat | touchswitch)
 * NHC Touch Switch
 * NHC Mood Action
 * NHC Motor Action (rolldownshutter | sunblind | gate | venetianblind)
