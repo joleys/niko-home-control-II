@@ -66,10 +66,13 @@ class CoCo:
 
         if ca_path is None:
             ca_path = os.path.dirname(os.path.realpath(__file__)) + MQTT_CERT_FILE
+
+        # Configure the client
         client = mqtt.Client(protocol=MQTT_PROTOCOL, transport=MQTT_TRANSPORT)
         client.username_pw_set(username, password)
         client.tls_set(ca_path)
         client.tls_insecure_set(True)
+
         self._client = client
         self._address = address
         self._port = port
@@ -87,65 +90,87 @@ class CoCo:
         self._client.disconnect()
 
     def connect(self):
-
         def _on_message(client, userdata, message):
             topic = message.topic
             response = json.loads(message.payload)
 
+            # System info response (/system/rsp, method: systeminfo.publish)
             if topic == self._profile_creation_id + MQTT_TOPIC_PUBLIC_RSP and \
                     response[KEY_METHOD] == MQTT_METHOD_SYSINFO_PUBLISH:
                 self._system_info = response
                 self._system_info_callback(self._system_info)
 
+            # Device list response (/control/devices/rsp, method: devices.list)
             elif topic == (self._profile_creation_id + MQTT_TOPIC_SUFFIX_RSP) and \
                     response[KEY_METHOD] == MQTT_METHOD_DEVICES_LIST:
+                # No need to listen for devices anymore. So unsubscribe.
                 self._client.unsubscribe(self._profile_creation_id + MQTT_TOPIC_SUFFIX_RSP)
                 self._process_devices_list(response)
 
+            # System info published (/system/evt, method: systeminfo.published)
             elif topic == (self._profile_creation_id + MQTT_TOPIC_SUFFIX_SYS_EVT) and \
                     response[KEY_METHOD] == MQTT_METHOD_SYSINFO_PUBLISHED:
-                # If the connected controller publishes sysinfo... we expect something to have changed.
+                # If the connected controller publishes sysinfo we expect something to have changed.
+                # So ask the list of devices again.
+                # To be honest: I don't think this will do anything usefull, as no new entities will be created.
                 client.subscribe(self._profile_creation_id + MQTT_TOPIC_SUFFIX_RSP, qos=1)
-                client.publish(self._profile_creation_id + MQTT_TOPIC_SUFFIX_CMD, json.dumps({KEY_METHOD: MQTT_METHOD_DEVICES_LIST}), 1)
+                client.publish(
+                    self._profile_creation_id + MQTT_TOPIC_SUFFIX_CMD,
+                    json.dumps({KEY_METHOD: MQTT_METHOD_DEVICES_LIST}),
+                    1
+                )
 
-            elif topic == (self._profile_creation_id + MQTT_TOPIC_SUFFIX_EVT) and \
-                    (response[KEY_METHOD] == MQTT_METHOD_DEVICES_STATUS or response[KEY_METHOD] == MQTT_METHOD_DEVICES_CHANGED):
+            # Device events (/control/devices/evt, method: devices.status or devices.changed)
+            elif topic == (self._profile_creation_id + MQTT_TOPIC_SUFFIX_EVT) and (
+                    response[KEY_METHOD] == MQTT_METHOD_DEVICES_STATUS or
+                    response[KEY_METHOD] == MQTT_METHOD_DEVICES_CHANGED
+            ):
                 devices = extract_devices(response)
 
                 for device in devices:
+                    if KEY_UUID not in device:
+                        continue
+
                     try:
-                        if KEY_UUID in device:
-                            self._device_instances[device[KEY_UUID]].on_change(topic, device)
-                            # self._device_callbacks[device[KEY_UUID]][INTERNAL_KEY_CALLBACK](device)
+                        self._device_instances[device[KEY_UUID]].on_change(topic, device)
                     except Exception as e:
-                        _LOGGER.debug(f'Failed to invoke callback: {e}')
+                        _LOGGER.debug(f'Failed to invoke callback: {device[KEY_UUID]}. Topic: {topic} | Data: {device}')
                         pass
 
         def _on_connect(client, userdata, flags, rc):
             if rc == 0:
                 _LOGGER.debug('Connected to MQTT broker')
+
+                # Subscribe to the MQTT topics
                 client.subscribe(self._profile_creation_id + MQTT_TOPIC_SUFFIX_RSP, qos=1)
                 client.subscribe(self._profile_creation_id + MQTT_TOPIC_PUBLIC_RSP, qos=1)
                 client.subscribe(self._profile_creation_id + MQTT_TOPIC_SUFFIX_EVT, qos=1)
                 client.subscribe(self._profile_creation_id + MQTT_TOPIC_SUFFIX_SYS_EVT, qos=1)
-                client.publish(self._profile_creation_id + MQTT_TOPIC_PUBLIC_CMD,
-                               json.dumps({KEY_METHOD: MQTT_METHOD_SYSINFO_PUBLISH}), 1)
-                client.publish(self._profile_creation_id + MQTT_TOPIC_SUFFIX_CMD,
-                               json.dumps({KEY_METHOD: MQTT_METHOD_DEVICES_LIST}), 1)
+
+                # ask the system information
+                client.publish(
+                    self._profile_creation_id + MQTT_TOPIC_PUBLIC_CMD,
+                    json.dumps({KEY_METHOD: MQTT_METHOD_SYSINFO_PUBLISH}),
+                    1
+                )
+
+                # ask the devices list
+                client.publish(
+                    self._profile_creation_id + MQTT_TOPIC_SUFFIX_CMD,
+                    json.dumps({KEY_METHOD: MQTT_METHOD_DEVICES_LIST}),
+                    1
+                )
             elif MQTT_RC_CODES[rc]:
                 raise Exception(MQTT_RC_CODES[rc])
             else:
                 raise Exception('Unknown error')
 
         def _on_disconnect(client, userdata, rc):
-            _LOGGER.warning('Disconnected')
-            for uuid, device_callback in self._device_callbacks.items():
-                if device_callback[INTERNAL_KEY_CALLBACK]:
-                    offline = {'Online': 'False', KEY_UUID: uuid}
-                    device_callback[INTERNAL_KEY_CALLBACK](offline)
-                else:
-                    _LOGGER.info(f'No callback for device with UUID {uuid}')
+            _LOGGER.warning('Disconnected from MQTT broker')
+            for device in self._device_instances.values():
+                device.is_online = False
 
+        # Configure the callbacks
         self._client.on_message = _on_message
         self._client.on_connect = _on_connect
         self._client.on_disconnect = _on_disconnect
@@ -191,8 +216,11 @@ class CoCo:
             sem.release()
             if device_commands_to_process is not None:
                 command = process_device_commands(device_commands_to_process)
-                #_LOGGER.debug(json.dumps(command))
-                self._client.publish(self._profile_creation_id + MQTT_TOPIC_SUFFIX_CMD, json.dumps(command), 1)
+                self._client.publish(
+                    self._profile_creation_id + MQTT_TOPIC_SUFFIX_CMD,
+                    json.dumps(command),
+                    1
+                )
             sleep(0.05)
 
     def _add_device_control(self, uuid, property_key, property_value):
@@ -206,8 +234,8 @@ class CoCo:
         self._device_control_buffer[uuid][property_key] = property_value
         sem.release()
 
-    # Processes response on devices.list
     def _process_devices_list(self, response):
+        """Convert the response of devices.list into device instances."""
         devices = extract_devices(response)
         self._device_instances = self._convert_to_device_instances(devices)
 
@@ -248,7 +276,6 @@ class CoCo:
     def _convert_to_device_instances(self, devices: list):
         device_instances = {}
         for device in devices:
-            instance = None
             try:
                 classname = str.replace(
                     str.title(
@@ -279,29 +306,6 @@ class CoCo:
                     continue
 
                 instance = getattr(sys.modules[__name__], classname)(json_to_map(device))
-                device_instances[instance.uuid] = instance
+                self._device_instances[instance.uuid] = instance
             except Exception as e:
                 _LOGGER.warning(f"Class {classname} not found {e}")
-
-        return device_instances
-
-    def initialize_devices(self, device_class, actionable_devices):
-        base_devices = [x for x in actionable_devices if x[KEY_MODEL]
-                        in DEVICE_SETS[device_class][INTERNAL_KEY_MODELS]]
-        if device_class not in self._devices:
-            self._devices[device_class] = []
-        for base_device in base_devices:
-            if self._device_callbacks[base_device[KEY_UUID]] \
-                    and self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY] \
-                    and self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY].uuid:
-                self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY].update_dev(base_device)
-            else:
-                self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY] = \
-                    DEVICE_SETS[device_class][INTERNAL_KEY_CLASS](base_device,
-                                                                  self._device_callbacks[base_device[KEY_UUID]],
-                                                                  self._client,
-                                                                  self._profile_creation_id,
-                                                                  self._add_device_control)
-            self._devices[device_class].append(self._device_callbacks[base_device[KEY_UUID]][KEY_ENTITY])
-        if device_class in self._devices_callback:
-            self._devices_callback[device_class](self._devices[device_class])
