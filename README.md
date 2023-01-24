@@ -42,6 +42,12 @@ It has some extra entities that can be used in automations:
   button is pressed, not when all devices are off.
 * **AllOff Basic State Binary Sensor**, which represents the Basic State of the AllOff.
 
+### NHC Basic Alarm Action (untested)
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+This action is exposed as alarm control panel.
+
 ### NHC Dimmer Action
 
 This action is exposed as a light.
@@ -84,7 +90,6 @@ The totals are not available as they are not exposed by the API.
 ## Not yet supported
 
 * NHC Audio Control Action
-* NHC Basic Alarm Action
 * NHC BellButton Action
 * NHC Fan Action
 * NHC Free Start Stop Actions
