@@ -2,33 +2,16 @@ import paho.mqtt.client as mqtt
 
 from enum import Enum
 
-MQTT_TLS_VERSION = 2
 MQTT_PROTOCOL = mqtt.MQTTv311
-MQTT_TRANSPORT = "tcp"
+MQTT_TRANSPORT = 'tcp'
 MQTT_CERT_FILE = '/coco_ca.pem'
-
-VALUE_DIMMER = 'dimmer'
-
-LIST_VALID_LIGHTS = ['light', VALUE_DIMMER]
-LIST_VALID_SWITCHES = ['socket', 'switched-generic']
-LIST_VALID_COVERS = ['rolldownshutter', 'sunblind', 'gate', 'venetianblind', 'garagedoor']
-LIST_VALID_FANS = ['fan']
-LIST_VALID_SWITCHED_FANS = ['switched-fan']
-LIST_VALID_THERMOSTATS = ['thermostat']
-LIST_VALID_ENERGYMETERS = ['electricity-clamp']
-LIST_VALID_ACCESSCONTROL = ['accesscontrol']
-LIST_VALID_BUTTONS = ['alloff']
-LIST_VALID_SMARTPLUGS = ['naso']
-LIST_VALID_GENERICS = ['generic']
 
 DEVICE_CONTROL_BUFFER_SIZE = 16
 DEVICE_CONTROL_BUFFER_COMMAND_SIZE = 32
 
 KEY_ACTION = 'Action'
-KEY_BRIGHTNESS = 'Brightness'
 KEY_DEVICES = 'Devices'
 KEY_DISPLAY_NAME = 'DisplayName'
-KEY_ENTITY = 'entity'
 KEY_FAN_SPEED = 'FanSpeed'
 KEY_METHOD = 'Method'
 KEY_MODEL = 'Model'
@@ -64,11 +47,7 @@ THERM_ECOSAVE = 'EcoSave'
 ENERGY_REPORT = 'ReportInstantUsage'
 ENERGY_POWER = 'ElectricalPower'
 
-DEV_TYPE_ACTION = 'action'
-
 INTERNAL_KEY_CALLBACK = 'callbackHolder'
-INTERNAL_KEY_MODELS = 'models'
-INTERNAL_KEY_CLASS = 'class'
 
 MQTT_METHOD_SYSINFO_PUBLISH = 'systeminfo.publish'
 MQTT_METHOD_SYSINFO_PUBLISHED = 'systeminfo.published'
