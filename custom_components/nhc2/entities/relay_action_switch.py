@@ -10,7 +10,7 @@ class Nhc2RelayActionSwitchEntity(SwitchEntity):
     _attr_name = None
 
     def __init__(self, device_instance: CocoRelayAction, hub, gateway):
-        """Initialize a light."""
+        """Initialize a switch."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway

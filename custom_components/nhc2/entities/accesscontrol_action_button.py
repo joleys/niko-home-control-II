@@ -2,14 +2,14 @@ from homeassistant.components.button import ButtonEntity
 
 from ..const import DOMAIN, BRAND
 
-from ..nhccoco.devices.alloff_action import CocoAlloffAction
+from ..nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 
 
-class Nhc2AlloffActionButtonEntity(ButtonEntity):
+class Nhc2AccesscontrolActionButtonEntity(ButtonEntity):
     _attr_has_entity_name = True
     _attr_name = None
 
-    def __init__(self, device_instance: CocoAlloffAction, hub, gateway):
+    def __init__(self, device_instance: CocoAccesscontrolAction, hub, gateway):
         """Initialize a button."""
         self._device = device_instance
         self._hub = hub

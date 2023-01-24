@@ -67,7 +67,8 @@ FORWARD_PLATFORMS = (
     "fan",
     "cover",
     "sensor",
-    "button"
+    "button",
+    "lock",
 )
 
 

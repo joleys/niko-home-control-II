@@ -14,6 +14,7 @@ class Nhc2NasoSmartPlugElectricalPowerEntity(SensorEntity):
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoNasoSmartplug, hub, gateway):
+        """Initialize a binary sensor."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway

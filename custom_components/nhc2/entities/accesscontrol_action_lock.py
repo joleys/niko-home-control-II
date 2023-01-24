@@ -1,16 +1,16 @@
-from homeassistant.components.button import ButtonEntity
+from homeassistant.components.lock import LockEntity
 
 from ..const import DOMAIN, BRAND
 
-from ..nhccoco.devices.alloff_action import CocoAlloffAction
+from ..nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 
 
-class Nhc2AlloffActionButtonEntity(ButtonEntity):
+class Nhc2AccesscontrolActionLockEntity(LockEntity):
     _attr_has_entity_name = True
     _attr_name = None
 
-    def __init__(self, device_instance: CocoAlloffAction, hub, gateway):
-        """Initialize a button."""
+    def __init__(self, device_instance: CocoAccesscontrolAction, hub, gateway):
+        """Initialize a lock sensor."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
@@ -20,6 +20,8 @@ class Nhc2AlloffActionButtonEntity(ButtonEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
+
+        self._attr_is_locked = self._device.is_doorlock_closed
 
     @property
     def device_info(self):
@@ -34,13 +36,22 @@ class Nhc2AlloffActionButtonEntity(ButtonEntity):
             'via_device': self._hub
         }
 
-    def press(self) -> None:
-        """Pass - not in use."""
-        pass
 
     def on_change(self):
         self.schedule_update_ha_state()
 
-    async def async_press(self):
-        self._device.press(self._gateway)
+    def lock(self, **kwargs):
+        """Pass - not in use."""
+        pass
+
+    async def async_lock(self, **kwargs):
+        """Pass - not in use."""
+        pass
+
+    def unlock(self, **kwargs):
+        """Pass - not in use."""
+        pass
+
+    async def async_unlock(self, **kwargs):
+        self._device.open_doorlock(self._gateway)
         self.on_change()

@@ -15,6 +15,20 @@ Thanks!
 
 ## What works now?
 
+### NHC Access Control Action (untested)
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+This action exposes a button, camera and lock.
+
+#### Entities
+
+It has some extra entities that can be used in automations:
+
+* **Access Control Basic State Binary Sensor**, which represents the Basic State. This is only available for
+  ring-and-come-in guided action. It indicates if the ring-and-come-in is enabled or not.
+* **Decline Call Applied On All Devices Binary Sensor**, which represents the Decline Call Applied On All Devices state.
+
 ### NHC All Off Action
 
 This action is exposed as a button.
@@ -26,7 +40,7 @@ It has some extra entities that can be used in automations:
 * **AllOff Active Binary Sensor**, which represents the AllOffActive state. Be aware that this state is only updated as
   the
   button is pressed, not when all devices are off.
-* **AllOff Basic State Binary Sensor**, which represents th Basic State of the AllOff.
+* **AllOff Basic State Binary Sensor**, which represents the Basic State of the AllOff.
 
 ### NHC Dimmer Action
 
@@ -69,7 +83,6 @@ The totals are not available as they are not exposed by the API.
 
 ## Not yet supported
 
-* NHC Access Control Action
 * NHC Audio Control Action
 * NHC Basic Alarm Action
 * NHC BellButton Action

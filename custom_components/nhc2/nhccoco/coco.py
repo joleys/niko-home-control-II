@@ -14,9 +14,9 @@ from .coco_switched_fan import CoCoSwitchedFan
 from .coco_climate import CoCoThermostat
 from .coco_energy import CoCoEnergyMeter
 from .coco_cover import CoCoCover
-from .coco_accesscontrol import CoCoAccessControl
 from .coco_generic import CoCoGeneric
 
+from .devices.accesscontrol_action import CocoAccesscontrolAction
 from .devices.alloff_action import CocoAlloffAction
 from .devices.dimmer_action import CocoDimmerAction
 from .devices.light_action import CocoLightAction
@@ -83,6 +83,10 @@ class CoCo:
         self._system_info = None
         self._system_info_callback = lambda x: None
         self._device_instances = {}
+
+    @property
+    def address(self):
+        return self._address
 
     def __del__(self):
         self._keep_thread_running = False

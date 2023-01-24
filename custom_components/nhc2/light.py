@@ -21,6 +21,8 @@ _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
+    _LOGGER.info('Configuring lights')
+
     hass.data.setdefault(KEY_ENTITY, {})[config_entry.entry_id] = []
 
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
@@ -30,7 +32,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     device_instances += gateway.get_device_instances(CocoLightAction)
     device_instances += gateway.get_device_instances(CocoDimmerAction)
 
-    _LOGGER.info('Found %s lights', len(device_instances))
+    _LOGGER.info('→ Found %s lights/dimmers', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:

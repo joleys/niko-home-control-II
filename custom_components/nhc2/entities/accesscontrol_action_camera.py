@@ -1,16 +1,16 @@
-from homeassistant.components.button import ButtonEntity
+from homeassistant.components.camera import Camera, CameraEntityFeature
 
 from ..const import DOMAIN, BRAND
 
-from ..nhccoco.devices.alloff_action import CocoAlloffAction
+from ..nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 
 
-class Nhc2AlloffActionButtonEntity(ButtonEntity):
+class Nhc2AccesscontrolActionCameraEntity(Camera):
     _attr_has_entity_name = True
     _attr_name = None
 
-    def __init__(self, device_instance: CocoAlloffAction, hub, gateway):
-        """Initialize a button."""
+    def __init__(self, device_instance: CocoAccesscontrolAction, hub, gateway):
+        """Initialize a lock sensor."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
@@ -20,6 +20,10 @@ class Nhc2AlloffActionButtonEntity(ButtonEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
+
+        self._attr_brand = BRAND
+        self._attr_model = str.title(f'{self._device.model} ({self._device.type})')
+        self._attr_supported_features = CameraEntityFeature.STREAM
 
     @property
     def device_info(self):
@@ -34,13 +38,8 @@ class Nhc2AlloffActionButtonEntity(ButtonEntity):
             'via_device': self._hub
         }
 
-    def press(self) -> None:
-        """Pass - not in use."""
-        pass
-
     def on_change(self):
         self.schedule_update_ha_state()
 
-    async def async_press(self):
-        self._device.press(self._gateway)
-        self.on_change()
+    async def stream_source(self) -> str | None:
+        return f'http://user@{self._gateway.address}:15110'

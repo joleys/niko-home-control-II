@@ -10,6 +10,7 @@ class Nhc2DimmerActionAlignedEntity(BinarySensorEntity):
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoDimmerAction, hub, gateway):
+        """Initialize a binary sensor."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway

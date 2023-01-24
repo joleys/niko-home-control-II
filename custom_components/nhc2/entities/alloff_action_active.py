@@ -9,6 +9,7 @@ class Nhc2AlloffActionActiveEntity(BinarySensorEntity):
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoAlloffAction, hub, gateway):
+        """Initialize a binary sensor."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
