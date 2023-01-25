@@ -10,7 +10,6 @@ import paho.mqtt.client as mqtt
 
 from .coco_device_class import CoCoDeviceClass
 from .coco_energy import CoCoEnergyMeter
-from .coco_cover import CoCoCover
 from .coco_generic import CoCoGeneric
 
 from .devices.accesscontrol_action import CocoAccesscontrolAction
@@ -18,14 +17,18 @@ from .devices.alarms_action import CocoAlarmsAction
 from .devices.alloff_action import CocoAlloffAction
 from .devices.dimmer_action import CocoDimmerAction
 from .devices.fan_action import CocoFanAction
+from .devices.gate_action import CocoGateAction
 from .devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .devices.light_action import CocoLightAction
 from .devices.naso_smartplug import CocoNasoSmartplug
+from .devices.rolldownshutter_action import CocoRolldownshutterAction
 from .devices.socket_action import CocoSocketAction
+from .devices.sunblind_action import CocoSunblindAction
 from .devices.switched_fan_action import CocoSwitchedFanAction
 from .devices.switched_generic_action import CocoSwitchedGenericAction
 from .devices.thermostat_hvac import CocoThermostatHvac
 from .devices.touchswitch_hvac import CocoTouchswitchHvac
+from .devices.venetianblind_action import CocoVenetianblindAction
 
 from .const import *
 from .helpers import *

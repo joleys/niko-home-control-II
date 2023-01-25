@@ -11,14 +11,20 @@ from .entities.alloff_action_active import Nhc2AlloffActionActiveEntity
 from .entities.alloff_action_basicstate import Nhc2AlloffActionBasicStateEntity
 from .entities.dimmer_action_alligned import Nhc2DimmerActionAlignedEntity
 from .entities.hvacthermostat_hvac_hvac_on import Nhc2HvacthermostatHvacHvacOnEntity
+from .entities.motor_action_cover import Nhc2MotorActionCoverEntity
+from .entities.motor_action_moving import Nhc2MotorActionMovingEntity
 from .entities.naso_smartplug_feedback_enabled import Nhc2NasoSmartPlugFeedbackEnabledEntity
 from .entities.naso_smartplug_measuring_only import Nhc2NasoSmartPlugMeasuringOnlyEntity
 from .entities.naso_smartplug_report_instant_usage import Nhc2NasoSmartPlugReportInstantUsageEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
+from .nhccoco.devices.gate_action import CocoGateAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
+from .nhccoco.devices.rolldownshutter_action import CocoRolldownshutterAction
+from .nhccoco.devices.sunblind_action import CocoSunblindAction
+from .nhccoco.devices.venetianblind_action import CocoVenetianblindAction
 
 from .const import DOMAIN, KEY_GATEWAY
 
@@ -71,6 +77,19 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2HvacthermostatHvacHvacOnEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGateAction)
+    device_instances += gateway.get_device_instances(CocoRolldownshutterAction)
+    device_instances += gateway.get_device_instances(CocoSunblindAction)
+    device_instances += gateway.get_device_instances(CocoVenetianblindAction)
+    _LOGGER.info('→ Found %s Motor Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2MotorActionCoverEntity(device_instance, hub, gateway))
+            entities.append(Nhc2MotorActionMovingEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

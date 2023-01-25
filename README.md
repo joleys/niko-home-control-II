@@ -113,6 +113,15 @@ This is exposed as a climate entity.
 * **EcoSave Switch**, marks if the EcoSave mode is active. When active the program keeps going, but the
   setpointtemperature is altered (+3 when cooling, -3 when heating).
 
+### NHC Motor Action (untested)
+
+This is exposed as a cover entity.
+
+#### Entities
+
+* **Aligned Binary Sensor**, this is on when all motors have the same position.
+* **Moving Binary Sensor**, this is on when the any motor is running.
+
 ### NHC Relay Action (light, socket, switched-fan, switched-generic)
 
 Lights are exposed as lights. Others are exposed as switches.
@@ -145,7 +154,6 @@ The totals are not available as they are not exposed by the API.
 * NHC HVAC Thermostat
 * NHC Touch Switch
 * NHC Mood Action
-* NHC Motor Action (rolldownshutter | sunblind | gate | venetianblind)
 * NHC Panic Mode Action
 * NHC PIR Action
 * NHC Presence Simulation Action
