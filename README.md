@@ -65,6 +65,14 @@ used to set the brightness without turning the lights on. For instance if you wa
 your lights to have a certain brightness at night. See Developer Tools → Services → Niko Home Control II: Set brightness
 for light.
 
+### NHC Fan Action (untested)
+
+This is exposed as a fan entity.
+
+#### Todo
+
+* [ ] [See if we can read the speeds fro the description](https://github.com/joleys/niko-home-control-II/blob/cbb5645a2f8332c62b94e429d6fdebda66633a67/custom_components/nhc2/nhccoco/coco_fan.py#L26)
+
 ### NHC HVAC Thermostat (untested)
 
 This is exposed as a climate entity.
@@ -131,7 +139,6 @@ The totals are not available as they are not exposed by the API.
 
 * NHC Audio Control Action
 * NHC BellButton Action
-* NHC Fan Action
 * NHC Free Start Stop Actions
 * NHC Garage Door Action
 * NHC House Mode Action
