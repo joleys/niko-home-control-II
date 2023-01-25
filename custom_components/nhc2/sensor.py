@@ -4,6 +4,7 @@ from homeassistant.const import CONF_USERNAME
 
 from .nhccoco.coco import CoCo
 
+from .entities.garagedoor_action_basicstate import Nhc2GaragedoorActionBasicStateEntity
 from .entities.hvacthermostat_hvac_setpoint_temperature import Nhc2HvacthermostatHvacSetpointTemperatureEntity
 from .entities.hvacthermostat_hvac_overrule_setpoint import Nhc2HvacthermostatHvacOverruleSetpointEntity
 from .entities.hvacthermostat_hvac_overrule_time import Nhc2HvacthermostatHvacOverruleTimeEntity
@@ -11,6 +12,7 @@ from .entities.naso_smartplug_electrical_power import Nhc2NasoSmartPlugElectrica
 from .entities.thermostat_hvac_setpoint_temperature import Nhc2ThermostatHvacSetpointTemperatureEntity
 from .entities.thermostat_hvac_overrule_time import Nhc2ThermostatHvacOverruleTimeEntity
 from .entities.thermostat_hvac_overrule_setpoint import Nhc2ThermostatHvacOverruleSetpointEntity
+from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.thermostat_hvac import CocoThermostatHvac
@@ -31,6 +33,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
     hub = (DOMAIN, config_entry.data[CONF_USERNAME])
+
+    device_instances = gateway.get_device_instances(CocoGaragedoorAction)
+    _LOGGER.info('→ Found %s Garagedoor Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2GaragedoorActionBasicStateEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoHvacthermostatHvac)
     _LOGGER.info('→ Found %s HVAC Thermostats', len(device_instances))

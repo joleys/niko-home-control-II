@@ -48,6 +48,17 @@ __Remark:__ this is untested as I don't own a device of this type.
 
 This action is exposed as alarm control panel.
 
+### NHC Garage Door Action (untested)
+
+#### Todo
+
+* [ ] Read possible states from description
+
+#### Entities
+
+* **Basic State Enum Sensor**, which represents the Basic State. On means the gate is opened, off means the gate is
+  closed. Intermediate means the gate is moving, only when optional moving sensor is available.
+
 ### NHC Dimmer Action
 
 This action is exposed as a light.
@@ -149,7 +160,6 @@ The totals are not available as they are not exposed by the API.
 * NHC Audio Control Action
 * NHC BellButton Action
 * NHC Free Start Stop Actions
-* NHC Garage Door Action
 * NHC House Mode Action
 * NHC HVAC Thermostat
 * NHC Touch Switch
