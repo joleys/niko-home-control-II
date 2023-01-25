@@ -65,6 +65,27 @@ used to set the brightness without turning the lights on. For instance if you wa
 your lights to have a certain brightness at night. See Developer Tools → Services → Niko Home Control II: Set brightness
 for light.
 
+### NHC HVAC Thermostat (untested)
+
+This is exposed as a climate entity.
+
+#### Todo
+
+* [ ] see todo's from NHC Thermostat
+
+#### Entities
+
+* **Setpoint Temperature Sensor**, the desired setpoint in the current program.
+* **Overrule Active Switch**, marks if the overrule-time will be used instead of setpoint as defined in program mode.
+* **Overrule Setpoint Temperature Sensor**, the current overruled setpoint temperature.
+* **Overrule Time Duration Sensor**, duration of the overrule period in minutes.
+* **EcoSave Switch**, marks if the EcoSave mode is active. When active the program keeps going, but the
+  setpointtemperature is altered (+3 when cooling, -3 when heating).
+* **Protect Mode Switch**, marks if the Protect mode is active. This is the system off mode with temperature protection.
+  Heating is activated when temperature is too low Cooling is activated when temperature is too high.
+* **Thermostat on Switch**, indicates wheter the thermostat is turned on or off.
+* **HVAC On Binary Sensor**, indicates that the HVAC indoor unit is online.
+
 ### NHC Thermostat (untested)
 
 This is exposed as a climate entity.
@@ -78,11 +99,10 @@ This is exposed as a climate entity.
 #### Entities
 
 * **Setpoint Temperature Sensor**, the desired setpoint in the current program.
-* **Overrule Active Binary Sensor**, marks if the overrule-time will be used instead of setpoint as defined in program
-  mode.
+* **Overrule Active Switch**, marks if the overrule-time will be used instead of setpoint as defined in program mode.
 * **Overrule Setpoint Temperature Sensor**, the current overruled setpoint temperature.
 * **Overrule Time Duration Sensor**, duration of the overrule period in minutes.
-* **EcoSave Binary Sensor**, marks if the EcoSave mode is active. When active the program keeps going, but the
+* **EcoSave Switch**, marks if the EcoSave mode is active. When active the program keeps going, but the
   setpointtemperature is altered (+3 when cooling, -3 when heating).
 
 ### NHC Relay Action (light, socket, switched-fan, switched-generic)

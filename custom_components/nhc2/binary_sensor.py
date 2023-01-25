@@ -10,12 +10,14 @@ from .entities.accesscontrol_action_decline_call_applied_on_all_devices import \
 from .entities.alloff_action_active import Nhc2AlloffActionActiveEntity
 from .entities.alloff_action_basicstate import Nhc2AlloffActionBasicStateEntity
 from .entities.dimmer_action_alligned import Nhc2DimmerActionAlignedEntity
+from .entities.hvacthermostat_hvac_hvac_on import Nhc2HvacthermostatHvacHvacOnEntity
 from .entities.naso_smartplug_feedback_enabled import Nhc2NasoSmartPlugFeedbackEnabledEntity
 from .entities.naso_smartplug_measuring_only import Nhc2NasoSmartPlugMeasuringOnlyEntity
 from .entities.naso_smartplug_report_instant_usage import Nhc2NasoSmartPlugReportInstantUsageEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
+from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 
 from .const import DOMAIN, KEY_GATEWAY
@@ -35,7 +37,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     hub = (DOMAIN, config_entry.data[CONF_USERNAME])
 
     device_instances = gateway.get_device_instances(CocoAccesscontrolAction)
-    _LOGGER.info('→ Found %s access controls', len(device_instances))
+    _LOGGER.info('→ Found %s Access Control Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -45,7 +47,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoAlloffAction)
-    _LOGGER.info('→ Found %s alloffs', len(device_instances))
+    _LOGGER.info('→ Found %s All Off Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -55,7 +57,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoDimmerAction)
-    _LOGGER.info('→ Found %s dimmers', len(device_instances))
+    _LOGGER.info('→ Found %s Dimmer Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -63,8 +65,17 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
         async_add_entities(entities)
 
+    device_instances = gateway.get_device_instances(CocoHvacthermostatHvac)
+    _LOGGER.info('→ Found %s HVAC Thermostats', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2HvacthermostatHvacHvacOnEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
     device_instances = gateway.get_device_instances(CocoNasoSmartplug)
-    _LOGGER.info('→ Found %s smartplugs', len(device_instances))
+    _LOGGER.info('→ Found %s Zigbee Smart plug', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:

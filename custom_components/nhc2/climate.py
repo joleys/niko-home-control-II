@@ -5,7 +5,9 @@ from homeassistant.const import CONF_USERNAME
 
 from .nhccoco.coco import CoCo
 
+from .entities.hvacthermostat_hvac_climate import Nhc2HvacthermostatHvacClimateEntity
 from .entities.thermostat_hvac_climate import Nhc2ThermostatHvacClimateEntity
+from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.thermostat_hvac import CocoThermostatHvac
 from .nhccoco.devices.touchswitch_hvac import CocoTouchswitchHvac
 
@@ -27,10 +29,19 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
     device_instances = gateway.get_device_instances(CocoThermostatHvac)
     device_instances += gateway.get_device_instances(CocoTouchswitchHvac)
-    _LOGGER.info('→ Found %s thermostats', len(device_instances))
+    _LOGGER.info('→ Found %s Thermostats', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2ThermostatHvacClimateEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoHvacthermostatHvac)
+    _LOGGER.info('→ Found %s HVAC Thermostats', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2HvacthermostatHvacClimateEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

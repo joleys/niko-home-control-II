@@ -19,6 +19,7 @@ from .devices.accesscontrol_action import CocoAccesscontrolAction
 from .devices.alarms_action import CocoAlarmsAction
 from .devices.alloff_action import CocoAlloffAction
 from .devices.dimmer_action import CocoDimmerAction
+from .devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .devices.light_action import CocoLightAction
 from .devices.naso_smartplug import CocoNasoSmartplug
 from .devices.socket_action import CocoSocketAction
