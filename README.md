@@ -155,7 +155,19 @@ This is the energy metering linked to a zigbee smart plug. The smart plug itself
 
 The totals are not available as they are not exposed by the API.
 
-### Energy Home
+### Electricity Metering module (with clamp) (untested)
+
+#### Entities
+
+* **Electrical Power Sensor**, the realtime power usage in W. Possitive means power consumed, negative is power
+  produced.
+* **Report Instant Usage Binary Sensor**, indicates if the Electrical Power is received. When disabled, it will
+  automatically be enabled.
+* **Flow Sensor**. Producer or Consumer
+* **Segment Sensor**. Central or Subsegment
+* **Clamp Type Sensor**. 63A or 120A
+
+### Energy Home (untested)
 
 #### Entities
 
@@ -187,7 +199,6 @@ The totals are not available as they are not exposed by the API.
 * Generic Zigbee Smart plug
 * Sonos Speaker
 * Bose Speaker
-* Electricity Metering module (with clamp)
 * Generic Ventilation Implementation
 * Generic Heating/Cooling Implementation
 * Generic Warm Water Implementation

@@ -4,6 +4,11 @@ from homeassistant.const import CONF_USERNAME
 
 from .nhccoco.coco import CoCo
 
+from .entities.electricity_clamp_centralmeter_electrical_power import \
+    Nhc2ElectricityClampCentralmeterElectricalPowerEntity
+from .entities.electricity_clamp_centralmeter_clamp_type import Nhc2ElectricityClampCentralmeterClampTypeEntity
+from .entities.electricity_clamp_centralmeter_flow import Nhc2ElectricityClampCentralmeterFlowEntity
+from .entities.electricity_clamp_centralmeter_segment import Nhc2ElectricityClampCentralmeterSegmentEntity
 from .entities.garagedoor_action_basicstate import Nhc2GaragedoorActionBasicStateEntity
 from .entities.generic_energyhome_electrical_power_consumption import \
     Nhc2GenericEnergyhomeElectricalPowerConsumptionEntity
@@ -20,6 +25,7 @@ from .entities.naso_smartplug_electrical_power import Nhc2NasoSmartPlugElectrica
 from .entities.thermostat_hvac_setpoint_temperature import Nhc2ThermostatHvacSetpointTemperatureEntity
 from .entities.thermostat_hvac_overrule_time import Nhc2ThermostatHvacOverruleTimeEntity
 from .entities.thermostat_hvac_overrule_setpoint import Nhc2ThermostatHvacOverruleSetpointEntity
+from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
 from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
@@ -81,6 +87,18 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2NasoSmartPlugElectricalPowerEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoElectricityClampCentralmeter)
+    _LOGGER.info('→ Found %s Electricity Metering modules', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2ElectricityClampCentralmeterElectricalPowerEntity(device_instance, hub, gateway))
+            entities.append(Nhc2ElectricityClampCentralmeterClampTypeEntity(device_instance, hub, gateway))
+            entities.append(Nhc2ElectricityClampCentralmeterFlowEntity(device_instance, hub, gateway))
+            entities.append(Nhc2ElectricityClampCentralmeterSegmentEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
