@@ -1,6 +1,7 @@
 from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_ELECTRICAL_POWER, PROPERTY_REPORT_INSTANT_USAGE, \
     PROPERTY_REPORT_INSTANT_USAGE_VALUE_TRUE, PARAMETER_FEEDBACK_ENABLED, PARAMETER_FEEDBACK_ENABLED_VALUE_TRUE, \
     PARAMETER_MEASURING_ONLY, PARAMETER_MEASURING_ONLY_VALUE_TRUE
+from ..helpers import to_float_or_none
 from .device import CoCoDevice
 
 import logging
@@ -11,7 +12,7 @@ _LOGGER = logging.getLogger(__name__)
 class CocoNasoSmartplug(CoCoDevice):
     @property
     def electrical_power(self) -> float:
-        return float(self.extract_property_value(PROPERTY_ELECTRICAL_POWER))
+        return to_float_or_none(self.extract_property_value(PROPERTY_ELECTRICAL_POWER))
 
     @property
     def is_report_instant_usage(self) -> bool:

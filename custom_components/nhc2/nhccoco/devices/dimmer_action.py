@@ -1,5 +1,6 @@
 from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_ON, PROPERTY_STATUS_VALUE_OFF, \
     PROPERTY_BRIGHTNESS, PROPERTY_ALIGNED, PROPERTY_ALIGNED_VALUE_TRUE
+from ..helpers import to_int_or_none
 from .device import CoCoDevice
 
 import logging
@@ -14,7 +15,7 @@ class CocoDimmerAction(CoCoDevice):
 
     @property
     def status_brightness(self) -> int:
-        return int(self.extract_property_value(PROPERTY_BRIGHTNESS))
+        return to_int_or_none(self.extract_property_value(PROPERTY_BRIGHTNESS))
 
     @property
     def status_aligned(self) -> str:

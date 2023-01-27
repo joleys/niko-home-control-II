@@ -1,6 +1,6 @@
 from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_ACTION, PROPERTY_ALIGNED, PROPERTY_ALIGNED_VALUE_TRUE, \
-    PROPERTY_MOVING, \
-    PROPERTY_MOVING_VALUE_TRUE, PROPERTY_POSITION
+    PROPERTY_MOVING, PROPERTY_MOVING_VALUE_TRUE, PROPERTY_POSITION
+from ..helpers import to_int_or_none
 from .device import CoCoDevice
 
 import logging
@@ -11,7 +11,7 @@ _LOGGER = logging.getLogger(__name__)
 class CocoMotorAction(CoCoDevice):
     @property
     def status_position(self) -> int:
-        return int(self.extract_property_value(PROPERTY_POSITION))
+        return to_int_or_none(self.extract_property_value(PROPERTY_POSITION))
 
     @property
     def status_aligned(self) -> str:

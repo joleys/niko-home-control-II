@@ -8,6 +8,7 @@ from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_PROGRAM, PROPERTY_PRO
     PROPERTY_OPERATION_MODE_VALUE_COOLING, PROPERTY_FAN_SPEED, PROPERTY_FAN_SPEED_VALUE_LOW, \
     PROPERTY_FAN_SPEED_VALUE_MEDIUM, PROPERTY_FAN_SPEED_VALUE_HIGH, PROPERTY_THERMOSTAT_ON, \
     PROPERTY_THERMOSTAT_ON_VALUE_TRUE, PROPERTY_THERMOSTAT_ON_VALUE_FALSE, PROPERTY_HVAC_ON, PROPERTY_HVAC_ON_VALUE_TRUE
+from ..helpers import to_float_or_none, to_int_or_none
 from .device import CoCoDevice
 
 import logging
@@ -32,11 +33,11 @@ class CocoHvacthermostatHvac(CoCoDevice):
 
     @property
     def status_ambient_temperature(self) -> float:
-        return float(self.extract_property_value(PROPERTY_AMBIENT_TEMPERATURE))
+        return to_float_or_none(self.extract_property_value(PROPERTY_AMBIENT_TEMPERATURE))
 
     @property
     def status_setpoint_temperature(self) -> float:
-        return float(self.extract_property_value(PROPERTY_SETPOINT_TEMPERATURE))
+        return to_float_or_none(self.extract_property_value(PROPERTY_SETPOINT_TEMPERATURE))
 
     @property
     def status_overrule_active(self) -> str:
@@ -48,11 +49,11 @@ class CocoHvacthermostatHvac(CoCoDevice):
 
     @property
     def status_overrule_setpoint(self) -> float:
-        return float(self.extract_property_value(PROPERTY_OVERRULE_SETPOINT))
+        return to_float_or_none(self.extract_property_value(PROPERTY_OVERRULE_SETPOINT))
 
     @property
     def status_overrule_time(self) -> int:
-        return int(self.extract_property_value(PROPERTY_OVERRULE_TIME))
+        return to_int_or_none(self.extract_property_value(PROPERTY_OVERRULE_TIME))
 
     @property
     def status_ecosave(self) -> str:
