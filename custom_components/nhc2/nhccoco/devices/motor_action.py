@@ -39,15 +39,15 @@ class CocoMotorAction(CoCoDevice):
                 callback()
 
     def set_action(self, gateway, action: str):
-        gateway._add_device_control(
-            self._device.uuid,
+        gateway.add_device_control(
+            self.uuid,
             PROPERTY_ACTION,
             action
         )
 
     def set_position(self, gateway, position: int):
-        gateway._add_device_control(
-            self._device.uuid,
+        gateway.add_device_control(
+            self.uuid,
             PROPERTY_POSITION,
             position
         )

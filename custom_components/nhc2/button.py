@@ -12,7 +12,6 @@ from .nhccoco.devices.alloff_action import CocoAlloffAction
 
 from .const import DOMAIN, KEY_GATEWAY
 
-KEY_GATEWAY = KEY_GATEWAY
 KEY_ENTITY = 'nhc2_buttons'
 
 _LOGGER = logging.getLogger(__name__)

@@ -36,8 +36,8 @@ class CocoNasoSmartplug(CoCoDevice):
                 callback()
 
     def enable_report_instant_usage(self, gateway):
-        gateway._add_device_control(
-            self._device.uuid,
+        gateway.add_device_control(
+            self.uuid,
             PROPERTY_REPORT_INSTANT_USAGE,
             PROPERTY_REPORT_INSTANT_USAGE_VALUE_TRUE
         )

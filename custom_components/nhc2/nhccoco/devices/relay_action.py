@@ -21,7 +21,7 @@ class CocoRelayAction(CoCoDevice):
                 callback()
 
     def turn_on(self, gateway):
-        gateway._add_device_control(self.uuid, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_ON)
+        gateway.add_device_control(self.uuid, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_ON)
 
     def turn_off(self, gateway):
-        gateway._add_device_control(self.uuid, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_OFF)
+        gateway.add_device_control(self.uuid, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_OFF)

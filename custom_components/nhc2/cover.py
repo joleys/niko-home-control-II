@@ -15,7 +15,6 @@ from .nhccoco.devices.venetianblind_action import CocoVenetianblindAction
 
 from .const import DOMAIN, KEY_GATEWAY
 
-KEY_GATEWAY = KEY_GATEWAY
 KEY_ENTITY = 'nhc2_covers'
 
 _LOGGER = logging.getLogger(__name__)

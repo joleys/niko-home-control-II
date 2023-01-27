@@ -9,12 +9,9 @@ from homeassistant.const import EVENT_HOMEASSISTANT_STOP
 
 from .config_flow import Nhc2FlowHandler  # noqa  pylint_disable=unused-import
 from .const import DOMAIN, KEY_GATEWAY, CONF_SWITCHES_AS_LIGHTS, BRAND
-from .helpers import extract_versions
+from .nhccoco.helpers import extract_versions
 
 _LOGGER = logging.getLogger(__name__)
-
-DOMAIN = DOMAIN
-KEY_GATEWAY = KEY_GATEWAY
 
 CONFIG_SCHEMA = vol.Schema({
     DOMAIN: vol.Schema({
@@ -62,14 +59,15 @@ async def async_setup(hass, config):
 FORWARD_PLATFORMS = (
     "alarm_control_panel",
     "binary_sensor",
-    "climate",
-    "switch",
-    "light",
-    "fan",
-    "cover",
-    "sensor",
     "button",
+    "camera",
+    "climate",
+    "cover",
+    "fan",
+    "light",
     "lock",
+    "sensor",
+    "switch",
 )
 
 
@@ -91,9 +89,8 @@ async def async_setup_entry(hass, entry):
     def get_process_sysinfo(dev_reg):
         def process_sysinfo(nhc2_sysinfo):
             coco_image, nhc_version = extract_versions(nhc2_sysinfo)
-            _LOGGER.debug('Sysinfo: NhcVersion %s - CocoImage %s',
-                          nhc_version,
-                          coco_image)
+            _LOGGER.debug('systeminfo.published: NhcVersion: %s - CocoImage %s', nhc_version, coco_image)
+
             dev_reg.async_get_or_create(
                 config_entry_id=entry.entry_id,
                 connections=set(),
@@ -116,9 +113,7 @@ async def async_setup_entry(hass, entry):
     hass.data.setdefault(KEY_GATEWAY, {})[entry.entry_id] = coco
     hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, on_hass_stop)
 
-    _LOGGER.debug('Connecting to %s with %s',
-                  entry.data[CONF_HOST], entry.data[CONF_USERNAME]
-                  )
+    _LOGGER.debug('Connecting to %s with %s', entry.data[CONF_HOST], entry.data[CONF_USERNAME])
     coco.connect()
     dev_reg = hass.helpers.device_registry.async_get(hass)
     coco.get_systeminfo(get_process_sysinfo(dev_reg))

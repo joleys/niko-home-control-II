@@ -1,7 +1,5 @@
 import paho.mqtt.client as mqtt
 
-from enum import Enum
-
 MQTT_PROTOCOL = mqtt.MQTTv311
 MQTT_TRANSPORT = 'tcp'
 MQTT_CERT_FILE = '/coco_ca.pem'
@@ -9,52 +7,21 @@ MQTT_CERT_FILE = '/coco_ca.pem'
 DEVICE_CONTROL_BUFFER_SIZE = 16
 DEVICE_CONTROL_BUFFER_COMMAND_SIZE = 32
 
-KEY_ACTION = 'Action'
-KEY_DEVICES = 'Devices'
-KEY_DISPLAY_NAME = 'DisplayName'
-KEY_FAN_SPEED = 'FanSpeed'
-KEY_METHOD = 'Method'
-KEY_MODEL = 'Model'
-KEY_NAME = 'Name'
-KEY_ONLINE = 'Online'
-KEY_PARAMS = 'Params'
-KEY_PROPERTIES = 'Properties'
-KEY_POSITION = 'Position'
-KEY_STATUS = 'Status'
-KEY_TYPE = 'Type'
-KEY_UUID = 'Uuid'
-KEY_BASICSTATE = "BasicState"
-
-VALUE_ON = 'On'
-VALUE_OFF = 'Off'
-VALUE_OPEN = 'Open'
-VALUE_STOP = 'Stop'
-VALUE_CLOSE = 'Close'
-VALUE_TRIGGERED = 'Triggered'
-
-GATE_VALUE_OPEN = 'On'
-GATE_VALUE_CLOSE = 'Off'
-GATE_VALUE_TRIGGERED = 'Triggered'
-GATE_MOVING = 'Intermediate'
-KEY_ALIGNED = "Aligned"
-
-THERM_PROGRAM = 'Program'
-THERM_OVERRULEACTION = 'OverruleActive'
-THERM_OVERRULESETPOINT = 'OverruleSetpoint'
-THERM_OVERRULETIME = 'OverruleTime'
-THERM_ECOSAVE = 'EcoSave'
-
-ENERGY_REPORT = 'ReportInstantUsage'
-ENERGY_POWER = 'ElectricalPower'
-
-INTERNAL_KEY_CALLBACK = 'callbackHolder'
-
-MQTT_METHOD_SYSINFO_PUBLISH = 'systeminfo.publish'
-MQTT_METHOD_SYSINFO_PUBLISHED = 'systeminfo.published'
-MQTT_METHOD_DEVICES_LIST = 'devices.list'
-MQTT_METHOD_DEVICES_CONTROL = 'devices.control'
-MQTT_METHOD_DEVICES_STATUS = 'devices.status'
-MQTT_METHOD_DEVICES_CHANGED = 'devices.changed'
+MQTT_DATA_METHOD = 'Method'
+MQTT_DATA_METHOD_SYSINFO_PUBLISH = 'systeminfo.publish'
+MQTT_DATA_METHOD_SYSINFO_PUBLISHED = 'systeminfo.published'
+MQTT_DATA_METHOD_DEVICES_LIST = 'devices.list'
+MQTT_DATA_METHOD_DEVICES_CONTROL = 'devices.control'
+MQTT_DATA_METHOD_DEVICES_STATUS = 'devices.status'
+MQTT_DATA_METHOD_DEVICES_CHANGED = 'devices.changed'
+MQTT_DATA_PARAMS = 'Params'
+MQTT_DATA_PARAMS_DEVICES = 'Devices'
+MQTT_DATA_PARAMS_DEVICES_PROPERTIES = 'Properties'
+MQTT_DATA_PARAMS_DEVICES_UUID = 'Uuid'
+MQTT_DATA_PARAMS_SYSTEMINFO = 'SystemInfo'
+MQTT_DATA_PARAMS_SYSTEMINFO_SWVERSIONS = 'SWversions'
+MQTT_DATA_PARAMS_SYSTEMINFO_SWVERSIONS_COCO_IMAGE = 'CocoImage'
+MQTT_DATA_PARAMS_SYSTEMINFO_SWVERSIONS_NHC_VERSION = 'NhcVersion'
 
 MQTT_RC_CODES = ['',
                  'Connection refused - incorrect protocol version',

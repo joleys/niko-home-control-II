@@ -1,16 +1,10 @@
 import json
-import logging
 import os
 import threading
 from time import sleep
-from typing import Callable
 import sys
 
 import paho.mqtt.client as mqtt
-
-from .coco_device_class import CoCoDeviceClass
-from .coco_energy import CoCoEnergyMeter
-from .coco_generic import CoCoGeneric
 
 from .devices.accesscontrol_action import CocoAccesscontrolAction
 from .devices.alarms_action import CocoAlarmsAction
@@ -36,32 +30,14 @@ from .devices.venetianblind_action import CocoVenetianblindAction
 from .const import *
 from .helpers import *
 
+import logging
+
 _LOGGER = logging.getLogger(__name__)
 sem = threading.Semaphore()
-
-DEVICE_SETS = {
-    CoCoDeviceClass.SWITCHED_FANS: {INTERNAL_KEY_CLASS: CoCoSwitchedFan, INTERNAL_KEY_MODELS: LIST_VALID_SWITCHED_FANS},
-    CoCoDeviceClass.FANS: {INTERNAL_KEY_CLASS: CoCoFan, INTERNAL_KEY_MODELS: LIST_VALID_FANS},
-    CoCoDeviceClass.COVERS: {INTERNAL_KEY_CLASS: CoCoCover, INTERNAL_KEY_MODELS: LIST_VALID_COVERS},
-    CoCoDeviceClass.SWITCHES: {INTERNAL_KEY_CLASS: CoCoSwitch, INTERNAL_KEY_MODELS: LIST_VALID_SWITCHES},
-    CoCoDeviceClass.LIGHTS: {INTERNAL_KEY_CLASS: CoCoLight, INTERNAL_KEY_MODELS: LIST_VALID_LIGHTS},
-    CoCoDeviceClass.THERMOSTATS: {INTERNAL_KEY_CLASS: CoCoThermostat, INTERNAL_KEY_MODELS: LIST_VALID_THERMOSTATS},
-    CoCoDeviceClass.ENERGYMETERS: {INTERNAL_KEY_CLASS: CoCoEnergyMeter, INTERNAL_KEY_MODELS: LIST_VALID_ENERGYMETERS},
-    CoCoDeviceClass.ACCESSCONTROL: {INTERNAL_KEY_CLASS: CoCoAccessControl,
-                                    INTERNAL_KEY_MODELS: LIST_VALID_ACCESSCONTROL},
-    CoCoDeviceClass.BUTTONS: {INTERNAL_KEY_CLASS: CoCoButton, INTERNAL_KEY_MODELS: LIST_VALID_BUTTONS},
-    CoCoDeviceClass.SMARTPLUGS: {INTERNAL_KEY_CLASS: CoCoSmartPlug, INTERNAL_KEY_MODELS: LIST_VALID_SMARTPLUGS},
-    CoCoDeviceClass.GENERIC: {INTERNAL_KEY_CLASS: CoCoGeneric, INTERNAL_KEY_MODELS: LIST_VALID_GENERICS}
-}
 
 
 class CoCo:
     def __init__(self, address, username, password, port=8884, ca_path=None, switches_as_lights=False):
-
-        if switches_as_lights:
-            DEVICE_SETS[CoCoDeviceClass.LIGHTS] = {INTERNAL_KEY_CLASS: CoCoLight,
-                                                   INTERNAL_KEY_MODELS: LIST_VALID_LIGHTS + LIST_VALID_SWITCHES}
-            DEVICE_SETS[CoCoDeviceClass.SWITCHES] = {INTERNAL_KEY_CLASS: CoCoSwitch, INTERNAL_KEY_MODELS: []}
         # The device control buffer fields
         self._keep_thread_running = True
         self._device_control_buffer = {}
@@ -107,45 +83,47 @@ class CoCo:
 
             # System info response (/system/rsp, method: systeminfo.publish)
             if topic == self._profile_creation_id + MQTT_TOPIC_PUBLIC_RSP and \
-                    response[KEY_METHOD] == MQTT_METHOD_SYSINFO_PUBLISH:
+                    response[MQTT_DATA_METHOD] == MQTT_DATA_METHOD_SYSINFO_PUBLISH:
                 self._system_info = response
                 self._system_info_callback(self._system_info)
 
             # Device list response (/control/devices/rsp, method: devices.list)
             elif topic == (self._profile_creation_id + MQTT_TOPIC_SUFFIX_RSP) and \
-                    response[KEY_METHOD] == MQTT_METHOD_DEVICES_LIST:
+                    response[MQTT_DATA_METHOD] == MQTT_DATA_METHOD_DEVICES_LIST:
                 # No need to listen for devices anymore. So unsubscribe.
                 self._client.unsubscribe(self._profile_creation_id + MQTT_TOPIC_SUFFIX_RSP)
                 self._process_devices_list(response)
 
             # System info published (/system/evt, method: systeminfo.published)
             elif topic == (self._profile_creation_id + MQTT_TOPIC_SUFFIX_SYS_EVT) and \
-                    response[KEY_METHOD] == MQTT_METHOD_SYSINFO_PUBLISHED:
+                    response[MQTT_DATA_METHOD] == MQTT_DATA_METHOD_SYSINFO_PUBLISHED:
                 # If the connected controller publishes sysinfo we expect something to have changed.
                 # So ask the list of devices again.
                 # To be honest: I don't think this will do anything usefull, as no new entities will be created.
                 client.subscribe(self._profile_creation_id + MQTT_TOPIC_SUFFIX_RSP, qos=1)
                 client.publish(
                     self._profile_creation_id + MQTT_TOPIC_SUFFIX_CMD,
-                    json.dumps({KEY_METHOD: MQTT_METHOD_DEVICES_LIST}),
+                    json.dumps({MQTT_DATA_METHOD: MQTT_DATA_METHOD_DEVICES_LIST}),
                     1
                 )
 
             # Device events (/control/devices/evt, method: devices.status or devices.changed)
             elif topic == (self._profile_creation_id + MQTT_TOPIC_SUFFIX_EVT) and (
-                    response[KEY_METHOD] == MQTT_METHOD_DEVICES_STATUS or
-                    response[KEY_METHOD] == MQTT_METHOD_DEVICES_CHANGED
+                    response[MQTT_DATA_METHOD] == MQTT_DATA_METHOD_DEVICES_STATUS or
+                    response[MQTT_DATA_METHOD] == MQTT_DATA_METHOD_DEVICES_CHANGED
             ):
                 devices = extract_devices(response)
 
                 for device in devices:
-                    if KEY_UUID not in device:
+                    if MQTT_DATA_PARAMS_DEVICES_UUID not in device:
                         continue
 
                     try:
-                        self._device_instances[device[KEY_UUID]].on_change(topic, device)
+                        self._device_instances[device[MQTT_DATA_PARAMS_DEVICES_UUID]].on_change(topic, device)
                     except Exception as e:
-                        _LOGGER.debug(f'Failed to invoke callback: {device[KEY_UUID]}. Topic: {topic} | Data: {device}')
+                        _LOGGER.debug(
+                            f'Failed to invoke callback: {device[MQTT_DATA_PARAMS_DEVICES_UUID]}. Topic: {topic} | Data: {device}')
+                        _LOGGER.error(e)
                         pass
 
         def _on_connect(client, userdata, flags, rc):
@@ -161,14 +139,14 @@ class CoCo:
                 # ask the system information
                 client.publish(
                     self._profile_creation_id + MQTT_TOPIC_PUBLIC_CMD,
-                    json.dumps({KEY_METHOD: MQTT_METHOD_SYSINFO_PUBLISH}),
+                    json.dumps({MQTT_DATA_METHOD: MQTT_DATA_METHOD_SYSINFO_PUBLISH}),
                     1
                 )
 
                 # ask the devices list
                 client.publish(
                     self._profile_creation_id + MQTT_TOPIC_SUFFIX_CMD,
-                    json.dumps({KEY_METHOD: MQTT_METHOD_DEVICES_LIST}),
+                    json.dumps({MQTT_DATA_METHOD: MQTT_DATA_METHOD_DEVICES_LIST}),
                     1
                 )
             elif MQTT_RC_CODES[rc]:
@@ -197,11 +175,6 @@ class CoCo:
         self._system_info_callback = callback
         if self._system_info:
             self._system_info_callback(self._system_info)
-
-    def get_devices(self, device_class: CoCoDeviceClass, callback: Callable):
-        self._devices_callback[device_class] = callback
-        if self._devices and device_class in self._devices:
-            self._devices_callback[device_class](self._devices[device_class])
 
     def get_device_instances(self, device_class):
         if len(self._device_instances) == 0:
@@ -234,7 +207,7 @@ class CoCo:
                 )
             sleep(0.05)
 
-    def _add_device_control(self, uuid, property_key, property_value):
+    def add_device_control(self, uuid, property_key, property_value):
         while len(self._device_control_buffer.keys()) >= self._device_control_buffer_size or \
                 self._device_control_buffer_command_count >= self._device_control_buffer_command_size:
             pass
@@ -248,44 +221,6 @@ class CoCo:
     def _process_devices_list(self, response):
         """Convert the response of devices.list into device instances."""
         devices = extract_devices(response)
-        self._device_instances = self._convert_to_device_instances(devices)
-
-        # for uuid, device in self._device_instances.items():
-        #     self._device_callbacks[uuid] = device.on_change
-
-        # Only add devices that are actionable
-        # actionable_devices = list(
-        #     filter(lambda d: d[KEY_TYPE] == DEV_TYPE_ACTION, extract_devices(response)))
-        # actionable_devices.extend(list(
-        #     filter(lambda d: d[KEY_TYPE] == "thermostat", extract_devices(response))))
-        # actionable_devices.extend(list(
-        #     filter(lambda d: d[KEY_TYPE] == "centralmeter", extract_devices(response))))
-        # actionable_devices.extend(list(
-        #     filter(lambda d: d[KEY_TYPE] == "smartplug", extract_devices(response))))
-
-        # Only prepare for devices that don't already exist
-        # # TODO - Can't we do this when we need it (in initialize_devices ?)
-        # existing_uuids = list(self._device_callbacks.keys())
-        # for actionable_device in actionable_devices:
-        #     if actionable_device[KEY_UUID] not in existing_uuids:
-        #         self._device_callbacks[actionable_device[KEY_UUID]] = \
-        #             {INTERNAL_KEY_CALLBACK: None, KEY_ENTITY: None}
-
-        # Initialize
-        # self.initialize_devices(CoCoDeviceClass.SWITCHED_FANS, actionable_devices)
-        # self.initialize_devices(CoCoDeviceClass.FANS, actionable_devices)
-        # self.initialize_devices(CoCoDeviceClass.SWITCHES, actionable_devices)
-        # self.initialize_devices(CoCoDeviceClass.LIGHTS, actionable_devices)
-        # self.initialize_devices(CoCoDeviceClass.COVERS, actionable_devices)
-        # self.initialize_devices(CoCoDeviceClass.THERMOSTATS, actionable_devices)
-        # self.initialize_devices(CoCoDeviceClass.ENERGYMETERS, actionable_devices)
-        # self.initialize_devices(CoCoDeviceClass.ACCESSCONTROL, actionable_devices)
-        # self.initialize_devices(CoCoDeviceClass.BUTTONS, actionable_devices)
-        # self.initialize_devices(CoCoDeviceClass.SMARTPLUGS, actionable_devices)
-        # self.initialize_devices(CoCoDeviceClass.GENERIC, actionable_devices)
-
-    def _convert_to_device_instances(self, devices: list):
-        device_instances = {}
         for device in devices:
             try:
                 classname = str.replace(

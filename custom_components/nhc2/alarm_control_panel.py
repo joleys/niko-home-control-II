@@ -10,7 +10,6 @@ from .nhccoco.devices.alarms_action import CocoAlarmsAction
 
 from .const import DOMAIN, KEY_GATEWAY
 
-KEY_GATEWAY = KEY_GATEWAY
 KEY_ENTITY = 'nhc2_alarm_control_panels'
 
 _LOGGER = logging.getLogger(__name__)

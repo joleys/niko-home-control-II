@@ -41,8 +41,8 @@ class CocoAlarmsAction(CoCoDevice):
         if self.is_on:
             return
 
-        gateway._add_device_control(
-            self._device.uuid,
+        gateway.add_device_control(
+            self.uuid,
             PROPERTY_BASIC_STATE,
             PROPERTY_BASIC_STATE_VALUE_TRIGGERED
         )
@@ -51,8 +51,8 @@ class CocoAlarmsAction(CoCoDevice):
         if self.is_off:
             return
 
-        gateway._add_device_control(
-            self._device.uuid,
+        gateway.add_device_control(
+            self.uuid,
             PROPERTY_BASIC_STATE,
             PROPERTY_BASIC_STATE_VALUE_TRIGGERED
         )

@@ -49,15 +49,15 @@ class CocoAccesscontrolAction(CoCoDevice):
                 callback()
 
     def press(self, gateway):
-        gateway._add_device_control(
-            self._device.uuid,
+        gateway.add_device_control(
+            self.uuid,
             PROPERTY_BASIC_STATE,
             PROPERTY_BASIC_STATE_VALUE_TRIGGERED
         )
 
     def open_doorlock(self, gateway):
-        gateway._add_device_control(
-            self._device.uuid,
+        gateway.add_device_control(
+            self.uuid,
             PROPERTY_DOORLOCK,
             PROPERTY_DOORLOCK_VALUE_OPEN
         )

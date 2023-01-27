@@ -125,71 +125,71 @@ class CocoHvacthermostatHvac(CoCoDevice):
                 callback()
 
     def set_program(self, gateway, program: str):
-        gateway._add_device_control(self._device.uuid, PROPERTY_PROGRAM, program)
+        gateway.add_device_control(self.uuid, PROPERTY_PROGRAM, program)
 
     def set_temperature(self, gateway, temperature: float):
-        gateway._add_device_control(self._device.uuid, PROPERTY_OVERRULE_SETPOINT, str(temperature))
-        gateway._add_device_control(self._device.uuid, PROPERTY_OVERRULE_TIME, '240')
-        gateway._add_device_control(self._device.uuid, PROPERTY_OVERRULE_ACTIVE, 'True')
+        gateway.add_device_control(self.uuid, PROPERTY_OVERRULE_SETPOINT, str(temperature))
+        gateway.add_device_control(self.uuid, PROPERTY_OVERRULE_TIME, '240')
+        gateway.add_device_control(self.uuid, PROPERTY_OVERRULE_ACTIVE, 'True')
 
     def set_operation_mode(self, gateway, operation_mode: str):
-        gateway._add_device_control(self._device.uuid, PROPERTY_OPERATION_MODE, operation_mode)
+        gateway.add_device_control(self.uuid, PROPERTY_OPERATION_MODE, operation_mode)
 
     def set_fan_speed(self, gateway, fan_speed: str):
-        gateway._add_device_control(self._device.uuid, PROPERTY_FAN_SPEED, fan_speed)
+        gateway.add_device_control(self.uuid, PROPERTY_FAN_SPEED, fan_speed)
 
     def set_overrule_active(self, gateway, active: bool):
         if active:
-            gateway._add_device_control(
-                self._device.uuid,
+            gateway.add_device_control(
+                self.uuid,
                 PROPERTY_OVERRULE_ACTIVE,
                 PROPERTY_OVERRULE_ACTIVE_VALUE_TRUE
             )
         else:
-            gateway._add_device_control(
-                self._device.uuid,
+            gateway.add_device_control(
+                self.uuid,
                 PROPERTY_OVERRULE_ACTIVE,
                 PROPERTY_OVERRULE_ACTIVE_VALUE_FALSE
             )
 
     def set_ecosave(self, gateway, active: bool):
         if active:
-            gateway._add_device_control(
-                self._device.uuid,
+            gateway.add_device_control(
+                self.uuid,
                 PROPERTY_ECOSAVE,
                 PROPERTY_ECOSAVE_VALUE_TRUE
             )
         else:
-            gateway._add_device_control(
-                self._device.uuid,
+            gateway.add_device_control(
+                self.uuid,
                 PROPERTY_ECOSAVE,
                 PROPERTY_ECOSAVE_VALUE_FALSE
             )
 
     def set_protect_mode(self, gateway, active: bool):
         if active:
-            gateway._add_device_control(
-                self._device.uuid,
+            gateway.add_device_control(
+                self.uuid,
                 PROPERTY_PROTECT_MODE,
                 PROPERTY_PROTECT_MODE_VALUE_TRUE
             )
         else:
-            gateway._add_device_control(
-                self._device.uuid,
+            gateway.add_device_control(
+                self.uuid,
                 PROPERTY_PROTECT_MODE,
                 PROPERTY_PROTECT_MODE_VALUE_FALSE
             )
 
     def set_thermostat_on(self, gateway, active: bool):
         if active:
-            gateway._add_device_control(
-                self._device.uuid,
+            gateway.add_device_control(
+                self.uuid,
                 PROPERTY_THERMOSTAT_ON,
                 PROPERTY_THERMOSTAT_ON_VALUE_TRUE
             )
         else:
-            gateway._add_device_control(
-                self._device.uuid,
+            gateway.add_device_control(
+                self.uuid,
                 PROPERTY_THERMOSTAT_ON,
                 PROPERTY_THERMOSTAT_ON_VALUE_FALSE
             )

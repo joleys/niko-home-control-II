@@ -35,7 +35,6 @@ from .nhccoco.devices.venetianblind_action import CocoVenetianblindAction
 
 from .const import DOMAIN, KEY_GATEWAY
 
-KEY_GATEWAY = KEY_GATEWAY
 KEY_ENTITY = 'nhc2_binary_sensors'
 
 _LOGGER = logging.getLogger(__name__)

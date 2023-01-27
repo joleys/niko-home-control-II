@@ -1,3 +1,4 @@
+"""Script to detect NHC2 controller on the network."""
 import socket
 from time import sleep
 

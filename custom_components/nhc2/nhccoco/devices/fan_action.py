@@ -32,8 +32,8 @@ class CocoFanAction(CoCoDevice):
                 callback()
 
     def set_fan_speed(self, gateway, speed: str):
-        gateway._add_device_control(
-            self._device.uuid,
+        gateway.add_device_control(
+            self.uuid,
             PROPERTY_FAN_SPEED,
             speed
         )

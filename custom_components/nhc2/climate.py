@@ -13,7 +13,6 @@ from .nhccoco.devices.touchswitch_hvac import CocoTouchswitchHvac
 
 from .const import DOMAIN, KEY_GATEWAY
 
-KEY_GATEWAY = KEY_GATEWAY
 KEY_ENTITY = 'nhc2_thermostats'
 
 _LOGGER = logging.getLogger(__name__)

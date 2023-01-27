@@ -14,7 +14,6 @@ from .nhccoco.devices.dimmer_action import CocoDimmerAction
 
 from .const import DOMAIN, KEY_GATEWAY, SERVICE_SET_LIGHT_BRIGHTNESS, ATTR_LIGHT_BRIGHTNESS
 
-KEY_GATEWAY = KEY_GATEWAY
 KEY_ENTITY = 'nhc2_lights'
 
 _LOGGER = logging.getLogger(__name__)
