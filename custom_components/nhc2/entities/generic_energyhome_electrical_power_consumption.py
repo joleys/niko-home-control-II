@@ -3,12 +3,12 @@ from homeassistant.const import UnitOfPower
 
 from ..const import DOMAIN, BRAND
 
-from ..nhccoco.devices.naso_smartplug import CocoNasoSmartplug
+from ..nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
 
-class Nhc2NasoSmartPlugElectricalPowerEntity(SensorEntity):
+class Nhc2GenericEnergyhomeElectricalPowerConsumptionEntity(SensorEntity):
     _attr_has_entity_name = True
 
-    def __init__(self, device_instance: CocoNasoSmartplug, hub, gateway):
+    def __init__(self, device_instance: CocoGenericEnergyhome, hub, gateway):
         """Initialize a binary sensor."""
         self._device = device_instance
         self._hub = hub
@@ -17,17 +17,17 @@ class Nhc2NasoSmartPlugElectricalPowerEntity(SensorEntity):
         self._device.after_change_callbacks.append(self.on_change)
 
         self._attr_available = self._device.is_online
-        self._attr_unique_id = device_instance.uuid + '_electrical_power'
+        self._attr_unique_id = device_instance.uuid + '_electrical_power_consumption'
         self._attr_should_poll = False
 
         self._attr_device_class = SensorDeviceClass.POWER
-        self._attr_native_value = self._device.electrical_power
+        self._attr_native_value = self._device.electrical_power_consumption
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
         self._attr_state_class = SensorStateClass.MEASUREMENT
 
     @property
     def name(self) -> str:
-        return 'Electrical Power'
+        return 'Electrical Power to Grid'
 
     @property
     def device_info(self):
@@ -44,7 +44,7 @@ class Nhc2NasoSmartPlugElectricalPowerEntity(SensorEntity):
 
     @property
     def state(self) -> float:
-        return self._device.electrical_power
+        return self._device.electrical_power_consumption
 
     def on_change(self):
         self.schedule_update_ha_state()

@@ -10,6 +10,9 @@ from .entities.accesscontrol_action_decline_call_applied_on_all_devices import \
 from .entities.alloff_action_active import Nhc2AlloffActionActiveEntity
 from .entities.alloff_action_basicstate import Nhc2AlloffActionBasicStateEntity
 from .entities.dimmer_action_alligned import Nhc2DimmerActionAlignedEntity
+from .entities.generic_energyhome_electrical_power_production_threshold_exceeded import \
+    Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity
+from .entities.generic_energyhome_report_instant_usage import Nhc2GenericEnergyhomeReportInstantUsageEntity
 from .entities.hvacthermostat_hvac_hvac_on import Nhc2HvacthermostatHvacHvacOnEntity
 from .entities.motor_action_cover import Nhc2MotorActionCoverEntity
 from .entities.motor_action_moving import Nhc2MotorActionMovingEntity
@@ -20,6 +23,7 @@ from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
 from .nhccoco.devices.gate_action import CocoGateAction
+from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.rolldownshutter_action import CocoRolldownshutterAction
@@ -94,12 +98,24 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoNasoSmartplug)
-    _LOGGER.info('→ Found %s Zigbee Smart plug', len(device_instances))
+    _LOGGER.info('→ Found %s Zigbee Smart plugs', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2NasoSmartPlugReportInstantUsageEntity(device_instance, hub, gateway))
             entities.append(Nhc2NasoSmartPlugFeedbackEnabledEntity(device_instance, hub, gateway))
             entities.append(Nhc2NasoSmartPlugMeasuringOnlyEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericEnergyhome)
+    _LOGGER.info('→ Found %s Energy Home\'s', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(
+                Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity(device_instance, hub, gateway)
+            )
+            entities.append(Nhc2GenericEnergyhomeReportInstantUsageEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

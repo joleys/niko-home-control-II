@@ -5,6 +5,14 @@ from homeassistant.const import CONF_USERNAME
 from .nhccoco.coco import CoCo
 
 from .entities.garagedoor_action_basicstate import Nhc2GaragedoorActionBasicStateEntity
+from .entities.generic_energyhome_electrical_power_consumption import \
+    Nhc2GenericEnergyhomeElectricalPowerConsumptionEntity
+from .entities.generic_energyhome_electrical_power_from_grid import Nhc2GenericEnergyhomeElectricalPowerFromGridEntity
+from .entities.generic_energyhome_electrical_power_production import \
+    Nhc2GenericEnergyhomeElectricalPowerProductionEntity
+from .entities.generic_energyhome_electrical_power_self_consumption import \
+    Nhc2GenericEnergyhomeElectricalPowerSelfConsumptionEntity
+from .entities.generic_energyhome_electrical_power_to_grid import Nhc2GenericEnergyhomeElectricalPowerToGridEntity
 from .entities.hvacthermostat_hvac_setpoint_temperature import Nhc2HvacthermostatHvacSetpointTemperatureEntity
 from .entities.hvacthermostat_hvac_overrule_setpoint import Nhc2HvacthermostatHvacOverruleSetpointEntity
 from .entities.hvacthermostat_hvac_overrule_time import Nhc2HvacthermostatHvacOverruleTimeEntity
@@ -13,6 +21,7 @@ from .entities.thermostat_hvac_setpoint_temperature import Nhc2ThermostatHvacSet
 from .entities.thermostat_hvac_overrule_time import Nhc2ThermostatHvacOverruleTimeEntity
 from .entities.thermostat_hvac_overrule_setpoint import Nhc2ThermostatHvacOverruleSetpointEntity
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
+from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.thermostat_hvac import CocoThermostatHvac
@@ -72,5 +81,18 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2NasoSmartPlugElectricalPowerEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericEnergyhome)
+    _LOGGER.info('→ Found %s Energy Home\'s', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2GenericEnergyhomeElectricalPowerToGridEntity(device_instance, hub, gateway))
+            entities.append(Nhc2GenericEnergyhomeElectricalPowerFromGridEntity(device_instance, hub, gateway))
+            entities.append(Nhc2GenericEnergyhomeElectricalPowerProductionEntity(device_instance, hub, gateway))
+            entities.append(Nhc2GenericEnergyhomeElectricalPowerSelfConsumptionEntity(device_instance, hub, gateway))
+            entities.append(Nhc2GenericEnergyhomeElectricalPowerConsumptionEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

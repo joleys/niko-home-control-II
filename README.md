@@ -155,6 +155,20 @@ This is the energy metering linked to a zigbee smart plug. The smart plug itself
 
 The totals are not available as they are not exposed by the API.
 
+### Energy Home
+
+#### Entities
+
+* **Electrical Power to Grid Sensor**, the realtime power usage in W as a sum for all central meters.
+* **Electrical Power from Grid Sensor**, the realtime power consumption in W as a sum for all central meters.
+* **Electrical Power Production Sensor**, the realtime power production in W as a sum for all producers.
+* **Electrical Power Self Consumption Sensor**, electrical power production minus power to grid.
+* **Electrical Power Consumption Sensor**, electrical power self production + electrical power from grid.
+* **Report Instant Usage Binary Sensor**, indicates if the Electrical Power is received. When disabled, it will
+  automatically be enabled.
+* **Electrical Power Production Threshold Exceeded Binary Sensor**, this is on when the central meters electrical power
+  production is greater than the threshold of 300W (+ 5W hysteresis)
+
 ## Not yet supported
 
 * NHC Audio Control Action
@@ -174,7 +188,6 @@ The totals are not available as they are not exposed by the API.
 * Sonos Speaker
 * Bose Speaker
 * Electricity Metering module (with clamp)
-* Energy Home
 * Generic Ventilation Implementation
 * Generic Heating/Cooling Implementation
 * Generic Warm Water Implementation

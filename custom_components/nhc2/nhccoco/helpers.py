@@ -51,3 +51,13 @@ def process_device_commands(device_commands_to_process):
 
 def json_to_map(json):
     return {k: v for k, v in json.items()}
+
+
+def to_float_or_none(value) -> float | None:
+    if value is None or value == '':
+        return None
+    return float(value)
+def to_int_or_none(value) -> float | None:
+    if value is None or value == '':
+        return None
+    return int(value)

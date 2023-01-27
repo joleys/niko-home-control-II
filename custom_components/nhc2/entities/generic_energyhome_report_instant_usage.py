@@ -3,17 +3,17 @@ from homeassistant.helpers.entity import EntityCategory
 
 from ..const import DOMAIN, BRAND
 
-from ..nhccoco.devices.naso_smartplug import CocoNasoSmartplug
+from ..nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
 
 import logging
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class Nhc2NasoSmartPlugReportInstantUsageEntity(BinarySensorEntity):
+class Nhc2GenericEnergyhomeReportInstantUsageEntity(BinarySensorEntity):
     _attr_has_entity_name = True
 
-    def __init__(self, device_instance: CocoNasoSmartplug, hub, gateway):
+    def __init__(self, device_instance: CocoGenericEnergyhome, hub, gateway):
         """Initialize a binary sensor."""
         self._device = device_instance
         self._hub = hub

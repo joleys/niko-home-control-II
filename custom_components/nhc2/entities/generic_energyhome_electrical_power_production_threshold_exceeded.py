@@ -3,17 +3,17 @@ from homeassistant.helpers.entity import EntityCategory
 
 from ..const import DOMAIN, BRAND
 
-from ..nhccoco.devices.naso_smartplug import CocoNasoSmartplug
+from ..nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
 
 import logging
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class Nhc2NasoSmartPlugReportInstantUsageEntity(BinarySensorEntity):
+class Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity(BinarySensorEntity):
     _attr_has_entity_name = True
 
-    def __init__(self, device_instance: CocoNasoSmartplug, hub, gateway):
+    def __init__(self, device_instance: CocoGenericEnergyhome, hub, gateway):
         """Initialize a binary sensor."""
         self._device = device_instance
         self._hub = hub
@@ -22,10 +22,10 @@ class Nhc2NasoSmartPlugReportInstantUsageEntity(BinarySensorEntity):
         self._device.after_change_callbacks.append(self.on_change)
 
         self._attr_available = self._device.is_online
-        self._attr_unique_id = device_instance.uuid + '_report_instant_usage'
+        self._attr_unique_id = device_instance.uuid + '_electrical_power_production_threshold_exceeded'
         self._attr_should_poll = False
 
-        self._attr_state = self._device.is_report_instant_usage
+        self._attr_state = self._device.is_electrical_power_production_threshold_exceeded
         self._attr_state_class = None
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
 
@@ -51,9 +51,4 @@ class Nhc2NasoSmartPlugReportInstantUsageEntity(BinarySensorEntity):
         return self._device.is_report_instant_usage
 
     def on_change(self):
-        # Re-enable reporting when it is turned off
-        if self._device.is_report_instant_usage is False:
-            _LOGGER.debug(f'{self.name} re-enabled')
-            self._device.enable_report_instant_usage(self._gateway)
-
         self.schedule_update_ha_state()
