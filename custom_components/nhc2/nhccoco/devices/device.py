@@ -100,3 +100,6 @@ class CoCoDevice():
     def on_change(self, topic: str, payload: dict):
         """Fallback on change method"""
         _LOGGER.debug(f'{self._name} has not implemented the on_change method')
+
+    def set_disconnected(self):
+        self._online = False

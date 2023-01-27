@@ -177,7 +177,7 @@ class CoCo:
         def _on_disconnect(client, userdata, rc):
             _LOGGER.warning('Disconnected from MQTT broker')
             for device in self._device_instances.values():
-                device.is_online = False
+                device.set_disconnected()
 
         # Configure the callbacks
         self._client.on_message = _on_message
