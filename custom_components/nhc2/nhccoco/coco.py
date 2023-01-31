@@ -9,6 +9,7 @@ import paho.mqtt.client as mqtt
 from .devices.accesscontrol_action import CocoAccesscontrolAction
 from .devices.alarms_action import CocoAlarmsAction
 from .devices.alloff_action import CocoAlloffAction
+from .devices.comfort_action import CocoComfortAction
 from .devices.dimmer_action import CocoDimmerAction
 from .devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .devices.fan_action import CocoFanAction

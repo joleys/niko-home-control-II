@@ -128,6 +128,18 @@ This is exposed as a climate entity.
 * **EcoSave Switch**, marks if the EcoSave mode is active. When active the program keeps going, but the
   setpointtemperature is altered (+3 when cooling, -3 when heating).
 
+### NHC Mood Action
+
+This action is exposed as a button.
+
+#### Entities
+
+It has some extra entities that can be used in automations:
+
+* **Basic State Binary Sensor**, is on according to the state of all assigned players as configured for that action.
+* **Mood Active Binary Sensor**, is on upon activation of the action. It is off when one of the assigned participant in
+  the action had a state change.
+
 ### NHC Motor Action
 
 This is exposed as a cover entity.
@@ -192,7 +204,6 @@ The totals are not available as they are not (yet) exposed by the API.
 * NHC BellButton Action
 * NHC House Mode Action
 * NHC Touch Switch
-* NHC Mood Action
 * NHC Panic Mode Action
 * NHC PIR Action
 * NHC Presence Simulation Action
