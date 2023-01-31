@@ -17,7 +17,7 @@ class Nhc2AlloffActionActiveEntity(BinarySensorEntity):
         self._device.after_change_callbacks.append(self.on_change)
 
         self._attr_available = self._device.is_online
-        self._attr_unique_id = device_instance.uuid + '_alloff_active'
+        self._attr_unique_id = device_instance.uuid + '_active'
         self._attr_should_poll = False
 
         self._attr_state = self._device.is_all_off_active

@@ -17,7 +17,7 @@ class Nhc2HvacthermostatHvacProtectModeEntity(SwitchEntity):
         self._device.after_change_callbacks.append(self.on_change)
 
         self._attr_available = self._device.is_online
-        self._attr_unique_id = device_instance.uuid + '_hvacthermostat_protect_mode'
+        self._attr_unique_id = device_instance.uuid + '_protect_mode'
         self._attr_should_poll = False
         self._attr_device_class = SwitchDeviceClass.SWITCH
 
