@@ -1,5 +1,5 @@
 from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_ACTION, PROPERTY_ALIGNED, PROPERTY_ALIGNED_VALUE_TRUE, \
-    PROPERTY_MOVING, PROPERTY_MOVING_VALUE_TRUE, PROPERTY_POSITION, PROPERTY_LAST_DIRECTION, PROPERTY_LAST_DIRECTION_VALUE_OPEN, PROPERTY_LAST_DIRECTION_VALUE_CLOSE
+    PROPERTY_MOVING, PROPERTY_MOVING_VALUE_TRUE, PROPERTY_POSITION, PROPERTY_LAST_DIRECTION
 from ..helpers import to_int_or_none
 from .device import CoCoDevice
 
@@ -35,10 +35,7 @@ class CocoMotorAction(CoCoDevice):
 
     @property
     def possible_last_directions(self) -> list:
-        return [
-            PROPERTY_LAST_DIRECTION_VALUE_OPEN,
-            PROPERTY_LAST_DIRECTION_VALUE_CLOSE,
-        ]
+        return self.extract_property_definition_description_choices(PROPERTY_LAST_DIRECTION)
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')

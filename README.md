@@ -70,10 +70,6 @@ for light.
 
 This is exposed as a fan entity.
 
-#### Todo
-
-* [ ] [See if we can read the speeds from the description](https://github.com/joleys/niko-home-control-II/blob/cbb5645a2f8332c62b94e429d6fdebda66633a67/custom_components/nhc2/nhccoco/coco_fan.py#L26)
-
 ### NHC Free Start Stop Actions
 
 This action is exposed as a button.
@@ -87,10 +83,6 @@ It has some extra entities that can be used in automations:
   the action has a state change.
 
 ### NHC Garage Door Action (untested)
-
-#### Todo
-
-* [ ] Read possible states from description
 
 #### Entities
 
@@ -126,7 +118,6 @@ This is exposed as a climate entity.
 
 * [ ] [Check if we can implement target_temperature_high, target_temperature_low, target_temperature_step](https://github.com/joleys/niko-home-control-II/blob/master/custom_components/nhc2/nhccoco/coco_climate.py#L103)
 * [ ] [Check if we can implement max_temp, min_temp](https://github.com/joleys/niko-home-control-II/blob/master/custom_components/nhc2/nhccoco/coco_climate.py#L112)
-* [ ] [Check if we can populate preset_modes from the description](https://github.com/joleys/niko-home-control-II/blob/master/custom_components/nhc2/nhccoco/coco_climate.py#L120)
 
 #### Entities
 

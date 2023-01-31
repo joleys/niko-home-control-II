@@ -14,11 +14,10 @@ class CocoGaragedoorAction(CoCoDevice):
 
     @property
     def possible_basic_states(self) -> list:
-        return [
-            PROPERTY_BASIC_STATE_VALUE_ON,
-            PROPERTY_BASIC_STATE_VALUE_INTERMEDIATE,
-            PROPERTY_BASIC_STATE_VALUE_OFF,
-        ]
+        states = self.extract_property_definition_description_choices(PROPERTY_BASIC_STATE)
+        states.remove(PROPERTY_BASIC_STATE_VALUE_TRIGGERED)
+
+        return states
 
     @property
     def is_basic_state_on(self) -> bool:

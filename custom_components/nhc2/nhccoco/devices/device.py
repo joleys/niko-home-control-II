@@ -1,8 +1,9 @@
 from ..const import DEVICE_DESCRIPTOR_UUID, DEVICE_DESCRIPTOR_TYPE, DEVICE_DESCRIPTOR_TECHNOLOGY, \
     DEVICE_DESCRIPTOR_MODEL, DEVICE_DESCRIPTOR_IDENTIFIER, DEVICE_DESCRIPTOR_NAME, DEVICE_DESCRIPTOR_TRAITS, \
-    DEVICE_DESCRIPTOR_PARAMETERS, DEVICE_DESCRIPTOR_PROPERTIES, DEVICE_DESCRIPTOR_ONLINE, \
-    DEVICE_DESCRIPTOR_ONLINE_VALUE_TRUE
+    DEVICE_DESCRIPTOR_PARAMETERS, DEVICE_DESCRIPTOR_PROPERTIES, DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS, \
+    DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS_DESCRIPTION, DEVICE_DESCRIPTOR_ONLINE, DEVICE_DESCRIPTOR_ONLINE_VALUE_TRUE
 
+import re
 import logging
 
 _LOGGER = logging.getLogger(__name__)
@@ -19,6 +20,9 @@ class CoCoDevice():
         self._traits = json[DEVICE_DESCRIPTOR_TRAITS] if DEVICE_DESCRIPTOR_TRAITS in json else None
         self._parameters = json[DEVICE_DESCRIPTOR_PARAMETERS] if DEVICE_DESCRIPTOR_PARAMETERS in json else None
         self._properties = json[DEVICE_DESCRIPTOR_PROPERTIES] if DEVICE_DESCRIPTOR_PROPERTIES in json else None
+        self._property_definitions = None
+        if DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS in json:
+            self._property_definitions = json[DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS]
 
         self._after_change_callbacks = []
         self._online = json[DEVICE_DESCRIPTOR_ONLINE] if DEVICE_DESCRIPTOR_ONLINE in json else None
@@ -96,6 +100,23 @@ class CoCoDevice():
                     for current_key, current_value in current_property.items():
                         if current_key == key:
                             self._properties[index] = new_property
+
+    def extract_property_definition(self, property_key: str) -> str:
+        if self._property_definitions:
+            property_definition_object = next(filter((lambda x: x and property_key in x), self._property_definitions),
+                                              None)
+            if property_definition_object and property_key in property_definition_object:
+                return property_definition_object[property_key]
+        return None
+
+    def extract_property_definition_description_choices(self, property_key: str) -> str:
+        definition = self.extract_property_definition(property_key)
+        if definition and DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS_DESCRIPTION in definition:
+            choices = re.findall(r'Choice\((.*?)\)', definition[DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS_DESCRIPTION])
+            if len(choices) == 1:
+                return choices[0].split(',')
+
+        return None
 
     def on_change(self, topic: str, payload: dict):
         """Fallback on change method"""

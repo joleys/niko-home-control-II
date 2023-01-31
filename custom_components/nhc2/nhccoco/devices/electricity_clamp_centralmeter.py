@@ -1,8 +1,5 @@
 from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_ELECTRICAL_POWER, PROPERTY_REPORT_INSTANT_USAGE, \
-    PROPERTY_REPORT_INSTANT_USAGE_VALUE_TRUE, PARAMETER_FLOW, PARAMETER_FLOW_VALUE_PRODUCER, \
-    PARAMETER_FLOW_VALUE_CONSUMER, PARAMETER_SEGMENT, PARAMETER_SEGMENT_VALUE_CENTRAL, \
-    PARAMETER_SEGMENT_VALUE_SUBSEGMENT, PARAMETER_CLAMP_TYPE, PARAMETER_CLAMP_TYPE_VALUE_63A, \
-    PARAMETER_CLAMP_TYPE_VALUE_120A
+    PROPERTY_REPORT_INSTANT_USAGE_VALUE_TRUE, PARAMETER_FLOW, PARAMETER_SEGMENT, PARAMETER_CLAMP_TYPE
 from ..helpers import to_float_or_none
 from .device import CoCoDevice
 
@@ -26,10 +23,7 @@ class CocoElectricityClampCentralmeter(CoCoDevice):
 
     @property
     def possible_flows(self) -> list:
-        return [
-            PARAMETER_FLOW_VALUE_PRODUCER,
-            PARAMETER_FLOW_VALUE_CONSUMER
-        ]
+        self.extract_property_definition_description_choices(PARAMETER_FLOW)
 
     @property
     def segment(self) -> str:
@@ -37,10 +31,7 @@ class CocoElectricityClampCentralmeter(CoCoDevice):
 
     @property
     def possible_segments(self) -> list:
-        return [
-            PARAMETER_SEGMENT_VALUE_CENTRAL,
-            PARAMETER_SEGMENT_VALUE_SUBSEGMENT,
-        ]
+        self.extract_property_definition_description_choices(PARAMETER_SEGMENT)
 
     @property
     def clamp_type(self) -> str:
@@ -48,10 +39,7 @@ class CocoElectricityClampCentralmeter(CoCoDevice):
 
     @property
     def possible_clamp_types(self) -> list:
-        return [
-            PARAMETER_CLAMP_TYPE_VALUE_63A,
-            PARAMETER_CLAMP_TYPE_VALUE_120A,
-        ]
+        self.extract_property_definition_description_choices(PARAMETER_CLAMP_TYPE)
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')

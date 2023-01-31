@@ -1,5 +1,4 @@
-from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_FAN_SPEED, PROPERTY_FAN_SPEED_VALUE_LOW, \
-    PROPERTY_FAN_SPEED_VALUE_MEDIUM, PROPERTY_FAN_SPEED_VALUE_HIGH, PROPERTY_FAN_SPEED_VALUE_BOOST
+from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_FAN_SPEED
 
 from .device import CoCoDevice
 
@@ -15,12 +14,7 @@ class CocoFanAction(CoCoDevice):
 
     @property
     def possible_fan_speeds(self) -> list[str]:
-        return [
-            PROPERTY_FAN_SPEED_VALUE_LOW,
-            PROPERTY_FAN_SPEED_VALUE_MEDIUM,
-            PROPERTY_FAN_SPEED_VALUE_HIGH,
-            PROPERTY_FAN_SPEED_VALUE_BOOST,
-        ]
+        self.extract_property_definition_description_choices(PROPERTY_FAN_SPEED)
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
