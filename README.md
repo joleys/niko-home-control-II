@@ -27,8 +27,8 @@ This action exposes a button, camera and lock.
 
 It has some extra entities that can be used in automations:
 
-* **Access Control Basic State Binary Sensor**, which represents the Basic State. This is only available for
-  ring-and-come-in guided action. It indicates if the ring-and-come-in is enabled or not.
+* **Basic State Binary Sensor**, which represents the Basic State. This is only available for ring-and-come-in guided
+  action. It indicates if the ring-and-come-in is enabled or not.
 * **Decline Call Applied On All Devices Binary Sensor**, which represents the Decline Call Applied On All Devices state.
 
 ### NHC All Off Action
@@ -39,39 +39,15 @@ This action is exposed as a button.
 
 It has some extra entities that can be used in automations:
 
+* **Basic State Binary Sensor**, which represents the Basic State of the AllOff.
 * **AllOff Active Binary Sensor**, which represents the AllOffActive state. Be aware that this state is only updated as
   the button is pressed, not when all devices are off.
-* **AllOff Basic State Binary Sensor**, which represents the Basic State of the AllOff.
 
 ### NHC Basic Alarm Action (untested)
 
 __Remark:__ this is untested as I don't own a device of this type.
 
 This action is exposed as alarm control panel.
-
-### NHC Free Start Stop Actions
-
-This action is exposed as a button.
-
-#### Entities
-
-It has some extra entities that can be used in automations:
-
-* **Free Start Stop Action Basic State Binary Sensor**, is on according to the state of all assigned players as
-  configured for that action.
-* **Free Start Stop Action Start Active Binary Sensor**, is on upon activation of the action. It is off when one of the
-  assigned participant in the action has a state change.
-
-### NHC Garage Door Action (untested)
-
-#### Todo
-
-* [ ] Read possible states from description
-
-#### Entities
-
-* **Basic State Enum Sensor**, which represents the Basic State. On means the gate is opened, off means the gate is
-  closed. Intermediate means the gate is moving, only when optional moving sensor is available.
 
 ### NHC Dimmer Action
 
@@ -96,7 +72,30 @@ This is exposed as a fan entity.
 
 #### Todo
 
-* [ ] [See if we can read the speeds fro the description](https://github.com/joleys/niko-home-control-II/blob/cbb5645a2f8332c62b94e429d6fdebda66633a67/custom_components/nhc2/nhccoco/coco_fan.py#L26)
+* [ ] [See if we can read the speeds from the description](https://github.com/joleys/niko-home-control-II/blob/cbb5645a2f8332c62b94e429d6fdebda66633a67/custom_components/nhc2/nhccoco/coco_fan.py#L26)
+
+### NHC Free Start Stop Actions
+
+This action is exposed as a button.
+
+#### Entities
+
+It has some extra entities that can be used in automations:
+
+* **Basic State Binary Sensor**, is on according to the state of all assigned players as configured for that action.
+* **Start Active Binary Sensor**, is on upon activation of the action. It is off when one of the assigned participant in
+  the action has a state change.
+
+### NHC Garage Door Action (untested)
+
+#### Todo
+
+* [ ] Read possible states from description
+
+#### Entities
+
+* **Basic State Enum Sensor**, which represents the Basic State. On means the gate is opened, off means the gate is
+  closed. Intermediate means the gate is moving, only when optional moving sensor is available.
 
 ### NHC HVAC Thermostat (untested)
 
@@ -167,7 +166,7 @@ This is the energy metering linked to a zigbee smart plug. The smart plug itself
 
 #### Remarks
 
-The totals are not available as they are not exposed by the API.
+The totals are not available as they are not (yet) exposed by the API.
 
 ### Electricity Metering module (with clamp) (untested)
 
