@@ -22,7 +22,7 @@ class Nhc2GaragedoorActionBasicStateEntity(SensorEntity):
 
         self._attr_device_class = SensorDeviceClass.ENUM
         self._attr_options = self._device.possible_basic_states
-        self._attr_native_value = self._device.status_basic_state
+        self._attr_native_value = self._device.basic_state
         self._attr_state_class = None
 
     @property

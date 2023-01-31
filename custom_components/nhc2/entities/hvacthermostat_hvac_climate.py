@@ -29,8 +29,8 @@ class Nhc2HvacthermostatHvacClimateEntity(ClimateEntity):
         self._attr_should_poll = False
 
         self._attr_temperature_unit = UnitOfTemperature.CELSIUS
-        self._attr_current_temperature = self._device.status_ambient_temperature
-        self._attr_target_temperature = self._device.status_setpoint_temperature
+        self._attr_current_temperature = self._device.ambient_temperature
+        self._attr_target_temperature = self._device.setpoint_temperature
         self._attr_hvac_modes = [
             HVACMode.HEAT,
             HVACMode.COOL,
@@ -74,12 +74,12 @@ class Nhc2HvacthermostatHvacClimateEntity(ClimateEntity):
 
     @property
     def preset_mode(self) -> str:
-        if self._device.status_program == PROPERTY_PROGRAM_VALUE_DAY:
+        if self._device.program == PROPERTY_PROGRAM_VALUE_DAY:
             return PRESET_COMFORT
-        if self._device.status_program == PROPERTY_PROGRAM_VALUE_NIGHT:
+        if self._device.program == PROPERTY_PROGRAM_VALUE_NIGHT:
             return PRESET_SLEEP
 
-        return self._device.status_program
+        return self._device.program
 
     @property
     def preset_modes(self) -> list[str]:
@@ -98,14 +98,14 @@ class Nhc2HvacthermostatHvacClimateEntity(ClimateEntity):
 
     @property
     def fan_mode(self) -> str | None:
-        if self._device.status_fan_speed == PROPERTY_FAN_SPEED_VALUE_LOW:
+        if self._device.fan_speed == PROPERTY_FAN_SPEED_VALUE_LOW:
             return FAN_LOW
-        if self._device.status_fan_speed == PROPERTY_FAN_SPEED_VALUE_MEDIUM:
+        if self._device.fan_speed == PROPERTY_FAN_SPEED_VALUE_MEDIUM:
             return FAN_MEDIUM
-        if self._device.status_fan_speed == PROPERTY_FAN_SPEED_VALUE_HIGH:
+        if self._device.fan_speed == PROPERTY_FAN_SPEED_VALUE_HIGH:
             return FAN_HIGH
 
-        return self._device.status_fan_speed
+        return self._device.fan_speed
 
     def on_change(self):
         self.schedule_update_ha_state()

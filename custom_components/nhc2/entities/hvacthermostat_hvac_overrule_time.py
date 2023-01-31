@@ -22,7 +22,7 @@ class Nhc2HvacthermostatHvacOverruleTimeEntity(SensorEntity):
         self._attr_should_poll = False
 
         self._attr_device_class = SensorDeviceClass.DURATION
-        self._attr_native_value = self._device.status_overrule_time
+        self._attr_native_value = self._device.overrule_time
         self._attr_native_unit_of_measurement = TIME_MINUTES
         self._attr_state_class = None
 

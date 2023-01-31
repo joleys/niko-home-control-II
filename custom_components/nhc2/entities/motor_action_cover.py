@@ -26,8 +26,8 @@ class Nhc2MotorActionCoverEntity(CoverEntity):
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
 
-        self._attr_current_cover_position = self._device.status_position
-        self._attr_is_closed = self._device.status_position == 0
+        self._attr_current_cover_position = self._device.position
+        self._attr_is_closed = self._device.position == 0
         self._attr_supported_features = CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | \
                                         CoverEntityFeature.SET_POSITION | CoverEntityFeature.STOP
 
@@ -56,7 +56,6 @@ class Nhc2MotorActionCoverEntity(CoverEntity):
             return CoverDeviceClass.SHUTTER
 
         return None
-
 
     def on_change(self):
         self.schedule_update_ha_state()

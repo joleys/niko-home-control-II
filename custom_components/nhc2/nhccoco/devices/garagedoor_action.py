@@ -9,7 +9,7 @@ _LOGGER = logging.getLogger(__name__)
 
 class CocoGaragedoorAction(CoCoDevice):
     @property
-    def status_basic_state(self) -> str:
+    def basic_state(self) -> str:
         return self.extract_property_value(PROPERTY_BASIC_STATE)
 
     @property
@@ -22,15 +22,15 @@ class CocoGaragedoorAction(CoCoDevice):
 
     @property
     def is_basic_state_on(self) -> bool:
-        return self.status_basic_state == PROPERTY_BASIC_STATE_VALUE_ON
+        return self.basic_state == PROPERTY_BASIC_STATE_VALUE_ON
 
     @property
     def is_basic_state_off(self) -> bool:
-        return self.status_basic_state == PROPERTY_BASIC_STATE_VALUE_OFF
+        return self.basic_state == PROPERTY_BASIC_STATE_VALUE_OFF
 
     @property
     def is_basic_state_intermediate(self) -> bool:
-        return self.status_basic_state == PROPERTY_BASIC_STATE_VALUE_INTERMEDIATE
+        return self.basic_state == PROPERTY_BASIC_STATE_VALUE_INTERMEDIATE
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')

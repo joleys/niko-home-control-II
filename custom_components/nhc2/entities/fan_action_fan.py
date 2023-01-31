@@ -39,7 +39,7 @@ class Nhc2FanActionFanEntity(FanEntity):
 
     @property
     def preset_mode(self) -> str:
-        return self._device.status_fan_speed
+        return self._device.fan_speed
 
     @property
     def preset_modes(self) -> str:
@@ -48,7 +48,7 @@ class Nhc2FanActionFanEntity(FanEntity):
     @property
     def percentage(self) -> int:
         """Return the current speed percentage."""
-        return ordered_list_item_to_percentage(self.preset_modes, self._device.status_fan_speed)
+        return ordered_list_item_to_percentage(self.preset_modes, self._device.fan_speed)
 
     @property
     def speed_count(self) -> int:

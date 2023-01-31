@@ -44,14 +44,14 @@ class Nhc2RelayActionLightEntity(LightEntity):
 
     @property
     def is_on(self) -> bool:
-        return self._device.is_on
+        return self._device.is_status_on
 
     @property
     def brightness(self) -> int:
         if not self._device.support_brightness:
             return None
 
-        if not self.is_on:
+        if not self.is_status_on:
             return 0
 
         return int(round(255 * self._device.status_brightness / 100))

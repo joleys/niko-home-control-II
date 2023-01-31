@@ -22,7 +22,7 @@ class Nhc2HvacthermostatHvacOverruleSetpointEntity(SensorEntity):
         self._attr_should_poll = False
 
         self._attr_device_class = SensorDeviceClass.TEMPERATURE
-        self._attr_native_value = self._device.status_overrule_setpoint
+        self._attr_native_value = self._device.overrule_setpoint
         self._attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
         self._attr_state_class = None
 

@@ -10,24 +10,24 @@ _LOGGER = logging.getLogger(__name__)
 
 class CocoMotorAction(CoCoDevice):
     @property
-    def status_position(self) -> int:
+    def position(self) -> int:
         return to_int_or_none(self.extract_property_value(PROPERTY_POSITION))
 
     @property
-    def status_aligned(self) -> str:
+    def aligned(self) -> str:
         return self.extract_property_value(PROPERTY_ALIGNED)
 
     @property
     def is_aligned(self) -> bool:
-        return self.status_aligned == PROPERTY_ALIGNED_VALUE_TRUE
+        return self.aligned == PROPERTY_ALIGNED_VALUE_TRUE
 
     @property
-    def status_moving(self) -> str:
+    def moving(self) -> str:
         return self.extract_property_value(PROPERTY_MOVING)
 
     @property
     def is_moving(self) -> bool:
-        return self.status_moving == PROPERTY_MOVING_VALUE_TRUE
+        return self.moving == PROPERTY_MOVING_VALUE_TRUE
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')

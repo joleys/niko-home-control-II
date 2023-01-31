@@ -26,8 +26,8 @@ class Nhc2ThermostatHvacClimateEntity(ClimateEntity):
         self._attr_should_poll = False
 
         self._attr_temperature_unit = UnitOfTemperature.CELSIUS
-        self._attr_current_temperature = self._device.status_ambient_temperature
-        self._attr_target_temperature = self._device.status_setpoint_temperature
+        self._attr_current_temperature = self._device.ambient_temperature
+        self._attr_target_temperature = self._device.setpoint_temperature
         self._attr_hvac_modes = [
             HVACMode.AUTO,
             HVACMode.HEAT_COOL,
@@ -50,7 +50,7 @@ class Nhc2ThermostatHvacClimateEntity(ClimateEntity):
 
     @property
     def hvac_action(self):
-        if self._device.status_program == PROPERTY_PROGRAM_VALUE_OFF:
+        if self._device.program == PROPERTY_PROGRAM_VALUE_OFF:
             return HVACAction.OFF
         if self._device.is_demand_heating:
             return HVACAction.HEATING
@@ -70,14 +70,14 @@ class Nhc2ThermostatHvacClimateEntity(ClimateEntity):
 
     @property
     def preset_mode(self) -> str:
-        if self._device.status_program == PROPERTY_PROGRAM_VALUE_ECO:
+        if self._device.program == PROPERTY_PROGRAM_VALUE_ECO:
             return PRESET_ECO
-        if self._device.status_program == PROPERTY_PROGRAM_VALUE_DAY:
+        if self._device.program == PROPERTY_PROGRAM_VALUE_DAY:
             return PRESET_COMFORT
-        if self._device.status_program == PROPERTY_PROGRAM_VALUE_NIGHT:
+        if self._device.program == PROPERTY_PROGRAM_VALUE_NIGHT:
             return PRESET_SLEEP
 
-        return self._device.status_program
+        return self._device.program
 
     @property
     def preset_modes(self) -> list[str]:

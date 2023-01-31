@@ -14,20 +14,20 @@ class CocoDimmerAction(CoCoDevice):
         return self.extract_property_value(PROPERTY_STATUS)
 
     @property
-    def status_brightness(self) -> int:
-        return to_int_or_none(self.extract_property_value(PROPERTY_BRIGHTNESS))
-
-    @property
-    def status_aligned(self) -> str:
-        return self.extract_property_value(PROPERTY_ALIGNED)
-
-    @property
-    def is_on(self) -> bool:
+    def is_status_on(self) -> bool:
         return self.status == PROPERTY_STATUS_VALUE_ON
 
     @property
+    def brightness(self) -> int:
+        return to_int_or_none(self.extract_property_value(PROPERTY_BRIGHTNESS))
+
+    @property
+    def aligned(self) -> str:
+        return self.extract_property_value(PROPERTY_ALIGNED)
+
+    @property
     def is_aligned(self) -> bool:
-        return self.status_aligned == PROPERTY_ALIGNED_VALUE_TRUE
+        return self.aligned == PROPERTY_ALIGNED_VALUE_TRUE
 
     @property
     def support_brightness(self) -> bool:

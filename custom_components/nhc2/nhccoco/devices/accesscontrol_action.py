@@ -12,32 +12,32 @@ _LOGGER = logging.getLogger(__name__)
 
 class CocoAccesscontrolAction(CoCoDevice):
     @property
-    def status_basic_state(self) -> str:
+    def basic_state(self) -> str:
         return self.extract_property_value(PROPERTY_BASIC_STATE)
 
     @property
     def is_basic_state_on(self) -> bool:
-        return self.status_basic_state == PROPERTY_BASIC_STATE_VALUE_ON
+        return self.basic_state == PROPERTY_BASIC_STATE_VALUE_ON
 
     @property
-    def status_doorlock(self) -> str:
+    def doorlock(self) -> str:
         return self.extract_property_value(PROPERTY_DOORLOCK)
 
     @property
     def is_doorlock_open(self) -> bool:
-        return self.status_doorlock == PROPERTY_DOORLOCK_VALUE_OPEN
+        return self.doorlock == PROPERTY_DOORLOCK_VALUE_OPEN
 
     @property
     def is_doorlock_closed(self) -> bool:
-        return self.status_doorlock == PROPERTY_DOORLOCK_VALUE_CLOSED
+        return self.doorlock == PROPERTY_DOORLOCK_VALUE_CLOSED
 
     @property
-    def status_decline_call_applied_on_all_devices(self) -> str:
+    def decline_call_applied_on_all_devices(self) -> str:
         return self.extract_parameter_value(PARAMETER_DECLINE_CALL_APPLIED_ON_ALL_DEVICES)
 
     @property
     def is_decline_call_applied_on_all_devices(self) -> bool:
-        return self.status_decline_call_applied_on_all_devices == PARAMETER_DECLINE_CALL_APPLIED_ON_ALL_DEVICES_VALUE_TRUE
+        return self.decline_call_applied_on_all_devices == PARAMETER_DECLINE_CALL_APPLIED_ON_ALL_DEVICES_VALUE_TRUE
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')

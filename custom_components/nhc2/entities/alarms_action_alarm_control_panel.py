@@ -39,11 +39,11 @@ class Nhc2AlarmsActionAlarmControlPanelEntity(AlarmControlPanelEntity):
 
     @property
     def state(self) -> str:
-        if self._device.is_off:
+        if self._device.is_basic_state_off:
             return STATE_ALARM_DISARMED
-        if self._device.is_on:
+        if self._device.is_basic_state_on:
             return STATE_ALARM_ARMED_AWAY
-        if self._device.is_intermediate:
+        if self._device.is_basic_state_intermediate:
             return STATE_ALARM_ARMING
 
     def on_change(self):
@@ -56,4 +56,3 @@ class Nhc2AlarmsActionAlarmControlPanelEntity(AlarmControlPanelEntity):
     async def async_alarm_disarm(self, code=None) -> None:
         self._device.disarm(self._gateway)
         self.on_change()
-

@@ -10,7 +10,7 @@ _LOGGER = logging.getLogger(__name__)
 
 class CocoFanAction(CoCoDevice):
     @property
-    def status_fan_speed(self) -> str:
+    def fan_speed(self) -> str:
         return self.extract_property_value(PROPERTY_FAN_SPEED)
 
     @property

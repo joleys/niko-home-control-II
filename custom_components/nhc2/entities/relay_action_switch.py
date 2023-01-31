@@ -43,7 +43,7 @@ class Nhc2RelayActionSwitchEntity(SwitchEntity):
 
     @property
     def is_on(self) -> bool:
-        return self._device.is_on
+        return self._device.is_status_on
 
     def turn_off(self, **kwargs) -> None:
         """Pass - not in use."""

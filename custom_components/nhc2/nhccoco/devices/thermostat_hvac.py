@@ -15,7 +15,7 @@ _LOGGER = logging.getLogger(__name__)
 
 class CocoThermostatHvac(CoCoDevice):
     @property
-    def status_program(self) -> str:
+    def program(self) -> str:
         return self.extract_property_value(PROPERTY_PROGRAM)
 
     @property
@@ -31,52 +31,52 @@ class CocoThermostatHvac(CoCoDevice):
         ]
 
     @property
-    def status_ambient_temperature(self) -> float:
+    def ambient_temperature(self) -> float:
         return to_float_or_none(self.extract_property_value(PROPERTY_AMBIENT_TEMPERATURE))
 
     @property
-    def status_setpoint_temperature(self) -> float:
+    def setpoint_temperature(self) -> float:
         return to_float_or_none(self.extract_property_value(PROPERTY_SETPOINT_TEMPERATURE))
 
     @property
-    def status_overrule_active(self) -> str:
+    def overrule_active(self) -> str:
         return self.extract_property_value(PROPERTY_OVERRULE_ACTIVE)
 
     @property
     def is_overrule_active(self) -> bool:
-        return self.status_overrule_active == PROPERTY_OVERRULE_ACTIVE_VALUE_TRUE
+        return self.overrule_active == PROPERTY_OVERRULE_ACTIVE_VALUE_TRUE
 
     @property
-    def status_overrule_setpoint(self) -> float:
+    def overrule_setpoint(self) -> float:
         return to_float_or_none(self.extract_property_value(PROPERTY_OVERRULE_SETPOINT))
 
     @property
-    def status_overrule_time(self) -> int:
+    def overrule_time(self) -> int:
         return to_int_or_none(self.extract_property_value(PROPERTY_OVERRULE_TIME))
 
     @property
-    def status_ecosave(self) -> str:
+    def ecosave(self) -> str:
         return self.extract_property_value(PROPERTY_ECOSAVE)
 
     @property
     def is_ecosave(self) -> bool:
-        return self.status_ecosave == PROPERTY_ECOSAVE_VALUE_TRUE
+        return self.ecosave == PROPERTY_ECOSAVE_VALUE_TRUE
 
     @property
-    def status_demand(self) -> str:
+    def demand(self) -> str:
         return self.extract_property_value(PROPERTY_DEMAND)
 
     @property
     def is_demand_heating(self) -> bool:
-        return self.status_demand == PROPERTY_DEMAND_VALUE_HEATING
+        return self.demand == PROPERTY_DEMAND_VALUE_HEATING
 
     @property
     def is_demand_cooling(self) -> bool:
-        return self.status_demand == PROPERTY_DEMAND_VALUE_COOLING
+        return self.demand == PROPERTY_DEMAND_VALUE_COOLING
 
     @property
     def is_demand_none(self) -> bool:
-        return self.status_demand == PROPERTY_DEMAND_VALUE_NONE
+        return self.demand == PROPERTY_DEMAND_VALUE_NONE
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
