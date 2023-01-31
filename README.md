@@ -13,6 +13,8 @@ API. If you use a touch screen profile, this isn't even needed.
 This custom component is a [spin-off of the hard and excellent work by @filipvh](https://github.com/filipvh/hass-nhc2).
 Thanks!
 
+A big thanks to Johan and Koen from Niko for their support and providing me with test equipment.
+
 ## What works now?
 
 ### NHC Access Control Action (untested)
@@ -197,9 +199,7 @@ The totals are not available as they are not exposed by the API.
 
 * NHC Audio Control Action
 * NHC BellButton Action
-* NHC Free Start Stop Actions
 * NHC House Mode Action
-* NHC HVAC Thermostat
 * NHC Touch Switch
 * NHC Mood Action
 * NHC Panic Mode Action
