@@ -120,6 +120,10 @@ class CoCo:
 
                     try:
                         self._device_instances[device[MQTT_DATA_PARAMS_DEVICES_UUID]].on_change(topic, device)
+                    except KeyError as e:
+                        _LOGGER.debug(
+                            f'Device not in our instances list, therefor failed to invoke callback: {device[MQTT_DATA_PARAMS_DEVICES_UUID]}. Topic: {topic} | Data: {device}')
+                        pass
                     except Exception as e:
                         _LOGGER.debug(
                             f'Failed to invoke callback: {device[MQTT_DATA_PARAMS_DEVICES_UUID]}. Topic: {topic} | Data: {device}')
