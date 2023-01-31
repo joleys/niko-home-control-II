@@ -220,6 +220,7 @@ class CoCo:
 
     def _process_devices_list(self, response):
         """Convert the response of devices.list into device instances."""
+        _LOGGER.debug(f'Received device list: {response}')
         devices = extract_devices(response)
         for device in devices:
             try:
