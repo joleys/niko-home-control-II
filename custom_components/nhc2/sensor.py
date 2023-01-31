@@ -21,6 +21,7 @@ from .entities.generic_energyhome_electrical_power_to_grid import Nhc2GenericEne
 from .entities.hvacthermostat_hvac_setpoint_temperature import Nhc2HvacthermostatHvacSetpointTemperatureEntity
 from .entities.hvacthermostat_hvac_overrule_setpoint import Nhc2HvacthermostatHvacOverruleSetpointEntity
 from .entities.hvacthermostat_hvac_overrule_time import Nhc2HvacthermostatHvacOverruleTimeEntity
+from .entities.motor_action_last_direction import Nhc2MotorActionLastDirectionEntity
 from .entities.naso_smartplug_electrical_power import Nhc2NasoSmartPlugElectricalPowerEntity
 from .entities.thermostat_hvac_setpoint_temperature import Nhc2ThermostatHvacSetpointTemperatureEntity
 from .entities.thermostat_hvac_overrule_time import Nhc2ThermostatHvacOverruleTimeEntity
@@ -28,6 +29,7 @@ from .entities.thermostat_hvac_overrule_setpoint import Nhc2ThermostatHvacOverru
 from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
 from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
+from .nhccoco.devices.motor_action import CocoMotorAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.thermostat_hvac import CocoThermostatHvac
@@ -77,6 +79,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(Nhc2ThermostatHvacSetpointTemperatureEntity(device_instance, hub, gateway))
             entities.append(Nhc2ThermostatHvacOverruleTimeEntity(device_instance, hub, gateway))
             entities.append(Nhc2ThermostatHvacOverruleSetpointEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoMotorAction)
+    _LOGGER.info('→ Found %s Motor Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2MotorActionLastDirectionEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

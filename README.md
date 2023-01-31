@@ -137,7 +137,7 @@ This is exposed as a climate entity.
 * **EcoSave Switch**, marks if the EcoSave mode is active. When active the program keeps going, but the
   setpointtemperature is altered (+3 when cooling, -3 when heating).
 
-### NHC Motor Action (untested)
+### NHC Motor Action
 
 This is exposed as a cover entity.
 
@@ -145,6 +145,7 @@ This is exposed as a cover entity.
 
 * **Aligned Binary Sensor**, this is on when all motors have the same position.
 * **Moving Binary Sensor**, this is on when the any motor is running.
+* **Last Direction Sensor** (undocumented).
 
 ### NHC Relay Action (light, socket, switched-fan, switched-generic)
 
