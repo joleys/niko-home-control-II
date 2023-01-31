@@ -7,8 +7,10 @@ from .nhccoco.coco import CoCo
 
 from .entities.accesscontrol_action_button import Nhc2AccesscontrolActionButtonEntity
 from .entities.alloff_action_button import Nhc2AlloffActionButtonEntity
+from .entities.generic_action_button import Nhc2GenericActionButtonEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.alloff_action import CocoAlloffAction
+from .nhccoco.devices.generic_action import CocoGenericAction
 
 from .const import DOMAIN, KEY_GATEWAY
 
@@ -40,5 +42,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2AlloffActionButtonEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericAction)
+    _LOGGER.info('→ Found %s NHC Free Start Stop Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2GenericActionButtonEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

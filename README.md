@@ -38,8 +38,7 @@ This action is exposed as a button.
 It has some extra entities that can be used in automations:
 
 * **AllOff Active Binary Sensor**, which represents the AllOffActive state. Be aware that this state is only updated as
-  the
-  button is pressed, not when all devices are off.
+  the button is pressed, not when all devices are off.
 * **AllOff Basic State Binary Sensor**, which represents the Basic State of the AllOff.
 
 ### NHC Basic Alarm Action (untested)
@@ -47,6 +46,19 @@ It has some extra entities that can be used in automations:
 __Remark:__ this is untested as I don't own a device of this type.
 
 This action is exposed as alarm control panel.
+
+### NHC Free Start Stop Actions
+
+This action is exposed as a button.
+
+#### Entities
+
+It has some extra entities that can be used in automations:
+
+* **Free Start Stop Action Basic State Binary Sensor**, is on according to the state of all assigned players as
+  configured for that action.
+* **Free Start Stop Action Start Active Binary Sensor**, is on upon activation of the action. It is off when one of the
+  assigned participant in the action has a state change.
 
 ### NHC Garage Door Action (untested)
 

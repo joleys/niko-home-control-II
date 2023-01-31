@@ -14,6 +14,7 @@ from .devices.electricity_clamp_centralmeter import CocoElectricityClampCentralm
 from .devices.fan_action import CocoFanAction
 from .devices.garagedoor_action import CocoGaragedoorAction
 from .devices.gate_action import CocoGateAction
+from .devices.generic_action import CocoGenericAction
 from .devices.generic_energyhome import CocoGenericEnergyhome
 from .devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .devices.light_action import CocoLightAction

@@ -12,6 +12,8 @@ from .entities.alloff_action_basicstate import Nhc2AlloffActionBasicStateEntity
 from .entities.dimmer_action_alligned import Nhc2DimmerActionAlignedEntity
 from .entities.electricity_clamp_centralmeter_report_instant_usage import \
     Nhc2ElectricityClampCentralmeterReportInstantUsageEntity
+from .entities.generic_action_basicstate import Nhc2GenericActionBasicStateEntity
+from .entities.generic_action_start_active import Nhc2GenericActionStartActiveEntity
 from .entities.generic_energyhome_electrical_power_production_threshold_exceeded import \
     Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity
 from .entities.generic_energyhome_report_instant_usage import Nhc2GenericEnergyhomeReportInstantUsageEntity
@@ -26,6 +28,7 @@ from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
 from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .nhccoco.devices.gate_action import CocoGateAction
+from .nhccoco.devices.generic_action import CocoGenericAction
 from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
@@ -74,6 +77,16 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2DimmerActionAlignedEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericAction)
+    _LOGGER.info('→ Found %s NHC Free Start Stop Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2GenericActionBasicStateEntity(device_instance, hub, gateway))
+            entities.append(Nhc2GenericActionStartActiveEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
