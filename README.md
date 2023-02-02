@@ -150,6 +150,10 @@ This is exposed as a cover entity.
 * **Moving Binary Sensor**, this is on when the any motor is running.
 * **Last Direction Sensor** (undocumented).
 
+### NHC Virtual flag (untested)
+
+This is exposed as switch.
+
 ### NHC Relay Action (light, socket, switched-fan, switched-generic)
 
 Lights are exposed as lights. Others are exposed as switches.
@@ -172,7 +176,7 @@ This is the energy metering linked to a zigbee smart plug. The smart plug itself
 
 The totals are not available as they are not (yet) exposed by the API.
 
-### Generic Zigbee Smart plug
+### Generic Zigbee Smart plug (untested)
 
 This is the energy metering linked to a generic zigbee smart plug. The smart plug itself is a different device.
 
@@ -222,7 +226,6 @@ The totals are not available as they are not (yet) exposed by the API.
 * NHC Panic Mode Action
 * NHC PIR Action
 * NHC Presence Simulation Action
-* NHC Virtual flag
 * NHC Reynaers Action
 * NHC Velux Action
 * Sonos Speaker
@@ -261,6 +264,17 @@ You need to add (and possibly tweak) the following:
         energy_monthly:
             source: sensor.energy_elektriciteit
             cycle: monthly
+
+## Development
+
+### Adding support for new Device models
+
+* Add a new class for the device in `nhccoco/devices`. The name of the file is `{model}_{type}.py`. The classname is
+  `Coco{Model}{Type}`.
+* Import the class in `nhccoco/coco.py`. This allows the Coco class to create an instance when the device is present in
+  the device list.
+* Create the needed entities in `entities`
+* Add the entities that should be created in the correct platform-file.
 
 ## Found a bug?
 

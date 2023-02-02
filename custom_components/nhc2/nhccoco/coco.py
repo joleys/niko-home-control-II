@@ -13,6 +13,7 @@ from .devices.comfort_action import CocoComfortAction
 from .devices.dimmer_action import CocoDimmerAction
 from .devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .devices.fan_action import CocoFanAction
+from .devices.flag_action import CocoFlagAction
 from .devices.garagedoor_action import CocoGaragedoorAction
 from .devices.gate_action import CocoGateAction
 from .devices.generic_action import CocoGenericAction
