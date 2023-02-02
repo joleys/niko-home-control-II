@@ -186,6 +186,18 @@ This is exposed as a cover entity.
 * **Moving Binary Sensor**, this is on when the any motor is running.
 * **Last Direction Sensor** (undocumented).
 
+### NHC PIR Action (untested)
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+This action is exposed as a button.
+
+#### Entities
+
+It has some extra entities that can be used in automations:
+
+* **Basic State Binary Sensor**, is on when motion detection is enabled, off when disabled.
+
 ### NHC Virtual flag (untested)
 
 __Remark:__ this is untested as I don't own a device of this type.
@@ -265,7 +277,6 @@ __Remark:__ this is untested as I don't own a device of this type.
 
 * NHC Audio Control Action
 * NHC Touch Switch
-* NHC PIR Action
 * NHC Presence Simulation Action
 * NHC Reynaers Action
 * NHC Velux Action

@@ -23,6 +23,8 @@ from .devices.generic_smartplug import CocoGenericSmartplug
 from .devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .devices.light_action import CocoLightAction
 from .devices.naso_smartplug import CocoNasoSmartplug
+from .devices.overallcomfort_action import CocoOverallcomfortAction
+from .devices.pir_action import CocoPirAction
 from .devices.rolldownshutter_action import CocoRolldownshutterAction
 from .devices.socket_action import CocoSocketAction
 from .devices.sunblind_action import CocoSunblindAction

@@ -11,12 +11,14 @@ from .entities.bellbutton_action_button import Nhc2BellbuttonActionButtonEntity
 from .entities.comfort_action_button import Nhc2ComfortActionButtonEntity
 from .entities.generic_action_button import Nhc2GenericActionButtonEntity
 from .entities.overallcomfort_action_button import Nhc2OverallcomfortActionButtonEntity
+from .entities.pir_action_button import Nhc2PirActionButtonEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
 from .nhccoco.devices.comfort_action import CocoComfortAction
 from .nhccoco.devices.generic_action import CocoGenericAction
 from .nhccoco.devices.overallcomfort_action import CocoOverallcomfortAction
+from .nhccoco.devices.pir_action import CocoPirAction
 
 from .const import DOMAIN, KEY_GATEWAY
 
@@ -84,5 +86,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2ComfortActionButtonEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoPirAction)
+    _LOGGER.info('→ Found %s NHC PIR Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2PirActionButtonEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
