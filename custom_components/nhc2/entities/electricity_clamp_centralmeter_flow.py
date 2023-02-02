@@ -29,7 +29,7 @@ class Nhc2ElectricityClampCentralmeterFlowEntity(SensorEntity):
 
     @property
     def name(self) -> str:
-        return 'Electricity Metering Module Flow'
+        return 'Flow'
 
     @property
     def device_info(self):

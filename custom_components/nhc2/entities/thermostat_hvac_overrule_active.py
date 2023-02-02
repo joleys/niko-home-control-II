@@ -23,7 +23,7 @@ class Nhc2ThermostatHvacOverruleActiveEntity(SwitchEntity):
 
     @property
     def name(self) -> str:
-        return 'Thermostat Overrule Active'
+        return 'Overrule Active'
 
     @property
     def device_info(self):

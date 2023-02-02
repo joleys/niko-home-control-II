@@ -28,7 +28,7 @@ class Nhc2HvacthermostatHvacOverruleTimeEntity(SensorEntity):
 
     @property
     def name(self) -> str:
-        return 'HVAC Thermostat Overrule time'
+        return 'Overrule time'
 
     @property
     def device_info(self):

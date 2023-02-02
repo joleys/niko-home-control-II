@@ -27,7 +27,7 @@ class Nhc2MotorActionLastDirectionEntity(SensorEntity):
 
     @property
     def name(self) -> str:
-        return 'Motor Action Last Direction'
+        return 'Last Direction'
 
     @property
     def device_info(self):

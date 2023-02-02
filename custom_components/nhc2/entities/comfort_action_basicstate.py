@@ -25,7 +25,7 @@ class Nhc2ComfortActionBasicStateEntity(BinarySensorEntity):
 
     @property
     def name(self) -> str:
-        return 'Mood Action Basic State'
+        return 'Basic State'
 
     @property
     def device_info(self):

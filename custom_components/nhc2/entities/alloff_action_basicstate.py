@@ -25,7 +25,7 @@ class Nhc2AlloffActionBasicStateEntity(BinarySensorEntity):
 
     @property
     def name(self) -> str:
-        return 'AllOff Basic State'
+        return 'Basic State'
 
     @property
     def device_info(self):

@@ -25,7 +25,7 @@ class Nhc2GenericActionBasicStateEntity(BinarySensorEntity):
 
     @property
     def name(self) -> str:
-        return 'Free Start Stop Action Basic State'
+        return 'Basic State'
 
     @property
     def device_info(self):

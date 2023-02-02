@@ -23,7 +23,7 @@ class Nhc2HvacthermostatHvacProtectModeEntity(SwitchEntity):
 
     @property
     def name(self) -> str:
-        return 'HVAC Thermostat Protect Mode'
+        return 'Protect Mode'
 
     @property
     def device_info(self):

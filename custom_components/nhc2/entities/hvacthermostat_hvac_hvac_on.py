@@ -22,7 +22,7 @@ class Nhc2HvacthermostatHvacHvacOnEntity(BinarySensorEntity):
 
     @property
     def name(self) -> str:
-        return 'HVAC Thermostat HVAC On'
+        return 'HVAC on'
 
     @property
     def device_info(self):

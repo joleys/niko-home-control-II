@@ -27,7 +27,7 @@ class Nhc2GaragedoorActionBasicStateEntity(SensorEntity):
 
     @property
     def name(self) -> str:
-        return 'Garagedoor Action Basic State'
+        return 'Basic State'
 
     @property
     def device_info(self):

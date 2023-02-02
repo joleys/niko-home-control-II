@@ -23,7 +23,7 @@ class Nhc2HvacthermostatHvacThermostatOnEntity(SwitchEntity):
 
     @property
     def name(self) -> str:
-        return 'HVAC Thermostat Thermostat On'
+        return 'Thermostat on'
 
     @property
     def device_info(self):

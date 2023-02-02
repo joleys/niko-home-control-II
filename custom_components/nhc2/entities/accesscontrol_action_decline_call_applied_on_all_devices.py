@@ -25,7 +25,7 @@ class Nhc2AccesscontrolActionDeclineCallAppliedOnAllDevicesEntity(BinarySensorEn
 
     @property
     def name(self) -> str:
-        return 'AccessControl Basic State'
+        return 'Decline call applied on all devices'
 
     @property
     def device_info(self):

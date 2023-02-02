@@ -29,7 +29,7 @@ class Nhc2ElectricityClampCentralmeterSegmentEntity(SensorEntity):
 
     @property
     def name(self) -> str:
-        return 'Electricity Metering Module Segment'
+        return 'Segment'
 
     @property
     def device_info(self):

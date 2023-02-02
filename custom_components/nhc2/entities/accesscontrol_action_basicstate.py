@@ -25,7 +25,7 @@ class Nhc2AccesscontrolActionBasicStateEntity(BinarySensorEntity):
 
     @property
     def name(self) -> str:
-        return 'AccessControl Basic State'
+        return 'Basic State'
 
     @property
     def device_info(self):

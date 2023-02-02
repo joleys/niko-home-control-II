@@ -25,7 +25,7 @@ class Nhc2GenericActionStartActiveEntity(BinarySensorEntity):
 
     @property
     def name(self) -> str:
-        return 'Free Start Stop Action Start Active'
+        return 'Start Active'
 
     @property
     def device_info(self):

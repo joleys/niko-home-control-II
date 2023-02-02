@@ -23,7 +23,7 @@ class Nhc2ThermostatHvacEcoSaveEntity(SwitchEntity):
 
     @property
     def name(self) -> str:
-        return 'Thermostat EcoSave'
+        return 'EcoSave'
 
     @property
     def device_info(self):

@@ -28,7 +28,7 @@ class Nhc2HvacthermostatHvacSetpointTemperatureEntity(SensorEntity):
 
     @property
     def name(self) -> str:
-        return 'HVAC Thermostat Setpoint Temperature'
+        return 'Setpoint Temperature'
 
     @property
     def device_info(self):
