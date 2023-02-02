@@ -7,10 +7,12 @@ from .nhccoco.coco import CoCo
 
 from .entities.accesscontrol_action_button import Nhc2AccesscontrolActionButtonEntity
 from .entities.alloff_action_button import Nhc2AlloffActionButtonEntity
+from .entities.bellbutton_action_button import Nhc2BellbuttonActionButtonEntity
 from .entities.comfort_action_button import Nhc2ComfortActionButtonEntity
 from .entities.generic_action_button import Nhc2GenericActionButtonEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.alloff_action import CocoAlloffAction
+from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
 from .nhccoco.devices.comfort_action import CocoComfortAction
 from .nhccoco.devices.generic_action import CocoGenericAction
 
@@ -44,6 +46,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2AlloffActionButtonEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoBellbuttonAction)
+    _LOGGER.info('→ Found %s BellButton Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2BellbuttonActionButtonEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

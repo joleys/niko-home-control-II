@@ -2,13 +2,13 @@ from homeassistant.components.binary_sensor import BinarySensorEntity
 
 from ..const import DOMAIN, BRAND
 
-from ..nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
+from ..nhccoco.devices.bellbutton_action import CocoBellbuttonAction
 
 
-class Nhc2AccesscontrolActionDeclineCallAppliedOnAllDevicesEntity(BinarySensorEntity):
+class Nhc2BellbuttonActionDeclineCallAppliedOnAllDevicesEntity(BinarySensorEntity):
     _attr_has_entity_name = True
 
-    def __init__(self, device_instance: CocoAccesscontrolAction, hub, gateway):
+    def __init__(self, device_instance: CocoBellbuttonAction, hub, gateway):
         """Initialize a binary sensor."""
         self._device = device_instance
         self._hub = hub

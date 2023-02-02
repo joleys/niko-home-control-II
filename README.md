@@ -49,6 +49,20 @@ __Remark:__ this is untested as I don't own a device of this type.
 
 This action is exposed as alarm control panel.
 
+### NHC BellButton Action (untested)
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+This action exposes a button and a lock.
+
+#### Entities
+
+It has some extra entities that can be used in automations:
+
+* **Basic State Binary Sensor**, which represents the Basic State. It is on when bell button is press, off when no call
+  is active.
+* **Decline Call Applied On All Devices Binary Sensor**, which represents the Decline Call Applied On All Devices state.
+
 ### NHC Dimmer Action
 
 This action is exposed as a light.
@@ -220,7 +234,6 @@ The totals are not available as they are not (yet) exposed by the API.
 ## Not yet supported
 
 * NHC Audio Control Action
-* NHC BellButton Action
 * NHC House Mode Action
 * NHC Touch Switch
 * NHC Panic Mode Action
