@@ -160,13 +160,28 @@ This is the energy metering linked to a zigbee smart plug. The smart plug itself
 
 #### Entities
 
-* **Electrical Power Sensor**, the realtime power usage in W. Possitive means power consumed, negative is power
+* **Electrical Power Sensor**, the realtime power usage in W. Positive means power consumed, negative is power
   produced.
 * **Report Instant Usage Binary Sensor**, indicates if the Electrical Power is received. When disabled, it will
   automatically be enabled.
 * **Feedback Enabled Binary Sensor**. On if the feedback led shows the relay status. Off if the feedback led is
   disabled.
 * **Measuring Only Binary Sensor**. If on, the relay will always be on.
+
+#### Remarks
+
+The totals are not available as they are not (yet) exposed by the API.
+
+### Generic Zigbee Smart plug
+
+This is the energy metering linked to a generic zigbee smart plug. The smart plug itself is a different device.
+
+#### Entities
+
+* **Electrical Power Sensor**, the realtime power usage in W. Positive means power consumed, negative is power
+  produced.
+* **Report Instant Usage Binary Sensor**, indicates if the Electrical Power is received. When disabled, it will
+  automatically be enabled.
 
 #### Remarks
 
@@ -210,7 +225,6 @@ The totals are not available as they are not (yet) exposed by the API.
 * NHC Virtual flag
 * NHC Reynaers Action
 * NHC Velux Action
-* Generic Zigbee Smart plug
 * Sonos Speaker
 * Bose Speaker
 * Generic Ventilation Implementation

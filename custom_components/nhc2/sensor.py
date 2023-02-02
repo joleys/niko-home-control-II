@@ -18,6 +18,7 @@ from .entities.generic_energyhome_electrical_power_production import \
 from .entities.generic_energyhome_electrical_power_self_consumption import \
     Nhc2GenericEnergyhomeElectricalPowerSelfConsumptionEntity
 from .entities.generic_energyhome_electrical_power_to_grid import Nhc2GenericEnergyhomeElectricalPowerToGridEntity
+from .entities.generic_smartplug_electrical_power import Nhc2GenericSmartPlugElectricalPowerEntity
 from .entities.hvacthermostat_hvac_setpoint_temperature import Nhc2HvacthermostatHvacSetpointTemperatureEntity
 from .entities.hvacthermostat_hvac_overrule_setpoint import Nhc2HvacthermostatHvacOverruleSetpointEntity
 from .entities.hvacthermostat_hvac_overrule_time import Nhc2HvacthermostatHvacOverruleTimeEntity
@@ -29,6 +30,7 @@ from .entities.thermostat_hvac_overrule_setpoint import Nhc2ThermostatHvacOverru
 from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
 from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
+from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
 from .nhccoco.devices.motor_action import CocoMotorAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
@@ -97,6 +99,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2NasoSmartPlugElectricalPowerEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericSmartplug)
+    _LOGGER.info('→ Found %s Generic Zigbee Smart plugs', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2GenericSmartPlugElectricalPowerEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

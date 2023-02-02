@@ -17,6 +17,7 @@ from .devices.garagedoor_action import CocoGaragedoorAction
 from .devices.gate_action import CocoGateAction
 from .devices.generic_action import CocoGenericAction
 from .devices.generic_energyhome import CocoGenericEnergyhome
+from .devices.generic_smartplug import CocoGenericSmartplug
 from .devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .devices.light_action import CocoLightAction
 from .devices.naso_smartplug import CocoNasoSmartplug
