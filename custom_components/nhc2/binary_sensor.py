@@ -29,6 +29,8 @@ from .entities.motor_action_moving import Nhc2MotorActionMovingEntity
 from .entities.naso_smartplug_feedback_enabled import Nhc2NasoSmartPlugFeedbackEnabledEntity
 from .entities.naso_smartplug_measuring_only import Nhc2NasoSmartPlugMeasuringOnlyEntity
 from .entities.naso_smartplug_report_instant_usage import Nhc2NasoSmartPlugReportInstantUsageEntity
+from .entities.overallcomfort_action_basicstate import Nhc2OverallcomfortActionBasicStateEntity
+from .entities.overallcomfort_action_start_active import Nhc2OverallcomfortActionStartActiveEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
@@ -41,6 +43,7 @@ from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
 from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
+from .nhccoco.devices.overallcomfort_action import CocoOverallcomfortAction
 from .nhccoco.devices.rolldownshutter_action import CocoRolldownshutterAction
 from .nhccoco.devices.sunblind_action import CocoSunblindAction
 from .nhccoco.devices.venetianblind_action import CocoVenetianblindAction
@@ -100,12 +103,22 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoGenericAction)
-    _LOGGER.info('→ Found %s NHC Free Start Stop Actions', len(device_instances))
+    _LOGGER.info('→ Found %s Free Start Stop Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2GenericActionBasicStateEntity(device_instance, hub, gateway))
             entities.append(Nhc2GenericActionStartActiveEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoOverallcomfortAction)
+    _LOGGER.info('→ Found %s House Mode Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2OverallcomfortActionBasicStateEntity(device_instance, hub, gateway))
+            entities.append(Nhc2OverallcomfortActionStartActiveEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

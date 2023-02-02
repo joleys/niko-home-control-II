@@ -107,6 +107,20 @@ __Remark:__ this is untested as I don't own a device of this type.
 * **Basic State Enum Sensor**, which represents the Basic State. On means the gate is opened, off means the gate is
   closed. Intermediate means the gate is moving, only when optional moving sensor is available.
 
+### NHC House Mode Actions (untested)
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+This action is exposed as a button.
+
+#### Entities
+
+It has some extra entities that can be used in automations:
+
+* **Basic State Binary Sensor**, is on according to the state of all assigned players as configured for that action.
+* **Start Active Binary Sensor**, is on upon activation of the action. It is off when one of the assigned participant in
+  the action has a state change.
+
 ### NHC HVAC Thermostat (untested)
 
 __Remark:__ this is untested as I don't own a device of this type.
@@ -250,7 +264,6 @@ __Remark:__ this is untested as I don't own a device of this type.
 ## Not yet supported
 
 * NHC Audio Control Action
-* NHC House Mode Action
 * NHC Touch Switch
 * NHC Panic Mode Action
 * NHC PIR Action
