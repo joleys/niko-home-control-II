@@ -43,7 +43,7 @@ It has some extra entities that can be used in automations:
 * **AllOff Active Binary Sensor**, which represents the AllOffActive state. Be aware that this state is only updated as
   the button is pressed, not when all devices are off.
 
-### NHC Basic Alarm Action (untested)
+### NHC Basic Alarm Action & NHC Panic Mode Action (untested)
 
 __Remark:__ this is untested as I don't own a device of this type.
 
@@ -265,7 +265,6 @@ __Remark:__ this is untested as I don't own a device of this type.
 
 * NHC Audio Control Action
 * NHC Touch Switch
-* NHC Panic Mode Action
 * NHC PIR Action
 * NHC Presence Simulation Action
 * NHC Reynaers Action
