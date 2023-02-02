@@ -21,7 +21,7 @@ A big thanks to Johan and Koen from Niko for their support and providing me with
 
 __Remark:__ this is untested as I don't own a device of this type.
 
-This action exposes a button, camera and lock.
+This action exposes a button, camera and a lock.
 
 #### Entities
 
@@ -82,6 +82,8 @@ for light.
 
 ### NHC Fan Action (untested)
 
+__Remark:__ this is untested as I don't own a device of this type.
+
 This is exposed as a fan entity.
 
 ### NHC Free Start Stop Actions
@@ -98,12 +100,16 @@ It has some extra entities that can be used in automations:
 
 ### NHC Garage Door Action (untested)
 
+__Remark:__ this is untested as I don't own a device of this type.
+
 #### Entities
 
 * **Basic State Enum Sensor**, which represents the Basic State. On means the gate is opened, off means the gate is
   closed. Intermediate means the gate is moving, only when optional moving sensor is available.
 
 ### NHC HVAC Thermostat (untested)
+
+__Remark:__ this is untested as I don't own a device of this type.
 
 This is exposed as a climate entity.
 
@@ -125,6 +131,8 @@ This is exposed as a climate entity.
 * **HVAC On Binary Sensor**, indicates that the HVAC indoor unit is online.
 
 ### NHC Thermostat (untested)
+
+__Remark:__ this is untested as I don't own a device of this type.
 
 This is exposed as a climate entity.
 
@@ -166,6 +174,8 @@ This is exposed as a cover entity.
 
 ### NHC Virtual flag (untested)
 
+__Remark:__ this is untested as I don't own a device of this type.
+
 This is exposed as switch.
 
 ### NHC Relay Action (light, socket, switched-fan, switched-generic)
@@ -192,6 +202,8 @@ The totals are not available as they are not (yet) exposed by the API.
 
 ### Generic Zigbee Smart plug (untested)
 
+__Remark:__ this is untested as I don't own a device of this type.
+
 This is the energy metering linked to a generic zigbee smart plug. The smart plug itself is a different device.
 
 #### Entities
@@ -207,6 +219,8 @@ The totals are not available as they are not (yet) exposed by the API.
 
 ### Electricity Metering module (with clamp) (untested)
 
+__Remark:__ this is untested as I don't own a device of this type.
+
 #### Entities
 
 * **Electrical Power Sensor**, the realtime power usage in W. Possitive means power consumed, negative is power
@@ -218,6 +232,8 @@ The totals are not available as they are not (yet) exposed by the API.
 * **Clamp Type Sensor**. 63A or 120A
 
 ### Energy Home (untested)
+
+__Remark:__ this is untested as I don't own a device of this type.
 
 #### Entities
 
