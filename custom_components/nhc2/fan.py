@@ -24,7 +24,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     hub = (DOMAIN, config_entry.data[CONF_USERNAME])
 
     device_instances = gateway.get_device_instances(CocoFanAction)
-    _LOGGER.info('→ Found %s Fan Actions', len(device_instances))
+    _LOGGER.info('→ Found %s NHC Fan Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:

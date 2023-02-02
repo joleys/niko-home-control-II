@@ -64,7 +64,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     hub = (DOMAIN, config_entry.data[CONF_USERNAME])
 
     device_instances = gateway.get_device_instances(CocoAccesscontrolAction)
-    _LOGGER.info('→ Found %s Access Control Actions', len(device_instances))
+    _LOGGER.info('→ Found %s NHC Access Control Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -74,7 +74,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoAlloffAction)
-    _LOGGER.info('→ Found %s All Off Actions', len(device_instances))
+    _LOGGER.info('→ Found %s NHC All Off Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -84,7 +84,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoBellbuttonAction)
-    _LOGGER.info('→ Found %s BellButton Actions', len(device_instances))
+    _LOGGER.info('→ Found %s NHC BellButton Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -94,7 +94,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoDimmerAction)
-    _LOGGER.info('→ Found %s Dimmer Actions', len(device_instances))
+    _LOGGER.info('→ Found %s NHC Dimmer Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -103,7 +103,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoGenericAction)
-    _LOGGER.info('→ Found %s Free Start Stop Actions', len(device_instances))
+    _LOGGER.info('→ Found %s NHC Free Start Stop Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -113,7 +113,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoOverallcomfortAction)
-    _LOGGER.info('→ Found %s House Mode Actions', len(device_instances))
+    _LOGGER.info('→ Found %s NHC House Mode Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -123,7 +123,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoHvacthermostatHvac)
-    _LOGGER.info('→ Found %s HVAC Thermostats', len(device_instances))
+    _LOGGER.info('→ Found %s NHC HVAC Thermostats', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -132,7 +132,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoComfortAction)
-    _LOGGER.info('→ Found %s Mood Actions', len(device_instances))
+    _LOGGER.info('→ Found %s NHC Mood Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -145,7 +145,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     device_instances += gateway.get_device_instances(CocoRolldownshutterAction)
     device_instances += gateway.get_device_instances(CocoSunblindAction)
     device_instances += gateway.get_device_instances(CocoVenetianblindAction)
-    _LOGGER.info('→ Found %s Motor Actions', len(device_instances))
+    _LOGGER.info('→ Found %s NHC Motor Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -155,7 +155,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoNasoSmartplug)
-    _LOGGER.info('→ Found %s Zigbee Smart plugs', len(device_instances))
+    _LOGGER.info('→ Found %s NHC Zigbee Smart plugs', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:

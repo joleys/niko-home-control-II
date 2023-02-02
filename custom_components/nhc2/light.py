@@ -31,7 +31,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     device_instances += gateway.get_device_instances(CocoLightAction)
     device_instances += gateway.get_device_instances(CocoDimmerAction)
 
-    _LOGGER.info('→ Found %s Relay Actions (light) and Dimmer Actions', len(device_instances))
+    _LOGGER.info('→ Found %s NHC Relay Actions (light) and Dimmer Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:

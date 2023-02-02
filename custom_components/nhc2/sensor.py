@@ -53,7 +53,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     hub = (DOMAIN, config_entry.data[CONF_USERNAME])
 
     device_instances = gateway.get_device_instances(CocoGaragedoorAction)
-    _LOGGER.info('→ Found %s Garagedoor Actions', len(device_instances))
+    _LOGGER.info('→ Found %s NHC Garage Door Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -62,7 +62,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoHvacthermostatHvac)
-    _LOGGER.info('→ Found %s HVAC Thermostats', len(device_instances))
+    _LOGGER.info('→ Found %s NHC HVAC Thermostats', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -74,7 +74,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
     device_instances = gateway.get_device_instances(CocoThermostatHvac)
     device_instances += gateway.get_device_instances(CocoTouchswitchHvac)
-    _LOGGER.info('→ Found %s Thermostats', len(device_instances))
+    _LOGGER.info('→ Found %s NHC Thermostats', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -85,7 +85,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoMotorAction)
-    _LOGGER.info('→ Found %s Motor Actions', len(device_instances))
+    _LOGGER.info('→ Found %s NHC Motor Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -94,7 +94,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoNasoSmartplug)
-    _LOGGER.info('→ Found %s Zigbee Smart plugs', len(device_instances))
+    _LOGGER.info('→ Found %s NHC Zigbee Smart plugs', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
