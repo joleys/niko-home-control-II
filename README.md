@@ -43,6 +43,25 @@ It has some extra entities that can be used in automations:
 * **AllOff Active Binary Sensor**, which represents the AllOffActive state. Be aware that this state is only updated as
   the button is pressed, not when all devices are off.
 
+### NHC Audio Control Action (untested)
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+This action is exposed as media player.
+
+#### Entities
+
+It has some extra entities that can be used in automations:
+
+* **Volume Aligned Binary Sensor**, on when all speakers / groups have the same volume.
+* **Title Aligned Binary Sensor**, on when all speakers / groups have the title.
+* **Connected Binary Sensor**, on when all speakers are connected.
+* **Speaker Sensor**, the UUID of the speaker to fetch the favourites from.
+
+#### Not yet implemented
+
+* [ ] Create a service to set the Favourite
+
 ### NHC Basic Alarm Action & NHC Panic Mode Action (untested)
 
 __Remark:__ this is untested as I don't own a device of this type.
@@ -275,7 +294,6 @@ __Remark:__ this is untested as I don't own a device of this type.
 
 ## Not yet supported
 
-* NHC Audio Control Action
 * NHC Touch Switch
 * NHC Presence Simulation Action
 * NHC Reynaers Action

@@ -4,6 +4,7 @@ from homeassistant.const import CONF_USERNAME
 
 from .nhccoco.coco import CoCo
 
+from .entities.audiocontrol_action_speaker import Nhc2AudiocontrolActionSpeakerEntity
 from .entities.electricity_clamp_centralmeter_electrical_power import \
     Nhc2ElectricityClampCentralmeterElectricalPowerEntity
 from .entities.electricity_clamp_centralmeter_clamp_type import Nhc2ElectricityClampCentralmeterClampTypeEntity
@@ -27,6 +28,7 @@ from .entities.naso_smartplug_electrical_power import Nhc2NasoSmartPlugElectrica
 from .entities.thermostat_hvac_setpoint_temperature import Nhc2ThermostatHvacSetpointTemperatureEntity
 from .entities.thermostat_hvac_overrule_time import Nhc2ThermostatHvacOverruleTimeEntity
 from .entities.thermostat_hvac_overrule_setpoint import Nhc2ThermostatHvacOverruleSetpointEntity
+from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
 from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
 from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
@@ -51,6 +53,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
     hub = (DOMAIN, config_entry.data[CONF_USERNAME])
+
+    device_instances = gateway.get_device_instances(CocoAudiocontrolAction)
+    _LOGGER.info('→ Found %s NHC Audio Control Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2AudiocontrolActionSpeakerEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoGaragedoorAction)
     _LOGGER.info('→ Found %s NHC Garage Door Actions', len(device_instances))

@@ -66,6 +66,7 @@ FORWARD_PLATFORMS = (
     "fan",
     "light",
     "lock",
+    "media_player",
     "sensor",
     "switch",
 )
