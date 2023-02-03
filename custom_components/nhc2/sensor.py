@@ -11,6 +11,7 @@ from .entities.electricity_clamp_centralmeter_clamp_type import Nhc2ElectricityC
 from .entities.electricity_clamp_centralmeter_flow import Nhc2ElectricityClampCentralmeterFlowEntity
 from .entities.electricity_clamp_centralmeter_segment import Nhc2ElectricityClampCentralmeterSegmentEntity
 from .entities.garagedoor_action_basicstate import Nhc2GaragedoorActionBasicStateEntity
+from .entities.generic_domestichotwaterunit_coupling_status import Nhc2GenericDomestichotwaterunitCouplingStatusEntity
 from .entities.generic_energyhome_electrical_power_consumption import \
     Nhc2GenericEnergyhomeElectricalPowerConsumptionEntity
 from .entities.generic_energyhome_electrical_power_from_grid import Nhc2GenericEnergyhomeElectricalPowerFromGridEntity
@@ -34,6 +35,7 @@ from .entities.thermostat_thermostat_overrule_setpoint import Nhc2ThermostatTher
 from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
 from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
+from .nhccoco.devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
 from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
 from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
 from .nhccoco.devices.motor_action import CocoMotorAction
@@ -159,5 +161,16 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(Nhc2GenericEnergyhomeElectricalPowerProductionEntity(device_instance, hub, gateway))
             entities.append(Nhc2GenericEnergyhomeElectricalPowerSelfConsumptionEntity(device_instance, hub, gateway))
             entities.append(Nhc2GenericEnergyhomeElectricalPowerConsumptionEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericDomestichotwaterunit)
+    _LOGGER.info('→ Found %s Generic Warm Water Implementation', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(
+                Nhc2GenericDomestichotwaterunitCouplingStatusEntity(device_instance, hub, gateway)
+            )
 
         async_add_entities(entities)

@@ -312,6 +312,17 @@ __Remark:__ this is untested as I don't own a device of this type.
 * **Electrical Power Production Threshold Exceeded Binary Sensor**, this is on when the central meters electrical power
   production is greater than the threshold of 300W (+ 5W hysteresis)
 
+### Generic Warm Water Implementation (untested)
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+#### Entities
+
+* **Domestic Hot Water Temperature Number**, control the temperature.
+* **Program Select**, select the program.
+* **Boost Switch**, enable/disable boost mode.
+* **Coupling Status Enum Sensor**, the connectivity status of the system.
+
 ## Not yet supported
 
 * NHC Presence Simulation Action
@@ -321,7 +332,6 @@ __Remark:__ this is untested as I don't own a device of this type.
 * Bose Speaker
 * Generic Ventilation Implementation
 * Generic Heating/Cooling Implementation
-* Generic Warm Water Implementation
 
 ## How to get it running
 

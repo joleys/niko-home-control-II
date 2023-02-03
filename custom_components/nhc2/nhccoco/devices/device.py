@@ -118,6 +118,22 @@ class CoCoDevice():
 
         return None
 
+    def extract_property_definition_description_range(self, property_key: str):
+        definition = self.extract_property_definition(property_key)
+        if definition and DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS_DESCRIPTION in definition:
+            range = re.findall(r'Range\((.*?)\)', definition[DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS_DESCRIPTION])
+            if len(range) == 1:
+                options = range[0].split(',')
+
+                if len(options) == 3:
+                    return [
+                        float(options[0]),
+                        float(options[1]),
+                        float(options[2]),
+                    ]
+
+        return None
+
     def on_change(self, topic: str, payload: dict):
         """Fallback on change method"""
         _LOGGER.debug(f'{self._name} has not implemented the on_change method')

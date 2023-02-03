@@ -6,6 +6,7 @@ from homeassistant.const import CONF_USERNAME
 from .nhccoco.coco import CoCo
 
 from .entities.flag_action_switch import Nhc2FlagActionSwitchEntity
+from .entities.generic_domestichotwaterunit_boost import Nhc2GenericDomestichotwaterunitBoostEntity
 from .entities.hvacthermostat_hvac_ecosave import Nhc2HvacthermostatHvacEcoSaveEntity
 from .entities.hvacthermostat_hvac_thermostat_on import Nhc2HvacthermostatHvacThermostatOnEntity
 from .entities.hvacthermostat_hvac_overrule_active import Nhc2HvacthermostatHvacOverruleActiveEntity
@@ -16,6 +17,7 @@ from .entities.thermostat_hvac_overrule_active import Nhc2ThermostatHvacOverrule
 from .entities.thermostat_thermostat_ecosave import Nhc2ThermostatThermostatEcoSaveEntity
 from .entities.thermostat_thermostat_overrule_active import Nhc2ThermostatThermostatOverruleActiveEntity
 from .nhccoco.devices.flag_action import CocoFlagAction
+from .nhccoco.devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.socket_action import CocoSocketAction
 from .nhccoco.devices.switched_fan_action import CocoSwitchedFanAction
@@ -89,5 +91,16 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2RelayActionSwitchEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericDomestichotwaterunit)
+    _LOGGER.info('→ Found %s Generic Warm Water Implementation', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(
+                Nhc2GenericDomestichotwaterunitBoostEntity(device_instance, hub, gateway)
+            )
 
         async_add_entities(entities)

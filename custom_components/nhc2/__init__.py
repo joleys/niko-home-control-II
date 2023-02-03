@@ -67,6 +67,8 @@ FORWARD_PLATFORMS = (
     "light",
     "lock",
     "media_player",
+    "number",
+    "select",
     "sensor",
     "switch",
 )
