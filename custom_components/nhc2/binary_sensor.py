@@ -14,7 +14,7 @@ from .entities.bellbutton_action_decline_call_applied_on_all_devices import \
     Nhc2BellbuttonActionDeclineCallAppliedOnAllDevicesEntity
 from .entities.comfort_action_basicstate import Nhc2ComfortActionBasicStateEntity
 from .entities.comfort_action_mood_active import Nhc2ComfortActionMoodActiveEntity
-from .entities.dimmer_action_alligned import Nhc2DimmerActionAlignedEntity
+from .entities.dimmer_action_aligned import Nhc2DimmerActionAlignedEntity
 from .entities.electricity_clamp_centralmeter_report_instant_usage import \
     Nhc2ElectricityClampCentralmeterReportInstantUsageEntity
 from .entities.generic_action_basicstate import Nhc2GenericActionBasicStateEntity
