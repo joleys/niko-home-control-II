@@ -183,6 +183,26 @@ This is exposed as a climate entity.
 * **EcoSave Switch**, marks if the EcoSave mode is active. When active the program keeps going, but the
   setpointtemperature is altered (+3 when cooling, -3 when heating).
 
+### NHC Touch Switch (untested)
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+This is exposed as a climate entity.
+
+#### Todo
+
+* [ ] [Check if we can implement target_temperature_high, target_temperature_low, target_temperature_step](https://github.com/joleys/niko-home-control-II/blob/master/custom_components/nhc2/nhccoco/coco_climate.py#L103)
+* [ ] [Check if we can implement max_temp, min_temp](https://github.com/joleys/niko-home-control-II/blob/master/custom_components/nhc2/nhccoco/coco_climate.py#L112)
+
+#### Entities
+
+* **Setpoint Temperature Sensor**, the desired setpoint in the current program.
+* **Overrule Active Switch**, marks if the overrule-time will be used instead of setpoint as defined in program mode.
+* **Overrule Setpoint Temperature Sensor**, the current overruled setpoint temperature.
+* **Overrule Time Duration Sensor**, duration of the overrule period in minutes.
+* **EcoSave Switch**, marks if the EcoSave mode is active. When active the program keeps going but limits the
+  temperature range to the value configured.
+
 ### NHC Mood Action
 
 This action is exposed as a button.
@@ -294,7 +314,6 @@ __Remark:__ this is untested as I don't own a device of this type.
 
 ## Not yet supported
 
-* NHC Touch Switch
 * NHC Presence Simulation Action
 * NHC Reynaers Action
 * NHC Velux Action

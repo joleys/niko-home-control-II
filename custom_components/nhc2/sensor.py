@@ -28,6 +28,9 @@ from .entities.naso_smartplug_electrical_power import Nhc2NasoSmartPlugElectrica
 from .entities.thermostat_hvac_setpoint_temperature import Nhc2ThermostatHvacSetpointTemperatureEntity
 from .entities.thermostat_hvac_overrule_time import Nhc2ThermostatHvacOverruleTimeEntity
 from .entities.thermostat_hvac_overrule_setpoint import Nhc2ThermostatHvacOverruleSetpointEntity
+from .entities.thermostat_thermostat_setpoint_temperature import Nhc2ThermostatThermostatSetpointTemperatureEntity
+from .entities.thermostat_thermostat_overrule_time import Nhc2ThermostatThermostatOverruleTimeEntity
+from .entities.thermostat_thermostat_overrule_setpoint import Nhc2ThermostatThermostatOverruleSetpointEntity
 from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
 from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
@@ -37,6 +40,7 @@ from .nhccoco.devices.motor_action import CocoMotorAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.thermostat_hvac import CocoThermostatHvac
+from .nhccoco.devices.thermostat_thermostat import CocoThermostatThermostat
 from .nhccoco.devices.touchswitch_hvac import CocoTouchswitchHvac
 
 from .const import DOMAIN, KEY_GATEWAY
@@ -92,6 +96,17 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(Nhc2ThermostatHvacSetpointTemperatureEntity(device_instance, hub, gateway))
             entities.append(Nhc2ThermostatHvacOverruleTimeEntity(device_instance, hub, gateway))
             entities.append(Nhc2ThermostatHvacOverruleSetpointEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoThermostatThermostat)
+    _LOGGER.info('→ Found %s NHC Touch Switch', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2ThermostatThermostatSetpointTemperatureEntity(device_instance, hub, gateway))
+            entities.append(Nhc2ThermostatThermostatOverruleSetpointEntity(device_instance, hub, gateway))
+            entities.append(Nhc2ThermostatThermostatOverruleTimeEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

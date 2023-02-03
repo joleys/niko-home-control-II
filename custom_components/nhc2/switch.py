@@ -13,12 +13,15 @@ from .entities.hvacthermostat_hvac_protect_mode import Nhc2HvacthermostatHvacPro
 from .entities.relay_action_switch import Nhc2RelayActionSwitchEntity
 from .entities.thermostat_hvac_ecosave import Nhc2ThermostatHvacEcoSaveEntity
 from .entities.thermostat_hvac_overrule_active import Nhc2ThermostatHvacOverruleActiveEntity
+from .entities.thermostat_thermostat_ecosave import Nhc2ThermostatThermostatEcoSaveEntity
+from .entities.thermostat_thermostat_overrule_active import Nhc2ThermostatThermostatOverruleActiveEntity
 from .nhccoco.devices.flag_action import CocoFlagAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.socket_action import CocoSocketAction
 from .nhccoco.devices.switched_fan_action import CocoSwitchedFanAction
 from .nhccoco.devices.switched_generic_action import CocoSwitchedGenericAction
 from .nhccoco.devices.thermostat_hvac import CocoThermostatHvac
+from .nhccoco.devices.thermostat_thermostat import CocoThermostatThermostat
 from .nhccoco.devices.touchswitch_hvac import CocoTouchswitchHvac
 
 from .const import DOMAIN, KEY_GATEWAY
@@ -56,6 +59,16 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             entities.append(Nhc2ThermostatHvacOverruleActiveEntity(device_instance, hub, gateway))
             entities.append(Nhc2ThermostatHvacEcoSaveEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoThermostatThermostat)
+    _LOGGER.info('→ Found %s NHC Touch Switch', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2ThermostatThermostatEcoSaveEntity(device_instance, hub, gateway))
+            entities.append(Nhc2ThermostatThermostatOverruleActiveEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

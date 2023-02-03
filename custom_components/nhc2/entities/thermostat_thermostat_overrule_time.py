@@ -3,13 +3,13 @@ from homeassistant.const import TIME_MINUTES
 
 from ..const import DOMAIN, BRAND
 
-from ..nhccoco.devices.thermostat_hvac import CocoThermostatHvac
+from ..nhccoco.devices.thermostat_thermostat import CocoThermostatThermostat
 
 
-class Nhc2ThermostatHvacOverruleTimeEntity(SensorEntity):
+class Nhc2ThermostatThermostatOverruleTimeEntity(SensorEntity):
     _attr_has_entity_name = True
 
-    def __init__(self, device_instance: CocoThermostatHvac, hub, gateway):
+    def __init__(self, device_instance: CocoThermostatThermostat, hub, gateway):
         """Initialize a duration sensor."""
         self._device = device_instance
         self._hub = hub

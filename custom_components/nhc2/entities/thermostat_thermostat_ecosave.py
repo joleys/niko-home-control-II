@@ -1,16 +1,15 @@
-from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
-from homeassistant.const import TIME_MINUTES
+from homeassistant.components.switch import SwitchEntity, SwitchDeviceClass
 
 from ..const import DOMAIN, BRAND
 
-from ..nhccoco.devices.thermostat_hvac import CocoThermostatHvac
+from ..nhccoco.devices.thermostat_thermostat import CocoThermostatThermostat
 
 
-class Nhc2ThermostatHvacOverruleTimeEntity(SensorEntity):
+class Nhc2ThermostatThermostatEcoSaveEntity(SwitchEntity):
     _attr_has_entity_name = True
 
-    def __init__(self, device_instance: CocoThermostatHvac, hub, gateway):
-        """Initialize a duration sensor."""
+    def __init__(self, device_instance: CocoThermostatThermostat, hub, gateway):
+        """Initialize a switch sensor."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
@@ -18,17 +17,13 @@ class Nhc2ThermostatHvacOverruleTimeEntity(SensorEntity):
         self._device.after_change_callbacks.append(self.on_change)
 
         self._attr_available = self._device.is_online
-        self._attr_unique_id = device_instance.uuid + '_overrule_time'
+        self._attr_unique_id = device_instance.uuid + '_ecosave'
         self._attr_should_poll = False
-
-        self._attr_device_class = SensorDeviceClass.DURATION
-        self._attr_native_value = self._device.overrule_time
-        self._attr_native_unit_of_measurement = TIME_MINUTES
-        self._attr_state_class = None
+        self._attr_device_class = SwitchDeviceClass.SWITCH
 
     @property
     def name(self) -> str:
-        return 'Overrule time'
+        return 'EcoSave'
 
     @property
     def device_info(self):
@@ -43,5 +38,17 @@ class Nhc2ThermostatHvacOverruleTimeEntity(SensorEntity):
             'via_device': self._hub
         }
 
+    @property
+    def is_on(self) -> bool:
+        return self._device.is_ecosave
+
     def on_change(self):
         self.schedule_update_ha_state()
+
+    async def async_turn_on(self, **kwargs):
+        self._device.set_ecosave(self._gateway, True)
+        self.on_change()
+
+    async def async_turn_off(self, **kwargs):
+        self._device.set_ecosave(self._gateway, False)
+        self.on_change()

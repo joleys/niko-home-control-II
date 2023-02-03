@@ -7,8 +7,10 @@ from .nhccoco.coco import CoCo
 
 from .entities.hvacthermostat_hvac_climate import Nhc2HvacthermostatHvacClimateEntity
 from .entities.thermostat_hvac_climate import Nhc2ThermostatHvacClimateEntity
+from .entities.thermostat_thermostat_climate import Nhc2ThermostatThermostatClimateEntity
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.thermostat_hvac import CocoThermostatHvac
+from .nhccoco.devices.thermostat_thermostat import CocoThermostatThermostat
 from .nhccoco.devices.touchswitch_hvac import CocoTouchswitchHvac
 
 from .const import DOMAIN, KEY_GATEWAY
@@ -42,5 +44,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2HvacthermostatHvacClimateEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoThermostatThermostat)
+    _LOGGER.info('→ Found %s NHC Touch Switch', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2ThermostatThermostatClimateEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
