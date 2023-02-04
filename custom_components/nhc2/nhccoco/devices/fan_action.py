@@ -14,7 +14,7 @@ class CocoFanAction(CoCoDevice):
 
     @property
     def possible_fan_speeds(self) -> list[str]:
-        self.extract_property_definition_description_choices(PROPERTY_FAN_SPEED)
+        return self.extract_property_definition_description_choices(PROPERTY_FAN_SPEED)
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
