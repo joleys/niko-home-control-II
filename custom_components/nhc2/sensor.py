@@ -26,6 +26,7 @@ from .entities.hvacthermostat_hvac_overrule_setpoint import Nhc2HvacthermostatHv
 from .entities.hvacthermostat_hvac_overrule_time import Nhc2HvacthermostatHvacOverruleTimeEntity
 from .entities.motor_action_last_direction import Nhc2MotorActionLastDirectionEntity
 from .entities.naso_smartplug_electrical_power import Nhc2NasoSmartPlugElectricalPowerEntity
+from .entities.simulation_action_basicstate import Nhc2SimulationActionBasicStateEntity
 from .entities.thermostat_hvac_setpoint_temperature import Nhc2ThermostatHvacSetpointTemperatureEntity
 from .entities.thermostat_hvac_overrule_time import Nhc2ThermostatHvacOverruleTimeEntity
 from .entities.thermostat_hvac_overrule_setpoint import Nhc2ThermostatHvacOverruleSetpointEntity
@@ -41,6 +42,7 @@ from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
 from .nhccoco.devices.motor_action import CocoMotorAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
+from .nhccoco.devices.simulation_action import CocoSimulationAction
 from .nhccoco.devices.thermostat_hvac import CocoThermostatHvac
 from .nhccoco.devices.thermostat_thermostat import CocoThermostatThermostat
 from .nhccoco.devices.touchswitch_hvac import CocoTouchswitchHvac
@@ -118,6 +120,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2MotorActionLastDirectionEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoSimulationAction)
+    _LOGGER.info('→ Found %s NHC Presence Simulation Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2SimulationActionBasicStateEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

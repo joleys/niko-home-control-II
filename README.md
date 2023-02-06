@@ -237,6 +237,18 @@ It has some extra entities that can be used in automations:
 
 * **Basic State Binary Sensor**, is on when motion detection is enabled, off when disabled.
 
+### NHC Presence Simulation Action (untested)
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+This action is exposed as a button.
+
+#### Entities
+
+It has some extra entities that can be used in automations:
+
+* **Basic State Enum Sensor**
+
 ### NHC Virtual flag (untested)
 
 __Remark:__ this is untested as I don't own a device of this type.
@@ -325,7 +337,6 @@ __Remark:__ this is untested as I don't own a device of this type.
 
 ## Not yet supported
 
-* NHC Presence Simulation Action
 * NHC Reynaers Action
 * NHC Velux Action
 * Sonos Speaker
