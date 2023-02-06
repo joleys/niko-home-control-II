@@ -350,8 +350,6 @@ This is exposed as a climate entity.
 
 * NHC Reynaers Action
 * NHC Velux Action
-* Sonos Speaker
-* Bose Speaker
 * Generic Ventilation Implementation
 
 ## How to get it running
