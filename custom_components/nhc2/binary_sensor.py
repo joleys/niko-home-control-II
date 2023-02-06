@@ -25,6 +25,7 @@ from .entities.generic_action_start_active import Nhc2GenericActionStartActiveEn
 from .entities.generic_energyhome_electrical_power_production_threshold_exceeded import \
     Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity
 from .entities.generic_energyhome_report_instant_usage import Nhc2GenericEnergyhomeReportInstantUsageEntity
+from .entities.generic_hvac_overrule_active import Nhc2GenericHvacOverruleActiveEntity
 from .entities.generic_smartplug_report_instant_usage import Nhc2GenericSmartPlugReportInstantUsageEntity
 from .entities.hvacthermostat_hvac_hvac_on import Nhc2HvacthermostatHvacHvacOnEntity
 from .entities.motor_action_cover import Nhc2MotorActionCoverEntity
@@ -45,6 +46,7 @@ from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClamp
 from .nhccoco.devices.gate_action import CocoGateAction
 from .nhccoco.devices.generic_action import CocoGenericAction
 from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
+from .nhccoco.devices.generic_hvac import CocoGenericHvac
 from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
@@ -218,5 +220,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                 Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity(device_instance, hub, gateway)
             )
             entities.append(Nhc2GenericEnergyhomeReportInstantUsageEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericHvac)
+    _LOGGER.info('→ Found %s Generic Heating/Cooling Implementations', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2GenericHvacOverruleActiveEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

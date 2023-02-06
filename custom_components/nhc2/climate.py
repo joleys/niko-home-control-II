@@ -5,9 +5,11 @@ from homeassistant.const import CONF_USERNAME
 
 from .nhccoco.coco import CoCo
 
+from .entities.generic_hvac_climate import Nhc2GenericHvacClimateEntity
 from .entities.hvacthermostat_hvac_climate import Nhc2HvacthermostatHvacClimateEntity
 from .entities.thermostat_hvac_climate import Nhc2ThermostatHvacClimateEntity
 from .entities.thermostat_thermostat_climate import Nhc2ThermostatThermostatClimateEntity
+from .nhccoco.devices.generic_hvac import CocoGenericHvac
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.thermostat_hvac import CocoThermostatHvac
 from .nhccoco.devices.thermostat_thermostat import CocoThermostatThermostat
@@ -53,5 +55,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2ThermostatThermostatClimateEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericHvac)
+    _LOGGER.info('→ Found %s Generic Heating/Cooling Implementations', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2GenericHvacClimateEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

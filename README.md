@@ -335,6 +335,17 @@ __Remark:__ this is untested as I don't own a device of this type.
 * **Boost Switch**, enable/disable boost mode.
 * **Coupling Status Enum Sensor**, the connectivity status of the system.
 
+### Generic Heating/Cooling Implementation (untested)
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+This is exposed as a climate entity.
+
+#### Entities
+
+* **Overrule Active Binary Sensor**, is the overrule mode active or not.
+* **Coupling Status Enum Sensor**, the connectivity status of the system.
+
 ## Not yet supported
 
 * NHC Reynaers Action
@@ -342,7 +353,6 @@ __Remark:__ this is untested as I don't own a device of this type.
 * Sonos Speaker
 * Bose Speaker
 * Generic Ventilation Implementation
-* Generic Heating/Cooling Implementation
 
 ## How to get it running
 

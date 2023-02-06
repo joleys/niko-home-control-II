@@ -21,6 +21,7 @@ from .devices.gate_action import CocoGateAction
 from .devices.generic_action import CocoGenericAction
 from .devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
 from .devices.generic_energyhome import CocoGenericEnergyhome
+from .devices.generic_hvac import CocoGenericHvac
 from .devices.generic_smartplug import CocoGenericSmartplug
 from .devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .devices.light_action import CocoLightAction
@@ -254,14 +255,17 @@ class CoCo:
                 # ignore some devices
                 if classname in [
                     # These are devices, but don't receive any events through MQTT. So we can't do anything with them.
+                    'CocoChimeRelay',
                     'CocoDimcontrollerSmartpanel',
                     'CocoDimmerSmartdimmer',
                     'CocoExtensionbuttonx1Smartextensionpanel',
+                    'CocoGenericAudiocontrol',
                     'CocoGenericBrick',
                     'CocoGenericGatewayfw',
                     'CocoGenericRadio',
                     'CocoGenericStick',
                     'CocoLightSmartrelay',
+                    'CocoNhc24Touchswitch',
                     'CocoPushbuttonx1FeedbackSmartpanel',
                     'CocoPushbuttonx1Smartpanel',
                 ]:

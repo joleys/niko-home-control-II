@@ -20,6 +20,7 @@ from .entities.generic_energyhome_electrical_power_production import \
 from .entities.generic_energyhome_electrical_power_self_consumption import \
     Nhc2GenericEnergyhomeElectricalPowerSelfConsumptionEntity
 from .entities.generic_energyhome_electrical_power_to_grid import Nhc2GenericEnergyhomeElectricalPowerToGridEntity
+from .entities.generic_hvac_coupling_status import Nhc2GenericHvacCouplingStatusEntity
 from .entities.generic_smartplug_electrical_power import Nhc2GenericSmartPlugElectricalPowerEntity
 from .entities.hvacthermostat_hvac_setpoint_temperature import Nhc2HvacthermostatHvacSetpointTemperatureEntity
 from .entities.hvacthermostat_hvac_overrule_setpoint import Nhc2HvacthermostatHvacOverruleSetpointEntity
@@ -38,6 +39,7 @@ from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClamp
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
 from .nhccoco.devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
 from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
+from .nhccoco.devices.generic_hvac import CocoGenericHvac
 from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
 from .nhccoco.devices.motor_action import CocoMotorAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
@@ -175,8 +177,17 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
         async_add_entities(entities)
 
+    device_instances = gateway.get_device_instances(CocoGenericHvac)
+    _LOGGER.info('→ Found %s Generic Heating/Cooling Implementations', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2GenericHvacCouplingStatusEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
     device_instances = gateway.get_device_instances(CocoGenericDomestichotwaterunit)
-    _LOGGER.info('→ Found %s Generic Warm Water Implementation', len(device_instances))
+    _LOGGER.info('→ Found %s Generic Warm Water Implementations', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
