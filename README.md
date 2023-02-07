@@ -60,7 +60,7 @@ It has some extra entities that can be used in automations:
 
 #### Not yet implemented
 
-* [ ] Create a service to set the Favourite
+* [ ] Setting the favourite
 
 ### NHC Basic Alarm Action & NHC Panic Mode Action (untested)
 
@@ -237,6 +237,10 @@ It has some extra entities that can be used in automations:
 
 * **Basic State Binary Sensor**, is on when motion detection is enabled, off when disabled.
 
+Remark: the Basic State is the override button. If you need the output of the PIR sensor in Home Assistant you can link
+a "Virtual on/off device" in the Niko Home Control Programming Software to be switched on when the PIR sensor initiates
+the routine.
+
 ### NHC Presence Simulation Action (untested)
 
 __Remark:__ this is untested as I don't own a device of this type.
@@ -377,28 +381,6 @@ Note: Make sure you have a recent version of Home Assistant!
 3. Add an integration, search for Niko Home Control II, and click on it
 4. Follow the wizard
 
-## Adding an Energy Meter?
-
-This currently requires some manual action in your configuration.yaml.
-
-You need to add (and possibly tweak) the following:
-
-    sensor:
-        - platform: integration
-            source: sensor.elektriciteitsmeting
-            name: energy_elektriciteit
-            unit_prefix: k
-            round: 3
-            method: left
-
-    utility_meter:
-        energy_daily:
-            source: sensor.energy_elektriciteit
-            cycle: daily
-        energy_monthly:
-            source: sensor.energy_elektriciteit
-            cycle: monthly
-
 ## Development
 
 ### Adding support for new Device models
@@ -412,8 +394,34 @@ You need to add (and possibly tweak) the following:
 
 ## Found a bug?
 
-When and if you find a bug, please document it as good as possible (how to reproduce, logs, screenshots, etc)
+If you found a bug you can create an [issue on GitHub](https://github.com/joleys/niko-home-control-II/issues).
+
+Before creating an issue:
+
+1. Check if the issue is already reported
+2. Make sure you are running the latest version of Home Assistant.
+3. Make sure you are running the latest version of this integration.
+
+If you create an issue:
+
+* Mention which version of Home Assistant you are using.
+* Include relevant logs from Home Assistant. You can enable debug logging for this integration by adding the following
+  to
+  your `configuration.yaml` file:
+
+```yaml
+logger:
+  default: warning
+  logs:
+    custom_components.nhc2: debug
+```
+
+* If possible include the steps to reproduce the issue. Explain what is wrong and what you expected to happen.
 
 ## Want to help?
 
-Make a PR, contact me, test new releases, code new entities ...
+As you can see in this README, there are still untested devices. These are devices that are implemented based on the
+available documentation from Niko. If you own one of these devices, please help me out by testing it. Let us know,
+through an issue, what is working or not.
+
+If you see missing features, feel free to create pull requests. Add missing devices, ...
