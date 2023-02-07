@@ -18,7 +18,6 @@ from .entities.comfort_action_mood_active import Nhc2ComfortActionMoodActiveEnti
 from .entities.dimmer_action_aligned import Nhc2DimmerActionAlignedEntity
 from .entities.electricity_clamp_centralmeter_report_instant_usage import \
     Nhc2ElectricityClampCentralmeterReportInstantUsageEntity
-from .entities.generic_action_basicstate import Nhc2GenericActionBasicStateEntity
 from .entities.generic_action_start_active import Nhc2GenericActionStartActiveEntity
 from .entities.generic_energyhome_electrical_power_production_threshold_exceeded import \
     Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity
@@ -123,7 +122,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2GenericActionBasicStateEntity(device_instance, hub, gateway))
             entities.append(Nhc2GenericActionStartActiveEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

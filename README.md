@@ -39,7 +39,6 @@ This action is exposed as a switch.
 
 It has some extra entities that can be used in automations:
 
-* **Basic State Binary Sensor**, which represents the Basic State of the AllOff.
 * **AllOff Active Binary Sensor**, which represents the AllOffActive state. Be aware that this state is only updated as
   the button is pressed, not when all devices are off.
 
@@ -107,13 +106,12 @@ This is exposed as a fan entity.
 
 ### NHC Free Start Stop Actions
 
-This action is exposed as a button.
+This action is exposed as a switch.
 
 #### Entities
 
 It has some extra entities that can be used in automations:
 
-* **Basic State Binary Sensor**, is on according to the state of all assigned players as configured for that action.
 * **Start Active Binary Sensor**, is on upon activation of the action. It is off when one of the assigned participant in
   the action has a state change.
 
@@ -205,13 +203,12 @@ This is exposed as a climate entity.
 
 ### NHC Mood Action
 
-This action is exposed as a button.
+This action is exposed as a switch.
 
 #### Entities
 
 It has some extra entities that can be used in automations:
 
-* **Basic State Binary Sensor**, is on according to the state of all assigned players as configured for that action.
 * **Mood Active Binary Sensor**, is on upon activation of the action. It is off when one of the assigned participant in
   the action had a state change.
 
