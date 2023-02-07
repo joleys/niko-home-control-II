@@ -5,7 +5,7 @@ from ..const import DOMAIN, BRAND
 
 from ..nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 
-class Nhc2NasoSmartPlugElectricalPowerEntity(SensorEntity):
+class Nhc2NasoSmartplugElectricalPowerEntity(SensorEntity):
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoNasoSmartplug, hub, gateway):

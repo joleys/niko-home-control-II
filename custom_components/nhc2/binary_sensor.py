@@ -26,13 +26,13 @@ from .entities.generic_energyhome_electrical_power_production_threshold_exceeded
     Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity
 from .entities.generic_energyhome_report_instant_usage import Nhc2GenericEnergyhomeReportInstantUsageEntity
 from .entities.generic_hvac_overrule_active import Nhc2GenericHvacOverruleActiveEntity
-from .entities.generic_smartplug_report_instant_usage import Nhc2GenericSmartPlugReportInstantUsageEntity
+from .entities.generic_smartplug_report_instant_usage import Nhc2GenericSmartplugReportInstantUsageEntity
 from .entities.hvacthermostat_hvac_hvac_on import Nhc2HvacthermostatHvacHvacOnEntity
 from .entities.motor_action_cover import Nhc2MotorActionCoverEntity
 from .entities.motor_action_moving import Nhc2MotorActionMovingEntity
-from .entities.naso_smartplug_feedback_enabled import Nhc2NasoSmartPlugFeedbackEnabledEntity
-from .entities.naso_smartplug_measuring_only import Nhc2NasoSmartPlugMeasuringOnlyEntity
-from .entities.naso_smartplug_report_instant_usage import Nhc2NasoSmartPlugReportInstantUsageEntity
+from .entities.naso_smartplug_feedback_enabled import Nhc2NasoSmartplugFeedbackEnabledEntity
+from .entities.naso_smartplug_measuring_only import Nhc2NasoSmartplugMeasuringOnlyEntity
+from .entities.naso_smartplug_report_instant_usage import Nhc2NasoSmartplugReportInstantUsageEntity
 from .entities.overallcomfort_action_basicstate import Nhc2OverallcomfortActionBasicStateEntity
 from .entities.overallcomfort_action_start_active import Nhc2OverallcomfortActionStartActiveEntity
 from .entities.pir_action_basicstate import Nhc2PirActionBasicStateEntity
@@ -187,9 +187,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2NasoSmartPlugReportInstantUsageEntity(device_instance, hub, gateway))
-            entities.append(Nhc2NasoSmartPlugFeedbackEnabledEntity(device_instance, hub, gateway))
-            entities.append(Nhc2NasoSmartPlugMeasuringOnlyEntity(device_instance, hub, gateway))
+            entities.append(Nhc2NasoSmartplugReportInstantUsageEntity(device_instance, hub, gateway))
+            entities.append(Nhc2NasoSmartplugFeedbackEnabledEntity(device_instance, hub, gateway))
+            entities.append(Nhc2NasoSmartplugMeasuringOnlyEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
@@ -198,7 +198,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2GenericSmartPlugReportInstantUsageEntity(device_instance, hub, gateway))
+            entities.append(Nhc2GenericSmartplugReportInstantUsageEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

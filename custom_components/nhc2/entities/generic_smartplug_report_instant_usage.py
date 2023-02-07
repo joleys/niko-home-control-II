@@ -10,7 +10,7 @@ import logging
 _LOGGER = logging.getLogger(__name__)
 
 
-class Nhc2GenericSmartPlugReportInstantUsageEntity(BinarySensorEntity):
+class Nhc2GenericSmartplugReportInstantUsageEntity(BinarySensorEntity):
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoGenericSmartplug, hub, gateway):

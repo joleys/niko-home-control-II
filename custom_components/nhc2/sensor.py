@@ -21,12 +21,12 @@ from .entities.generic_energyhome_electrical_power_self_consumption import \
     Nhc2GenericEnergyhomeElectricalPowerSelfConsumptionEntity
 from .entities.generic_energyhome_electrical_power_to_grid import Nhc2GenericEnergyhomeElectricalPowerToGridEntity
 from .entities.generic_hvac_coupling_status import Nhc2GenericHvacCouplingStatusEntity
-from .entities.generic_smartplug_electrical_power import Nhc2GenericSmartPlugElectricalPowerEntity
+from .entities.generic_smartplug_electrical_power import Nhc2GenericSmartplugElectricalPowerEntity
 from .entities.hvacthermostat_hvac_setpoint_temperature import Nhc2HvacthermostatHvacSetpointTemperatureEntity
 from .entities.hvacthermostat_hvac_overrule_setpoint import Nhc2HvacthermostatHvacOverruleSetpointEntity
 from .entities.hvacthermostat_hvac_overrule_time import Nhc2HvacthermostatHvacOverruleTimeEntity
 from .entities.motor_action_last_direction import Nhc2MotorActionLastDirectionEntity
-from .entities.naso_smartplug_electrical_power import Nhc2NasoSmartPlugElectricalPowerEntity
+from .entities.naso_smartplug_electrical_power import Nhc2NasoSmartplugElectricalPowerEntity
 from .entities.reynaers_action_status import Nhc2ReynaersActionStatusEntity
 from .entities.simulation_action_basicstate import Nhc2SimulationActionBasicStateEntity
 from .entities.thermostat_hvac_setpoint_temperature import Nhc2ThermostatHvacSetpointTemperatureEntity
@@ -150,7 +150,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2NasoSmartPlugElectricalPowerEntity(device_instance, hub, gateway))
+            entities.append(Nhc2NasoSmartplugElectricalPowerEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
@@ -159,7 +159,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2GenericSmartPlugElectricalPowerEntity(device_instance, hub, gateway))
+            entities.append(Nhc2GenericSmartplugElectricalPowerEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
