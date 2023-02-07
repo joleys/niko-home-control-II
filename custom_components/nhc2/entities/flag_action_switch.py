@@ -1,4 +1,4 @@
-from homeassistant.components.switch import SwitchEntity, SwitchDeviceClass
+from homeassistant.components.switch import SwitchEntity
 
 from ..const import DOMAIN, BRAND
 

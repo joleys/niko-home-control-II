@@ -33,7 +33,7 @@ It has some extra entities that can be used in automations:
 
 ### NHC All Off Action
 
-This action is exposed as a button.
+This action is exposed as a switch.
 
 #### Entities
 

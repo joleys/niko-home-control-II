@@ -5,6 +5,7 @@ from homeassistant.const import CONF_USERNAME
 
 from .nhccoco.coco import CoCo
 
+from .entities.alloff_action_basicstate import Nhc2AlloffActionBasicStateEntity
 from .entities.flag_action_switch import Nhc2FlagActionSwitchEntity
 from .entities.generic_domestichotwaterunit_boost import Nhc2GenericDomestichotwaterunitBoostEntity
 from .entities.hvacthermostat_hvac_ecosave import Nhc2HvacthermostatHvacEcoSaveEntity
@@ -16,6 +17,7 @@ from .entities.thermostat_hvac_ecosave import Nhc2ThermostatHvacEcoSaveEntity
 from .entities.thermostat_hvac_overrule_active import Nhc2ThermostatHvacOverruleActiveEntity
 from .entities.thermostat_thermostat_ecosave import Nhc2ThermostatThermostatEcoSaveEntity
 from .entities.thermostat_thermostat_overrule_active import Nhc2ThermostatThermostatOverruleActiveEntity
+from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.flag_action import CocoFlagAction
 from .nhccoco.devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
@@ -40,6 +42,16 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
     hub = (DOMAIN, config_entry.data[CONF_USERNAME])
+
+    device_instances = gateway.get_device_instances(CocoAlloffAction)
+    _LOGGER.info('→ Found %s NHC All Off Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2AlloffActionBasicStateEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
 
     device_instances = gateway.get_device_instances(CocoHvacthermostatHvac)
     _LOGGER.info('→ Found %s NHC HVAC Thermostats', len(device_instances))

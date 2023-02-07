@@ -87,7 +87,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2AlloffActionActiveEntity(device_instance, hub, gateway))
-            entities.append(Nhc2AlloffActionBasicStateEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
