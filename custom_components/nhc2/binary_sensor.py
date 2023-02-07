@@ -31,7 +31,6 @@ from .entities.naso_smartplug_feedback_enabled import Nhc2NasoSmartplugFeedbackE
 from .entities.naso_smartplug_measuring_only import Nhc2NasoSmartplugMeasuringOnlyEntity
 from .entities.naso_smartplug_report_instant_usage import Nhc2NasoSmartplugReportInstantUsageEntity
 from .entities.overallcomfort_action_start_active import Nhc2OverallcomfortActionStartActiveEntity
-from .entities.pir_action_basicstate import Nhc2PirActionBasicStateEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
@@ -47,7 +46,6 @@ from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.overallcomfort_action import CocoOverallcomfortAction
-from .nhccoco.devices.pir_action import CocoPirAction
 from .nhccoco.devices.rolldownshutter_action import CocoRolldownshutterAction
 from .nhccoco.devices.sunblind_action import CocoSunblindAction
 from .nhccoco.devices.venetianblind_action import CocoVenetianblindAction
@@ -162,15 +160,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             entities.append(Nhc2MotorActionCoverEntity(device_instance, hub, gateway))
             entities.append(Nhc2MotorActionMovingEntity(device_instance, hub, gateway))
-
-        async_add_entities(entities)
-
-    device_instances = gateway.get_device_instances(CocoPirAction)
-    _LOGGER.info('→ Found %s NHC PIR Actions', len(device_instances))
-    if len(device_instances) > 0:
-        entities = []
-        for device_instance in device_instances:
-            entities.append(Nhc2PirActionBasicStateEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
