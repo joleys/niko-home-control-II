@@ -30,7 +30,6 @@ from .entities.motor_action_moving import Nhc2MotorActionMovingEntity
 from .entities.naso_smartplug_feedback_enabled import Nhc2NasoSmartplugFeedbackEnabledEntity
 from .entities.naso_smartplug_measuring_only import Nhc2NasoSmartplugMeasuringOnlyEntity
 from .entities.naso_smartplug_report_instant_usage import Nhc2NasoSmartplugReportInstantUsageEntity
-from .entities.overallcomfort_action_basicstate import Nhc2OverallcomfortActionBasicStateEntity
 from .entities.overallcomfort_action_start_active import Nhc2OverallcomfortActionStartActiveEntity
 from .entities.pir_action_basicstate import Nhc2PirActionBasicStateEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
@@ -131,7 +130,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2OverallcomfortActionBasicStateEntity(device_instance, hub, gateway))
             entities.append(Nhc2OverallcomfortActionStartActiveEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

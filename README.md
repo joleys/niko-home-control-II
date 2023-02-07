@@ -128,13 +128,12 @@ __Remark:__ this is untested as I don't own a device of this type.
 
 __Remark:__ this is untested as I don't own a device of this type.
 
-This action is exposed as a button.
+This action is exposed as a switch.
 
 #### Entities
 
 It has some extra entities that can be used in automations:
 
-* **Basic State Binary Sensor**, is on according to the state of all assigned players as configured for that action.
 * **Start Active Binary Sensor**, is on upon activation of the action. It is off when one of the assigned participant in
   the action has a state change.
 
