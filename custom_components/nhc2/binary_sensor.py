@@ -8,14 +8,12 @@ from .entities.accesscontrol_action_basicstate import Nhc2AccesscontrolActionBas
 from .entities.accesscontrol_action_decline_call_applied_on_all_devices import \
     Nhc2AccesscontrolActionDeclineCallAppliedOnAllDevicesEntity
 from .entities.alloff_action_active import Nhc2AlloffActionActiveEntity
-from .entities.alloff_action_basicstate import Nhc2AlloffActionBasicStateEntity
 from .entities.audiocontrol_action_connected import Nhc2AudiocontrolActionConnectedEntity
 from .entities.audiocontrol_action_title_aligned import Nhc2AudiocontrolActionTitleAlignedEntity
 from .entities.audiocontrol_action_volume_aligned import Nhc2AudiocontrolActionVolumeAlignedEntity
 from .entities.bellbutton_action_basicstate import Nhc2BellbuttonActionBasicStateEntity
 from .entities.bellbutton_action_decline_call_applied_on_all_devices import \
     Nhc2BellbuttonActionDeclineCallAppliedOnAllDevicesEntity
-from .entities.comfort_action_basicstate import Nhc2ComfortActionBasicStateEntity
 from .entities.comfort_action_mood_active import Nhc2ComfortActionMoodActiveEntity
 from .entities.dimmer_action_aligned import Nhc2DimmerActionAlignedEntity
 from .entities.electricity_clamp_centralmeter_report_instant_usage import \
@@ -154,7 +152,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2ComfortActionBasicStateEntity(device_instance, hub, gateway))
             entities.append(Nhc2ComfortActionMoodActiveEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
