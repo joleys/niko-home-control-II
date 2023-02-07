@@ -28,6 +28,7 @@ from .devices.light_action import CocoLightAction
 from .devices.naso_smartplug import CocoNasoSmartplug
 from .devices.overallcomfort_action import CocoOverallcomfortAction
 from .devices.pir_action import CocoPirAction
+from .devices.reynaers_action import CocoReynaersAction
 from .devices.rolldownshutter_action import CocoRolldownshutterAction
 from .devices.simulation_action import CocoSimulationAction
 from .devices.socket_action import CocoSocketAction

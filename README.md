@@ -259,6 +259,17 @@ This is exposed as switch.
 
 Lights are exposed as lights. Others are exposed as switches.
 
+### NHC Reynaers Action (untested)
+
+This is exposed as a cover entity.
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+#### Entities
+
+* **Status Sensor**, status feedback of the Reynaers motor.
+
+
 ### NHC Zigbee Smart plug
 
 This is the energy metering linked to a zigbee smart plug. The smart plug itself is a different device.
@@ -348,8 +359,9 @@ This is exposed as a climate entity.
 
 ## Not yet supported
 
-* NHC Reynaers Action
 * NHC Velux Action
+* Sonos Speaker
+* Bose Speaker
 * Generic Ventilation Implementation
 
 ## How to get it running
