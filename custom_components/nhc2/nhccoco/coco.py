@@ -38,6 +38,7 @@ from .devices.switched_generic_action import CocoSwitchedGenericAction
 from .devices.thermostat_hvac import CocoThermostatHvac
 from .devices.thermostat_thermostat import CocoThermostatThermostat
 from .devices.touchswitch_hvac import CocoTouchswitchHvac
+from .devices.velux_action import CocoVeluxAction
 from .devices.venetianblind_action import CocoVenetianblindAction
 
 from .const import *

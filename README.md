@@ -269,6 +269,11 @@ __Remark:__ this is untested as I don't own a device of this type.
 
 * **Status Sensor**, status feedback of the Reynaers motor.
 
+### NHC Velux Action (untested)
+
+This is exposed as a cover entity.
+
+__Remark:__ this is untested as I don't own a device of this type.
 
 ### NHC Zigbee Smart plug
 
@@ -359,7 +364,6 @@ This is exposed as a climate entity.
 
 ## Not yet supported
 
-* NHC Velux Action
 * Sonos Speaker
 * Bose Speaker
 * Generic Ventilation Implementation

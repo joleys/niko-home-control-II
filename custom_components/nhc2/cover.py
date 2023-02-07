@@ -8,11 +8,13 @@ from .nhccoco.coco import CoCo
 from .entities.garagedoor_action_cover import Nhc2GaragedoorActionCoverEntity
 from .entities.motor_action_cover import Nhc2MotorActionCoverEntity
 from .entities.reynaers_action_cover import Nhc2ReynaersActionCoverEntity
+from .entities.velux_action_cover import Nhc2VeluxActionCoverEntity
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
 from .nhccoco.devices.gate_action import CocoGateAction
 from .nhccoco.devices.reynaers_action import CocoReynaersAction
 from .nhccoco.devices.rolldownshutter_action import CocoRolldownshutterAction
 from .nhccoco.devices.sunblind_action import CocoSunblindAction
+from .nhccoco.devices.velux_action import CocoVeluxAction
 from .nhccoco.devices.venetianblind_action import CocoVenetianblindAction
 
 from .const import DOMAIN, KEY_GATEWAY
@@ -57,5 +59,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2ReynaersActionCoverEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoVeluxAction)
+    _LOGGER.info('→ Found %s NHC Velux Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2VeluxActionCoverEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
