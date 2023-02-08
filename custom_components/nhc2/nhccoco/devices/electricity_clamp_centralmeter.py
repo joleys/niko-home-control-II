@@ -40,6 +40,11 @@ class CocoElectricityClampCentralmeter(CoCoDevice):
     @property
     def possible_clamp_types(self) -> list:
         self.extract_property_definition_description_choices(PARAMETER_CLAMP_TYPE)
+        
+    @property
+    def is_online(self) -> bool:
+        #overrule False from API
+        return True
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
