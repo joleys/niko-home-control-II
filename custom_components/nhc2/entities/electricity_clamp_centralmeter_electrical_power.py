@@ -24,8 +24,6 @@ class Nhc2ElectricityClampCentralmeterElectricalPowerEntity(SensorEntity):
         self._attr_native_value = self._device.electrical_power
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
         self._attr_state_class = SensorStateClass.MEASUREMENT
-        
-        self._device.enable_report_instant_usage(self._gateway)
 
     @property
     def name(self) -> str:
