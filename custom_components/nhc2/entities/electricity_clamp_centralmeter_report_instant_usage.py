@@ -28,6 +28,8 @@ class Nhc2ElectricityClampCentralmeterReportInstantUsageEntity(BinarySensorEntit
         self._attr_state = self._device.is_report_instant_usage
         self._attr_state_class = None
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
+        
+        self._device.enable_report_instant_usage(self._gateway)
 
     @property
     def name(self) -> str:
