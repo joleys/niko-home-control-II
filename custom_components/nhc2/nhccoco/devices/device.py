@@ -92,6 +92,13 @@ class CoCoDevice():
                 return property_object[property_key]
         return None
 
+    def has_property(self, property_key: str) -> bool:
+        if self._properties:
+            property_object = next(filter((lambda x: x and property_key in x), self._properties), None)
+            if property_object and property_key in property_object:
+                return True
+        return False
+
     def merge_properties(self, new_properties: dict):
         """Merge the properties of the device with the properties of the payload"""
         for new_property in new_properties:

@@ -30,7 +30,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2AccesscontrolActionLockEntity(device_instance, hub, gateway))
+            if(device_instance.supports_doorlock):
+                entities.append(Nhc2AccesscontrolActionLockEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

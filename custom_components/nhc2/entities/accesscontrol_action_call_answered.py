@@ -1,16 +1,15 @@
-from homeassistant.components.lock import LockEntity
+from homeassistant.components.binary_sensor import BinarySensorEntity
 
 from ..const import DOMAIN, BRAND
 
 from ..nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 
 
-class Nhc2AccesscontrolActionLockEntity(LockEntity):
+class Nhc2AccesscontrolActionCallAnsweredEntity(BinarySensorEntity):
     _attr_has_entity_name = True
-    _attr_name = None
 
     def __init__(self, device_instance: CocoAccesscontrolAction, hub, gateway):
-        """Initialize a lock sensor."""
+        """Initialize a binary sensor."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
@@ -18,10 +17,15 @@ class Nhc2AccesscontrolActionLockEntity(LockEntity):
         self._device.after_change_callbacks.append(self.on_change)
 
         self._attr_available = self._device.is_online
-        self._attr_unique_id = device_instance.uuid
+        self._attr_unique_id = device_instance.uuid + '_call_answered'
         self._attr_should_poll = False
 
-        self._attr_is_locked = self._device.is_doorlock_closed
+        self._attr_state = self._device.is_call_answered
+        self._attr_state_class = None
+
+    @property
+    def name(self) -> str:
+        return 'Call Answered'
 
     @property
     def device_info(self):
@@ -36,13 +40,9 @@ class Nhc2AccesscontrolActionLockEntity(LockEntity):
             'via_device': self._hub
         }
 
+    @property
+    def is_on(self) -> bool:
+        return self._device.is_call_answered
 
     def on_change(self):
         self.schedule_update_ha_state()
-
-    async def async_lock(self, **kwargs):
-        return False
-
-    async def async_unlock(self, **kwargs):
-        self._device.open_doorlock(self._gateway)
-        self.on_change()

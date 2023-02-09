@@ -17,19 +17,17 @@ A big thanks to Johan and Koen from Niko for their support and providing me with
 
 ## What works now?
 
-### NHC Access Control Action (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
-
-This action exposes a button, camera and a lock.
+### NHC Access Control Action
 
 #### Entities
 
-It has some extra entities that can be used in automations:
-
-* **Basic State Binary Sensor**, which represents the Basic State. This is only available for ring-and-come-in guided
-  action. It indicates if the ring-and-come-in is enabled or not.
+* **Button**, (only if supported), used to enable/disable ring-and-come-in.
+* **Basic State Binary Sensor**, (only if supported), This is only available for ring-and-come-in guided action. It
+  indicates if the ring-and-come-in is enabled or not.
+* **Call Answered Binary Sensor**, (only if supported), undocumented.
+* **Call Pending Binary Sensor**, (only if supported), undocumented.
 * **Decline Call Applied On All Devices Binary Sensor**, which represents the Decline Call Applied On All Devices state.
+* **Lock**, (only if supported), used to unlock the doorlock.
 
 ### NHC All Off Action
 

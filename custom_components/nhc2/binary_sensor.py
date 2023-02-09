@@ -5,6 +5,8 @@ from homeassistant.const import CONF_USERNAME
 from .nhccoco.coco import CoCo
 
 from .entities.accesscontrol_action_basicstate import Nhc2AccesscontrolActionBasicStateEntity
+from .entities.accesscontrol_action_call_answered import Nhc2AccesscontrolActionCallAnsweredEntity
+from .entities.accesscontrol_action_call_pending import Nhc2AccesscontrolActionCallPendingEntity
 from .entities.accesscontrol_action_decline_call_applied_on_all_devices import \
     Nhc2AccesscontrolActionDeclineCallAppliedOnAllDevicesEntity
 from .entities.alloff_action_active import Nhc2AlloffActionActiveEntity
@@ -70,8 +72,13 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2AccesscontrolActionBasicStateEntity(device_instance, hub, gateway))
             entities.append(Nhc2AccesscontrolActionDeclineCallAppliedOnAllDevicesEntity(device_instance, hub, gateway))
+            if device_instance.supports_basicstate:
+                entities.append(Nhc2AccesscontrolActionBasicStateEntity(device_instance, hub, gateway))
+            if device_instance.supports_call_answered:
+                entities.append(Nhc2AccesscontrolActionCallAnsweredEntity(device_instance, hub, gateway))
+            if device_instance.supports_call_pending:
+                entities.append(Nhc2AccesscontrolActionCallPendingEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

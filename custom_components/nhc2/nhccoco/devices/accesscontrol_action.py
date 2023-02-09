@@ -1,7 +1,8 @@
 from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PARAMETER_DECLINE_CALL_APPLIED_ON_ALL_DEVICES, \
     PARAMETER_DECLINE_CALL_APPLIED_ON_ALL_DEVICES_VALUE_TRUE, PROPERTY_BASIC_STATE, PROPERTY_BASIC_STATE_VALUE_ON, \
     PROPERTY_BASIC_STATE_VALUE_TRIGGERED, PROPERTY_DOORLOCK, PROPERTY_DOORLOCK_VALUE_OPEN, \
-    PROPERTY_DOORLOCK_VALUE_CLOSED
+    PROPERTY_DOORLOCK_VALUE_CLOSED, PROPERTY_CALL_PENDING, PROPERTY_CALL_PENDING_VALUE_TRUE, PARAMETER_CALL_ANSWERED, \
+    PARAMETER_CALL_ANSWERED_VALUE_TRUE
 
 from .device import CoCoDevice
 
@@ -12,12 +13,20 @@ _LOGGER = logging.getLogger(__name__)
 
 class CocoAccesscontrolAction(CoCoDevice):
     @property
+    def supports_basicstate(self) -> bool:
+        return self.has_property(PROPERTY_BASIC_STATE)
+
+    @property
     def basic_state(self) -> str:
         return self.extract_property_value(PROPERTY_BASIC_STATE)
 
     @property
     def is_basic_state_on(self) -> bool:
         return self.basic_state == PROPERTY_BASIC_STATE_VALUE_ON
+
+    @property
+    def supports_doorlock(self) -> bool:
+        return self.has_property(PROPERTY_DOORLOCK)
 
     @property
     def doorlock(self) -> str:
@@ -30,6 +39,30 @@ class CocoAccesscontrolAction(CoCoDevice):
     @property
     def is_doorlock_closed(self) -> bool:
         return self.doorlock == PROPERTY_DOORLOCK_VALUE_CLOSED
+
+    @property
+    def supports_call_pending(self) -> bool:
+        return self.has_property(PROPERTY_CALL_PENDING)
+
+    @property
+    def call_pending(self) -> str:
+        return self.extract_property_value(PROPERTY_CALL_PENDING)
+
+    @property
+    def is_call_pending(self) -> bool:
+        return self.call_pending == PROPERTY_CALL_PENDING_VALUE_TRUE
+
+    @property
+    def supports_call_answered(self) -> bool:
+        return self.has_property(PARAMETER_CALL_ANSWERED)
+
+    @property
+    def call_answered(self) -> str:
+        return self.extract_parameter_value(PARAMETER_CALL_ANSWERED)
+
+    @property
+    def is_call_answered(self) -> bool:
+        return self.call_answered == PARAMETER_CALL_ANSWERED_VALUE_TRUE
 
     @property
     def decline_call_applied_on_all_devices(self) -> str:
