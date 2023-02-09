@@ -27,7 +27,7 @@ class Nhc2AudiocontrolActionTitleAlignedEntity(BinarySensorEntity):
 
     @property
     def name(self) -> str:
-        return 'Volume Aligned'
+        return 'Title Aligned'
 
     @property
     def device_info(self):
@@ -37,7 +37,7 @@ class Nhc2AudiocontrolActionTitleAlignedEntity(BinarySensorEntity):
                 (DOMAIN, self._device.uuid)
             },
             'name': self._device.name,
-            'manufacturer': BRAND,
+            'manufacturer': f'{BRAND} ({self._device.manufacturer})',
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }

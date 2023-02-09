@@ -3,7 +3,7 @@ from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_STATUS, PROPERTY_STAT
     PROPERTY_PLAYBACK_VALUE_PLAYING, PROPERTY_VOLUME, PROPERTY_MUTED, PROPERTY_MUTED_VALUE_TRUE, \
     PROPERTY_MUTED_VALUE_FALSE, PROPERTY_TITLE, PROPERTY_VOLUME_ALIGNED, PROPERTY_VOLUME_ALIGNED_VALUE_TRUE, \
     PROPERTY_TITLE_ALIGNED, PROPERTY_TITLE_ALIGNED_VALUE_TRUE, PROPERTY_CONNECTED, PROPERTY_CONNECTED_VALUE_TRUE, \
-    PARAMETER_SPEAKER
+    PARAMETER_SPEAKER, PARAMETER_MANUFACTURER
 
 from ..helpers import to_int_or_none
 
@@ -86,6 +86,10 @@ class CocoAudiocontrolAction(CoCoDevice):
     @property
     def speaker(self) -> str:
         return self.extract_parameter_value(PARAMETER_SPEAKER)
+
+    @property
+    def manufacturer(self) -> str:
+        return self.extract_parameter_value(PARAMETER_MANUFACTURER)
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')

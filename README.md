@@ -48,9 +48,7 @@ It has some extra entities that can be used in automations:
   in the action had a state change. Be aware that this state is only updated as the button is pressed, not when all
   devices are off.
 
-### NHC Audio Control Action (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
+### NHC Audio Control Action
 
 This action is exposed as media player.
 

@@ -10,7 +10,7 @@ class Nhc2AudiocontrolActionMediaPlayerEntity(MediaPlayerEntity):
     _attr_name = None
 
     def __init__(self, device_instance: CocoAudiocontrolAction, hub, gateway):
-        """Initialize a button."""
+        """Initialize a media player."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
@@ -36,7 +36,7 @@ class Nhc2AudiocontrolActionMediaPlayerEntity(MediaPlayerEntity):
                 (DOMAIN, self._device.uuid)
             },
             'name': self._device.name,
-            'manufacturer': BRAND,
+            'manufacturer': f'{BRAND} ({self._device.manufacturer})',
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }
@@ -53,7 +53,6 @@ class Nhc2AudiocontrolActionMediaPlayerEntity(MediaPlayerEntity):
             return MediaPlayerState.OFF
         if self._device.is_status_on:
             return MediaPlayerState.ON
-
 
     def on_change(self):
         self.schedule_update_ha_state()
