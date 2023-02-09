@@ -97,10 +97,9 @@ This action is exposed as a light.
 
 #### Services
 
-The integration exposes a service to set the brightness of a light. This can be
-used to set the brightness without turning the lights on. For instance if you want
-your lights to have a certain brightness at night. See Developer Tools → Services → Niko Home Control II: Set brightness
-for light.
+The integration exposes a service to set the brightness of a light. This can be used to set the brightness without
+turning the lights on. For instance if you want your lights to have a certain brightness at night. See Developer Tools →
+Services → Niko Home Control II: Set brightness for light.
 
 ### NHC Fan Action (untested)
 

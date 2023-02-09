@@ -51,18 +51,7 @@ class Nhc2RelayActionLightEntity(LightEntity):
         if not self._device.support_brightness:
             return None
 
-        if not self.is_on:
-            return 0
-
         return int(round(255 * self._device.brightness / 100))
-
-    def turn_off(self, **kwargs) -> None:
-        """Pass - not in use."""
-        pass
-
-    def turn_on(self, **kwargs) -> None:
-        """Pass - not in use."""
-        pass
 
     def on_change(self):
         self.schedule_update_ha_state()
