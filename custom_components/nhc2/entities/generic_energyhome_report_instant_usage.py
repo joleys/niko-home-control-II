@@ -29,6 +29,9 @@ class Nhc2GenericEnergyhomeReportInstantUsageEntity(BinarySensorEntity):
         self._attr_state_class = None
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
 
+        # Start reporting
+        self._device.enable_report_instant_usage(self._gateway)
+
     @property
     def name(self) -> str:
         return 'Report Instant Usage'

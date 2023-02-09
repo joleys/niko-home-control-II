@@ -41,6 +41,11 @@ class CocoGenericEnergyhome(CoCoDevice):
         return self.extract_property_value(PROPERTY_ELECTRICAL_POWER_PRODUCTION_THRESHOLD_EXCEEDED) == \
             PROPERTY_ELECTRICAL_POWER_PRODUCTION_THRESHOLD_EXCEEDED_VALUE_TRUE
 
+    @property
+    def is_online(self) -> bool:
+        # For some reason NHC return `False` for these devices. Sor overruling this.
+        return True
+
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
         if DEVICE_DESCRIPTOR_PROPERTIES in payload:

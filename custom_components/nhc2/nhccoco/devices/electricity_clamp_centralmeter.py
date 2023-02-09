@@ -43,7 +43,7 @@ class CocoElectricityClampCentralmeter(CoCoDevice):
         
     @property
     def is_online(self) -> bool:
-        #overrule False from API
+        # For some reason NHC return `False` for these devices. Sor overruling this.
         return True
 
     def on_change(self, topic: str, payload: dict):
