@@ -13,7 +13,13 @@ API. If you use a touch screen profile, this isn't even needed.
 This custom component is a [spin-off of the hard and excellent work by @filipvh](https://github.com/filipvh/hass-nhc2).
 Thanks!
 
-A big thanks to Johan and Koen from Niko for their support and providing me with test equipment.
+A big thanks to Johan and Koen from Niko for their support and providing the test equipment.
+
+Some people who made this possible, and should be mentioned:
+
+* @nexus256
+* @joleys
+* @tijsverkoyen
 
 ## What works now?
 
@@ -31,14 +37,16 @@ A big thanks to Johan and Koen from Niko for their support and providing me with
 
 ### NHC All Off Action
 
-This action is exposed as a switch.
+This action is exposed as a switch. The state is according the state of all assigned players as configured for that
+action.
 
 #### Entities
 
 It has some extra entities that can be used in automations:
 
-* **AllOff Active Binary Sensor**, which represents the AllOffActive state. Be aware that this state is only updated as
-  the button is pressed, not when all devices are off.
+* **AllOff Active Binary Sensor**, Is on only upon activation of the action. Off when one of the assigned participants
+  in the action had a state change. Be aware that this state is only updated as the button is pressed, not when all
+  devices are off.
 
 ### NHC Audio Control Action (untested)
 
