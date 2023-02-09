@@ -33,7 +33,7 @@ class Nhc2GenericHvacOverruleActiveEntity(SwitchEntity):
                 (DOMAIN, self._device.uuid)
             },
             'name': self._device.name,
-            'manufacturer': self._device.technology,
+            'manufacturer': f'{BRAND} ({self._device.technology})',
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }

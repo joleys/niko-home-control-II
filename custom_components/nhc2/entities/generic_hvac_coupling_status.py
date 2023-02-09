@@ -1,7 +1,7 @@
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
 from homeassistant.helpers.entity import EntityCategory
 
-from ..const import DOMAIN
+from ..const import DOMAIN, BRAND
 
 from ..nhccoco.devices.generic_hvac import CocoGenericHvac
 
@@ -39,7 +39,7 @@ class Nhc2GenericHvacCouplingStatusEntity(SensorEntity):
                 (DOMAIN, self._device.uuid)
             },
             'name': self._device.name,
-            'manufacturer': self._device.technology,
+            'manufacturer': f'{BRAND} ({self._device.technology})',
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }

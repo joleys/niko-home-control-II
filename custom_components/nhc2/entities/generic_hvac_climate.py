@@ -3,7 +3,7 @@ from homeassistant.components.climate import ClimateEntity, HVACMode, HVACAction
     PRESET_HOME, PRESET_SLEEP
 from homeassistant.const import UnitOfTemperature
 
-from ..const import DOMAIN
+from ..const import DOMAIN, BRAND
 from ..nhccoco.const import PROPERTY_PROGRAM_VALUE_DAY, PROPERTY_PROGRAM_VALUE_ECO, PROPERTY_PROGRAM_VALUE_NIGHT, \
     PROPERTY_PROGRAM_VALUE_AWAY, PROPERTY_PROGRAM_VALUE_HOME, PROPERTY_STATUS_VALUE_OFF, \
     PROPERTY_OPERATION_MODE_VALUE_HEAT, PROPERTY_OPERATION_MODE_VALUE_COOL, PROPERTY_OPERATION_MODE_VALUE_AUTO, \
@@ -54,7 +54,7 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
                 (DOMAIN, self._device.uuid)
             },
             'name': self._device.name,
-            'manufacturer': self._device.technology,
+            'manufacturer': f'{BRAND} ({self._device.technology})',
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }
