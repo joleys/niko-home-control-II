@@ -41,6 +41,10 @@ class CocoThermostatThermostat(CoCoDevice):
         return to_float_or_none(self.extract_property_value(PROPERTY_OVERRULE_SETPOINT))
 
     @property
+    def overrule_setpoint_range(self) -> tuple[float, float, float]:
+        return self.extract_property_definition_description_range(PROPERTY_OVERRULE_SETPOINT)
+
+    @property
     def overrule_time(self) -> int:
         return to_int_or_none(self.extract_property_value(PROPERTY_OVERRULE_TIME))
 

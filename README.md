@@ -174,9 +174,7 @@ This is exposed as a climate entity.
 * **EcoSave Switch**, marks if the EcoSave mode is active. When active the program keeps going, but the
   setpointtemperature is altered (+3 when cooling, -3 when heating).
 
-### NHC Touch Switch (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
+### NHC Touch Switch
 
 This is exposed as a climate entity.
 
