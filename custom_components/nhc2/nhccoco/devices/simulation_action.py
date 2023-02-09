@@ -15,7 +15,7 @@ class CocoSimulationAction(CoCoDevice):
 
     @property
     def possible_basic_states(self) -> list:
-        return self.extract_property_possible_values(PROPERTY_BASIC_STATE)
+        return self.extract_property_definition_description_choices(PROPERTY_BASIC_STATE)
 
     @property
     def is_basic_state_on(self) -> bool:
