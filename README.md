@@ -143,10 +143,6 @@ __Remark:__ this is untested as I don't own a device of this type.
 
 This is exposed as a climate entity.
 
-#### Todo
-
-* [ ] see todo's from NHC Thermostat
-
 #### Entities
 
 * **Setpoint Temperature Sensor**, the desired setpoint in the current program.
@@ -166,11 +162,6 @@ __Remark:__ this is untested as I don't own a device of this type.
 
 This is exposed as a climate entity.
 
-#### Todo
-
-* [ ] [Check if we can implement target_temperature_high, target_temperature_low, target_temperature_step](https://github.com/joleys/niko-home-control-II/blob/master/custom_components/nhc2/nhccoco/coco_climate.py#L103)
-* [ ] [Check if we can implement max_temp, min_temp](https://github.com/joleys/niko-home-control-II/blob/master/custom_components/nhc2/nhccoco/coco_climate.py#L112)
-
 #### Entities
 
 * **Setpoint Temperature Sensor**, the desired setpoint in the current program.
@@ -185,11 +176,6 @@ This is exposed as a climate entity.
 __Remark:__ this is untested as I don't own a device of this type.
 
 This is exposed as a climate entity.
-
-#### Todo
-
-* [ ] [Check if we can implement target_temperature_high, target_temperature_low, target_temperature_step](https://github.com/joleys/niko-home-control-II/blob/master/custom_components/nhc2/nhccoco/coco_climate.py#L103)
-* [ ] [Check if we can implement max_temp, min_temp](https://github.com/joleys/niko-home-control-II/blob/master/custom_components/nhc2/nhccoco/coco_climate.py#L112)
 
 #### Entities
 
