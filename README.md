@@ -23,6 +23,9 @@ Some people who made this possible, and should be mentioned:
 
 ## What works now?
 
+Everything is developed against the Niko documentation. The version that was used can be found
+at [docs/documentation.pdf](./docs/documentation.pdf).
+
 ### NHC Access Control Action
 
 This action is exposed as a switch, and a lock (if supported)
