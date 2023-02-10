@@ -90,7 +90,7 @@ class CoCo:
         self._keep_thread_running = False
         self._client.disconnect()
 
-    def connect(self):
+    def connect(self, on_connection_refused=None):
         def _on_message(client, userdata, message):
             topic = message.topic
             response = json.loads(message.payload)
@@ -167,6 +167,15 @@ class CoCo:
                     json.dumps({MQTT_DATA_METHOD: MQTT_DATA_METHOD_DEVICES_LIST}),
                     1
                 )
+
+            elif rc in [1, 2, 3, 4, 5] and on_connection_refused is not None:
+                # Possible reasons for Connection refused:
+                # 1: Connection refused - incorrect protocol version
+                # 2: Connection refused - invalid client identifier
+                # 3: Connection refused - server unavailable
+                # 4: Connection refused - bad username or password
+                # 5: Connection refused - not authorised
+                on_connection_refused(rc)
             elif MQTT_RC_CODES[rc]:
                 raise Exception(MQTT_RC_CODES[rc])
             else:
