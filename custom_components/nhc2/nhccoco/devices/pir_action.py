@@ -27,8 +27,4 @@ class CocoPirAction(CoCoDevice):
                 callback()
 
     def press(self, gateway):
-        gateway.add_device_control(
-            self.uuid,
-            PROPERTY_BASIC_STATE,
-            PROPERTY_BASIC_STATE_VALUE_TRIGGERED
-        )
+        gateway.add_device_control(self.uuid, PROPERTY_BASIC_STATE, PROPERTY_BASIC_STATE_VALUE_TRIGGERED)

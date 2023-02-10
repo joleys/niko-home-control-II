@@ -208,15 +208,13 @@ This is exposed as a cover entity.
 * **Moving Binary Sensor**, this is on when any motor is running.
 * **Last Direction Sensor** (undocumented).
 
-### NHC PIR Action (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
+### NHC PIR Action
 
 This action is exposed as a switch.
 
-Remark: the Basic State is the override button. If you need the output of the PIR sensor in Home Assistant you can link
-a "Virtual on/off device" in the Niko Home Control Programming Software to be switched on when the PIR sensor initiates
-the routine.
+__Remark__: the switch represents the state of the override button. If you need the output of the PIR sensor in Home
+Assistant you can link a "Virtual on/off device" in the Niko Home Control Programming Software to be switched on when
+the PIR sensor initiates the routine.
 
 ### NHC Presence Simulation Action (untested)
 
