@@ -4,7 +4,6 @@ from homeassistant.const import CONF_HOST  # noqa pylint: disable=unused-import
 DOMAIN = 'nhc2'
 KEY_GATEWAY = 'nhc2_gateway'
 BRAND = 'Niko'
-CONF_SWITCHES_AS_LIGHTS = 'switches_as_lights'
 KEY_MANUAL = 'MANUAL_IP_HOST'
 
 SERVICE_SET_LIGHT_BRIGHTNESS = 'set_light_brightness'

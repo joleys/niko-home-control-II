@@ -8,7 +8,7 @@ from homeassistant.const import CONF_HOST, CONF_USERNAME, \
 from .nhccoco.coco_discover_profiles import CoCoDiscoverProfiles
 from .nhccoco.coco_login_validation import CoCoLoginValidation
 
-from .const import DOMAIN, CONF_SWITCHES_AS_LIGHTS, KEY_MANUAL
+from .const import DOMAIN, KEY_MANUAL
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -68,8 +68,7 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
                     CONF_ADDRESS: self._selected_coco[1],
                     CONF_PORT: port,
                     CONF_USERNAME: username,
-                    CONF_PASSWORD: password,
-                    CONF_SWITCHES_AS_LIGHTS: user_input[CONF_SWITCHES_AS_LIGHTS]
+                    CONF_PASSWORD: password
                 }
             )
 
@@ -157,8 +156,7 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
             },
             data_schema=vol.Schema({
                 vol.Required(CONF_USERNAME, default=first): vol.In(profile_listing),
-                vol.Required(CONF_PASSWORD, default=None): str,
-                vol.Optional(CONF_SWITCHES_AS_LIGHTS, default=False): bool
+                vol.Required(CONF_PASSWORD, default=None): str
             }),
         )
 
