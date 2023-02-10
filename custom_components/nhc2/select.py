@@ -28,7 +28,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            if device_instance.possible_programs:
+            if device_instance.supports_program:
                 entities.append(Nhc2GenericDomestichotwaterunitProgramEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

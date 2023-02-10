@@ -326,14 +326,12 @@ This is exposed as a climate entity.
 * **Overrule Active Binary Sensor**, is the overrule mode active or not.
 * **Coupling Status Enum Sensor**, the connectivity status of the system.
 
-### Generic Warm Water Implementation (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
+### Generic Warm Water Implementation
 
 #### Entities
 
 * **Domestic Hot Water Temperature Number**, control the temperature.
-* **Program Select**, select the program.
+* **Program Select**, (only if supported), select the program.
 * **Boost Switch**, enable/disable boost mode.
 * **Coupling Status Enum Sensor**, the connectivity status of the system.
 

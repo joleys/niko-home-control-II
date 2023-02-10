@@ -21,9 +21,8 @@ class Nhc2GenericDomestichotwaterunitDomesticHotWaterTemperatureEntity(NumberEnt
         self._attr_unique_id = device_instance.uuid + '_domestic_hot_water_temperature'
         self._attr_should_poll = False
 
-        min_value, max_value, step = self._device.domestic_hot_water_temperature_range
-
         self._attr_device_class = NumberDeviceClass.TEMPERATURE
+        min_value, max_value, step = self._device.domestic_hot_water_temperature_range
         self._attr_native_max_value = max_value
         self._attr_native_min_value = min_value
         self._attr_native_step = step
@@ -42,7 +41,7 @@ class Nhc2GenericDomestichotwaterunitDomesticHotWaterTemperatureEntity(NumberEnt
                 (DOMAIN, self._device.uuid)
             },
             'name': self._device.name,
-            'manufacturer': BRAND,
+            'manufacturer': f'{BRAND} ({self._device.technology})',
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }

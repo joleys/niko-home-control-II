@@ -10,7 +10,7 @@ class Nhc2GenericDomestichotwaterunitCouplingStatusEntity(SensorEntity):
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoGenericDomestichotwaterunit, hub, gateway):
-        """Initialize a binary sensor."""
+        """Initialize a enum sensor."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
@@ -39,7 +39,7 @@ class Nhc2GenericDomestichotwaterunitCouplingStatusEntity(SensorEntity):
                 (DOMAIN, self._device.uuid)
             },
             'name': self._device.name,
-            'manufacturer': BRAND,
+            'manufacturer': f'{BRAND} ({self._device.technology})',
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }

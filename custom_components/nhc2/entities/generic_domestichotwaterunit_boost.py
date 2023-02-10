@@ -33,7 +33,7 @@ class Nhc2GenericDomestichotwaterunitBoostEntity(SwitchEntity):
                 (DOMAIN, self._device.uuid)
             },
             'name': self._device.name,
-            'manufacturer': BRAND,
+            'manufacturer': f'{BRAND} ({self._device.technology})',
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }
