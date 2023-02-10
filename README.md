@@ -269,9 +269,7 @@ This is the energy metering linked to a zigbee smart plug. The smart plug itself
 
 __Remark:__ The totals are not available as they are not (yet) exposed by the API.
 
-### Generic Zigbee Smart plug (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
+### Generic Zigbee Smart plug
 
 This is the energy metering linked to a generic zigbee smart plug. The smart plug itself is a different device.
 
@@ -282,9 +280,7 @@ This is the energy metering linked to a generic zigbee smart plug. The smart plu
 * **Report Instant Usage Binary Sensor**, indicates if the Electrical Power is received. When disabled, it will
   automatically be enabled.
 
-#### Remarks
-
-The totals are not available as they are not (yet) exposed by the API.
+__Remark:__ The totals are not available as they are not (yet) exposed by the API.
 
 ### Electricity Metering module (with clamp) (untested)
 
