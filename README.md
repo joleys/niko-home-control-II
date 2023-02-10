@@ -25,15 +25,18 @@ Some people who made this possible, and should be mentioned:
 
 ### NHC Access Control Action
 
+This action is exposed as a switch, and a lock (if supported)
+
 #### Entities
 
-* **Button**, (only if supported), used to enable/disable ring-and-come-in.
-* **Basic State Binary Sensor**, (only if supported), This is only available for ring-and-come-in guided action. It
-  indicates if the ring-and-come-in is enabled or not.
+* **Basic State Switch**, (only if supported), used to enable/disable ring-and-come-in.
+* **Lock**, (only if supported), used to unlock the doorlock.
+* **Basic State Enum Sensor**, (only if supported), This is only available for ring-and-come-in guided action. It
+  indicates if the ring-and-come-in is enabled or not. The switch uses the same information but will not
+  take `Intermediate` into account.
 * **Call Answered Binary Sensor**, (only if supported), undocumented.
 * **Call Pending Binary Sensor**, (only if supported), undocumented.
 * **Decline Call Applied On All Devices Binary Sensor**, which represents the Decline Call Applied On All Devices state.
-* **Lock**, (only if supported), used to unlock the doorlock.
 
 ### NHC All Off Action
 

@@ -4,7 +4,6 @@ from homeassistant.const import CONF_USERNAME
 
 from .nhccoco.coco import CoCo
 
-from .entities.accesscontrol_action_basicstate import Nhc2AccesscontrolActionBasicStateEntity
 from .entities.accesscontrol_action_call_answered import Nhc2AccesscontrolActionCallAnsweredEntity
 from .entities.accesscontrol_action_call_pending import Nhc2AccesscontrolActionCallPendingEntity
 from .entities.accesscontrol_action_decline_call_applied_on_all_devices import \
@@ -71,8 +70,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2AccesscontrolActionDeclineCallAppliedOnAllDevicesEntity(device_instance, hub, gateway))
-            if device_instance.supports_basicstate:
-                entities.append(Nhc2AccesscontrolActionBasicStateEntity(device_instance, hub, gateway))
             if device_instance.supports_call_answered:
                 entities.append(Nhc2AccesscontrolActionCallAnsweredEntity(device_instance, hub, gateway))
             if device_instance.supports_call_pending:

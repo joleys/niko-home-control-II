@@ -9,7 +9,7 @@ class Nhc2SimulationActionBasicStateEntity(SensorEntity):
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoSimulationAction, hub, gateway):
-        """Initialize a sensor."""
+        """Initialize a enum sensor."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
