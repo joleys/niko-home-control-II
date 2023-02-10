@@ -43,8 +43,6 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
             FAN_HIGH,
             FAN_AUTO,
         ]
-        self._attr_supported_features = ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.FAN_MODE | \
-                                        ClimateEntityFeature.PRESET_MODE
 
     @property
     def device_info(self):
@@ -58,6 +56,13 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }
+
+    @property
+    def supported_features(self) -> int:
+        if self._device.supports_fan_speed:
+            return ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.FAN_MODE | ClimateEntityFeature.PRESET_MODE
+
+        return ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.PRESET_MODE
 
     @property
     def hvac_action(self):
@@ -136,7 +141,7 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
         if hvac_mode == HVACMode.COOL:
             self._device.set_operation_mode(self._gateway, PROPERTY_OPERATION_MODE_VALUE_COOL)
         if hvac_mode == HVACMode.AUTO or hvac_mode == HVACMode.HEAT_COOL:
-            self._device.set_operation_mode((self._gateway, PROPERTY_OPERATION_MODE_VALUE_AUTO))
+            self._device.set_operation_mode(self._gateway, PROPERTY_OPERATION_MODE_VALUE_AUTO)
         self.on_change()
 
     async def async_set_preset_mode(self, preset_mode: str):

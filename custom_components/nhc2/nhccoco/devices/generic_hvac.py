@@ -44,6 +44,10 @@ class CocoGenericHvac(CoCoDevice):
         return self.extract_property_definition_description_choices(PROPERTY_FAN_SPEED)
 
     @property
+    def supports_fan_speed(self) -> bool:
+        return self.has_property(PROPERTY_FAN_SPEED)
+
+    @property
     def status(self) -> str:
         return self.extract_property_value(PROPERTY_STATUS)
 
@@ -80,11 +84,7 @@ class CocoGenericHvac(CoCoDevice):
         gateway.add_device_control(self.uuid, PROPERTY_SETPOINT_TEMPERATURE, str(temperature))
 
     def set_program(self, gateway, program: str):
-        gateway.add_device_control(
-            self.uuid,
-            PROPERTY_PROGRAM,
-            program
-        )
+        gateway.add_device_control(self.uuid, PROPERTY_PROGRAM, program)
 
     def set_operation_mode(self, gateway, operation_mode: str):
         gateway.add_device_control(self.uuid, PROPERTY_OPERATION_MODE, operation_mode)

@@ -317,6 +317,15 @@ __Remark:__ The totals are not available as they are not (yet) exposed by the AP
 __Remark:__ There a more properties to this device, but these are not documented so it is difficult to know what they
 report exactly.
 
+### Generic Heating/Cooling Implementation
+
+This is exposed as a climate entity.
+
+#### Entities
+
+* **Overrule Active Binary Sensor**, is the overrule mode active or not.
+* **Coupling Status Enum Sensor**, the connectivity status of the system.
+
 ### Generic Warm Water Implementation (untested)
 
 __Remark:__ this is untested as I don't own a device of this type.
@@ -326,17 +335,6 @@ __Remark:__ this is untested as I don't own a device of this type.
 * **Domestic Hot Water Temperature Number**, control the temperature.
 * **Program Select**, select the program.
 * **Boost Switch**, enable/disable boost mode.
-* **Coupling Status Enum Sensor**, the connectivity status of the system.
-
-### Generic Heating/Cooling Implementation (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
-
-This is exposed as a climate entity.
-
-#### Entities
-
-* **Overrule Active Binary Sensor**, is the overrule mode active or not.
 * **Coupling Status Enum Sensor**, the connectivity status of the system.
 
 ## Not yet supported
