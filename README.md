@@ -216,17 +216,16 @@ __Remark__: the switch represents the state of the override button. If you need 
 Assistant you can link a "Virtual on/off device" in the Niko Home Control Programming Software to be switched on when
 the PIR sensor initiates the routine.
 
-### NHC Presence Simulation Action (untested)
+### NHC Presence Simulation Action
 
-__Remark:__ this is untested as I don't own a device of this type.
-
-This action is exposed as a button.
+This action is exposed as a switch.
 
 #### Entities
 
 It has some extra entities that can be used in automations:
 
-* **Basic State Enum Sensor**
+* **Basic State Enum Sensor**, the value of the Basic State. The switch uses the same information but will not
+  take `Intermediate` into account.
 
 ### NHC Virtual flag (untested)
 
