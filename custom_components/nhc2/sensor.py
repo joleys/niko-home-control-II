@@ -176,9 +176,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2ElectricityClampCentralmeterElectricalPowerEntity(device_instance, hub, gateway))
-            entities.append(Nhc2ElectricityClampCentralmeterClampTypeEntity(device_instance, hub, gateway))
             entities.append(Nhc2ElectricityClampCentralmeterFlowEntity(device_instance, hub, gateway))
             entities.append(Nhc2ElectricityClampCentralmeterSegmentEntity(device_instance, hub, gateway))
+            if device_instance.supports_clamp_type:
+                entities.append(Nhc2ElectricityClampCentralmeterClampTypeEntity(device_instance, hub, gateway))
+
 
         async_add_entities(entities)
 

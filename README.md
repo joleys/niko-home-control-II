@@ -282,19 +282,19 @@ This is the energy metering linked to a generic zigbee smart plug. The smart plu
 
 __Remark:__ The totals are not available as they are not (yet) exposed by the API.
 
-### Electricity Metering module (with clamp) (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
+### Electricity Metering module (with clamp)
 
 #### Entities
 
-* **Electrical Power Sensor**, the realtime power usage in W. Possitive means power consumed, negative is power
+* **Electrical Power Sensor**, the realtime power usage in W. Positive means power consumed, negative is power
   produced.
 * **Report Instant Usage Binary Sensor**, indicates if the Electrical Power is received. When disabled, it will
   automatically be enabled.
-* **Flow Sensor**. Producer or Consumer
-* **Segment Sensor**. Central or Subsegment
-* **Clamp Type Sensor**. 63A or 120A
+* **Flow Sensor**, Producer or Consumer
+* **Segment Sensor**, Central or Subsegment
+* **Clamp Type Sensor**, (only if supported), 63A or 120A
+
+__Remark:__ The totals are not available as they are not (yet) exposed by the API.
 
 ### Energy Home (untested)
 

@@ -85,6 +85,13 @@ class CoCoDevice():
                 return parameter_object[parameter_key]
         return None
 
+    def has_parameter(self, parameter_key: str) -> bool:
+        if self._parameters:
+            parameter_object = next(filter((lambda x: x and parameter_key in x), self._parameters), None)
+            if parameter_object and parameter_key in parameter_object:
+                return True
+        return False
+
     def extract_property_value(self, property_key: str) -> str:
         if self._properties:
             property_object = next(filter((lambda x: x and property_key in x), self._properties), None)

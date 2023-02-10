@@ -40,7 +40,11 @@ class CocoElectricityClampCentralmeter(CoCoDevice):
     @property
     def possible_clamp_types(self) -> list:
         self.extract_property_definition_description_choices(PARAMETER_CLAMP_TYPE)
-        
+
+    @property
+    def supports_clamp_type(self) -> bool:
+        return self.has_parameter(PARAMETER_CLAMP_TYPE)
+
     @property
     def is_online(self) -> bool:
         # For some reason NHC return `False` for these devices. Sor overruling this.

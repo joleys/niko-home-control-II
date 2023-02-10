@@ -10,7 +10,7 @@ class Nhc2ElectricityClampCentralmeterClampTypeEntity(SensorEntity):
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoElectricityClampCentralmeter, hub, gateway):
-        """Initialize a binary sensor."""
+        """Initialize a sensor."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
@@ -29,7 +29,7 @@ class Nhc2ElectricityClampCentralmeterClampTypeEntity(SensorEntity):
 
     @property
     def name(self) -> str:
-        return 'Clamp type'
+        return 'Clamp Type'
 
     @property
     def device_info(self):
