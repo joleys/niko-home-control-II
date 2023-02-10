@@ -1,4 +1,5 @@
 from homeassistant.components.binary_sensor import BinarySensorEntity
+from homeassistant.helpers.entity import EntityCategory
 
 from ..const import DOMAIN, BRAND
 
@@ -22,6 +23,7 @@ class Nhc2AccesscontrolActionCallPendingEntity(BinarySensorEntity):
 
         self._attr_state = self._device.is_call_pending
         self._attr_state_class = None
+        self._attr_entity_category = EntityCategory.DIAGNOSTIC
 
     @property
     def name(self) -> str:

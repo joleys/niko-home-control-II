@@ -27,7 +27,7 @@ from .entities.generic_energyhome_report_instant_usage import Nhc2GenericEnergyh
 from .entities.generic_hvac_overrule_active import Nhc2GenericHvacOverruleActiveEntity
 from .entities.generic_smartplug_report_instant_usage import Nhc2GenericSmartplugReportInstantUsageEntity
 from .entities.hvacthermostat_hvac_hvac_on import Nhc2HvacthermostatHvacHvacOnEntity
-from .entities.motor_action_cover import Nhc2MotorActionCoverEntity
+from .entities.motor_action_aligned import Nhc2MotorActionAlignedEntity
 from .entities.motor_action_moving import Nhc2MotorActionMovingEntity
 from .entities.naso_smartplug_feedback_enabled import Nhc2NasoSmartplugFeedbackEnabledEntity
 from .entities.naso_smartplug_measuring_only import Nhc2NasoSmartplugMeasuringOnlyEntity
@@ -165,8 +165,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2MotorActionCoverEntity(device_instance, hub, gateway))
             entities.append(Nhc2MotorActionMovingEntity(device_instance, hub, gateway))
+            entities.append(Nhc2MotorActionAlignedEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

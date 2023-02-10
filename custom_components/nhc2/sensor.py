@@ -37,19 +37,22 @@ from .entities.thermostat_thermostat_overrule_time import Nhc2ThermostatThermost
 from .entities.thermostat_thermostat_overrule_setpoint import Nhc2ThermostatThermostatOverruleSetpointEntity
 from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
 from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
+from .nhccoco.devices.gate_action import CocoGateAction
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
 from .nhccoco.devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
 from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
 from .nhccoco.devices.generic_hvac import CocoGenericHvac
 from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
-from .nhccoco.devices.motor_action import CocoMotorAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.reynaers_action import CocoReynaersAction
+from .nhccoco.devices.rolldownshutter_action import CocoRolldownshutterAction
 from .nhccoco.devices.simulation_action import CocoSimulationAction
+from .nhccoco.devices.sunblind_action import CocoSunblindAction
 from .nhccoco.devices.thermostat_hvac import CocoThermostatHvac
 from .nhccoco.devices.thermostat_thermostat import CocoThermostatThermostat
 from .nhccoco.devices.touchswitch_hvac import CocoTouchswitchHvac
+from .nhccoco.devices.venetianblind_action import CocoVenetianblindAction
 
 from .const import DOMAIN, KEY_GATEWAY
 
@@ -118,12 +121,16 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
         async_add_entities(entities)
 
-    device_instances = gateway.get_device_instances(CocoMotorAction)
+    device_instances = gateway.get_device_instances(CocoGateAction)
+    device_instances += gateway.get_device_instances(CocoRolldownshutterAction)
+    device_instances += gateway.get_device_instances(CocoSunblindAction)
+    device_instances += gateway.get_device_instances(CocoVenetianblindAction)
     _LOGGER.info('→ Found %s NHC Motor Actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2MotorActionLastDirectionEntity(device_instance, hub, gateway))
+            if device_instance.supports_last_direction:
+                entities.append(Nhc2MotorActionLastDirectionEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

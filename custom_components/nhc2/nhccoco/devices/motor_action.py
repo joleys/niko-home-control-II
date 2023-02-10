@@ -37,6 +37,10 @@ class CocoMotorAction(CoCoDevice):
     def possible_last_directions(self) -> list:
         return self.extract_property_definition_description_choices(PROPERTY_LAST_DIRECTION)
 
+    @property
+    def supports_last_direction(self) -> bool:
+        return self.has_property(PROPERTY_LAST_DIRECTION)
+
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
         if DEVICE_DESCRIPTOR_PROPERTIES in payload:

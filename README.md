@@ -205,7 +205,7 @@ This is exposed as a cover entity.
 #### Entities
 
 * **Aligned Binary Sensor**, this is on when all motors have the same position.
-* **Moving Binary Sensor**, this is on when the any motor is running.
+* **Moving Binary Sensor**, this is on when any motor is running.
 * **Last Direction Sensor** (undocumented).
 
 ### NHC PIR Action (untested)
