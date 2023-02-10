@@ -364,6 +364,34 @@ Note: Make sure you have a recent version of Home Assistant!
 * Create the needed entities in `entities`
 * Add the entities that should be created in the correct platform-file.
 
+### Testing without having the real devices?
+
+If you don't own a device but want to test the integration, and you have the relevant device info (eg. through a device
+list your received). You can fake the devices returned from the MQTT broker.
+
+1. Create a folder `debugging` in the root of the project.
+2. Add the device list json in this folder.
+3. Open [coco.py](./custom_components/nhc2/nhccoco/coco.py)
+4. Search for `def _process_devices_list(self, response):` and edit the code to look like:
+
+```python
+def _process_devices_list(self, response):
+  """Convert the response of devices.list into device instances."""
+  _LOGGER.debug(f'Received device list: {response}')
+
+  # REMOVE ME START
+  from pathlib import Path
+  import ast
+
+  path = Path(str(Path(__file__).parent.resolve()) + '/../../../debugging/device_list.json').resolve()
+  f = open(path)
+  response = ast.literal_eval(f.read())
+  # REMOVE ME END
+```
+
+__Remark:__ This is a hackish way, and you will not able to test it for real. You will not receive updates. Check the
+logs to see if messages are correctly send to the MQTT broker.
+
 ## Found a bug?
 
 If you found a bug you can create an [issue on GitHub](https://github.com/joleys/niko-home-control-II/issues).
