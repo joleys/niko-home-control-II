@@ -181,7 +181,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             if device_instance.supports_clamp_type:
                 entities.append(Nhc2ElectricityClampCentralmeterClampTypeEntity(device_instance, hub, gateway))
 
-
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoGenericEnergyhome)
@@ -189,11 +188,18 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2GenericEnergyhomeElectricalPowerToGridEntity(device_instance, hub, gateway))
-            entities.append(Nhc2GenericEnergyhomeElectricalPowerFromGridEntity(device_instance, hub, gateway))
-            entities.append(Nhc2GenericEnergyhomeElectricalPowerProductionEntity(device_instance, hub, gateway))
-            entities.append(Nhc2GenericEnergyhomeElectricalPowerSelfConsumptionEntity(device_instance, hub, gateway))
-            entities.append(Nhc2GenericEnergyhomeElectricalPowerConsumptionEntity(device_instance, hub, gateway))
+            if device_instance.supports_electrical_power_to_grid:
+                entities.append(Nhc2GenericEnergyhomeElectricalPowerToGridEntity(device_instance, hub, gateway))
+            if device_instance.supports_electrical_power_from_grid:
+                entities.append(Nhc2GenericEnergyhomeElectricalPowerFromGridEntity(device_instance, hub, gateway))
+            if device_instance.supports_electrical_power_production:
+                entities.append(Nhc2GenericEnergyhomeElectricalPowerProductionEntity(device_instance, hub, gateway))
+            if device_instance.supports_electrical_power_self_consumption:
+                entities.append(
+                    Nhc2GenericEnergyhomeElectricalPowerSelfConsumptionEntity(device_instance, hub, gateway)
+                )
+            if device_instance.supports_electrical_power_consumption:
+                entities.append(Nhc2GenericEnergyhomeElectricalPowerConsumptionEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

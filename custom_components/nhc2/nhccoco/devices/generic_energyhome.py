@@ -17,20 +17,40 @@ class CocoGenericEnergyhome(CoCoDevice):
         return to_float_or_none(self.extract_property_value(PROPERTY_ELECTRICAL_POWER_TO_GRID))
 
     @property
+    def supports_electrical_power_to_grid(self) -> bool:
+        return self.has_property(PROPERTY_ELECTRICAL_POWER_TO_GRID)
+
+    @property
     def electrical_power_from_grid(self) -> float:
         return to_float_or_none(self.extract_property_value(PROPERTY_ELECTRICAL_POWER_FROM_GRID))
+
+    @property
+    def supports_electrical_power_from_grid(self) -> bool:
+        return self.has_property(PROPERTY_ELECTRICAL_POWER_FROM_GRID)
 
     @property
     def electrical_power_production(self) -> float:
         return to_float_or_none(self.extract_property_value(PROPERTY_ELECTRICAL_POWER_PRODUCTION))
 
     @property
+    def supports_electrical_power_production(self) -> bool:
+        return self.has_property(PROPERTY_ELECTRICAL_POWER_PRODUCTION)
+
+    @property
     def electrical_power_self_consumption(self) -> float:
         return to_float_or_none(self.extract_property_value(PROPERTY_ELECTRICAL_POWER_SELF_CONSUMPTION))
 
     @property
+    def supports_electrical_power_self_consumption(self) -> bool:
+        return self.has_property(PROPERTY_ELECTRICAL_POWER_SELF_CONSUMPTION)
+
+    @property
     def electrical_power_consumption(self) -> float:
         return to_float_or_none(self.extract_property_value(PROPERTY_ELECTRICAL_POWER_CONSUMPTION))
+
+    @property
+    def supports_electrical_power_consumption(self) -> bool:
+        return self.has_property(PROPERTY_ELECTRICAL_POWER_CONSUMPTION)
 
     @property
     def is_report_instant_usage(self) -> bool:

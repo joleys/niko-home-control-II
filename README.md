@@ -296,21 +296,26 @@ __Remark:__ The totals are not available as they are not (yet) exposed by the AP
 
 __Remark:__ The totals are not available as they are not (yet) exposed by the API.
 
-### Energy Home (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
+### Energy Home
 
 #### Entities
 
-* **Electrical Power to Grid Sensor**, the realtime power usage in W as a sum for all central meters.
-* **Electrical Power from Grid Sensor**, the realtime power consumption in W as a sum for all central meters.
-* **Electrical Power Production Sensor**, the realtime power production in W as a sum for all producers.
-* **Electrical Power Self Consumption Sensor**, electrical power production minus power to grid.
-* **Electrical Power Consumption Sensor**, electrical power self production + electrical power from grid.
+* **Electrical Power to Grid Sensor**, (only if supported), the realtime power usage in W as a sum for all central
+  meters.
+* **Electrical Power from Grid Sensor**, (only if supported), the realtime power consumption in W as a sum for all
+  central meters.
+* **Electrical Power Production Sensor**, (only if supported), the realtime power production in W as a sum for all
+  producers.
+* **Electrical Power Self Consumption Sensor**, (only if supported), electrical power production minus power to grid.
+* **Electrical Power Consumption Sensor**, (only if supported), electrical power self production + electrical power from
+  grid.
 * **Report Instant Usage Binary Sensor**, indicates if the Electrical Power is received. When disabled, it will
   automatically be enabled.
 * **Electrical Power Production Threshold Exceeded Binary Sensor**, this is on when the central meters electrical power
   production is greater than the threshold of 300W (+ 5W hysteresis)
+
+__Remark:__ There a more properties to this device, but these are not documented so it is difficult to know what they
+report exactly.
 
 ### Generic Warm Water Implementation (untested)
 

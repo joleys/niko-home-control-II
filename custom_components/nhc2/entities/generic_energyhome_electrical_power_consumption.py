@@ -5,11 +5,12 @@ from ..const import DOMAIN, BRAND
 
 from ..nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
 
+
 class Nhc2GenericEnergyhomeElectricalPowerConsumptionEntity(SensorEntity):
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoGenericEnergyhome, hub, gateway):
-        """Initialize a binary sensor."""
+        """Initialize a sensor."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
