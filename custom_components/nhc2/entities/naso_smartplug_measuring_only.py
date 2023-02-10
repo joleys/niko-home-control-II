@@ -27,7 +27,7 @@ class Nhc2NasoSmartplugMeasuringOnlyEntity(BinarySensorEntity):
 
     @property
     def name(self) -> str:
-        return 'Measuring only'
+        return 'Measuring Only'
 
     @property
     def device_info(self):

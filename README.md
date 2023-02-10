@@ -267,9 +267,7 @@ This is the energy metering linked to a zigbee smart plug. The smart plug itself
   disabled.
 * **Measuring Only Binary Sensor**. If on, the relay will always be on.
 
-#### Remarks
-
-The totals are not available as they are not (yet) exposed by the API.
+__Remark:__ The totals are not available as they are not (yet) exposed by the API.
 
 ### Generic Zigbee Smart plug (untested)
 
