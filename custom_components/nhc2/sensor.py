@@ -6,6 +6,7 @@ from .nhccoco.coco import CoCo
 
 from .entities.accesscontrol_action_basicstate import Nhc2AccesscontrolActionBasicStateEntity
 from .entities.audiocontrol_action_speaker import Nhc2AudiocontrolActionSpeakerEntity
+from .entities.bellbutton_action_basicstate import Nhc2BellbuttonActionBasicStateEntity
 from .entities.electricity_clamp_centralmeter_electrical_power import \
     Nhc2ElectricityClampCentralmeterElectricalPowerEntity
 from .entities.electricity_clamp_centralmeter_clamp_type import Nhc2ElectricityClampCentralmeterClampTypeEntity
@@ -38,6 +39,7 @@ from .entities.thermostat_thermostat_overrule_time import Nhc2ThermostatThermost
 from .entities.thermostat_thermostat_overrule_setpoint import Nhc2ThermostatThermostatOverruleSetpointEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
+from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
 from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .nhccoco.devices.gate_action import CocoGateAction
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
@@ -87,6 +89,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2AudiocontrolActionSpeakerEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoBellbuttonAction)
+    _LOGGER.info('→ Found %s NHC BellButton Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2BellbuttonActionBasicStateEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

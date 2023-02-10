@@ -76,16 +76,16 @@ This action is exposed as alarm control panel.
 
 ### NHC BellButton Action (untested)
 
-__Remark:__ this is untested as I don't own a device of this type.
-
-This action exposes a button and a lock.
+This action exposes a switch and a lock.
 
 #### Entities
 
 It has some extra entities that can be used in automations:
 
-* **Basic State Binary Sensor**, which represents the Basic State. It is on when bell button is press, off when no call
-  is active.
+* **Basic State Switch**
+* **Basic State Enum Sensor**, which represents the Basic State. It is on when bell button is press, off when no call
+  is active. The switch uses the same information but will not take `Intermediate` into account.
+* **Lock**, used to unlock the doorlock.
 * **Decline Call Applied On All Devices Binary Sensor**, which represents the Decline Call Applied On All Devices state.
 
 ### NHC Dimmer Action

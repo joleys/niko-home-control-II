@@ -1,16 +1,16 @@
-from homeassistant.components.button import ButtonEntity
+from homeassistant.components.switch import SwitchEntity
 
 from ..const import DOMAIN, BRAND
 
 from ..nhccoco.devices.bellbutton_action import CocoBellbuttonAction
 
 
-class Nhc2BellbuttonActionButtonEntity(ButtonEntity):
+class Nhc2BellbuttonActionBasicStateSwitchEntity(SwitchEntity):
     _attr_has_entity_name = True
     _attr_name = None
 
     def __init__(self, device_instance: CocoBellbuttonAction, hub, gateway):
-        """Initialize a button."""
+        """Initialize a switch."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
@@ -34,13 +34,17 @@ class Nhc2BellbuttonActionButtonEntity(ButtonEntity):
             'via_device': self._hub
         }
 
-    def press(self) -> None:
-        """Pass - not in use."""
-        pass
+    @property
+    def is_on(self) -> bool:
+        return self._device.is_basic_state_on
 
     def on_change(self):
         self.schedule_update_ha_state()
 
-    async def async_press(self):
+    async def async_turn_on(self):
+        self._device.press(self._gateway)
+        self.on_change()
+
+    async def async_turn_off(self):
         self._device.press(self._gateway)
         self.on_change()

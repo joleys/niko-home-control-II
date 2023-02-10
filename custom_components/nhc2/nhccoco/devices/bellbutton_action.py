@@ -20,6 +20,10 @@ class CocoBellbuttonAction(CoCoDevice):
         return self.basic_state == PROPERTY_BASIC_STATE_VALUE_ON
 
     @property
+    def possible_basic_states(self) -> list:
+        return self.extract_property_definition_description_choices(PROPERTY_BASIC_STATE)
+
+    @property
     def doorlock(self) -> str:
         return self.extract_property_value(PROPERTY_DOORLOCK)
 
@@ -49,15 +53,7 @@ class CocoBellbuttonAction(CoCoDevice):
                 callback()
 
     def press(self, gateway):
-        gateway.add_device_control(
-            self.uuid,
-            PROPERTY_BASIC_STATE,
-            PROPERTY_BASIC_STATE_VALUE_TRIGGERED
-        )
+        gateway.add_device_control(self.uuid, PROPERTY_BASIC_STATE, PROPERTY_BASIC_STATE_VALUE_TRIGGERED)
 
     def open_doorlock(self, gateway):
-        gateway.add_device_control(
-            self.uuid,
-            PROPERTY_DOORLOCK,
-            PROPERTY_DOORLOCK_VALUE_OPEN
-        )
+        gateway.add_device_control(self.uuid, PROPERTY_DOORLOCK, PROPERTY_DOORLOCK_VALUE_OPEN)
