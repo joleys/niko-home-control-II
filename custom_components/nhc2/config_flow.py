@@ -175,7 +175,6 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
             }),
         )
 
-
     async def async_step_reauth(self, user_input=None):
         return await self.async_step_reauth_confirm()
 

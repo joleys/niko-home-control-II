@@ -23,12 +23,14 @@ MQTT_DATA_PARAMS_SYSTEMINFO_SWVERSIONS = 'SWversions'
 MQTT_DATA_PARAMS_SYSTEMINFO_SWVERSIONS_COCO_IMAGE = 'CocoImage'
 MQTT_DATA_PARAMS_SYSTEMINFO_SWVERSIONS_NHC_VERSION = 'NhcVersion'
 
-MQTT_RC_CODES = ['',
-                 'Connection refused - incorrect protocol version',
-                 'Connection refused - invalid client identifier',
-                 'Connection refused - server unavailable',
-                 'Connection refused - bad username or password',
-                 'Connection refused - not authorised']
+MQTT_RC_CODES = [
+    '',
+    'Connection refused - incorrect protocol version',
+    'Connection refused - invalid client identifier',
+    'Connection refused - server unavailable',
+    'Connection refused - bad username or password',
+    'Connection refused - not authorised'
+]
 
 MQTT_TOPIC_PUBLIC_AUTH_CMD = 'public/authentication/cmd'
 MQTT_TOPIC_PUBLIC_AUTH_RSP = 'public/authentication/rsp'
