@@ -40,6 +40,7 @@ from .devices.switched_fan_action import CocoSwitchedFanAction
 from .devices.switched_generic_action import CocoSwitchedGenericAction
 from .devices.thermostat_hvac import CocoThermostatHvac
 from .devices.thermostat_thermostat import CocoThermostatThermostat
+from .devices.timeschedule_action import CocoTimescheduleAction
 from .devices.touchswitch_hvac import CocoTouchswitchHvac
 from .devices.velux_action import CocoVeluxAction
 from .devices.venetianblind_action import CocoVenetianblindAction
@@ -305,7 +306,6 @@ class CoCo:
                     'CocoPushbuttonx6Panel',
                     'CocoSocketRelay',
                     'CocoSwitchedGenericRelay',
-                    'CocoTimescheduleAction',
                     'CocoWaterCentralmeter',
                     'CocoZonevalveHvac',
                 ]:

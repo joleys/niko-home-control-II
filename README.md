@@ -360,6 +360,14 @@ __Remark:__ This device is not documented/supported by Niko.
 
 This is exposed as a switch.
 
+### NHC Timeschedule Action
+
+__Remark:__ This device is not documented/supported by Niko.
+
+#### Entities
+
+* **Active Binary Sensor**
+
 ## Not yet supported
 
 * Sonos Speaker
