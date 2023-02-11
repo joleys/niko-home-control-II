@@ -5,6 +5,9 @@ from homeassistant.const import CONF_USERNAME
 
 from .nhccoco.coco import CoCo
 
+from .entities.robinsip_videodoorstation_camera import Nhc2RobinsipVideodoorstationCameraEntity
+from .nhccoco.devices.robinsip_videodoorstation import CocoRobinsipVideodoorstation
+
 from .const import DOMAIN, KEY_GATEWAY
 
 KEY_ENTITY = 'nhc2_cameras'
@@ -19,3 +22,12 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
     hub = (DOMAIN, config_entry.data[CONF_USERNAME])
+
+    device_instances = gateway.get_device_instances(CocoRobinsipVideodoorstation)
+    _LOGGER.info('→ Found %s Robinsip Videodoorstations (undocumented)', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2RobinsipVideodoorstationCameraEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
