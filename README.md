@@ -354,6 +354,12 @@ I don't understand. You should be able to add the camera by using
 a [Generic Camera](https://www.home-assistant.io/integrations/generic/). The RTSP url
 is `rtsp://admin:123qwe@{{IP dress}}/rtsp/video.av`.
 
+### NHC Condition Action
+
+__Remark:__ This device is not documented/supported by Niko.
+
+This is exposed as a switch.
+
 ## Not yet supported
 
 * Sonos Speaker

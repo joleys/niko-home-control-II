@@ -12,6 +12,7 @@ from .devices.alloff_action import CocoAlloffAction
 from .devices.audiocontrol_action import CocoAudiocontrolAction
 from .devices.bellbutton_action import CocoBellbuttonAction
 from .devices.comfort_action import CocoComfortAction
+from .devices.condition_action import CocoConditionAction
 from .devices.dimmer_action import CocoDimmerAction
 from .devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .devices.fan_action import CocoFanAction
@@ -273,7 +274,6 @@ class CoCo:
                     'CocoAvout010VFanFan',
                     'CocoAvout110VDimmer',
                     'CocoChimeRelay',
-                    'CocoConditionAction',
                     'CocoDigitalsensorDigitalsensor',
                     'CocoDimcontrollerSmartpanel',
                     'CocoDimmerDimmer',
