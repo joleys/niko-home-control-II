@@ -38,14 +38,6 @@ class Nhc2FlagActionSwitchEntity(SwitchEntity):
     def is_on(self) -> bool:
         return self._device.is_status_on
 
-    def turn_off(self, **kwargs) -> None:
-        """Pass - not in use."""
-        pass
-
-    def turn_on(self, **kwargs) -> None:
-        """Pass - not in use."""
-        pass
-
     def on_change(self):
         self.schedule_update_ha_state()
 

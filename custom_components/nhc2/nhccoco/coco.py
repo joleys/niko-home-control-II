@@ -16,6 +16,7 @@ from .devices.dimmer_action import CocoDimmerAction
 from .devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .devices.fan_action import CocoFanAction
 from .devices.flag_action import CocoFlagAction
+from .devices.flag_virtual import CocoFlagVirtual
 from .devices.garagedoor_action import CocoGaragedoorAction
 from .devices.gate_action import CocoGateAction
 from .devices.generic_action import CocoGenericAction
@@ -279,7 +280,6 @@ class CoCo:
                     'CocoDimmerSmartdimmer',
                     'CocoExtensionbuttonx1Smartextensionpanel',
                     'CocoExternalsystemDigitalsensor',
-                    'CocoFlagVirtual',
                     'CocoGasCentralmeter',
                     'CocoGenericAudiocontrol',
                     'CocoGenericBrick',

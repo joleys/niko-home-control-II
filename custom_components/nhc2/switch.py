@@ -30,6 +30,7 @@ from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
 from .nhccoco.devices.comfort_action import CocoComfortAction
 from .nhccoco.devices.flag_action import CocoFlagAction
+from .nhccoco.devices.flag_virtual import CocoFlagVirtual
 from .nhccoco.devices.generic_action import CocoGenericAction
 from .nhccoco.devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
 from .nhccoco.devices.generic_hvac import CocoGenericHvac

@@ -233,9 +233,7 @@ It has some extra entities that can be used in automations:
 * **Basic State Enum Sensor**, the value of the Basic State. The switch uses the same information but will not
   take `Intermediate` into account.
 
-### NHC Virtual flag (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
+### NHC Virtual flag
 
 This is exposed as switch.
 
