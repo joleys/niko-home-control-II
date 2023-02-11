@@ -368,6 +368,15 @@ __Remark:__ This device is not documented/supported by Niko.
 
 * **Active Binary Sensor**
 
+### NHC Heating Cooling Action
+
+__Remark:__ This device is not documented/supported by Niko.
+
+#### Entities
+
+* **Cooling Mode Binary Sensor**
+* **Heating Mode Binary Sensor**
+
 ## Not yet supported
 
 * Sonos Speaker
@@ -406,17 +415,17 @@ list your received). You can fake the devices returned from the MQTT broker.
 
 ```python
 def _process_devices_list(self, response):
-  """Convert the response of devices.list into device instances."""
-  _LOGGER.debug(f'Received device list: {response}')
+    """Convert the response of devices.list into device instances."""
+    _LOGGER.debug(f'Received device list: {response}')
 
-  # REMOVE ME START
-  from pathlib import Path
-  import ast
+    # REMOVE ME START
+    from pathlib import Path
+    import ast
 
-  path = Path(str(Path(__file__).parent.resolve()) + '/../../../debugging/device_list.json').resolve()
-  f = open(path)
-  response = ast.literal_eval(f.read())
-  # REMOVE ME END
+    path = Path(str(Path(__file__).parent.resolve()) + '/../../../debugging/device_list.json').resolve()
+    f = open(path)
+    response = ast.literal_eval(f.read())
+    # REMOVE ME END
 ```
 
 __Remark:__ This is a hackish way, and you will not able to test it for real. You will not receive updates. Check the

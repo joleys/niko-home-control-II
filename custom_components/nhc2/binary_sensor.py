@@ -23,6 +23,8 @@ from .entities.generic_energyhome_electrical_power_production_threshold_exceeded
     Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity
 from .entities.generic_energyhome_report_instant_usage import Nhc2GenericEnergyhomeReportInstantUsageEntity
 from .entities.generic_smartplug_report_instant_usage import Nhc2GenericSmartplugReportInstantUsageEntity
+from .entities.heatingcooling_action_cooling_mode import Nhc2HeatingcoolingActionCoolingModeEntity
+from .entities.heatingcooling_action_heating_mode import Nhc2HeatingcoolingActionHeatingModeEntity
 from .entities.hvacthermostat_hvac_hvac_on import Nhc2HvacthermostatHvacHvacOnEntity
 from .entities.motor_action_aligned import Nhc2MotorActionAlignedEntity
 from .entities.motor_action_moving import Nhc2MotorActionMovingEntity
@@ -42,6 +44,7 @@ from .nhccoco.devices.gate_action import CocoGateAction
 from .nhccoco.devices.generic_action import CocoGenericAction
 from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
 from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
+from .nhccoco.devices.heatingcooling_action import CocoHeatingcoolingAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.overallcomfort_action import CocoOverallcomfortAction
@@ -212,5 +215,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2TimeschedulActionActiveEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoHeatingcoolingAction)
+    _LOGGER.info('→ Found %s Heating Cooling Actions (undocumented)', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2HeatingcoolingActionCoolingModeEntity(device_instance, hub, gateway))
+            entities.append(Nhc2HeatingcoolingActionHeatingModeEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

@@ -25,6 +25,7 @@ from .devices.generic_domestichotwaterunit import CocoGenericDomestichotwateruni
 from .devices.generic_energyhome import CocoGenericEnergyhome
 from .devices.generic_hvac import CocoGenericHvac
 from .devices.generic_smartplug import CocoGenericSmartplug
+from .devices.heatingcooling_action import CocoHeatingcoolingAction
 from .devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .devices.light_action import CocoLightAction
 from .devices.naso_smartplug import CocoNasoSmartplug
@@ -287,7 +288,6 @@ class CoCo:
                     'CocoGenericGatewayfw',
                     'CocoGenericRadio',
                     'CocoGenericStick',
-                    'CocoHeatingcoolingAction',
                     'CocoHeatingcoolingsystemHvac',
                     'CocoIndoormotiondetectorMotiondetector',
                     'CocoLightRelay',
