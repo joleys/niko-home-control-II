@@ -29,6 +29,7 @@ from .devices.naso_smartplug import CocoNasoSmartplug
 from .devices.overallcomfort_action import CocoOverallcomfortAction
 from .devices.pir_action import CocoPirAction
 from .devices.reynaers_action import CocoReynaersAction
+from .devices.robinsip_videodoorstation import CocoRobinsipVideodoorstation
 from .devices.rolldownshutter_action import CocoRolldownshutterAction
 from .devices.simulation_action import CocoSimulationAction
 from .devices.socket_action import CocoSocketAction
@@ -264,9 +265,10 @@ class CoCo:
                     ''
                 )
 
-                # ignore some devices
+                # ignore some devices. These are devices that:
+                # * are not supported by the API / MQTT broker
+                # * don't have any (usefull) properties
                 if classname in [
-                    # These are devices, but don't receive any events through MQTT. So we can't do anything with them.
                     'CocoAvout010VFanFan',
                     'CocoAvout110VDimmer',
                     'CocoChimeRelay',
@@ -301,7 +303,6 @@ class CoCo:
                     'CocoPushbuttonx4Panel',
                     'CocoPushbuttonx6FeedbackPanel',
                     'CocoPushbuttonx6Panel',
-                    'CocoRobinsipVideodoorstation',
                     'CocoSocketRelay',
                     'CocoSwitchedGenericRelay',
                     'CocoTimescheduleAction',
