@@ -12,10 +12,12 @@ from .devices.alloff_action import CocoAlloffAction
 from .devices.audiocontrol_action import CocoAudiocontrolAction
 from .devices.bellbutton_action import CocoBellbuttonAction
 from .devices.comfort_action import CocoComfortAction
+from .devices.condition_action import CocoConditionAction
 from .devices.dimmer_action import CocoDimmerAction
 from .devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .devices.fan_action import CocoFanAction
 from .devices.flag_action import CocoFlagAction
+from .devices.flag_virtual import CocoFlagVirtual
 from .devices.garagedoor_action import CocoGaragedoorAction
 from .devices.gate_action import CocoGateAction
 from .devices.generic_action import CocoGenericAction
@@ -23,6 +25,7 @@ from .devices.generic_domestichotwaterunit import CocoGenericDomestichotwateruni
 from .devices.generic_energyhome import CocoGenericEnergyhome
 from .devices.generic_hvac import CocoGenericHvac
 from .devices.generic_smartplug import CocoGenericSmartplug
+from .devices.heatingcooling_action import CocoHeatingcoolingAction
 from .devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .devices.light_action import CocoLightAction
 from .devices.naso_smartplug import CocoNasoSmartplug
@@ -38,6 +41,7 @@ from .devices.switched_fan_action import CocoSwitchedFanAction
 from .devices.switched_generic_action import CocoSwitchedGenericAction
 from .devices.thermostat_hvac import CocoThermostatHvac
 from .devices.thermostat_thermostat import CocoThermostatThermostat
+from .devices.timeschedule_action import CocoTimescheduleAction
 from .devices.touchswitch_hvac import CocoTouchswitchHvac
 from .devices.velux_action import CocoVeluxAction
 from .devices.venetianblind_action import CocoVenetianblindAction
@@ -272,21 +276,18 @@ class CoCo:
                     'CocoAvout010VFanFan',
                     'CocoAvout110VDimmer',
                     'CocoChimeRelay',
-                    'CocoConditionAction',
                     'CocoDigitalsensorDigitalsensor',
                     'CocoDimcontrollerSmartpanel',
                     'CocoDimmerDimmer',
                     'CocoDimmerSmartdimmer',
                     'CocoExtensionbuttonx1Smartextensionpanel',
                     'CocoExternalsystemDigitalsensor',
-                    'CocoFlagVirtual',
                     'CocoGasCentralmeter',
                     'CocoGenericAudiocontrol',
                     'CocoGenericBrick',
                     'CocoGenericGatewayfw',
                     'CocoGenericRadio',
                     'CocoGenericStick',
-                    'CocoHeatingcoolingAction',
                     'CocoHeatingcoolingsystemHvac',
                     'CocoIndoormotiondetectorMotiondetector',
                     'CocoLightRelay',
@@ -305,7 +306,6 @@ class CoCo:
                     'CocoPushbuttonx6Panel',
                     'CocoSocketRelay',
                     'CocoSwitchedGenericRelay',
-                    'CocoTimescheduleAction',
                     'CocoWaterCentralmeter',
                     'CocoZonevalveHvac',
                 ]:

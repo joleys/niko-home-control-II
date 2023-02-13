@@ -1,16 +1,16 @@
-from homeassistant.components.switch import SwitchEntity
+from homeassistant.components.binary_sensor import BinarySensorEntity
+from homeassistant.helpers.entity import EntityCategory
 
 from ..const import DOMAIN, BRAND
 
-from ..nhccoco.devices.flag_action import CocoFlagAction
+from ..nhccoco.devices.heatingcooling_action import CocoHeatingcoolingAction
 
 
-class Nhc2FlagActionSwitchEntity(SwitchEntity):
+class Nhc2HeatingcoolingActionHeatingModeEntity(BinarySensorEntity):
     _attr_has_entity_name = True
-    _attr_name = None
 
-    def __init__(self, device_instance: CocoFlagAction, hub, gateway):
-        """Initialize a switch."""
+    def __init__(self, device_instance: CocoHeatingcoolingAction, hub, gateway):
+        """Initialize a binary sensor."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
@@ -18,8 +18,16 @@ class Nhc2FlagActionSwitchEntity(SwitchEntity):
         self._device.after_change_callbacks.append(self.on_change)
 
         self._attr_available = self._device.is_online
-        self._attr_unique_id = device_instance.uuid
+        self._attr_unique_id = device_instance.uuid + '_heating_mode'
         self._attr_should_poll = False
+
+        self._attr_state = self._device.is_heating_mode
+        self._attr_state_class = None
+        self._attr_entity_category = EntityCategory.DIAGNOSTIC
+
+    @property
+    def name(self) -> str:
+        return 'Heating Mode'
 
     @property
     def device_info(self):
@@ -36,15 +44,7 @@ class Nhc2FlagActionSwitchEntity(SwitchEntity):
 
     @property
     def is_on(self) -> bool:
-        return self._device.is_status_on
+        return self._device.is_heating_mode
 
     def on_change(self):
         self.schedule_update_ha_state()
-
-    async def async_turn_on(self):
-        self._device.turn_on(self._gateway)
-        self.on_change()
-
-    async def async_turn_off(self):
-        self._device.turn_off(self._gateway)
-        self.on_change()

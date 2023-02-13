@@ -1,4 +1,4 @@
-from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_ON, PROPERTY_STATUS_VALUE_OFF
+from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_TRUE, PROPERTY_STATUS_VALUE_FALSE
 from .device import CoCoDevice
 
 import logging
@@ -13,7 +13,7 @@ class CocoFlagAction(CoCoDevice):
 
     @property
     def is_status_on(self) -> bool:
-        return self.status == PROPERTY_STATUS_VALUE_ON
+        return self.status == PROPERTY_STATUS_VALUE_TRUE
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
@@ -25,7 +25,7 @@ class CocoFlagAction(CoCoDevice):
                 callback()
 
     def turn_on(self, gateway):
-        gateway.add_device_control(self.uuid, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_ON)
+        gateway.add_device_control(self.uuid, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_TRUE)
 
     def turn_off(self, gateway):
-        gateway.add_device_control(self.uuid, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_OFF)
+        gateway.add_device_control(self.uuid, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_FALSE)

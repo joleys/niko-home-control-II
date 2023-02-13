@@ -2,14 +2,14 @@ from homeassistant.components.switch import SwitchEntity
 
 from ..const import DOMAIN, BRAND
 
-from ..nhccoco.devices.flag_action import CocoFlagAction
+from ..nhccoco.devices.condition_action import CocoConditionAction
 
 
-class Nhc2FlagActionSwitchEntity(SwitchEntity):
+class Nhc2ConditionActionSwitchEntity(SwitchEntity):
     _attr_has_entity_name = True
     _attr_name = None
 
-    def __init__(self, device_instance: CocoFlagAction, hub, gateway):
+    def __init__(self, device_instance: CocoConditionAction, hub, gateway):
         """Initialize a switch."""
         self._device = device_instance
         self._hub = hub
@@ -36,15 +36,15 @@ class Nhc2FlagActionSwitchEntity(SwitchEntity):
 
     @property
     def is_on(self) -> bool:
-        return self._device.is_status_on
+        return self._device.is_basic_state_on
 
     def on_change(self):
         self.schedule_update_ha_state()
 
     async def async_turn_on(self):
-        self._device.turn_on(self._gateway)
+        self._device.press(self._gateway)
         self.on_change()
 
     async def async_turn_off(self):
-        self._device.turn_off(self._gateway)
+        self._device.press(self._gateway)
         self.on_change()

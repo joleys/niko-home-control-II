@@ -233,9 +233,7 @@ It has some extra entities that can be used in automations:
 * **Basic State Enum Sensor**, the value of the Basic State. The switch uses the same information but will not
   take `Intermediate` into account.
 
-### NHC Virtual flag (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
+### NHC Virtual flag
 
 This is exposed as switch.
 
@@ -356,6 +354,29 @@ I don't understand. You should be able to add the camera by using
 a [Generic Camera](https://www.home-assistant.io/integrations/generic/). The RTSP url
 is `rtsp://admin:123qwe@{{IP dress}}/rtsp/video.av`.
 
+### NHC Condition Action
+
+__Remark:__ This device is not documented/supported by Niko.
+
+This is exposed as a switch.
+
+### NHC Timeschedule Action
+
+__Remark:__ This device is not documented/supported by Niko.
+
+#### Entities
+
+* **Active Binary Sensor**
+
+### NHC Heating Cooling Action
+
+__Remark:__ This device is not documented/supported by Niko.
+
+#### Entities
+
+* **Cooling Mode Binary Sensor**
+* **Heating Mode Binary Sensor**
+
 ## Not yet supported
 
 * Sonos Speaker
@@ -394,17 +415,17 @@ list your received). You can fake the devices returned from the MQTT broker.
 
 ```python
 def _process_devices_list(self, response):
-  """Convert the response of devices.list into device instances."""
-  _LOGGER.debug(f'Received device list: {response}')
+    """Convert the response of devices.list into device instances."""
+    _LOGGER.debug(f'Received device list: {response}')
 
-  # REMOVE ME START
-  from pathlib import Path
-  import ast
+    # REMOVE ME START
+    from pathlib import Path
+    import ast
 
-  path = Path(str(Path(__file__).parent.resolve()) + '/../../../debugging/device_list.json').resolve()
-  f = open(path)
-  response = ast.literal_eval(f.read())
-  # REMOVE ME END
+    path = Path(str(Path(__file__).parent.resolve()) + '/../../../debugging/device_list.json').resolve()
+    f = open(path)
+    response = ast.literal_eval(f.read())
+    # REMOVE ME END
 ```
 
 __Remark:__ This is a hackish way, and you will not able to test it for real. You will not receive updates. Check the
