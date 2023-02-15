@@ -10,7 +10,10 @@ class Nhc2RobinsipVideodoorstationCameraEntity(Camera):
     _attr_name = None
 
     def __init__(self, device_instance: CocoRobinsipVideodoorstation, hub, gateway):
-        """Initialize a enum sensor."""
+        # I don't know why, but this is needed to make it work...
+        Camera.__init__(self)
+        """Initialize a camera sensor."""
+
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
@@ -22,10 +25,9 @@ class Nhc2RobinsipVideodoorstationCameraEntity(Camera):
         self._attr_should_poll = False
 
         self._attr_name = self._device.name
-        self._attr_frontend_stream_type = StreamType.HLS
         self._attr_supported_features = CameraEntityFeature.STREAM
-        self._rtsp_to_webrtc = False
-        self._attr_available = True
+        self._attr_is_streaming = True
+        self._attr_stream_type = StreamType.HLS
 
     @property
     def device_info(self):
