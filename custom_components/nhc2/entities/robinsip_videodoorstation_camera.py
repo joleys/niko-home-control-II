@@ -52,7 +52,7 @@ class Nhc2RobinsipVideodoorstationCameraEntity(Camera):
         return f'http://admin:123qwe@{self._device.ip_address_readable}{self._device.mjpeg_uri}'
 
     async def async_camera_image(self, width: int | None = None, height: int | None = None) -> bytes | None:
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(raise_for_status=True) as session:
             async with session.get(
                     f'http://admin:123qwe@{self._device.ip_address_readable}{self._device.tn_uri}'
             ) as response:
