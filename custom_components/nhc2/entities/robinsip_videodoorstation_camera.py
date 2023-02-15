@@ -46,4 +46,4 @@ class Nhc2RobinsipVideodoorstationCameraEntity(Camera):
         self.schedule_update_ha_state()
 
     async def stream_source(self) -> str:
-        return f'rtsp://admin:123qwe@{self._device.ip_address_readable}/rtsp/video.av'
+        return f'http://admin:123qwe@{self._device.ip_address_readable}{self._device.mjpeg_uri}'
