@@ -232,7 +232,7 @@ class CoCo:
             sem.release()
             if device_commands_to_process is not None:
                 command = process_device_commands(device_commands_to_process)
-                _LOGGER.info(f'→ Publishing device control command: {json.dumps(command)}')
+                _LOGGER.debug(f'→ Publishing device control command: {json.dumps(command)}')
                 self._client.publish(
                     self._profile_creation_id + MQTT_TOPIC_SUFFIX_CMD,
                     json.dumps(command),
