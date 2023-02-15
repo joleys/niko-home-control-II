@@ -42,5 +42,9 @@ class Nhc2RobinsipVideodoorstationCallStatus01Entity(SensorEntity):
             'via_device': self._hub
         }
 
+    @property
+    def state(self) -> str:
+        return self._device.call_status_01
+
     def on_change(self):
         self.schedule_update_ha_state()
