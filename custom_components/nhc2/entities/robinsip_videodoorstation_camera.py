@@ -60,3 +60,18 @@ class Nhc2RobinsipVideodoorstationCameraEntity(MjpegCamera):
 
     def on_change(self):
         self.schedule_update_ha_state()
+
+    async def async_camera_image(self, width: int | None = None, height: int | None = None) -> bytes | None:
+        # This is a workaround for the fact that the camera sometimes returns stills of 1x1 pixels
+        counter = 0
+        while counter < 10:
+            counter += 1
+
+            image = await MjpegCamera.async_camera_image(self, width, height)
+            p = ImageFile.Parser()
+            p.feed(image)
+            _LOGGER.debug(f'Image size for still image is: {p.image.size}')
+            if p.image.size != (1, 1):
+                break
+
+        return image
