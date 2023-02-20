@@ -389,6 +389,22 @@ Note: Make sure you have a recent version of Home Assistant!
 3. Add an integration, search for Niko Home Control II, and click on it
 4. Follow the wizard
 
+## FAQ
+
+### The integration is not working after power outage
+
+It is expected behouviour that the integration may not work after a power outage. Please restart Home Assistant. or
+after a new configuration is uploaded.
+
+### The integration is not working after uploading a new configuration
+
+if you uploaded a new configuration to the connected controller / hub, please restart Home Assistant.
+
+### The integration is not working after an IP change
+
+Please make sure that the IP of the connected controller / hub does not change. If the IP changes you will need to
+remove and re-add the integration.
+
 ## Development
 
 ### Adding support for new Device models
