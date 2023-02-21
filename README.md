@@ -190,12 +190,14 @@ This is exposed as a climate entity.
 
 ### NHC Mood Action
 
-This action is exposed as a switch.
+This action is exposed as a button.
 
 #### Entities
 
 It has some extra entities that can be used in automations:
 
+* **Basic State Binary Sensor**, is on or off according to the state of all assigned players as configured for that
+  action.
 * **Mood Active Binary Sensor**, is on upon activation of the action. It is off when one of the assigned participant in
   the action had a state change.
 

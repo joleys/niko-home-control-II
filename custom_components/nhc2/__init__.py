@@ -57,6 +57,7 @@ async def async_setup(hass, config):
 FORWARD_PLATFORMS = (
     "alarm_control_panel",
     "binary_sensor",
+    "button",
     "camera",
     "climate",
     "cover",

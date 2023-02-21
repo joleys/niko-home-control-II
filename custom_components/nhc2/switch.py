@@ -8,7 +8,6 @@ from .nhccoco.coco import CoCo
 from .entities.accesscontrol_action_basicstate_switch import Nhc2AccesscontrolActionBasicStateSwitchEntity
 from .entities.alloff_action_basicstate import Nhc2AlloffActionBasicStateEntity
 from .entities.bellbutton_action_basicstate_switch import Nhc2BellbuttonActionBasicStateSwitchEntity
-from .entities.comfort_action_basicstate import Nhc2ComfortActionBasicStateEntity
 from .entities.condition_action_switch import Nhc2ConditionActionSwitchEntity
 from .entities.flag_action_switch import Nhc2FlagActionSwitchEntity
 from .entities.generic_action_basicstate import Nhc2GenericActionBasicStateEntity
@@ -29,7 +28,6 @@ from .entities.thermostat_thermostat_overrule_active import Nhc2ThermostatThermo
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
-from .nhccoco.devices.comfort_action import CocoComfortAction
 from .nhccoco.devices.condition_action import CocoConditionAction
 from .nhccoco.devices.flag_action import CocoFlagAction
 from .nhccoco.devices.generic_action import CocoGenericAction
@@ -137,15 +135,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             entities.append(Nhc2ThermostatThermostatEcoSaveEntity(device_instance, hub, gateway))
             entities.append(Nhc2ThermostatThermostatOverruleActiveEntity(device_instance, hub, gateway))
-
-        async_add_entities(entities)
-
-    device_instances = gateway.get_device_instances(CocoComfortAction)
-    _LOGGER.info('→ Found %s NHC Mood Actions', len(device_instances))
-    if len(device_instances) > 0:
-        entities = []
-        for device_instance in device_instances:
-            entities.append(Nhc2ComfortActionBasicStateEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
