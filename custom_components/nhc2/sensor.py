@@ -9,6 +9,10 @@ from .entities.audiocontrol_action_speaker import Nhc2AudiocontrolActionSpeakerE
 from .entities.bellbutton_action_basicstate import Nhc2BellbuttonActionBasicStateEntity
 from .entities.electricity_clamp_centralmeter_electrical_power import \
     Nhc2ElectricityClampCentralmeterElectricalPowerEntity
+from .entities.electricity_clamp_centralmeter_electrical_power_consumption import \
+    Nhc2ElectricityClampCentralmeterElectricalPowerConsumptionEntity
+from .entities.electricity_clamp_centralmeter_electrical_power_production import \
+    Nhc2ElectricityClampCentralmeterElectricalPowerProductionEntity
 from .entities.electricity_clamp_centralmeter_clamp_type import Nhc2ElectricityClampCentralmeterClampTypeEntity
 from .entities.electricity_clamp_centralmeter_flow import Nhc2ElectricityClampCentralmeterFlowEntity
 from .entities.electricity_clamp_centralmeter_segment import Nhc2ElectricityClampCentralmeterSegmentEntity
@@ -203,6 +207,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2ElectricityClampCentralmeterElectricalPowerEntity(device_instance, hub, gateway))
+            entities.append(Nhc2ElectricityClampCentralmeterElectricalPowerConsumptionEntity(device_instance, hub, gateway))
+            entities.append(Nhc2ElectricityClampCentralmeterElectricalPowerProductionEntity(device_instance, hub, gateway))
             entities.append(Nhc2ElectricityClampCentralmeterFlowEntity(device_instance, hub, gateway))
             entities.append(Nhc2ElectricityClampCentralmeterSegmentEntity(device_instance, hub, gateway))
             if device_instance.supports_clamp_type:
