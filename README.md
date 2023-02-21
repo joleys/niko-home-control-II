@@ -285,6 +285,7 @@ This is the energy metering linked to a generic zigbee smart plug. The smart plu
   automatically be enabled.
 
 __Remark:__ The totals are not available as they are not (yet) exposed by the API.
+
 Totals are available via a Helper. Goto 'Settings' > 'Devices & Services' and click 'Helpers' at the top. Click the '+ Create Helper' button at the bottom right and select 'Integration - Riemann sum integral sensor'.
 Type a name for the Helper and select the relevant 'energyhome' entity (i.e. 'Electrical Power to Grid') from the 'Input sensor' dropdown. Integration method 'Trapezoidal rule' should give the most accurate integrated value. Set 'Precision' to '3' and set the 'Metric prefix' to 'k (kilo)'. Leave the time unit at 'Hours'.
 At least two helpers are needed: one for the consumption total and one for the production total.
