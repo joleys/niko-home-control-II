@@ -11,7 +11,7 @@ class Nhc2FanActionFanEntity(FanEntity):
     _attr_name = None
 
     def __init__(self, device_instance: CocoFanAction, hub, gateway):
-        """Initialize a switch."""
+        """Initialize a fan."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
@@ -48,21 +48,21 @@ class Nhc2FanActionFanEntity(FanEntity):
 
     @property
     def percentage(self) -> int:
-        """Return the current speed percentage."""
+        """Return the current speed percentage based on the current mode."""
         return ordered_list_item_to_percentage(self._preset_modes, self._device.fan_speed)
 
     @property
     def speed_count(self) -> int:
         """Return the number of speeds the fan supports."""
         return len(self._preset_modes)
-    
+
     @property
     def supported_features(self):
         """Return supported features."""
         return self._attr_supported_features
 
     def set_percentage(self, percentage: int) -> None:
-        """Set the speed percentage of the fan."""
+        """Set the fan speed preset based on a given percentage"""
         self._device.set_fan_speed(self._gateway, percentage_to_ordered_list_item(self._preset_modes, percentage))
 
     def on_change(self):

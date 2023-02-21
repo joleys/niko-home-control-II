@@ -107,9 +107,7 @@ The integration exposes a service to set the brightness of a light. This can be 
 turning the lights on. For instance if you want your lights to have a certain brightness at night. See Developer Tools →
 Services → Niko Home Control II: Set brightness for light.
 
-### NHC Fan Action (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
+### NHC Fan Action
 
 This is exposed as a fan entity.
 
