@@ -162,9 +162,7 @@ This is exposed as a climate entity.
 * **Thermostat on Switch**, indicates wheter the thermostat is turned on or off.
 * **HVAC On Binary Sensor**, indicates that the HVAC indoor unit is online.
 
-### NHC Thermostat (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
+### NHC Thermostat
 
 This is exposed as a climate entity.
 
