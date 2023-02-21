@@ -132,9 +132,7 @@ This action is exposed as a cover.
   closed. Intermediate means the gate is moving, only when optional moving sensor is available.
 * **Port Closed Binary Sensor**, undocumented.
 
-### NHC House Mode Actions (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
+### NHC House Mode Actions
 
 This action is exposed as a switch.
 
