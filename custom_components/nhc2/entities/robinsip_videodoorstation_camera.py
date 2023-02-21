@@ -71,6 +71,11 @@ class Nhc2RobinsipVideodoorstationCameraEntity(MjpegCamera):
             p = ImageFile.Parser()
             p.feed(image)
             _LOGGER.debug(f'Image size for still image is: {p.image.size}')
+
+            if p.image is None:
+                image = None
+                continue
+
             if p.image.size != (1, 1):
                 break
 
