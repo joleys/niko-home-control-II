@@ -124,14 +124,15 @@ It has some extra entities that can be used in automations:
 * **Start Active Binary Sensor**, is on upon activation of the action. It is off when one of the assigned participant in
   the action has a state change.
 
-### NHC Garage Door Action (untested)
+### NHC Garage Door Action
 
-__Remark:__ this is untested as I don't own a device of this type.
+This action is exposed as a cover.
 
 #### Entities
 
 * **Basic State Enum Sensor**, which represents the Basic State. On means the gate is opened, off means the gate is
   closed. Intermediate means the gate is moving, only when optional moving sensor is available.
+* **Port Closed Binary Sensor**, undocumented.
 
 ### NHC House Mode Actions (untested)
 

@@ -1,5 +1,6 @@
 from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_BASIC_STATE, PROPERTY_BASIC_STATE_VALUE_OFF, \
-    PROPERTY_BASIC_STATE_VALUE_ON, PROPERTY_BASIC_STATE_VALUE_INTERMEDIATE, PROPERTY_BASIC_STATE_VALUE_TRIGGERED
+    PROPERTY_BASIC_STATE_VALUE_ON, PROPERTY_BASIC_STATE_VALUE_INTERMEDIATE, PROPERTY_BASIC_STATE_VALUE_TRIGGERED, \
+    PROPERTY_PORT_CLOSED, PROPERTY_PORT_CLOSED_VALUE_TRUE
 from .device import CoCoDevice
 
 import logging
@@ -30,6 +31,22 @@ class CocoGaragedoorAction(CoCoDevice):
     @property
     def is_basic_state_intermediate(self) -> bool:
         return self.basic_state == PROPERTY_BASIC_STATE_VALUE_INTERMEDIATE
+
+    @property
+    def port_closed(self) -> str:
+        return self.extract_property_value(PROPERTY_PORT_CLOSED)
+
+    @property
+    def is_port_closed(self) -> bool:
+        return self.port_closed == PROPERTY_PORT_CLOSED_VALUE_TRUE
+
+    @property
+    def is_port_open(self) -> bool:
+        return self.port_closed != PROPERTY_PORT_CLOSED_VALUE_TRUE
+
+    @property
+    def supports_port_closed(self) -> bool:
+        return self.has_property(PROPERTY_PORT_CLOSED)
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')

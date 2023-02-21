@@ -18,6 +18,7 @@ from .entities.comfort_action_mood_active import Nhc2ComfortActionMoodActiveEnti
 from .entities.dimmer_action_aligned import Nhc2DimmerActionAlignedEntity
 from .entities.electricity_clamp_centralmeter_report_instant_usage import \
     Nhc2ElectricityClampCentralmeterReportInstantUsageEntity
+from .entities.garagedoor_action_port_closed import Nhc2GaragedoorActionPortClosedEntity
 from .entities.generic_action_start_active import Nhc2GenericActionStartActiveEntity
 from .entities.generic_energyhome_electrical_power_production_threshold_exceeded import \
     Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity
@@ -40,6 +41,7 @@ from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
 from .nhccoco.devices.comfort_action import CocoComfortAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
 from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
+from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
 from .nhccoco.devices.gate_action import CocoGateAction
 from .nhccoco.devices.generic_action import CocoGenericAction
 from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
@@ -125,6 +127,16 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2GenericActionStartActiveEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGaragedoorAction)
+    _LOGGER.info('→ Found %s NHC Garage Door Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            if device_instance.supports_port_closed:
+                entities.append(Nhc2GaragedoorActionPortClosedEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
