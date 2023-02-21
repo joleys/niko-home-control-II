@@ -47,8 +47,8 @@ class Nhc2ElectricityClampCentralmeterElectricalPowerProductionEntity(SensorEnti
     def state(self) -> float:
         if self._device.electrical_power < 0:
             return -self._device.electrical_power
-        else:
-            return 0
+
+        return 0
 
     def on_change(self):
         self.schedule_update_ha_state()
