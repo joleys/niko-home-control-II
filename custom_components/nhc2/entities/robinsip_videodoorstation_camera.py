@@ -68,6 +68,9 @@ class Nhc2RobinsipVideodoorstationCameraEntity(MjpegCamera):
             counter += 1
 
             image = await MjpegCamera.async_camera_image(self, width, height)
+            if image is None:
+                continue
+
             p = ImageFile.Parser()
             p.feed(image)
             _LOGGER.debug(f'Image size for still image is: {p.image.size}')
