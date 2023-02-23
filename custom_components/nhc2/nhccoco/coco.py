@@ -256,6 +256,10 @@ class CoCo:
         _LOGGER.debug(f'Received device list: {response}')
         devices = extract_devices(response)
         for device in devices:
+            if 'Properties' not in device or len(device['Properties']) == 0:
+                _LOGGER.debug(f"Skip device ({device['Uuid']}) as it has no Properties")
+                continue
+
             try:
                 classname = str.replace(
                     str.title(
@@ -273,45 +277,11 @@ class CoCo:
                 # * are not supported by the API / MQTT broker
                 # * don't have any (usefull) properties
                 if classname in [
-                    'CocoAvout010VFanFan',
-                    'CocoAvout110VDimmer',
-                    'CocoChimeRelay',
-                    'CocoDigitalsensorDigitalsensor',
-                    'CocoDimcontrollerSmartpanel',
-                    'CocoDimmerDimmer',
-                    'CocoDimmerSmartdimmer',
-                    'CocoExtensionbuttonx1Smartextensionpanel',
-                    'CocoExternalsystemDigitalsensor',
-                    'CocoGasCentralmeter',
-                    'CocoGenericAudiocontrol',
-                    'CocoGenericBrick',
                     'CocoGenericGatewayfw',
-                    'CocoGenericRadio',
-                    'CocoGenericStick',
-                    'CocoHeatingcoolingsystemHvac',
-                    'CocoIndoormotiondetectorMotiondetector',
-                    'CocoLightRelay',
-                    'CocoLightSmartrelay',
-                    'CocoNhc24Touchswitch',
-                    'CocoOutdoormotiondetectorMotiondetector',
-                    'CocoPushbuttonx1FeedbackPanel',
-                    'CocoPushbuttonx1FeedbackSmartpanel',
-                    'CocoPushbuttonx1Panel',
-                    'CocoPushbuttonx1Smartpanel',
-                    'CocoPushbuttonx2FeedbackPanel',
-                    'CocoPushbuttonx2Panel',
-                    'CocoPushbuttonx4FeedbackPanel',
-                    'CocoPushbuttonx4Panel',
-                    'CocoPushbuttonx6FeedbackPanel',
-                    'CocoPushbuttonx6Panel',
-                    'CocoSocketRelay',
-                    'CocoSwitchedGenericRelay',
-                    'CocoWaterCentralmeter',
-                    'CocoZonevalveHvac',
                 ]:
                     continue
 
                 instance = getattr(sys.modules[__name__], classname)(json_to_map(device))
                 self._device_instances[instance.uuid] = instance
             except Exception as e:
-                _LOGGER.warning(f"Class {classname} not found {e}")
+                _LOGGER.warning(f"Class {classname} not found {e}, device: {device['Properties']}")
