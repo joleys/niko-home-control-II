@@ -24,6 +24,7 @@ class Nhc2VeluxActionCoverEntity(CoverEntity):
 
         self._attr_device_class = CoverDeviceClass.WINDOW
         self._attr_supported_features = CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | CoverEntityFeature.STOP
+        self._attr_is_closed = None
 
     @property
     def device_info(self):
