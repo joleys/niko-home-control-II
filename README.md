@@ -356,6 +356,10 @@ This is exposed as a camera.
 * **IP Adress Sensor**
 * **Status Enum Sensor**
 
+__Remark:__ Note that this will only work if your camera is not directly connected to the controller. The controller
+uses its own DHCP server and there is nothing in place to connect to the streams. In older versions of the controller
+there was port forwarding, but this is disabled (confirmed by Niko).
+
 ### NHC Condition Action
 
 __Remark:__ This device is not documented/supported by Niko.
