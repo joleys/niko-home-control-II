@@ -45,6 +45,10 @@ class CocoGenericDomestichotwaterunit(CoCoDevice):
     def possible_coupling_status(self) -> list[str]:
         return self.extract_property_definition_description_choices(PROPERTY_COUPLING_STATUS)
 
+    @property
+    def supports_coupling_status(self) -> bool:
+        return self.has_property(PROPERTY_COUPLING_STATUS) and self.coupling_status in self.possible_coupling_status
+
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
         if DEVICE_DESCRIPTOR_PROPERTIES in payload:
