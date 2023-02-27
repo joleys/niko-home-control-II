@@ -26,6 +26,9 @@ from .entities.generic_energyhome_electrical_power_production import \
 from .entities.generic_energyhome_electrical_power_self_consumption import \
     Nhc2GenericEnergyhomeElectricalPowerSelfConsumptionEntity
 from .entities.generic_energyhome_electrical_power_to_grid import Nhc2GenericEnergyhomeElectricalPowerToGridEntity
+from .entities.generic_fan_co2 import Nhc2GenericFanCo2Entity
+from .entities.generic_fan_coupling_status import Nhc2GenericFanCouplingStatusEntity
+from .entities.generic_fan_humidity import Nhc2GenericFanHumidityEntity
 from .entities.generic_hvac_coupling_status import Nhc2GenericHvacCouplingStatusEntity
 from .entities.generic_smartplug_electrical_power import Nhc2GenericSmartplugElectricalPowerEntity
 from .entities.hvacthermostat_hvac_setpoint_temperature import Nhc2HvacthermostatHvacSetpointTemperatureEntity
@@ -52,6 +55,7 @@ from .nhccoco.devices.gate_action import CocoGateAction
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
 from .nhccoco.devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
 from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
+from .nhccoco.devices.generic_fan import CocoGenericFan
 from .nhccoco.devices.generic_hvac import CocoGenericHvac
 from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
@@ -237,6 +241,20 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                 )
             if device_instance.supports_electrical_power_consumption:
                 entities.append(Nhc2GenericEnergyhomeElectricalPowerConsumptionEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericFan)
+    _LOGGER.info('→ Found %s Generic Ventilation Implementation', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            if device_instance.supports_co2:
+                entities.append(Nhc2GenericFanCo2Entity(device_instance, hub, gateway))
+            if device_instance.supports_coupling_status:
+                entities.append(Nhc2GenericFanCouplingStatusEntity(device_instance, hub, gateway))
+            if device_instance.supports_humidity:
+                entities.append(Nhc2GenericFanHumidityEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

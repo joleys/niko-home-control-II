@@ -12,6 +12,7 @@ from .entities.condition_action_switch import Nhc2ConditionActionSwitchEntity
 from .entities.flag_action_switch import Nhc2FlagActionSwitchEntity
 from .entities.generic_action_basicstate import Nhc2GenericActionBasicStateEntity
 from .entities.generic_domestichotwaterunit_boost import Nhc2GenericDomestichotwaterunitBoostEntity
+from .entities.generic_fan_boost import Nhc2GenericFanBoostEntity
 from .entities.generic_hvac_overrule_active import Nhc2GenericHvacOverruleActiveEntity
 from .entities.hvacthermostat_hvac_ecosave import Nhc2HvacthermostatHvacEcoSaveEntity
 from .entities.hvacthermostat_hvac_thermostat_on import Nhc2HvacthermostatHvacThermostatOnEntity
@@ -32,6 +33,7 @@ from .nhccoco.devices.condition_action import CocoConditionAction
 from .nhccoco.devices.flag_action import CocoFlagAction
 from .nhccoco.devices.generic_action import CocoGenericAction
 from .nhccoco.devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
+from .nhccoco.devices.generic_fan import CocoGenericFan
 from .nhccoco.devices.generic_hvac import CocoGenericHvac
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.overallcomfort_action import CocoOverallcomfortAction
@@ -173,6 +175,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2RelayActionSwitchEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericFan)
+    _LOGGER.info('→ Found %s Generic Ventilation Implementation', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2GenericFanBoostEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

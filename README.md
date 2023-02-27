@@ -326,6 +326,17 @@ __Remark:__ The totals are not available as they are not (yet) exposed by the AP
 __Remark:__ There a more properties to this device, but these are not documented so it is difficult to know what they
 report exactly.
 
+### Generic Ventilation Implementation
+
+This is exposed as a fan entity.
+
+#### Entities
+
+* **Boost Switch**, enable/disable boost mode.
+* **CO2 Sensor**, (only if supported), the CO2 level.
+* **Humidity Sensor**, (only if supported), the humidity level.
+* **Coupling Status Enum Sensor**, (only if supported), the connectivity status of the system.
+
 ### Generic Heating/Cooling Implementation
 
 This is exposed as a climate entity.
@@ -387,7 +398,6 @@ __Remark:__ This device is not documented/supported by Niko.
 
 * Sonos Speaker
 * Bose Speaker
-* Generic Ventilation Implementation
 
 ## How to get it running
 

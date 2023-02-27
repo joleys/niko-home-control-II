@@ -24,6 +24,7 @@ from .devices.gate_action import CocoGateAction
 from .devices.generic_action import CocoGenericAction
 from .devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
 from .devices.generic_energyhome import CocoGenericEnergyhome
+from .devices.generic_fan import CocoGenericFan
 from .devices.generic_hvac import CocoGenericHvac
 from .devices.generic_smartplug import CocoGenericSmartplug
 from .devices.heatingcooling_action import CocoHeatingcoolingAction
