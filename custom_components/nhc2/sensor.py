@@ -47,6 +47,7 @@ from .entities.thermostat_hvac_overrule_setpoint import Nhc2ThermostatHvacOverru
 from .entities.thermostat_thermostat_setpoint_temperature import Nhc2ThermostatThermostatSetpointTemperatureEntity
 from .entities.thermostat_thermostat_overrule_time import Nhc2ThermostatThermostatOverruleTimeEntity
 from .entities.thermostat_thermostat_overrule_setpoint import Nhc2ThermostatThermostatOverruleSetpointEntity
+from .entities.velux_action_feedback import Nhc2VeluxActionFeedbackEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
 from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
@@ -68,6 +69,7 @@ from .nhccoco.devices.sunblind_action import CocoSunblindAction
 from .nhccoco.devices.thermostat_hvac import CocoThermostatHvac
 from .nhccoco.devices.thermostat_thermostat import CocoThermostatThermostat
 from .nhccoco.devices.touchswitch_hvac import CocoTouchswitchHvac
+from .nhccoco.devices.velux_action import CocoVeluxAction
 from .nhccoco.devices.venetianblind_action import CocoVenetianblindAction
 
 from .const import DOMAIN, KEY_GATEWAY
@@ -184,6 +186,16 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2ReynaersActionStatusEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoVeluxAction)
+    _LOGGER.info('→ Found %s NHC Velux Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            if device_instance.supports_feedback:
+                entities.append(Nhc2VeluxActionFeedbackEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

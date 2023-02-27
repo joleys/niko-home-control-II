@@ -248,11 +248,13 @@ __Remark:__ this is untested as I don't own a device of this type.
 
 * **Status Sensor**, status feedback of the Reynaers motor.
 
-### NHC Velux Action (untested)
+### NHC Velux Action
 
 This is exposed as a cover entity.
 
-__Remark:__ this is untested as I don't own a device of this type.
+#### Entities
+
+* **Feedback Enum Sensor**, (only if supported), undocumented.
 
 ### NHC Zigbee Smart plug
 
