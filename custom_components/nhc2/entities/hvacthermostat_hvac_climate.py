@@ -30,7 +30,11 @@ class Nhc2HvacthermostatHvacClimateEntity(ClimateEntity):
 
         self._attr_temperature_unit = UnitOfTemperature.CELSIUS
         self._attr_current_temperature = self._device.ambient_temperature
+        min_value, max_value, step = self._device.ambient_temperature_range
         self._attr_target_temperature = self._device.setpoint_temperature
+        self._attr_target_temperature_step = step
+        self._attr_max_temp = max_value
+        self._attr_min_temp = min_value
         self._attr_hvac_modes = [
             HVACMode.HEAT,
             HVACMode.COOL,

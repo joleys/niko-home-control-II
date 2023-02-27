@@ -25,6 +25,10 @@ class CocoThermostatHvac(CoCoDevice):
         return to_float_or_none(self.extract_property_value(PROPERTY_AMBIENT_TEMPERATURE))
 
     @property
+    def ambient_temperature_range(self) -> list:
+        return self.extract_property_definition_description_range(PROPERTY_AMBIENT_TEMPERATURE)
+
+    @property
     def setpoint_temperature(self) -> float:
         return to_float_or_none(self.extract_property_value(PROPERTY_SETPOINT_TEMPERATURE))
 
