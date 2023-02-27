@@ -43,8 +43,7 @@ This action is exposed as a switch, and a lock (if supported)
 
 ### NHC All Off Action
 
-This action is exposed as a switch. The state is according the state of all assigned players as configured for that
-action.
+This action is exposed as a button.
 
 #### Entities
 
@@ -53,6 +52,7 @@ It has some extra entities that can be used in automations:
 * **AllOff Active Binary Sensor**, Is on only upon activation of the action. Off when one of the assigned participants
   in the action had a state change. Be aware that this state is only updated as the button is pressed, not when all
   devices are off.
+* **Basic State Binary Sensor**, The state is according the state of all assigned players as configured for that action.
 
 ### NHC Audio Control Action
 
