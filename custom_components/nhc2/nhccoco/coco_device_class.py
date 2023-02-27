@@ -14,3 +14,4 @@ class CoCoDeviceClass(Enum):
     SMARTPLUGS = 'smartplugs'
     GENERIC = 'generic'
     VIRTUAL = 'virtual'
+    ENERGY_HOME = "energyhome"

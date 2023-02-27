@@ -21,6 +21,7 @@ LIST_VALID_BUTTONS = ['alloff']
 LIST_VALID_SMARTPLUGS = ['naso']
 LIST_VALID_GENERICS = ['generic']
 LIST_VALID_VIRTUAL = ['flag']
+LIST_VALID_ENERGY_HOME = ['generic']
 
 DEVICE_CONTROL_BUFFER_SIZE = 16
 DEVICE_CONTROL_BUFFER_COMMAND_SIZE = 32
@@ -68,8 +69,10 @@ THERM_ECOSAVE = 'EcoSave'
 TEMP_CELSIUS = "°C"
 HVAC_MODE_HEAT_COOL = "heat_cool"
 
-ENERGY_REPORT = 'ReportInstantUsage'
-ENERGY_POWER = 'ElectricalPower'
+ENERGY_REPORT = "ReportInstantUsage"
+ENERGY_POWER = "ElectricalPower"
+ENERGY_HOME_POWER_TO_GRID = "ElectricalPowerToGrid"
+ENERGY_HOME_POWER_FROM_GRID = "ElectricalPowerFromGrid"
 
 DEV_TYPE_ACTION = 'action'
 

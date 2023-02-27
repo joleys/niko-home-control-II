@@ -7,6 +7,8 @@ from typing import Callable
 
 import paho.mqtt.client as mqtt
 
+from .coco_energy_home import CoCoEnergyHome
+
 from .coco_device_class import CoCoDeviceClass
 from .coco_fan import CoCoFan
 from .coco_light import CoCoLight
@@ -38,8 +40,8 @@ DEVICE_SETS = {
     CoCoDeviceClass.ACCESSCONTROL: {INTERNAL_KEY_CLASS: CoCoAccessControl, INTERNAL_KEY_MODELS: LIST_VALID_ACCESSCONTROL},
     CoCoDeviceClass.BUTTONS: {INTERNAL_KEY_CLASS: CoCoButton, INTERNAL_KEY_MODELS: LIST_VALID_BUTTONS},
     CoCoDeviceClass.SMARTPLUGS: {INTERNAL_KEY_CLASS: CoCoSmartPlug, INTERNAL_KEY_MODELS: LIST_VALID_SMARTPLUGS},
-    CoCoDeviceClass.GENERIC: {INTERNAL_KEY_CLASS: CoCoGeneric, INTERNAL_KEY_MODELS: LIST_VALID_GENERICS},
-    CoCoDeviceClass.VIRTUAL: {INTERNAL_KEY_CLASS: CoCoVirtual, INTERNAL_KEY_MODELS: LIST_VALID_VIRTUAL}
+    CoCoDeviceClass.VIRTUAL: {INTERNAL_KEY_CLASS: CoCoVirtual, INTERNAL_KEY_MODELS: LIST_VALID_VIRTUAL},
+    CoCoDeviceClass.ENERGY_HOME: {INTERNAL_KEY_CLASS: CoCoEnergyHome, INTERNAL_KEY_MODELS: LIST_VALID_ENERGY_HOME}
 }
 
 
@@ -209,6 +211,8 @@ class CoCo:
             filter(lambda d: d[KEY_TYPE] == "smartplug", extract_devices(response))))
         actionable_devices.extend(list(
             filter(lambda d: d[KEY_TYPE] == "virtual", extract_devices(response))))
+        actionable_devices.extend(list(
+            filter(lambda d: d[KEY_TYPE] == "energyhome", extract_devices(response))))
 
         # Only prepare for devices that don't already exist
         # TODO - Can't we do this when we need it (in initialize_devices ?)
@@ -219,6 +223,7 @@ class CoCo:
                     {INTERNAL_KEY_CALLBACK: None, KEY_ENTITY: None}
 
         # Initialize
+        self.initialize_devices(CoCoDeviceClass.ENERGY_HOME, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.SWITCHED_FANS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.FANS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.SWITCHES, actionable_devices)
@@ -229,7 +234,6 @@ class CoCo:
         self.initialize_devices(CoCoDeviceClass.ACCESSCONTROL, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.BUTTONS, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.SMARTPLUGS, actionable_devices)
-        self.initialize_devices(CoCoDeviceClass.GENERIC, actionable_devices)
         self.initialize_devices(CoCoDeviceClass.VIRTUAL, actionable_devices)
 
     def initialize_devices(self, device_class, actionable_devices):

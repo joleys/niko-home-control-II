@@ -7,6 +7,7 @@ from .coco_climate import CoCoThermostat
 from .coco_energy import CoCoEnergyMeter
 from .coco_cover import CoCoCover
 from .coco_accesscontrol import CoCoAccessControl
+from .coco_energy_home import CoCoEnergyHome
 from .coco_device_class import CoCoDeviceClass
 
 __all__ = ["CoCo",
@@ -18,4 +19,5 @@ __all__ = ["CoCo",
            "CoCoEnergyMeter",
            "CoCoCover",
            "CoCoAccessControl",
+           "CocoEnergyHome",
            "CoCoDeviceClass"]
