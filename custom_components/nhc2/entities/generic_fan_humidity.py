@@ -25,6 +25,7 @@ class Nhc2GenericFanHumidityEntity(SensorEntity):
         self._attr_native_value = self._device.humidity
         self._attr_native_unit_of_measurement = PERCENTAGE
         self._attr_state_class = None
+        self._attr_suggested_display_precision = 0
 
     @property
     def name(self) -> str:

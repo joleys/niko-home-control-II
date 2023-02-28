@@ -25,6 +25,7 @@ class Nhc2ElectricityClampCentralmeterElectricalPowerConsumptionEntity(SensorEnt
         self._attr_native_value = self._device.electrical_power
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
         self._attr_state_class = SensorStateClass.MEASUREMENT
+        self._attr_suggested_display_precision = 0
 
     @property
     def name(self) -> str:

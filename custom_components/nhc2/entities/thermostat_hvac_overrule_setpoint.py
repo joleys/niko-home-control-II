@@ -25,6 +25,7 @@ class Nhc2ThermostatHvacOverruleSetpointEntity(SensorEntity):
         self._attr_native_value = self._device.overrule_setpoint
         self._attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
         self._attr_state_class = None
+        self._attr_suggested_display_precision = 1
 
     @property
     def name(self) -> str:
