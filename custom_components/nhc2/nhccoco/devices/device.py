@@ -9,7 +9,7 @@ import logging
 _LOGGER = logging.getLogger(__name__)
 
 
-class CoCoDevice():
+class CoCoDevice:
     def __init__(self, json: dict):
         self._uuid = json[DEVICE_DESCRIPTOR_UUID]
         self._type = json[DEVICE_DESCRIPTOR_TYPE]

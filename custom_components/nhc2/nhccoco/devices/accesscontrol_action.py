@@ -10,6 +10,9 @@ import logging
 
 _LOGGER = logging.getLogger(__name__)
 
+import sys
+from ...entities.boolean_has_status_true_can_control_false import Nhc2BooleanHasStatusTrueCanControlFalseEntity
+
 
 class CocoAccesscontrolAction(CoCoDevice):
     @property
@@ -49,32 +52,22 @@ class CocoAccesscontrolAction(CoCoDevice):
         return self.has_property(PROPERTY_CALL_PENDING)
 
     @property
-    def call_pending(self) -> str:
-        return self.extract_property_value(PROPERTY_CALL_PENDING)
-
-    @property
-    def is_call_pending(self) -> bool:
-        return self.call_pending == PROPERTY_CALL_PENDING_VALUE_TRUE
+    def call_pending(self) -> bool:
+        return self.extract_property_value(PROPERTY_CALL_PENDING) == PROPERTY_CALL_PENDING_VALUE_TRUE
 
     @property
     def supports_call_answered(self) -> bool:
         return self.has_property(PARAMETER_CALL_ANSWERED)
 
     @property
-    def call_answered(self) -> str:
-        return self.extract_parameter_value(PARAMETER_CALL_ANSWERED)
+    def call_answered(self) -> bool:
+        return self.extract_parameter_value(PARAMETER_CALL_ANSWERED) == PARAMETER_CALL_ANSWERED_VALUE_TRUE
 
     @property
-    def is_call_answered(self) -> bool:
-        return self.call_answered == PARAMETER_CALL_ANSWERED_VALUE_TRUE
-
-    @property
-    def decline_call_applied_on_all_devices(self) -> str:
-        return self.extract_parameter_value(PARAMETER_DECLINE_CALL_APPLIED_ON_ALL_DEVICES)
-
-    @property
-    def is_decline_call_applied_on_all_devices(self) -> bool:
-        return self.decline_call_applied_on_all_devices == PARAMETER_DECLINE_CALL_APPLIED_ON_ALL_DEVICES_VALUE_TRUE
+    def decline_call_applied_on_all_devices(self) -> bool:
+        return self.extract_parameter_value(
+            PARAMETER_DECLINE_CALL_APPLIED_ON_ALL_DEVICES
+        ) == PARAMETER_DECLINE_CALL_APPLIED_ON_ALL_DEVICES_VALUE_TRUE
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
@@ -90,3 +83,28 @@ class CocoAccesscontrolAction(CoCoDevice):
 
     def open_doorlock(self, gateway):
         gateway.add_device_control(self.uuid, PROPERTY_DOORLOCK, PROPERTY_DOORLOCK_VALUE_OPEN)
+
+    def get_binary_sensor_entities(self, hub: tuple, gateway) -> list:
+        entities = []
+
+        for property_definition in self._property_definitions:
+            property_name = next(iter(property_definition))
+            if property_definition[property_name]['Description'] != 'Boolean':
+                continue
+
+            classname = 'Nhc2BooleanHasStatus%sCanControl%sEntity' % (
+                'True' if property_definition[property_name]['HasStatus'] == 'true' else 'False',
+                'True' if property_definition[property_name]['CanControl'] == 'true' else 'False',
+            )
+
+            instance = getattr(sys.modules[__name__], classname)(property_name, self, hub, gateway)
+            entities.append(instance)
+
+        if self.has_parameter(PARAMETER_DECLINE_CALL_APPLIED_ON_ALL_DEVICES):
+            entities.append(
+                Nhc2BooleanHasStatusTrueCanControlFalseEntity(
+                    PARAMETER_DECLINE_CALL_APPLIED_ON_ALL_DEVICES, self, hub, gateway, True
+                )
+            )
+
+        return entities
