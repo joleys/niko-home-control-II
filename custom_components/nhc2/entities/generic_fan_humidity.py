@@ -31,7 +31,6 @@ class Nhc2GenericFanHumidityEntity(SensorEntity):
     def name(self) -> str:
         return 'Humidity'
 
-
     @property
     def device_info(self):
         """Return the device info."""
@@ -44,6 +43,10 @@ class Nhc2GenericFanHumidityEntity(SensorEntity):
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }
+
+    @property
+    def state(self) -> int:
+        return self._device.humidity
 
     def on_change(self):
         self.schedule_update_ha_state()

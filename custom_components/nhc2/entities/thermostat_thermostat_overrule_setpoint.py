@@ -44,5 +44,9 @@ class Nhc2ThermostatThermostatOverruleSetpointEntity(SensorEntity):
             'via_device': self._hub
         }
 
+    @property
+    def state(self) -> float:
+        return self._device.overrule_setpoint
+
     def on_change(self):
         self.schedule_update_ha_state()
