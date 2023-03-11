@@ -42,5 +42,9 @@ class Nhc2ReynaersActionStatusEntity(SensorEntity):
             'via_device': self._hub
         }
 
+    @property
+    def state(self) -> str:
+        return self._device.status
+
     def on_change(self):
         self.schedule_update_ha_state()

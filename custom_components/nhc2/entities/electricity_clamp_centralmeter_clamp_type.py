@@ -44,5 +44,9 @@ class Nhc2ElectricityClampCentralmeterClampTypeEntity(SensorEntity):
             'via_device': self._hub
         }
 
+    @property
+    def state(self) -> str:
+        return self._device.clamp_type
+
     def on_change(self):
         self.schedule_update_ha_state()

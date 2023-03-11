@@ -42,5 +42,9 @@ class Nhc2MotorActionLastDirectionEntity(SensorEntity):
             'via_device': self._hub
         }
 
+    @property
+    def state(self) -> str:
+        return self._device.last_direction
+
     def on_change(self):
         self.schedule_update_ha_state()

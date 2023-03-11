@@ -42,5 +42,9 @@ class Nhc2GaragedoorActionBasicStateEntity(SensorEntity):
             'via_device': self._hub
         }
 
+    @property
+    def state(self) -> str:
+        return self._device.basic_state
+
     def on_change(self):
         self.schedule_update_ha_state()

@@ -44,5 +44,9 @@ class Nhc2GenericFanCo2Entity(SensorEntity):
             'via_device': self._hub
         }
 
+    @property
+    def state(self) -> int:
+        return self._device.co2
+
     def on_change(self):
         self.schedule_update_ha_state()

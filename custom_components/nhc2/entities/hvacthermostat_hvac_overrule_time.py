@@ -43,5 +43,9 @@ class Nhc2HvacthermostatHvacOverruleTimeEntity(SensorEntity):
             'via_device': self._hub
         }
 
+    @property
+    def state(self) -> int:
+        return self._device.overrule_time
+
     def on_change(self):
         self.schedule_update_ha_state()
