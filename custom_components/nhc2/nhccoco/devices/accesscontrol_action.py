@@ -48,16 +48,8 @@ class CocoAccesscontrolAction(CoCoDevice):
         return self.doorlock == PROPERTY_DOORLOCK_VALUE_CLOSED
 
     @property
-    def supports_call_pending(self) -> bool:
-        return self.has_property(PROPERTY_CALL_PENDING)
-
-    @property
     def call_pending(self) -> bool:
         return self.extract_property_value(PROPERTY_CALL_PENDING) == PROPERTY_CALL_PENDING_VALUE_TRUE
-
-    @property
-    def supports_call_answered(self) -> bool:
-        return self.has_property(PARAMETER_CALL_ANSWERED)
 
     @property
     def call_answered(self) -> bool:
