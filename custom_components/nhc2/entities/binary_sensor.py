@@ -5,13 +5,10 @@ from .helpers import camel_case_to_words
 
 from ..const import DOMAIN, BRAND
 
-from ..nhccoco.devices.device import CoCoDevice
-
-
-class Nhc2BooleanHasStatusTrueCanControlFalseEntity(BinarySensorEntity):
+class Nhc2BinarySensorEntity(BinarySensorEntity):
     _attr_has_entity_name = True
 
-    def __init__(self, property_name, device_instance: CoCoDevice, hub, gateway, is_diagnostic: bool = False):
+    def __init__(self, property_name, device_instance, hub, gateway, is_diagnostic: bool = False):
         """Initialize a binary sensor."""
         self._original_property_name = property_name
         self._property_name_with_underscores = '_'.join(camel_case_to_words(property_name)).lower()
@@ -25,7 +22,6 @@ class Nhc2BooleanHasStatusTrueCanControlFalseEntity(BinarySensorEntity):
         self._attr_unique_id = device_instance.uuid + '_' + self._property_name_with_underscores
         self._attr_should_poll = False
 
-        self._attr_state = getattr(self._device, self._property_name_with_underscores) is True
         self._attr_state_class = None
 
         if is_diagnostic:
@@ -47,6 +43,10 @@ class Nhc2BooleanHasStatusTrueCanControlFalseEntity(BinarySensorEntity):
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }
+
+    @property
+    def state(self) -> bool:
+        return getattr(self._device, self._property_name_with_underscores) is True
 
     @property
     def is_on(self) -> bool:

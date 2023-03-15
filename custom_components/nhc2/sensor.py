@@ -4,7 +4,6 @@ from homeassistant.const import CONF_USERNAME
 
 from .nhccoco.coco import CoCo
 
-from .entities.accesscontrol_action_basicstate import Nhc2AccesscontrolActionBasicStateEntity
 from .entities.audiocontrol_action_speaker import Nhc2AudiocontrolActionSpeakerEntity
 from .entities.bellbutton_action_basicstate import Nhc2BellbuttonActionBasicStateEntity
 from .entities.electricity_clamp_centralmeter_electrical_power import \
@@ -92,8 +91,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            if device_instance.supports_basicstate:
-                entities.append(Nhc2AccesscontrolActionBasicStateEntity(device_instance, hub, gateway))
+            entities.extend(device_instance.get_sensor_entities(hub, gateway))
 
         async_add_entities(entities)
 

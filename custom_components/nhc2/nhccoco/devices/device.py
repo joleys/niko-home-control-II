@@ -3,6 +3,10 @@ from ..const import DEVICE_DESCRIPTOR_UUID, DEVICE_DESCRIPTOR_TYPE, DEVICE_DESCR
     DEVICE_DESCRIPTOR_PARAMETERS, DEVICE_DESCRIPTOR_PROPERTIES, DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS, \
     DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS_DESCRIPTION, DEVICE_DESCRIPTOR_ONLINE, DEVICE_DESCRIPTOR_ONLINE_VALUE_TRUE
 
+from ...entities.binary_sensor import Nhc2BinarySensorEntity
+from ...entities.enum_sensor import Nhc2EnumSensorEntity
+
+import sys
 import re
 import logging
 
@@ -154,3 +158,26 @@ class CoCoDevice:
 
     def set_disconnected(self):
         self._online = False
+
+    def get_binary_sensor_entities(self, hub: tuple, gateway) -> list:
+        entities = []
+
+        for property_definition in self._property_definitions:
+            property_name = next(iter(property_definition))
+
+            if property_definition[property_name]['Description'] == 'Boolean' and \
+                    property_definition[property_name]['HasStatus'] == 'true':
+                entities.append(Nhc2BinarySensorEntity(property_name, self, hub, gateway))
+
+        return entities
+
+    def get_sensor_entities(self, hub: tuple, gateway) -> list:
+        entities = []
+
+        for property_definition in self._property_definitions:
+            property_name = next(iter(property_definition))
+
+            if str.startswith(property_definition[property_name]['Description'], 'Choice('):
+                entities.append(Nhc2EnumSensorEntity(property_name, self, hub, gateway))
+
+        return entities

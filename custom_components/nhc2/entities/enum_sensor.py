@@ -1,15 +1,18 @@
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
+from homeassistant.helpers.entity import EntityCategory
+
+from .helpers import camel_case_to_words
 
 from ..const import DOMAIN, BRAND
 
-from ..nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 
-
-class Nhc2AccesscontrolActionBasicStateEntity(SensorEntity):
+class Nhc2EnumSensorEntity(SensorEntity):
     _attr_has_entity_name = True
 
-    def __init__(self, device_instance: CocoAccesscontrolAction, hub, gateway):
+    def __init__(self, property_name, device_instance, hub, gateway, is_diagnostic: bool = False):
         """Initialize a enum sensor."""
+        self._original_property_name = property_name
+        self._property_name_with_underscores = '_'.join(camel_case_to_words(property_name)).lower()
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
@@ -17,17 +20,20 @@ class Nhc2AccesscontrolActionBasicStateEntity(SensorEntity):
         self._device.after_change_callbacks.append(self.on_change)
 
         self._attr_available = self._device.is_online
-        self._attr_unique_id = device_instance.uuid + '_basic_state'
+        self._attr_unique_id = device_instance.uuid + '_' + self._property_name_with_underscores
         self._attr_should_poll = False
 
         self._attr_device_class = SensorDeviceClass.ENUM
-        self._attr_options = self._device.possible_basic_states
-        self._attr_native_value = self._device.basic_state
+        self._attr_options = self._device.extract_property_definition_description_choices(self._original_property_name)
+        self._attr_native_value = getattr(self._device, self._property_name_with_underscores)
         self._attr_state_class = None
+
+        if is_diagnostic:
+            self._attr_entity_category = EntityCategory.DIAGNOSTIC
 
     @property
     def name(self) -> str:
-        return 'Basic State'
+        return ' '.join(camel_case_to_words(self._original_property_name))
 
     @property
     def device_info(self):
@@ -44,7 +50,7 @@ class Nhc2AccesscontrolActionBasicStateEntity(SensorEntity):
 
     @property
     def state(self) -> str:
-        return self._device.basic_state
+        return getattr(self._device, self._property_name_with_underscores)
 
     def on_change(self):
         self.schedule_update_ha_state()
