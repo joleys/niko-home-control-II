@@ -17,7 +17,7 @@ class Nhc2HvacthermostatHvacClimateEntity(ClimateEntity):
     _attr_name = None
 
     def __init__(self, device_instance: CocoHvacthermostatHvac, hub, gateway):
-        """Initialize a lock sensor."""
+        """Initialize a climate entity."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
@@ -29,9 +29,7 @@ class Nhc2HvacthermostatHvacClimateEntity(ClimateEntity):
         self._attr_should_poll = False
 
         self._attr_temperature_unit = UnitOfTemperature.CELSIUS
-        self._attr_current_temperature = self._device.ambient_temperature
         min_value, max_value, step = self._device.ambient_temperature_range
-        self._attr_target_temperature = self._device.setpoint_temperature
         self._attr_target_temperature_step = step
         self._attr_max_temp = max_value
         self._attr_min_temp = min_value
@@ -59,6 +57,14 @@ class Nhc2HvacthermostatHvacClimateEntity(ClimateEntity):
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }
+
+    @property
+    def current_temperature(self) -> float:
+        return self._device.ambient_temperature
+
+    @property
+    def target_temperature(self) -> float:
+        return self._device.setpoint_temperature
 
     @property
     def hvac_action(self):
