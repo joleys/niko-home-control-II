@@ -26,7 +26,6 @@ class Nhc2GenericFanFanEntity(FanEntity):
         self._attr_unique_id = self._device.uuid
         self._attr_should_poll = False
 
-        self._attr_is_on = self._device.is_status_on
         self._attr_supported_features = FanEntityFeature.SET_SPEED | FanEntityFeature.PRESET_MODE
 
     @property
@@ -41,6 +40,10 @@ class Nhc2GenericFanFanEntity(FanEntity):
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }
+
+    @property
+    def is_on(self) -> bool:
+        return self._device.is_status_on
 
     @property
     def preset_mode(self) -> str:
