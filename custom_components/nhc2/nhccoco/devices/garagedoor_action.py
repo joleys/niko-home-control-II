@@ -1,6 +1,6 @@
 from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_BASIC_STATE, PROPERTY_BASIC_STATE_VALUE_OFF, \
     PROPERTY_BASIC_STATE_VALUE_ON, PROPERTY_BASIC_STATE_VALUE_INTERMEDIATE, PROPERTY_BASIC_STATE_VALUE_TRIGGERED, \
-    PROPERTY_PORT_CLOSED, PROPERTY_PORT_CLOSED_VALUE_TRUE
+    PROPERTY_PORT_CLOSED, PROPERTY_PORT_CLOSED_VALUE_TRUE, GARAGE_DOOR_STATUS_OPENING, GARAGE_DOOR_STATUS_CLOSING
 from .device import CoCoDevice
 
 import logging
@@ -9,6 +9,10 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class CocoGaragedoorAction(CoCoDevice):
+    def __init__(self, json: dict):
+        super().__init__(json)
+        self._previous_state = None
+
     @property
     def basic_state(self) -> str:
         return self.extract_property_value(PROPERTY_BASIC_STATE)
@@ -48,8 +52,27 @@ class CocoGaragedoorAction(CoCoDevice):
     def supports_port_closed(self) -> bool:
         return self.has_property(PROPERTY_PORT_CLOSED)
 
+    @property
+    def current_status(self) -> str | None:
+        if self.is_basic_state_intermediate and self._previous_state == PROPERTY_BASIC_STATE_VALUE_OFF:
+            return GARAGE_DOOR_STATUS_OPENING
+        if self.is_basic_state_intermediate and self._previous_state == PROPERTY_BASIC_STATE_VALUE_ON:
+            return GARAGE_DOOR_STATUS_CLOSING
+        return None
+
+    @property
+    def is_closing(self) -> bool | None:
+        return self.current_status == GARAGE_DOOR_STATUS_CLOSING
+
+    @property
+    def is_opening(self) -> bool | None:
+        return self.current_status == GARAGE_DOOR_STATUS_OPENING
+
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
+
+        self._previous_state = self.basic_state
+
         if DEVICE_DESCRIPTOR_PROPERTIES in payload:
             self.merge_properties(payload[DEVICE_DESCRIPTOR_PROPERTIES])
 

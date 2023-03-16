@@ -2,7 +2,6 @@ from homeassistant.components.cover import CoverEntity, CoverDeviceClass, CoverE
 
 from ..const import DOMAIN, BRAND
 
-from ..nhccoco.const import PROPERTY_ACTION_VALUE_OPEN, PROPERTY_ACTION_VALUE_CLOSE, PROPERTY_ACTION_VALUE_STOP
 from ..nhccoco.devices.garagedoor_action import CocoGaragedoorAction
 
 
@@ -44,6 +43,14 @@ class Nhc2GaragedoorActionCoverEntity(CoverEntity):
             return self._device.is_port_closed
 
         return self._device.is_basic_state_off
+
+    @property
+    def is_opening(self) -> bool | None:
+        return self._device.is_opening
+
+    @property
+    def is_closing(self) -> bool | None:
+        return self._device.is_closing
 
     def on_change(self):
         self.schedule_update_ha_state()
