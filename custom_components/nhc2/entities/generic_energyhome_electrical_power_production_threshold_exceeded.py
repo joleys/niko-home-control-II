@@ -31,7 +31,7 @@ class Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity(Bina
 
     @property
     def name(self) -> str:
-        return 'Report Instant Usage'
+        return 'Electrical Power Production Threshold Exceeded'
 
     @property
     def device_info(self):
@@ -48,7 +48,7 @@ class Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity(Bina
 
     @property
     def is_on(self) -> bool:
-        return self._device.is_report_instant_usage
+        return self._device.is_electrical_power_production_threshold_exceeded
 
     def on_change(self):
         self.schedule_update_ha_state()
