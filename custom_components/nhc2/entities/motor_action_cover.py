@@ -26,8 +26,6 @@ class Nhc2MotorActionCoverEntity(CoverEntity):
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
 
-        self._attr_current_cover_position = self._device.position
-        self._attr_is_closed = self._device.position == 0
         self._attr_supported_features = CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | \
                                         CoverEntityFeature.SET_POSITION | CoverEntityFeature.STOP
 
@@ -43,6 +41,22 @@ class Nhc2MotorActionCoverEntity(CoverEntity):
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }
+
+    @property
+    def current_cover_position(self) -> int | None:
+        return self._device.position
+
+    @property
+    def is_closed(self) -> bool:
+        return self._device.position == 0
+
+    @property
+    def is_opening(self) -> bool:
+        return self._device.is_opening
+
+    @property
+    def is_closing(self) -> bool:
+        return self._device.is_closing
 
     @property
     def device_class(self) -> str:
