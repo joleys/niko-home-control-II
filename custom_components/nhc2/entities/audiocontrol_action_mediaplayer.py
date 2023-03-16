@@ -24,9 +24,6 @@ class Nhc2AudiocontrolActionMediaPlayerEntity(MediaPlayerEntity):
         self._attr_supported_features = MediaPlayerEntityFeature.PAUSE | MediaPlayerEntityFeature.PLAY | \
                                         MediaPlayerEntityFeature.TURN_OFF | MediaPlayerEntityFeature.TURN_ON | \
                                         MediaPlayerEntityFeature.VOLUME_MUTE | MediaPlayerEntityFeature.VOLUME_SET
-        self._attr_is_volume_muted = self._device.is_muted
-        self._attr_media_title = self._device.title
-        self._attr_volume_level = self._device.volume / 100
 
     @property
     def device_info(self):
@@ -53,6 +50,18 @@ class Nhc2AudiocontrolActionMediaPlayerEntity(MediaPlayerEntity):
             return MediaPlayerState.OFF
         if self._device.is_status_on:
             return MediaPlayerState.ON
+
+    @property
+    def is_volume_muted(self) -> bool:
+        return self._device.is_muted
+
+    @property
+    def media_title(self) -> str:
+        return self._device.title
+
+    @property
+    def volume_level(self) -> float:
+        return self._device.volume / 100
 
     def on_change(self):
         self.schedule_update_ha_state()
