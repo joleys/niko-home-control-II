@@ -21,8 +21,6 @@ class Nhc2AccesscontrolActionLockEntity(LockEntity):
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
 
-        self._attr_is_locked = self._device.is_doorlock_closed
-
     @property
     def device_info(self):
         """Return the device info."""
@@ -36,6 +34,9 @@ class Nhc2AccesscontrolActionLockEntity(LockEntity):
             'via_device': self._hub
         }
 
+    @property
+    def is_locked(self) -> bool:
+        return self._device.is_doorlock_closed
 
     def on_change(self):
         self.schedule_update_ha_state()

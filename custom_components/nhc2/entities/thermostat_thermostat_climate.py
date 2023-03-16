@@ -25,10 +25,10 @@ class Nhc2ThermostatThermostatClimateEntity(ClimateEntity):
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
 
-        self._attr_temperature_unit = UnitOfTemperature.CELSIUS
-        self._attr_current_temperature = self._device.ambient_temperature
-        self._attr_target_temperature = self._device.setpoint_temperature
         min_value, max_value, step = self._device.overrule_setpoint_range
+
+        self._attr_temperature_unit = UnitOfTemperature.CELSIUS
+        self._attr_precision = step
         self._attr_target_temperature_high = max_value
         self._attr_target_temperature_low = min_value
         self._attr_target_temperature_step = step
@@ -55,15 +55,12 @@ class Nhc2ThermostatThermostatClimateEntity(ClimateEntity):
         }
 
     @property
-    def hvac_action(self):
-        if self._device.program == PROPERTY_PROGRAM_VALUE_OFF:
-            return HVACAction.OFF
-        if self._device.is_demand_heating:
-            return HVACAction.HEATING
-        if self._device.is_demand_cooling:
-            return HVACAction.COOLING
+    def current_temperature(self) -> float:
+        return self._device.ambient_temperature
 
-        return HVACAction.IDLE
+    @property
+    def target_temperature(self) -> float:
+        return self._device.setpoint_temperature
 
     @property
     def hvac_mode(self):
@@ -73,6 +70,17 @@ class Nhc2ThermostatThermostatClimateEntity(ClimateEntity):
             return HVACMode.COOL
         if self._device.is_demand_none:
             return HVACMode.OFF
+
+    @property
+    def hvac_action(self):
+        if self._device.program == PROPERTY_PROGRAM_VALUE_OFF:
+            return HVACAction.OFF
+        if self._device.is_demand_heating:
+            return HVACAction.HEATING
+        if self._device.is_demand_cooling:
+            return HVACAction.COOLING
+
+        return HVACAction.IDLE
 
     @property
     def preset_mode(self) -> str:

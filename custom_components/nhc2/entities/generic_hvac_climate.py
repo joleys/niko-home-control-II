@@ -17,7 +17,7 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
     _attr_name = None
 
     def __init__(self, device_instance: CocoGenericHvac, hub, gateway):
-        """Initialize a lock sensor."""
+        """Initialize a climate entity."""
         self._device = device_instance
         self._hub = hub
         self._gateway = gateway
@@ -29,8 +29,6 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
         self._attr_should_poll = False
 
         self._attr_temperature_unit = UnitOfTemperature.CELSIUS
-        self._attr_current_temperature = self._device.ambient_temperature
-        self._attr_target_temperature = self._device.setpoint_temperature
         self._attr_hvac_modes = [
             HVACMode.AUTO,
             HVACMode.HEAT_COOL,
@@ -56,6 +54,14 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }
+
+    @property
+    def current_temperature(self) -> float:
+        return self._device.ambient_temperature
+
+    @property
+    def target_temperature(self) -> float:
+        return self._device.setpoint_temperature
 
     @property
     def supported_features(self) -> int:
