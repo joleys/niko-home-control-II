@@ -20,7 +20,6 @@ class Nhc2GenericDomestichotwaterunitProgramEntity(SelectEntity):
         self._attr_unique_id = device_instance.uuid + '_program'
         self._attr_should_poll = False
 
-        self._attr_current_option = self._device.program
         self._attr_options = self._device.possible_programs
 
     @property
@@ -39,6 +38,10 @@ class Nhc2GenericDomestichotwaterunitProgramEntity(SelectEntity):
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }
+
+    @property
+    def current_option(self) -> str:
+        return self._device.program
 
     def on_change(self):
         self.schedule_update_ha_state()

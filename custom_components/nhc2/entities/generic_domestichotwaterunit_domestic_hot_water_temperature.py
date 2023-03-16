@@ -26,7 +26,6 @@ class Nhc2GenericDomestichotwaterunitDomesticHotWaterTemperatureEntity(NumberEnt
         self._attr_native_max_value = max_value
         self._attr_native_min_value = min_value
         self._attr_native_step = step
-        self._attr_native_value = self._device.domestic_hot_water_temperature
         self._attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
 
     @property
@@ -45,6 +44,10 @@ class Nhc2GenericDomestichotwaterunitDomesticHotWaterTemperatureEntity(NumberEnt
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }
+
+    @property
+    def native_value(self) -> float:
+        return self._device.domestic_hot_water_temperature
 
     def on_change(self):
         self.schedule_update_ha_state()
