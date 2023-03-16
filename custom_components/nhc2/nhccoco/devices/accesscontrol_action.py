@@ -1,8 +1,8 @@
 from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PARAMETER_DECLINE_CALL_APPLIED_ON_ALL_DEVICES, \
     PARAMETER_DECLINE_CALL_APPLIED_ON_ALL_DEVICES_VALUE_TRUE, PROPERTY_BASIC_STATE, PROPERTY_BASIC_STATE_VALUE_ON, \
     PROPERTY_BASIC_STATE_VALUE_TRIGGERED, PROPERTY_DOORLOCK, PROPERTY_DOORLOCK_VALUE_OPEN, \
-    PROPERTY_DOORLOCK_VALUE_CLOSED, PROPERTY_CALL_PENDING, PROPERTY_CALL_PENDING_VALUE_TRUE, PARAMETER_CALL_ANSWERED, \
-    PARAMETER_CALL_ANSWERED_VALUE_TRUE
+    PROPERTY_DOORLOCK_VALUE_CLOSED, PROPERTY_CALL_PENDING, PROPERTY_CALL_PENDING_VALUE_TRUE, PROPERTY_CALL_ANSWERED, \
+    PROPERTY_CALL_ANSWERED_VALUE_TRUE
 
 from .device import CoCoDevice
 
@@ -58,15 +58,15 @@ class CocoAccesscontrolAction(CoCoDevice):
 
     @property
     def supports_call_answered(self) -> bool:
-        return self.has_property(PARAMETER_CALL_ANSWERED)
+        return self.has_property(PROPERTY_CALL_ANSWERED)
 
     @property
     def call_answered(self) -> str:
-        return self.extract_parameter_value(PARAMETER_CALL_ANSWERED)
+        return self.extract_property_value(PROPERTY_CALL_ANSWERED)
 
     @property
     def is_call_answered(self) -> bool:
-        return self.call_answered == PARAMETER_CALL_ANSWERED_VALUE_TRUE
+        return self.call_answered == PROPERTY_CALL_ANSWERED_VALUE_TRUE
 
     @property
     def decline_call_applied_on_all_devices(self) -> str:
