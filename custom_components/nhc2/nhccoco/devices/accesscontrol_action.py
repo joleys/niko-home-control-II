@@ -6,6 +6,8 @@ from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PARAMETER_DECLINE_CALL_APPLIED
 
 from .device import CoCoDevice
 
+from ...entities.accesscontrol_action_basicstate_switch import Nhc2AccesscontrolActionBasicStateSwitchEntity
+from ...entities.accesscontrol_action_lock import Nhc2AccesscontrolActionLockEntity
 from ...entities.binary_sensor import Nhc2BinarySensorEntity
 
 import logging
@@ -15,10 +17,6 @@ _LOGGER = logging.getLogger(__name__)
 
 class CocoAccesscontrolAction(CoCoDevice):
     @property
-    def supports_basicstate(self) -> bool:
-        return self.has_property(PROPERTY_BASIC_STATE)
-
-    @property
     def basic_state(self) -> str:
         return self.extract_property_value(PROPERTY_BASIC_STATE)
 
@@ -27,16 +25,8 @@ class CocoAccesscontrolAction(CoCoDevice):
         return self.basic_state == PROPERTY_BASIC_STATE_VALUE_ON
 
     @property
-    def supports_doorlock(self) -> bool:
-        return self.has_property(PROPERTY_DOORLOCK)
-
-    @property
     def doorlock(self) -> str:
         return self.extract_property_value(PROPERTY_DOORLOCK)
-
-    @property
-    def is_doorlock_open(self) -> bool:
-        return self.doorlock == PROPERTY_DOORLOCK_VALUE_OPEN
 
     @property
     def is_doorlock_closed(self) -> bool:
@@ -65,6 +55,22 @@ class CocoAccesscontrolAction(CoCoDevice):
                     PARAMETER_DECLINE_CALL_APPLIED_ON_ALL_DEVICES, self, hub, gateway, True
                 )
             )
+
+        return entities
+
+    def get_lock_entities(self, hub: tuple, gateway) -> list:
+        entities = CoCoDevice.get_lock_entities(self, hub, gateway)
+
+        if self.has_property(PROPERTY_DOORLOCK):
+            entities.append(Nhc2AccesscontrolActionLockEntity(self, hub, gateway))
+
+        return entities
+
+    def get_switch_entities(self, hub: tuple, gateway) -> list:
+        entities = CoCoDevice.get_switch_entities(self, hub, gateway)
+
+        if self.has_property(PROPERTY_BASIC_STATE):
+            entities.append(Nhc2AccesscontrolActionBasicStateSwitchEntity(self, hub, gateway))
 
         return entities
 

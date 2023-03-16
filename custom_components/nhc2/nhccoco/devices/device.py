@@ -171,6 +171,11 @@ class CoCoDevice:
 
         return entities
 
+    def get_lock_entities(self, hub: tuple, gateway) -> list:
+        entities = []
+
+        return entities
+
     def get_sensor_entities(self, hub: tuple, gateway) -> list:
         entities = []
 
@@ -179,5 +184,10 @@ class CoCoDevice:
 
             if str.startswith(property_definition[property_name]['Description'], 'Choice('):
                 entities.append(Nhc2EnumSensorEntity(property_name, self, hub, gateway))
+
+        return entities
+
+    def get_switch_entities(self, hub: tuple, gateway) -> list:
+        entities = []
 
         return entities

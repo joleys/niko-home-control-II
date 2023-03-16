@@ -2,14 +2,12 @@ from homeassistant.components.lock import LockEntity
 
 from ..const import DOMAIN, BRAND
 
-from ..nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
-
 
 class Nhc2AccesscontrolActionLockEntity(LockEntity):
     _attr_has_entity_name = True
     _attr_name = None
 
-    def __init__(self, device_instance: CocoAccesscontrolAction, hub, gateway):
+    def __init__(self, device_instance, hub, gateway):
         """Initialize a lock sensor."""
         self._device = device_instance
         self._hub = hub
