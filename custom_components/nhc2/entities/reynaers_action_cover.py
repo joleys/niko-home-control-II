@@ -23,7 +23,6 @@ class Nhc2ReynaersActionCoverEntity(CoverEntity):
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
 
-        self._attr_is_closed = self._device.status == PROPERTY_STATUS_VALUE_FIXED_CLOSED
         self._attr_device_class = CoverDeviceClass.WINDOW
         self._attr_supported_features = CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | CoverEntityFeature.STOP
 
@@ -39,6 +38,10 @@ class Nhc2ReynaersActionCoverEntity(CoverEntity):
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }
+
+    @property
+    def is_closed(self) -> bool | None:
+        return self._device.status == PROPERTY_STATUS_VALUE_FIXED_CLOSED
 
     def on_change(self):
         self.schedule_update_ha_state()
