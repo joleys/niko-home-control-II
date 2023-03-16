@@ -22,7 +22,6 @@ class Nhc2GaragedoorActionCoverEntity(CoverEntity):
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
 
-        self._attr_is_closed = self._device.is_basic_state_off
         self._attr_device_class = CoverDeviceClass.GARAGE
         self._attr_supported_features = CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE
 
@@ -38,6 +37,13 @@ class Nhc2GaragedoorActionCoverEntity(CoverEntity):
             'model': str.title(f'{self._device.model} ({self._device.type})'),
             'via_device': self._hub
         }
+
+    @property
+    def is_closed(self) -> bool:
+        if self._device.supports_port_closed:
+            return self._device.is_port_closed
+
+        return self._device.is_basic_state_off
 
     def on_change(self):
         self.schedule_update_ha_state()
