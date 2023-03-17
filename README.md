@@ -28,11 +28,10 @@ at [docs/documentation.pdf](./docs/documentation.pdf).
 
 ### NHC Access Control Action
 
-This action is exposed as a switch, and a lock (if supported)
+This action is exposed as a switch (if supported), and a lock (if supported)
 
 #### Entities
 
-* **Basic State Switch**, (only if supported), used to enable/disable ring-and-come-in.
 * **Lock**, (only if supported), used to unlock the doorlock.
 * **Basic State Enum Sensor**, (only if supported), This is only available for ring-and-come-in guided action. It
   indicates if the ring-and-come-in is enabled or not. The switch uses the same information but will not
@@ -76,6 +75,12 @@ It has some extra entities that can be used in automations:
 __Remark:__ this is untested as I don't own a device of this type.
 
 This action is exposed as alarm control panel.
+
+#### Entities
+
+It has some extra entities that can be used in automations:
+
+* **Basic State Enum Sensor**, which represents the Basic State. It is on when bell button is press, off when no call
 
 ### NHC BellButton Action (untested)
 

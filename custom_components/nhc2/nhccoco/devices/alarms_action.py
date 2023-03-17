@@ -13,6 +13,10 @@ class CocoAlarmsAction(CoCoDevice):
         return self.extract_property_value(PROPERTY_BASIC_STATE)
 
     @property
+    def possible_basic_states(self) -> list:
+        return self.extract_property_definition_description_choices(PROPERTY_BASIC_STATE)
+
+    @property
     def is_basic_state_intermediate(self) -> bool:
         return self.basic_state == PROPERTY_BASIC_STATE_VALUE_INTERMEDIATE
 
