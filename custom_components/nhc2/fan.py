@@ -1,121 +1,44 @@
-"""Support for NHC2 lights."""
+"""Support for NHC2 Fans."""
 import logging
-from typing import Any, Optional
 
-from homeassistant.components.fan import FanEntity, SUPPORT_SET_SPEED
+from homeassistant.const import CONF_USERNAME
+
 from .nhccoco.coco import CoCo
-from .nhccoco.coco_device_class import CoCoDeviceClass
-from .nhccoco.coco_fan import CoCoFan
-from .nhccoco.coco_switched_fan import CoCoSwitchedFan
 
-from .const import DOMAIN, KEY_GATEWAY, BRAND, FAN
-from .helpers import nhc2_entity_processor
+from .entities.fan_action_fan import Nhc2FanActionFanEntity
+from .entities.generic_fan_fan import Nhc2GenericFanFanEntity
+from .nhccoco.devices.fan_action import CocoFanAction
+from .nhccoco.devices.generic_fan import CocoGenericFan
 
-from homeassistant.util.percentage import ordered_list_item_to_percentage, percentage_to_ordered_list_item
+from .const import DOMAIN, KEY_GATEWAY
 
-KEY_GATEWAY = KEY_GATEWAY
 KEY_ENTITY = 'nhc2_fans'
 
 _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
-    """Load NHC2 fan based on a config entry."""
+    _LOGGER.info('Configuring fans')
+
     hass.data.setdefault(KEY_ENTITY, {})[config_entry.entry_id] = []
+
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
-    _LOGGER.debug('Platform is starting')
-    gateway.get_devices(CoCoDeviceClass.FANS,
-                        nhc2_entity_processor(hass,
-                                              config_entry,
-                                              async_add_entities,
-                                              KEY_ENTITY,
-                                              lambda x: NHC2HassFan(x))
-                        )
+    hub = (DOMAIN, config_entry.data[CONF_USERNAME])
 
+    device_instances = gateway.get_device_instances(CocoFanAction)
+    _LOGGER.info('→ Found %s NHC Fan Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2FanActionFanEntity(device_instance, hub, gateway))
 
-class NHC2HassFan(FanEntity):
-    """Representation of an NHC2 Fan."""
+        async_add_entities(entities)
 
-    def __init__(self, nhc2fan: CoCoFan):
-        """Initialize a fan."""
-        self._nhc2fan = nhc2fan
-        self._fan_speeds = self._nhc2fan.fan_speeds
-        self._percentage = ordered_list_item_to_percentage(self._fan_speeds, self._nhc2fan.fan_speed)
-        nhc2fan.on_change = self._on_change
+    device_instances = gateway.get_device_instances(CocoGenericFan)
+    _LOGGER.info('→ Found %s Generic Ventilation Implementation', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2GenericFanFanEntity(device_instance, hub, gateway))
 
-    def set_percentage(self, percentage: int) -> None:
-        """Set the speed percentage of the fan."""
-        self._nhc2fan.change_speed(percentage_to_ordered_list_item(self._fan_speeds, percentage))
-
-    def turn_on(self, speed: Optional[str] = None, percentage: Optional[int] = None, preset_mode: Optional[str] = None, **kwargs: Any) -> None:
-        """Turn on the fan."""
-        if percentage is not None:
-            self.set_percentage(percentage)
-
-    def turn_off(self, **kwargs: Any) -> None:
-        """Turn the fan off."""
-        pass
-
-    def _on_change(self):
-        self._percentage = ordered_list_item_to_percentage(self._fan_speeds, self._nhc2fan.fan_speed)
-        self.schedule_update_ha_state()
-
-    def nhc2_update(self, nhc2fan: CoCoFan):
-        """Update the NHC2 fan with a new object."""
-        self._nhc2fan = nhc2fan
-        nhc2fan.on_change = self._on_change
-        self.schedule_update_ha_state()
-
-    @property
-    def percentage(self) -> int:
-        """Return the current speed percentage."""
-        return self._percentage
-
-    @property
-    def speed_count(self) -> int:
-        """Return the number of speeds the fan supports."""
-        return len(self._fan_speeds)
-
-    @property
-    def unique_id(self):
-        """Return the fan's UUID."""
-        return self._nhc2fan.uuid
-
-    @property
-    def uuid(self):
-        """Return the fan's UUID."""
-        return self._nhc2fan.uuid
-
-    @property
-    def should_poll(self):
-        """Return false, since the fan will push state."""
-        return False
-
-    @property
-    def name(self):
-        """Return the fan's name."""
-        return self._nhc2fan.name
-
-    @property
-    def available(self):
-        """Return true if the fan is online."""
-        #return self._nhc2fan.online
-        return True
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self.unique_id)
-            },
-            'name': self.name,
-            'manufacturer': BRAND,
-            'model': FAN,
-            'via_hub': (DOMAIN, self._nhc2fan.profile_creation_id),
-        }
-
-    @property
-    def supported_features(self):
-        """Return supported features."""
-        return SUPPORT_SET_SPEED
+        async_add_entities(entities)

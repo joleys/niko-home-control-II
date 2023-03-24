@@ -1,11 +1,20 @@
 {
   "domain": "nhc2",
   "name": "Niko Home Control II",
-  "requirements": [ "paho-mqtt==1.6.1", "getmac==0.8.3" ],
+  "codeowners": [
+    "@filipvh",
+    "@joleys",
+    "@tijsverkoyen"
+  ],
   "config_flow": true,
-  "issue_tracker": "https://github.com/joleys/niko-home-control-II",
+  "dependencies": [],
   "documentation": "https://github.com/joleys/niko-home-control-II/blob/master/README.md",
-  "codeowners": ["@filipvh", "@joleys"],
-  "version": "2.0.0",
-  "iot_class": "local_push"
+  "integration_type": "hub",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/joleys/niko-home-control-II/issues",
+  "requirements": [
+    "paho-mqtt==1.6.1",
+    "getmac==0.8.3"
+  ],
+  "version": "v3.0.0"
 }

@@ -8,7 +8,7 @@ from homeassistant.const import CONF_HOST, CONF_USERNAME, \
 from .nhccoco.coco_discover_profiles import CoCoDiscoverProfiles
 from .nhccoco.coco_login_validation import CoCoLoginValidation
 
-from .const import DOMAIN, CONF_SWITCHES_AS_LIGHTS, KEY_MANUAL
+from .const import DOMAIN, KEY_MANUAL
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -40,16 +40,15 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
         self._errors = {}
 
         if user_input is not None:
-            # TODO We might want to check this before showing dialogs in the future
+            # Make sure the controller is not already configured
             matches = list(filter(lambda x: ((x.data[CONF_ADDRESS] == self._selected_coco[1]) and (
                     x.data[CONF_USERNAME] == user_input[CONF_USERNAME])),
                                   self.hass.config_entries.async_entries(DOMAIN)))
-
             if len(matches) > 0:
                 return self.async_abort(reason="single_instance_allowed")
 
-            user_name = list(filter(lambda x: (x.get('Uuid') == user_input[CONF_USERNAME]), self._selected_coco[2]))[
-                0].get('Name')
+            user_name = list(filter(lambda x: (x.get('Uuid') == user_input[CONF_USERNAME]),
+                                    self._selected_coco[2]))[0].get('Name')
             host = self._selected_coco[0] if self._selected_coco[3] is None else self._selected_coco[3]
             username = user_input[CONF_USERNAME]
             password = user_input[CONF_PASSWORD]
@@ -68,8 +67,7 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
                     CONF_ADDRESS: self._selected_coco[1],
                     CONF_PORT: port,
                     CONF_USERNAME: username,
-                    CONF_PASSWORD: password,
-                    CONF_SWITCHES_AS_LIGHTS: user_input[CONF_SWITCHES_AS_LIGHTS]
+                    CONF_PASSWORD: password
                 }
             )
 
@@ -86,14 +84,53 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
 
         return await self._show_host_config_form()
 
+    async def _show_host_config_form(self):
+        """Show the form to select the host."""
+        host_listing = {}
+        first = None
+        for i, x in enumerate(self._all_cocos):
+            if x[3] is None:
+                dkey = x[0]
+                host_listing[dkey] = [x[0]]
+            else:
+                dkey = x[3]
+                host_listing[dkey] = [x[3] + ' (' + x[0] + ')']
+            if i == 0:
+                first = dkey
+        # Append an option to enter the host manually
+        host_listing[KEY_MANUAL] = 'Manual Input'
+
+        if first is None:
+            first = KEY_MANUAL
+
+        return self.async_show_form(
+            step_id='host',
+            errors=self._errors,
+            data_schema=vol.Schema({
+                vol.Required(CONF_HOST, default=first): vol.In(host_listing)
+            }),
+        )
+
     async def async_step_host(self, user_input=None):
         self._errors = {}
         if user_input[CONF_HOST] == KEY_MANUAL:
             return await self._show_manual_host_config_form()
         else:
-            self._selected_coco = \
-                list(filter(lambda x: x[0] == user_input[CONF_HOST] or x[3] == user_input[CONF_HOST], self._all_cocos))[0]
+            self._selected_coco = list(
+                filter(lambda x: x[0] == user_input[CONF_HOST] or x[3] == user_input[CONF_HOST], self._all_cocos)
+            )[0]
+
         return await self._show_user_config_form()
+
+    async def _show_manual_host_config_form(self):
+        """Show the form to manually enter an IP / hostname."""
+        return self.async_show_form(
+            step_id='manual_host',
+            errors=self._errors,
+            data_schema=vol.Schema({
+                vol.Required(CONF_HOST, default=None): str
+            }),
+        )
 
     async def async_step_manual_host(self, user_input=None):
         self._errors = {}
@@ -115,32 +152,8 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
         else:
             return self.async_abort(reason="no_controller_found")
 
-    async def _show_host_config_form(self):
-        """Show the configuration form to edit NHC2 data."""
-        host_listing = {}
-        first = None
-        for i, x in enumerate(self._all_cocos):
-            if x[3] is None:
-                dkey = x[0]
-                host_listing[dkey] = [x[0]]
-            else:
-                dkey = x[3]
-                host_listing[dkey] = [x[3] + ' (' + x[0] + ')']
-            if i == 0:
-                first = dkey
-        host_listing[KEY_MANUAL] = 'Manual Input'
-        if first is None:
-            first = KEY_MANUAL
-        return self.async_show_form(
-            step_id='host',
-            errors=self._errors,
-            data_schema=vol.Schema({
-                vol.Required(CONF_HOST, default=first): vol.In(host_listing)
-            }),
-        )
-
     async def _show_user_config_form(self):
-        """Show the configuration form to edit NHC2 data."""
+        """Show form to enter the credentials."""
         profile_listing = {}
         profiles = self._selected_coco[2]
         first = None
@@ -149,6 +162,7 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
             profile_listing[dkey] = x.get('Name')
             if i == 0:
                 first = dkey
+
         return self.async_show_form(
             step_id='user',
             errors=self._errors,
@@ -157,18 +171,7 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
             },
             data_schema=vol.Schema({
                 vol.Required(CONF_USERNAME, default=first): vol.In(profile_listing),
-                vol.Required(CONF_PASSWORD, default=None): str,
-                vol.Optional(CONF_SWITCHES_AS_LIGHTS, default=False): bool
-            }),
-        )
-
-    async def _show_manual_host_config_form(self):
-        """Show the configuration form to edit NHC2 data."""
-        return self.async_show_form(
-            step_id='manual_host',
-            errors=self._errors,
-            data_schema=vol.Schema({
-                vol.Required(CONF_HOST, default=None): str
+                vol.Required(CONF_PASSWORD, default=None): str
             }),
         )
 

@@ -1,209 +1,204 @@
 """Support for NHC2 switches."""
 import logging
-from homeassistant.components.switch import SwitchEntity
 
-from .helpers import nhc2_entity_processor
+from homeassistant.const import CONF_USERNAME
+
 from .nhccoco.coco import CoCo
-from .nhccoco.coco_switch import CoCoSwitch
-from .nhccoco.coco_generic import CoCoGeneric
-from .nhccoco.coco_device_class import CoCoDeviceClass
 
-from .const import DOMAIN, KEY_GATEWAY, BRAND, SWITCH
+from .entities.accesscontrol_action_basicstate_switch import Nhc2AccesscontrolActionBasicStateSwitchEntity
+from .entities.bellbutton_action_basicstate_switch import Nhc2BellbuttonActionBasicStateSwitchEntity
+from .entities.condition_action_switch import Nhc2ConditionActionSwitchEntity
+from .entities.flag_action_switch import Nhc2FlagActionSwitchEntity
+from .entities.generic_action_basicstate import Nhc2GenericActionBasicStateEntity
+from .entities.generic_domestichotwaterunit_boost import Nhc2GenericDomestichotwaterunitBoostEntity
+from .entities.generic_fan_boost import Nhc2GenericFanBoostEntity
+from .entities.generic_hvac_overrule_active import Nhc2GenericHvacOverruleActiveEntity
+from .entities.hvacthermostat_hvac_ecosave import Nhc2HvacthermostatHvacEcoSaveEntity
+from .entities.hvacthermostat_hvac_thermostat_on import Nhc2HvacthermostatHvacThermostatOnEntity
+from .entities.hvacthermostat_hvac_overrule_active import Nhc2HvacthermostatHvacOverruleActiveEntity
+from .entities.hvacthermostat_hvac_protect_mode import Nhc2HvacthermostatHvacProtectModeEntity
+from .entities.overallcomfort_action_basicstate import Nhc2OverallcomfortActionBasicStateEntity
+from .entities.pir_action_basicstate import Nhc2PirActionBasicStateEntity
+from .entities.relay_action_switch import Nhc2RelayActionSwitchEntity
+from .entities.simulation_action_basicstate_switch import Nhc2SimulationActionBasicStateSwitchEntity
+from .entities.thermostat_hvac_ecosave import Nhc2ThermostatHvacEcoSaveEntity
+from .entities.thermostat_hvac_overrule_active import Nhc2ThermostatHvacOverruleActiveEntity
+from .entities.thermostat_thermostat_ecosave import Nhc2ThermostatThermostatEcoSaveEntity
+from .entities.thermostat_thermostat_overrule_active import Nhc2ThermostatThermostatOverruleActiveEntity
+from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
+from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
+from .nhccoco.devices.condition_action import CocoConditionAction
+from .nhccoco.devices.flag_action import CocoFlagAction
+from .nhccoco.devices.generic_action import CocoGenericAction
+from .nhccoco.devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
+from .nhccoco.devices.generic_fan import CocoGenericFan
+from .nhccoco.devices.generic_hvac import CocoGenericHvac
+from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
+from .nhccoco.devices.overallcomfort_action import CocoOverallcomfortAction
+from .nhccoco.devices.pir_action import CocoPirAction
+from .nhccoco.devices.simulation_action import CocoSimulationAction
+from .nhccoco.devices.socket_action import CocoSocketAction
+from .nhccoco.devices.switched_fan_action import CocoSwitchedFanAction
+from .nhccoco.devices.switched_generic_action import CocoSwitchedGenericAction
+from .nhccoco.devices.thermostat_hvac import CocoThermostatHvac
+from .nhccoco.devices.thermostat_thermostat import CocoThermostatThermostat
+from .nhccoco.devices.touchswitch_hvac import CocoTouchswitchHvac
 
-KEY_GATEWAY = KEY_GATEWAY
+from .const import DOMAIN, KEY_GATEWAY
+
 KEY_ENTITY = 'nhc2_switches'
 
 _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
-    """Load NHC2 switches based on a config entry."""
+    _LOGGER.info('Configuring switches')
+
     hass.data.setdefault(KEY_ENTITY, {})[config_entry.entry_id] = []
+
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
-    _LOGGER.debug('Platform is starting')
-    gateway.get_devices(CoCoDeviceClass.SWITCHES,
-        nhc2_entity_processor(hass,
-                              config_entry,
-                              async_add_entities,
-                              KEY_ENTITY,
-                              lambda x: NHC2HassSwitch(x))
-    )
-    gateway.get_devices(CoCoDeviceClass.GENERIC,
-         nhc2_entity_processor(hass,
-                               config_entry,
-                               async_add_entities,
-                               KEY_ENTITY,
-                               lambda x: NHC2HassGeneric(x))
-     )
-     
-class NHC2HassGeneric(SwitchEntity):
-    """Representation of an NHC2 Switch."""
+    hub = (DOMAIN, config_entry.data[CONF_USERNAME])
 
-    def __init__(self, nhc2switch: CoCoGeneric, optimistic=True):
-        """Initialize a switch."""
-        _LOGGER.debug("init Switch")
-        self._nhc2switch = nhc2switch
-        self._optimistic = optimistic
-        self._is_on = nhc2switch.is_on
-        nhc2switch.on_change = self._on_change
+    device_instances = gateway.get_device_instances(CocoAccesscontrolAction)
+    _LOGGER.info('→ Found %s NHC Access Control Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            if device_instance.supports_basicstate:
+                entities.append(Nhc2AccesscontrolActionBasicStateSwitchEntity(device_instance, hub, gateway))
 
-    def _on_change(self):
-        self._is_on = self._nhc2switch.is_on
-        self.schedule_update_ha_state()
+        async_add_entities(entities)
 
-    def turn_off(self, **kwargs) -> None:
-        """Pass - not in use."""
-        pass
+    device_instances = gateway.get_device_instances(CocoBellbuttonAction)
+    _LOGGER.info('→ Found %s NHC BellButton Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2BellbuttonActionBasicStateSwitchEntity(device_instance, hub, gateway))
 
-    def turn_on(self, **kwargs) -> None:
-        """Pass - not in use."""
-        pass
+        async_add_entities(entities)
 
-    async def async_turn_on(self, **kwargs):
-        """Instruct the switch to turn on."""
-        self._nhc2switch.turn_on()
-        if self._optimistic:
-            self._is_on = True
-            self.schedule_update_ha_state()
+    device_instances = gateway.get_device_instances(CocoGenericAction)
+    _LOGGER.info('→ Found %s NHC Free Start Stop Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2GenericActionBasicStateEntity(device_instance, hub, gateway))
 
-    async def async_turn_off(self, **kwargs):
-        """Instruct the switch to turn off."""
-        self._nhc2switch.turn_off()
-        if self._optimistic:
-            self._is_on = False
-            self.schedule_update_ha_state()
+        async_add_entities(entities)
 
-    def nhc2_update(self, nhc2switch: CoCoSwitch):
-        """Update the NHC2 switch with a new object."""
-        self._nhc2switch = nhc2switch
-        nhc2switch.on_change = self._on_change
-        self.schedule_update_ha_state()
+    device_instances = gateway.get_device_instances(CocoOverallcomfortAction)
+    _LOGGER.info('→ Found %s NHC House Mode Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2OverallcomfortActionBasicStateEntity(device_instance, hub, gateway))
 
-    @property
-    def unique_id(self):
-        """Return the lights UUID."""
-        return self._nhc2switch.uuid
+        async_add_entities(entities)
 
-    @property
-    def uuid(self):
-        """Return the lights UUID."""
-        return self._nhc2switch.uuid
+    device_instances = gateway.get_device_instances(CocoHvacthermostatHvac)
+    _LOGGER.info('→ Found %s NHC HVAC Thermostats', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2HvacthermostatHvacOverruleActiveEntity(device_instance, hub, gateway))
+            entities.append(Nhc2HvacthermostatHvacEcoSaveEntity(device_instance, hub, gateway))
+            entities.append(Nhc2HvacthermostatHvacThermostatOnEntity(device_instance, hub, gateway))
+            entities.append(Nhc2HvacthermostatHvacProtectModeEntity(device_instance, hub, gateway))
 
-    @property
-    def should_poll(self):
-        """Return false, since the light will push state."""
-        return False
+        async_add_entities(entities)
 
-    @property
-    def name(self):
-        """Return the lights name."""
-        return self._nhc2switch.name
+    device_instances = gateway.get_device_instances(CocoThermostatHvac)
+    device_instances += gateway.get_device_instances(CocoTouchswitchHvac)
+    _LOGGER.info('→ Found %s NHC Thermostat (thermostat, touchswitch)', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2ThermostatHvacOverruleActiveEntity(device_instance, hub, gateway))
+            entities.append(Nhc2ThermostatHvacEcoSaveEntity(device_instance, hub, gateway))
 
-    @property
-    def available(self):
-        """Return true if the light is online."""
-        return self._nhc2switch.online
+        async_add_entities(entities)
 
-    @property
-    def is_on(self):
-        """Return true if the light is on."""
-        return self._is_on
+    device_instances = gateway.get_device_instances(CocoThermostatThermostat)
+    _LOGGER.info('→ Found %s NHC Touch Switch', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2ThermostatThermostatEcoSaveEntity(device_instance, hub, gateway))
+            entities.append(Nhc2ThermostatThermostatOverruleActiveEntity(device_instance, hub, gateway))
 
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self.unique_id)
-            },
-            'name': self.name,
-            'manufacturer': BRAND,
-            'model': SWITCH,
-            'via_hub': (DOMAIN, self._nhc2switch.profile_creation_id),
-        }
+        async_add_entities(entities)
 
+    device_instances = gateway.get_device_instances(CocoPirAction)
+    _LOGGER.info('→ Found %s NHC PIR Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2PirActionBasicStateEntity(device_instance, hub, gateway))
 
-class NHC2HassSwitch(SwitchEntity):
-    """Representation of an NHC2 Switch."""
+        async_add_entities(entities)
 
-    def __init__(self, nhc2switch: CoCoSwitch, optimistic=True):
-        """Initialize a switch."""
-        self._nhc2switch = nhc2switch
-        self._optimistic = optimistic
-        self._is_on = nhc2switch.is_on
-        nhc2switch.on_change = self._on_change
+    device_instances = gateway.get_device_instances(CocoSimulationAction)
+    _LOGGER.info('→ Found %s NHC Presence Simulation Actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2SimulationActionBasicStateSwitchEntity(device_instance, hub, gateway))
 
-    def _on_change(self):
-        self._is_on = self._nhc2switch.is_on
-        self.schedule_update_ha_state()
+        async_add_entities(entities)
 
-    def turn_off(self, **kwargs) -> None:
-        """Pass - not in use."""
-        pass
+    device_instances = gateway.get_device_instances(CocoFlagAction)
+    _LOGGER.info('→ Found %s NHC Virtual flags', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2FlagActionSwitchEntity(device_instance, hub, gateway))
 
-    def turn_on(self, **kwargs) -> None:
-        """Pass - not in use."""
-        pass
+        async_add_entities(entities)
 
-    async def async_turn_on(self, **kwargs):
-        """Instruct the switch to turn on."""
-        self._nhc2switch.turn_on()
-        if self._optimistic:
-            self._is_on = True
-            self.schedule_update_ha_state()
+    device_instances = gateway.get_device_instances(CocoSocketAction)
+    device_instances += gateway.get_device_instances(CocoSwitchedFanAction)
+    device_instances += gateway.get_device_instances(CocoSwitchedGenericAction)
+    _LOGGER.info('→ Found %s NHC Relay Actions (socket, switched-fan, switched-generic)', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2RelayActionSwitchEntity(device_instance, hub, gateway))
 
-    async def async_turn_off(self, **kwargs):
-        """Instruct the switch to turn off."""
-        self._nhc2switch.turn_off()
-        if self._optimistic:
-            self._is_on = False
-            self.schedule_update_ha_state()
+        async_add_entities(entities)
 
-    def nhc2_update(self, nhc2switch: CoCoSwitch):
-        """Update the NHC2 switch with a new object."""
-        self._nhc2switch = nhc2switch
-        nhc2switch.on_change = self._on_change
-        self.schedule_update_ha_state()
+    device_instances = gateway.get_device_instances(CocoGenericFan)
+    _LOGGER.info('→ Found %s Generic Ventilation Implementation', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2GenericFanBoostEntity(device_instance, hub, gateway))
 
-    @property
-    def unique_id(self):
-        """Return the lights UUID."""
-        return self._nhc2switch.uuid
+        async_add_entities(entities)
 
-    @property
-    def uuid(self):
-        """Return the lights UUID."""
-        return self._nhc2switch.uuid
+    device_instances = gateway.get_device_instances(CocoGenericHvac)
+    _LOGGER.info('→ Found %s Generic Heating/Cooling Implementations', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2GenericHvacOverruleActiveEntity(device_instance, hub, gateway))
 
-    @property
-    def should_poll(self):
-        """Return false, since the light will push state."""
-        return False
+        async_add_entities(entities)
 
-    @property
-    def name(self):
-        """Return the lights name."""
-        return self._nhc2switch.name
+    device_instances = gateway.get_device_instances(CocoGenericDomestichotwaterunit)
+    _LOGGER.info('→ Found %s Generic Warm Water Implementation', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2GenericDomestichotwaterunitBoostEntity(device_instance, hub, gateway))
 
-    @property
-    def available(self):
-        """Return true if the light is online."""
-        return self._nhc2switch.online
+        async_add_entities(entities)
 
-    @property
-    def is_on(self):
-        """Return true if the light is on."""
-        return self._is_on
+    device_instances = gateway.get_device_instances(CocoConditionAction)
+    _LOGGER.info('→ Found %s Condition actions (undocumented)', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2ConditionActionSwitchEntity(device_instance, hub, gateway))
 
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self.unique_id)
-            },
-            'name': self.name,
-            'manufacturer': BRAND,
-            'model': SWITCH,
-            'via_hub': (DOMAIN, self._nhc2switch.profile_creation_id),
-        }
+        async_add_entities(entities)

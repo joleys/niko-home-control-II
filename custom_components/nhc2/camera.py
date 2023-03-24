@@ -1,71 +1,33 @@
-"""Support for Niko Home Control Access Control"""
-
+"""Support for NHC2 Camera's."""
 import logging
 
-import httpx
-import voluptuous as vol
-
-from homeassistant.components.camera import DEFAULT_CONTENT_TYPE, PLATFORM_SCHEMA, SUPPORT_STREAM, Camera
-from homeassistant.exceptions import TemplateError
-
-
-from . import DOMAIN, PLATFORMS
-
-_LOGGER = logging.getLogger(__name__)
+from homeassistant.const import CONF_USERNAME
 
 from .nhccoco.coco import CoCo
-from .nhccoco.coco_device_class import CoCoDeviceClass
-from .nhccoco.coco_accesscontrol import CoCoAccessControl
 
-from .const import DOMAIN, KEY_GATEWAY, BRAND
-from .helpers import nhc2_entity_processor
+from .entities.robinsip_videodoorstation_camera import Nhc2RobinsipVideodoorstationCameraEntity
+from .nhccoco.devices.robinsip_videodoorstation import CocoRobinsipVideodoorstation
 
-KEY_GATEWAY = KEY_GATEWAY
-KEY_ENTITY = 'nhc2_accesscontrol'
+from .const import DOMAIN, KEY_GATEWAY
+
+KEY_ENTITY = 'nhc2_cameras'
 
 _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
-    """Load NHC2 access control based on a config entry."""
+    _LOGGER.info('Configuring cameras')
+
     hass.data.setdefault(KEY_ENTITY, {})[config_entry.entry_id] = []
+
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
-    _LOGGER.debug('Platform is starting')
-    gateway.get_devices(CoCoDeviceClass.ACCESSCONTROL,
-                        nhc2_entity_processor(hass,
-                                              config_entry,
-                                              async_add_entities,
-                                              KEY_ENTITY,
-                                              lambda x: NHC2HassAccessControl(x))
-                        )
+    hub = (DOMAIN, config_entry.data[CONF_USERNAME])
 
-class NHC2HassAccessControl(Camera):
-    """Implementation of NHC2 Camera."""
-        
-    def __init__(self, nhc2accesscontrol: CoCoAccessControl):
-        """Initialize a camera."""
-        nhc2accesscontrol.on_change = self._on_change
-        self._nhc2accesscontrol = nhc2accesscontrol
-        self._auth = httpx.BasicAuth(username='user', password='')
-        self._stream_source = self._nhc2accesscontrol.stream_source
+    device_instances = gateway.get_device_instances(CocoRobinsipVideodoorstation)
+    _LOGGER.info('→ Found %s Robinsip Videodoorstations (undocumented)', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2RobinsipVideodoorstationCameraEntity(device_instance, hub, gateway))
 
-    @property
-    def supported_features(self):
-        """Return supported features for this camera."""
-        return SUPPORT_STREAM
-
-    @property
-    def name(self):
-        """Return the name of this device."""
-        return self._nhc2accesscontrol.name
-
-    async def stream_source(self):
-        """Return the source of the stream."""
-        if self._stream_source is None:
-            return None
-
-        try:
-            return self._stream_source.async_render(parse_result=False)
-        except TemplateError as err:
-            _LOGGER.error("Error parsing template %s: %s", self._stream_source, err)
-            return None
+        async_add_entities(entities)

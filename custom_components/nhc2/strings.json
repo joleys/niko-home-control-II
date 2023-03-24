@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Connect to your Niko Connected Controller II",
-        "description": "Configuring controller {host}.\n One option is to activate the 'Niko Hobby API' on the Connected Services page at: https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview or you can use a touchscreen profile. Touchscreen profiles can be create in the 'Niko Home Control programming software' under Dashboard > Touchscreens.",
+        "description": "Configuring controller **{host}**.\n\nThere are 2 ways to authenticate:\n1. Activate the 'Niko Hobby API' on the [Connected Services page](https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview).\n2. Use a touchscreen profile.\n\n'Niko Hobby API' is the easiest method, but you will need to reauthenticate once a year. Touchscreen profiles can be created in the 'Niko Home Control programming software' under Dashboard → Touchscreens.",
         "data": {
           "username": "Profile",
           "password": "Password",
@@ -12,14 +12,14 @@
       },
       "host": {
         "title": "Choose a Niko Connected Controller II",
-        "description": "If no hostname (only IP) is shown, it must be static.",
+        "description": "If you use an IP address, make sure it does not change.",
         "data": {
           "host": "Controller"
         }
       },
       "manual_host": {
         "title": "Niko Connected Controller II",
-        "description": "Provide a host or IP address",
+        "description": "Provide the host or IP address for the Niko Connected Controller II. If you use an IP address, make sure it does not change.",
         "data": {
           "host": "Address/IP"
         }
@@ -33,7 +33,7 @@
       }
     },
     "abort": {
-      "single_instance_allowed": "Controller and profile already added.",
+      "single_instance_allowed": "This controller and profile was already added. You can only add it once.",
       "no_controller_found": "No controller was found.",
       "reauth_successful": "Authentication successful. [Restart Home Assistant](/config/system) to apply the changes."
     },
