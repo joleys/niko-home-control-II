@@ -446,6 +446,24 @@ used.
 
 If you do not want to see / record / ... you can disable the device in the integration.
 
+### I need to see the device list
+
+First you will need to enable debug logging for the integration. You can enable debug logging for this integration by
+adding the following to your `configuration.yaml` file:
+
+```yaml
+logger:
+  default: warning
+  logs:
+    custom_components.nhc2: debug
+```
+
+When this is done you will need to restart Home Assistant. After that you can see the device list in the logs. You can
+find it by searching for `Received device list:`. The device list itself is a large JSON string.
+
+If you don't feel comfortable sharing this device list in a public issue, you can send it to me via
+mail: `niko-ha [at] verkoyen [dot] eu`.
+
 ## Development
 
 ### Adding support for new Device models
