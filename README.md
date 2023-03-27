@@ -431,6 +431,39 @@ if you uploaded a new configuration to the connected controller / hub, please re
 Please make sure that the IP of the connected controller / hub does not change. If the IP changes you will need to
 remove and re-add the integration.
 
+### I see a lot of "Report Instant Usage re-enabled" messages in the log
+
+This will only appear in the logs if you have set your log-level to `debug`.
+
+The Electricity Metering module (with clamp), Energy Home, NHC Zigbee Smart plug and Generic Zigbee Smart plug only
+report their power usage for 30 seconds when the "Report Instant Usage" is enabled. So as soon as it becomes disabled
+this integration re-enables it.
+
+### I don't have/use the Energy Home, but it is present in the integration
+
+Each installation exposes an Energy Home device. At this point there is no good way to detect if the Energy Home is
+used.
+
+If you do not want to see / record / ... you can disable the device in the integration.
+
+### I need to see the device list
+
+First you will need to enable debug logging for the integration. You can enable debug logging for this integration by
+adding the following to your `configuration.yaml` file:
+
+```yaml
+logger:
+  default: warning
+  logs:
+    custom_components.nhc2: debug
+```
+
+When this is done you will need to restart Home Assistant. After that you can see the device list in the logs. You can
+find it by searching for `Received device list:`. The device list itself is a large JSON string.
+
+If you don't feel comfortable sharing this device list in a public issue, you can send it to me via
+mail: `niko-ha [at] verkoyen [dot] eu`.
+
 ## Development
 
 ### Adding support for new Device models
