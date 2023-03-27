@@ -431,6 +431,14 @@ if you uploaded a new configuration to the connected controller / hub, please re
 Please make sure that the IP of the connected controller / hub does not change. If the IP changes you will need to
 remove and re-add the integration.
 
+### I see a lot of "Report Instant Usage re-enabled" messages in the log
+
+This will only appear in the logs if you have set your log-level to `debug`.
+
+The Electricity Metering module (with clamp), Energy Home, NHC Zigbee Smart plug and Generic Zigbee Smart plug only
+report their power usage for 30 seconds when the "Report Instant Usage" is enabled. So as soon as it becomes disabled
+this integration re-enables it.
+
 ## Development
 
 ### Adding support for new Device models
