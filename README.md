@@ -439,6 +439,13 @@ The Electricity Metering module (with clamp), Energy Home, NHC Zigbee Smart plug
 report their power usage for 30 seconds when the "Report Instant Usage" is enabled. So as soon as it becomes disabled
 this integration re-enables it.
 
+### I don't have/use the Energy Home, but it is present in the integration
+
+Each installation exposes an Energy Home device. At this point there is no good way to detect if the Energy Home is
+used.
+
+If you do not want to see / record / ... you can disable the device in the integration.
+
 ## Development
 
 ### Adding support for new Device models
