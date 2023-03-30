@@ -82,5 +82,5 @@ class CocoMotorAction(CoCoDevice):
         gateway.add_device_control(
             self.uuid,
             PROPERTY_POSITION,
-            position
+            str(position)
         )
