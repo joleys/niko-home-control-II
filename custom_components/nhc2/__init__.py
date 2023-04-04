@@ -69,6 +69,7 @@ FORWARD_PLATFORMS = (
     "select",
     "sensor",
     "switch",
+    "update",
 )
 
 
