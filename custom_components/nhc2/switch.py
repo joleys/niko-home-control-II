@@ -11,6 +11,8 @@ from .entities.condition_action_switch import Nhc2ConditionActionSwitchEntity
 from .entities.flag_action_switch import Nhc2FlagActionSwitchEntity
 from .entities.generic_action_basicstate import Nhc2GenericActionBasicStateEntity
 from .entities.generic_domestichotwaterunit_boost import Nhc2GenericDomestichotwaterunitBoostEntity
+from .entities.generic_energyhome_disable_report_instant_usage_re_enabling import \
+    Nhc2GenericEnergyhomeDisableReportInstantUsageReEnablingEntity
 from .entities.generic_fan_boost import Nhc2GenericFanBoostEntity
 from .entities.generic_hvac_overrule_active import Nhc2GenericHvacOverruleActiveEntity
 from .entities.hvacthermostat_hvac_ecosave import Nhc2HvacthermostatHvacEcoSaveEntity
@@ -31,6 +33,7 @@ from .nhccoco.devices.condition_action import CocoConditionAction
 from .nhccoco.devices.flag_action import CocoFlagAction
 from .nhccoco.devices.generic_action import CocoGenericAction
 from .nhccoco.devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
+from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
 from .nhccoco.devices.generic_fan import CocoGenericFan
 from .nhccoco.devices.generic_hvac import CocoGenericHvac
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
@@ -164,6 +167,17 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2RelayActionSwitchEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericEnergyhome)
+    _LOGGER.info('→ Found %s Energy Home\'s', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(
+                Nhc2GenericEnergyhomeDisableReportInstantUsageReEnablingEntity(device_instance, hub, gateway)
+            )
 
         async_add_entities(entities)
 

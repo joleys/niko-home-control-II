@@ -329,6 +329,8 @@ __Remark:__ The totals are not available as they are not (yet) exposed by the AP
   automatically be enabled.
 * **Electrical Power Production Threshold Exceeded Binary Sensor**, this is on when the central meters electrical power
   production is greater than the threshold of 300W (+ 5W hysteresis)
+* **Disable Report Instant Usage Re-enabling Switch**, a toggle to disable the automatic re-enabling of the
+  Report Instant Usage Binary Sensor. This is useful if you don't need Electrical Power reporting.
 
 __Remark:__ There a more properties to this device, but these are not documented so it is difficult to know what they
 report exactly.
