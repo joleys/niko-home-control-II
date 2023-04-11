@@ -26,6 +26,19 @@ Some people who made this possible, and should be mentioned:
 Everything is developed against the Niko documentation. The version that was used can be found
 at [docs/documentation.pdf](./docs/documentation.pdf).
 
+### General
+
+The integration provides multiple devices and entities. See below for a list of entities that each type of device
+exposes.
+
+#### Entities
+
+The integration itself exposes the following entities:
+
+* **Latest Controller Config Update Entity**, If you upload a new configuration to your controller you need to restart
+  Home Assistant. Otherwise the integration will not work correctly. This entity will be on when a new configuration is
+  loaded.
+
 ### NHC Access Control Action
 
 This action is exposed as a switch (if supported), and a lock (if supported)

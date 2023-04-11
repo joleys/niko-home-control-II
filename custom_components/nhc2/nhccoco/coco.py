@@ -14,6 +14,7 @@ from .devices.audiocontrol_action import CocoAudiocontrolAction
 from .devices.bellbutton_action import CocoBellbuttonAction
 from .devices.comfort_action import CocoComfortAction
 from .devices.condition_action import CocoConditionAction
+from .devices.controller import CocoController
 from .devices.dimmer_action import CocoDimmerAction
 from .devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .devices.fan_action import CocoFanAction
@@ -87,7 +88,9 @@ class CoCo:
         self._devices_callback = {}
         self._system_info = None
         self._system_info_callback = lambda x: None
-        self._device_instances = {}
+        self._device_instances = {
+            'controller': CocoController()
+        }
 
     @property
     def address(self):
@@ -114,6 +117,7 @@ class CoCo:
                 # No need to listen for devices anymore. So unsubscribe.
                 self._client.unsubscribe(self._profile_creation_id + MQTT_TOPIC_SUFFIX_RSP)
                 self._process_devices_list(response)
+                self._device_instances['controller'].on_change(topic, response)
 
             # System info published (/system/evt, method: systeminfo.published)
             elif topic == (self._profile_creation_id + MQTT_TOPIC_SUFFIX_SYS_EVT) and \
@@ -133,6 +137,8 @@ class CoCo:
                     response[MQTT_DATA_METHOD] == MQTT_DATA_METHOD_DEVICES_STATUS or
                     response[MQTT_DATA_METHOD] == MQTT_DATA_METHOD_DEVICES_CHANGED
             ):
+                self._device_instances['controller'].on_change(topic, response)
+
                 devices = extract_devices(response)
 
                 for device in devices:
