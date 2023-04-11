@@ -70,10 +70,10 @@ class Nhc2GenericEnergyhomeDisableReportInstantUsageReEnablingEntity(RestoreEnti
         state = await self.async_get_last_state()
         if not state:
             # Fallback, if no previous state is found, assume it is off
-            self._start_reporting_if_enabled()
-            return
+            self._state = STATE_OFF
+        else:
+            self._state = state.state
 
-        self._state = state.state
         self.async_schedule_update_ha_state(True)
         self._start_reporting_if_enabled()
 
