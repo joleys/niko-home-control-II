@@ -34,3 +34,6 @@ class CocoController:
         if self._after_change_callbacks:
             for callback in self._after_change_callbacks:
                 callback()
+
+    def set_disconnected(self):
+        return
