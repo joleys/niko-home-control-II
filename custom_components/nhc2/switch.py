@@ -9,14 +9,22 @@ from .entities.accesscontrol_action_basicstate_switch import Nhc2AccesscontrolAc
 from .entities.bellbutton_action_basicstate_switch import Nhc2BellbuttonActionBasicStateSwitchEntity
 from .entities.condition_action_switch import Nhc2ConditionActionSwitchEntity
 from .entities.flag_action_switch import Nhc2FlagActionSwitchEntity
+from .entities.electricity_clamp_centralmeter_disable_report_instant_usage_re_enabling import \
+    Nhc2ElectricityClampCentralmeterDisableReportInstantUsageReEnablingEntity
 from .entities.generic_action_basicstate import Nhc2GenericActionBasicStateEntity
 from .entities.generic_domestichotwaterunit_boost import Nhc2GenericDomestichotwaterunitBoostEntity
+from .entities.generic_energyhome_disable_report_instant_usage_re_enabling import \
+    Nhc2GenericEnergyhomeDisableReportInstantUsageReEnablingEntity
 from .entities.generic_fan_boost import Nhc2GenericFanBoostEntity
 from .entities.generic_hvac_overrule_active import Nhc2GenericHvacOverruleActiveEntity
+from .entities.generic_smartplug_disable_report_instant_usage_re_enabling import \
+    Nhc2GenericSmartplugDisableReportInstantUsageReEnablingEntity
 from .entities.hvacthermostat_hvac_ecosave import Nhc2HvacthermostatHvacEcoSaveEntity
 from .entities.hvacthermostat_hvac_thermostat_on import Nhc2HvacthermostatHvacThermostatOnEntity
 from .entities.hvacthermostat_hvac_overrule_active import Nhc2HvacthermostatHvacOverruleActiveEntity
 from .entities.hvacthermostat_hvac_protect_mode import Nhc2HvacthermostatHvacProtectModeEntity
+from .entities.naso_smartplug_disable_report_instant_usage_re_enabling import \
+    Nhc2NasoSmartplugDisableReportInstantUsageReEnablingEntity
 from .entities.overallcomfort_action_basicstate import Nhc2OverallcomfortActionBasicStateEntity
 from .entities.pir_action_basicstate import Nhc2PirActionBasicStateEntity
 from .entities.relay_action_switch import Nhc2RelayActionSwitchEntity
@@ -29,11 +37,15 @@ from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
 from .nhccoco.devices.condition_action import CocoConditionAction
 from .nhccoco.devices.flag_action import CocoFlagAction
+from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .nhccoco.devices.generic_action import CocoGenericAction
 from .nhccoco.devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
+from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
 from .nhccoco.devices.generic_fan import CocoGenericFan
 from .nhccoco.devices.generic_hvac import CocoGenericHvac
+from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
+from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.overallcomfort_action import CocoOverallcomfortAction
 from .nhccoco.devices.pir_action import CocoPirAction
 from .nhccoco.devices.simulation_action import CocoSimulationAction
@@ -164,6 +176,50 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2RelayActionSwitchEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoNasoSmartplug)
+    _LOGGER.info('→ Found %s NHC Zigbee Smart plugs', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2NasoSmartplugDisableReportInstantUsageReEnablingEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericSmartplug)
+    _LOGGER.info('→ Found %s Generic Zigbee Smart plugs', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(
+                Nhc2GenericSmartplugDisableReportInstantUsageReEnablingEntity(device_instance, hub, gateway)
+            )
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoElectricityClampCentralmeter)
+    _LOGGER.info('→ Found %s Electricity Metering modules', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(
+                Nhc2ElectricityClampCentralmeterDisableReportInstantUsageReEnablingEntity(
+                    device_instance, hub, gateway
+                )
+            )
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericEnergyhome)
+    _LOGGER.info('→ Found %s Energy Home\'s', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(
+                Nhc2GenericEnergyhomeDisableReportInstantUsageReEnablingEntity(device_instance, hub, gateway)
+            )
 
         async_add_entities(entities)
 

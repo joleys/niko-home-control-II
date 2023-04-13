@@ -1,5 +1,6 @@
 from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.helpers.entity import EntityCategory
+from homeassistant.const import STATE_ON
 
 from ..const import DOMAIN, BRAND
 
@@ -29,9 +30,6 @@ class Nhc2GenericEnergyhomeReportInstantUsageEntity(BinarySensorEntity):
         self._attr_state_class = None
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
 
-        # Start reporting
-        self._device.enable_report_instant_usage(self._gateway)
-
     @property
     def name(self) -> str:
         return 'Report Instant Usage'
@@ -56,7 +54,23 @@ class Nhc2GenericEnergyhomeReportInstantUsageEntity(BinarySensorEntity):
     def on_change(self):
         # Re-enable reporting when it is turned off
         if self._device.is_report_instant_usage is False:
+            if self._is_report_instant_usage_re_enabling_disabled():
+                _LOGGER.debug(f'{self.name} re-enabling disabled')
+                return
+
             _LOGGER.debug(f'{self.name} re-enabled')
             self._device.enable_report_instant_usage(self._gateway)
 
         self.schedule_update_ha_state()
+
+    def _is_report_instant_usage_re_enabling_disabled(self) -> bool:
+        disable_report_instant_usage_re_enabling_entity = self.hass.states.get(
+            self.entity_id.replace('binary_sensor.', 'switch.').replace('_report_instant_usage',
+                                                                        '_disable_report_instant_usage_re_enabling')
+        )
+
+        if disable_report_instant_usage_re_enabling_entity is None:
+            _LOGGER.debug(f'{self.name} no Disable Report Instant Usage Re-enabling entity found.')
+            return False
+
+        return disable_report_instant_usage_re_enabling_entity.state == STATE_ON
