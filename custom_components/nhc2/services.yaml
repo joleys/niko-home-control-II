@@ -5,7 +5,6 @@ set_light_brightness:
   target:
     entity:
       domain: light
-      multiple: true
   fields:
     light_brightness:
       name: Brightness
