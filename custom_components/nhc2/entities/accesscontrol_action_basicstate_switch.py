@@ -42,9 +42,11 @@ class Nhc2AccesscontrolActionBasicStateSwitchEntity(SwitchEntity):
         self.schedule_update_ha_state()
 
     async def async_turn_on(self):
-        self._device.press(self._gateway)
+        if not self.is_on:
+            self._device.press(self._gateway)
         self.on_change()
 
     async def async_turn_off(self):
-        self._device.press(self._gateway)
+        if self.is_on:
+            self._device.press(self._gateway)
         self.on_change()
