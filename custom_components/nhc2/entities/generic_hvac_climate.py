@@ -65,10 +65,16 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
 
     @property
     def supported_features(self) -> int:
-        if self._device.supports_fan_speed:
+        if self._device.supports_fan_speed and self._device.supports_program:
             return ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.FAN_MODE | ClimateEntityFeature.PRESET_MODE
 
-        return ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.PRESET_MODE
+        if self._device.supports_fan_speed:
+            return ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.FAN_MODE
+
+        if self._device.supports_program:
+            return ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.PRESET_MODE
+
+        return ClimateEntityFeature.TARGET_TEMPERATURE
 
     @property
     def hvac_action(self):
