@@ -18,6 +18,7 @@ from .entities.bellbutton_action_decline_call_applied_on_all_devices import \
 from .entities.comfort_action_basicstate import Nhc2ComfortActionBasicStateEntity
 from .entities.comfort_action_mood_active import Nhc2ComfortActionMoodActiveEntity
 from .entities.dimmer_action_aligned import Nhc2DimmerActionAlignedEntity
+from .entities.electricalheating_action_basicstate import Nhc2ElectricalheatingActionBasicStateEntity
 from .entities.electricity_clamp_centralmeter_report_instant_usage import \
     Nhc2ElectricityClampCentralmeterReportInstantUsageEntity
 from .entities.garagedoor_action_port_closed import Nhc2GaragedoorActionPortClosedEntity
@@ -42,6 +43,7 @@ from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
 from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
 from .nhccoco.devices.comfort_action import CocoComfortAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
+from .nhccoco.devices.electricalheating_action import CocoElectricalheatingAction
 from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
 from .nhccoco.devices.gate_action import CocoGateAction
@@ -241,5 +243,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             entities.append(Nhc2HeatingcoolingActionCoolingModeEntity(device_instance, hub, gateway))
             entities.append(Nhc2HeatingcoolingActionHeatingModeEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoElectricalheatingAction)
+    _LOGGER.info('→ Found %s Electricalheating Actions (undocumented)', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2ElectricalheatingActionBasicStateEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
