@@ -32,6 +32,10 @@ class CocoGenericHvac(CoCoDevice):
         return self.extract_property_definition_description_choices(PROPERTY_PROGRAM)
 
     @property
+    def supports_program(self) -> bool:
+        return self.has_property(PROPERTY_PROGRAM)
+
+    @property
     def operation_mode(self) -> str:
         return self.extract_property_value(PROPERTY_OPERATION_MODE)
 
