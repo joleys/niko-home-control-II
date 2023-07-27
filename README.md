@@ -422,6 +422,16 @@ __Remark:__ This device is not documented/supported by Niko.
 * **Cooling Mode Binary Sensor**
 * **Heating Mode Binary Sensor**
 
+### Electrical Heating Action (untested)
+
+__Remark:__ This device is not documented/supported by Niko.
+
+This action is exposed as a button.
+
+#### Entities
+
+* **Basic State Binary Sensor**, the current status of the action.
+
 ## Not yet supported
 
 * Sonos Speaker
