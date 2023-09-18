@@ -44,7 +44,7 @@ class Nhc2ThermostatHvacOverruleTimeEntity(SensorEntity):
         }
 
     @property
-    def state(self) -> int:
+    def native_value(self) -> int:
         return self._device.overrule_time
 
     def on_change(self):

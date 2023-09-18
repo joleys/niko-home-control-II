@@ -45,7 +45,7 @@ class Nhc2ThermostatHvacSetpointTemperatureEntity(SensorEntity):
         }
 
     @property
-    def state(self) -> float:
+    def native_value(self) -> float:
         return self._device.setpoint_temperature
 
     def on_change(self):

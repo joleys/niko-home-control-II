@@ -45,7 +45,7 @@ class Nhc2GenericSmartplugElectricalPowerEntity(SensorEntity):
         }
 
     @property
-    def state(self) -> float:
+    def native_value(self) -> float:
         return self._device.electrical_power
 
     def on_change(self):

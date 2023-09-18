@@ -45,7 +45,7 @@ class Nhc2ThermostatHvacOverruleSetpointEntity(SensorEntity):
         }
 
     @property
-    def state(self) -> float:
+    def native_value(self) -> float:
         return self._device.overrule_setpoint
 
     def on_change(self):

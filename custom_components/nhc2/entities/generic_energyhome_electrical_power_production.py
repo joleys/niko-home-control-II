@@ -45,7 +45,7 @@ class Nhc2GenericEnergyhomeElectricalPowerProductionEntity(SensorEntity):
         }
 
     @property
-    def state(self) -> float:
+    def native_value(self) -> float:
         return self._device.electrical_power_production
 
     def on_change(self):

@@ -45,7 +45,7 @@ class Nhc2GenericFanCo2Entity(SensorEntity):
         }
 
     @property
-    def state(self) -> int:
+    def native_value(self) -> int:
         return self._device.co2
 
     def on_change(self):
