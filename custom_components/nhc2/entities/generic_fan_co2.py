@@ -26,6 +26,7 @@ class Nhc2GenericFanCo2Entity(SensorEntity):
         self._attr_native_unit_of_measurement = CONCENTRATION_PARTS_PER_MILLION
         self._attr_state_class = None
         self._attr_suggested_display_precision = 0
+        self._attr_native_precision = 0
 
     @property
     def name(self) -> str:
