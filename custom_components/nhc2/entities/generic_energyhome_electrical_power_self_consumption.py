@@ -26,6 +26,7 @@ class Nhc2GenericEnergyhomeElectricalPowerSelfConsumptionEntity(SensorEntity):
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_suggested_display_precision = 3
+        self._attr_native_precision = 3
 
     @property
     def name(self) -> str:
@@ -45,7 +46,7 @@ class Nhc2GenericEnergyhomeElectricalPowerSelfConsumptionEntity(SensorEntity):
         }
 
     @property
-    def state(self) -> float:
+    def native_value(self) -> float:
         return self._device.electrical_power_self_consumption
 
     def on_change(self):
