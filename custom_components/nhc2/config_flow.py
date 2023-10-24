@@ -71,9 +71,6 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
                 }
             )
 
-        disc = CoCoDiscoverProfiles()
-
-        self._all_cocos = await disc.get_all_profiles()
         for coco in self._all_cocos:
             if coco[2] is not None:
                 coco[2].insert(0, {
@@ -82,45 +79,7 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
                     'Type': 'hobby'
                 })
 
-        return await self._show_host_config_form()
-
-    async def _show_host_config_form(self):
-        """Show the form to select the host."""
-        host_listing = {}
-        first = None
-        for i, x in enumerate(self._all_cocos):
-            if x[3] is None:
-                dkey = x[0]
-                host_listing[dkey] = [x[0]]
-            else:
-                dkey = x[3]
-                host_listing[dkey] = [x[3] + ' (' + x[0] + ')']
-            if i == 0:
-                first = dkey
-        # Append an option to enter the host manually
-        host_listing[KEY_MANUAL] = 'Manual Input'
-
-        if first is None:
-            first = KEY_MANUAL
-
-        return self.async_show_form(
-            step_id='host',
-            errors=self._errors,
-            data_schema=vol.Schema({
-                vol.Required(CONF_HOST, default=first): vol.In(host_listing)
-            }),
-        )
-
-    async def async_step_host(self, user_input=None):
-        self._errors = {}
-        if user_input[CONF_HOST] == KEY_MANUAL:
-            return await self._show_manual_host_config_form()
-        else:
-            self._selected_coco = list(
-                filter(lambda x: x[0] == user_input[CONF_HOST] or x[3] == user_input[CONF_HOST], self._all_cocos)
-            )[0]
-
-        return await self._show_user_config_form()
+        return await self._show_manual_host_config_form()
 
     async def _show_manual_host_config_form(self):
         """Show the form to manually enter an IP / hostname."""
@@ -141,6 +100,9 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
             self._selected_coco = self._all_cocos[0]
             _LOGGER.debug(str(self._all_cocos))
             for coco in self._all_cocos:
+                if coco[2] is None:
+                    return self.async_abort(reason="no_controller_found")
+
                 if coco[2] is not None:
                     coco[2].insert(0, {
                         'Uuid': 'hobby',
