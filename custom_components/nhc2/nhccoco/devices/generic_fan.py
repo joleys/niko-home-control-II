@@ -46,6 +46,10 @@ class CocoGenericFan(CoCoDevice):
         return 'Range' in self.extract_property_definition(PROPERTY_FAN_SPEED)['Description']
 
     @property
+    def supports_boost(self) -> bool:
+        return self.has_property(PROPERTY_BOOST)
+
+    @property
     def boost(self) -> str:
         return self.extract_property_value(PROPERTY_BOOST)
 
