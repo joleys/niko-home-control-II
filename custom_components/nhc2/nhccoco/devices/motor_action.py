@@ -47,7 +47,9 @@ class CocoMotorAction(CoCoDevice):
         if not self.supports_last_direction:
             return None
 
-        if self.is_moving and self.last_direction == PROPERTY_LAST_DIRECTION_VALUE_CLOSE:
+        # The next line may be wierd, but it is correct.
+        # It seems that the last_direction property is updated directly instead of after the moving is done.
+        if self.is_moving and self.last_direction == PROPERTY_LAST_DIRECTION_VALUE_OPEN:
             return True
 
         return False
@@ -57,7 +59,9 @@ class CocoMotorAction(CoCoDevice):
         if not self.supports_last_direction:
             return None
 
-        if self.is_moving and self.last_direction == PROPERTY_LAST_DIRECTION_VALUE_OPEN:
+        # The next line may be wierd, but it is correct.
+        # It seems that the last_direction property is updated directly instead of after the moving is done.
+        if self.is_moving and self.last_direction == PROPERTY_LAST_DIRECTION_VALUE_CLOSE:
             return True
 
         return False
