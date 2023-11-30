@@ -58,11 +58,18 @@ class CocoGenericFan(CoCoDevice):
         return self.boost == PROPERTY_BOOST_VALUE_TRUE
 
     @property
+    def supports_status(self) -> bool:
+        return self.has_property(PROPERTY_STATUS)
+
+    @property
     def status(self) -> str:
         return self.extract_property_value(PROPERTY_STATUS)
 
     @property
     def is_status_on(self) -> bool:
+        # Assume status is on if no status property is available
+        if not self.has_property(PROPERTY_STATUS):
+            return True
         return self.status == PROPERTY_STATUS_VALUE_ON
 
     @property

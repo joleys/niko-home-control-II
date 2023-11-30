@@ -94,7 +94,11 @@ class Nhc2GenericFanFanEntity(FanEntity):
         self.on_change()
 
     async def async_turn_on(self, speed: str = None, percentage: int = None, preset_mode: str = None, **kwargs) -> None:
-        self._device.set_status(self._gateway, True)
+        if not self._device.supports_status:
+            _LOGGER.info('Device does not support the status property, therefor we can not set any status.')
+        else:
+            self._device.set_status(self._gateway, True)
+
         if percentage is not None and self._device.is_fan_speed_range:
             self._device.set_fan_speed(self._gateway, percentage)
         if preset_mode is not None and self._device.supports_program:
@@ -102,5 +106,8 @@ class Nhc2GenericFanFanEntity(FanEntity):
         self.on_change()
 
     async def async_turn_off(self, **kwargs) -> None:
+        if not self._device.supports_status:
+            _LOGGER.info('Device does not support the status property, therefor we can not set any status.')
+            return
         self._device.set_status(self._gateway, False)
         self.on_change()
