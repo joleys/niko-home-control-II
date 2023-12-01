@@ -360,10 +360,13 @@ This is exposed as a fan entity.
 
 #### Entities
 
-* **Boost Switch**, enable/disable boost mode.
+* **Boost Switch**, (only if supported), enable/disable boost mode.
 * **CO2 Sensor**, (only if supported), the CO2 level.
 * **Humidity Sensor**, (only if supported), the humidity level.
 * **Coupling Status Enum Sensor**, (only if supported), the connectivity status of the system.
+
+__Remark:__ Some ventilation systems can not be turned off. Home Assistant Fan Entity does not support this. This means
+you will be able to turn it off in Home Assistant, but this will not have any effect.
 
 ### Generic Heating/Cooling Implementation
 
