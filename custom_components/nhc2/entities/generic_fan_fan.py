@@ -96,7 +96,6 @@ class Nhc2GenericFanFanEntity(FanEntity):
         self.on_change()
 
     async def async_set_percentage(self, percentage: int) -> None:
-        _LOGGER.error(f'async_set_percentage: {percentage}')
         if self._device.is_fan_speed_range:
             self._device.set_fan_speed(self._gateway, percentage)
         else:
