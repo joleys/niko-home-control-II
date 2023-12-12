@@ -374,7 +374,7 @@ This is exposed as a climate entity.
 
 #### Entities
 
-* **Overrule Active Binary Sensor**, is the overrule mode active or not.
+* **Overrule Active Binary Sensor**, (only if supported), is the overrule mode active or not.
 * **Coupling Status Enum Sensor**, the connectivity status of the system.
 
 ### Generic Warm Water Implementation
