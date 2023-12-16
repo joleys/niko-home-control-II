@@ -47,7 +47,7 @@ class Nhc2ElectricityClampCentralmeterElectricalPowerConsumptionEntity(SensorEnt
 
     @property
     def native_value(self) -> float:
-        if self._device.electrical_power > 0:
+        if self._device.electrical_power is not None and self._device.electrical_power > 0:
             return self._device.electrical_power
 
         return 0
