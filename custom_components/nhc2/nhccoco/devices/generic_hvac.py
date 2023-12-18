@@ -68,6 +68,10 @@ class CocoGenericHvac(CoCoDevice):
         return self.overrule_active == PROPERTY_OVERRULE_ACTIVE_VALUE_TRUE
 
     @property
+    def supports_overrule_active(self) -> bool:
+        return self.has_property(PROPERTY_OVERRULE_ACTIVE)
+
+    @property
     def coupling_status(self) -> str:
         return self.extract_property_value(PROPERTY_COUPLING_STATUS)
 
