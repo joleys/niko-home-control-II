@@ -444,10 +444,18 @@ This action is exposed as a button.
 
 Note: Make sure you have a recent version of Home Assistant!
 
-1. Install this custom component
-2. Go to Configuration > Integrations
-3. Add an integration, search for Niko Home Control II, and click on it
-4. Follow the wizard
+This integration is not part of the default Home Assistant installation.
+
+The easiest way to install it is through [HACS (Home Assistant Community Store)](https://hacs.xyz/). Once you have HACS
+installed you can search for "Niko Home Control II". Make sure you select the correct one. Ours has the following description:
+
+> Home Assistant Custom integration for Niko Home Control II
+
+Once this is done you can install the integration in Home Assistant:
+
+1. Go to Settings → Devices & Services Integrations
+2. Add an integration, search for Niko Home Control II, and click on it
+3. Follow the wizard
 
 ## FAQ
 
