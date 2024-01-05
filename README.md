@@ -447,8 +447,9 @@ Note: Make sure you have a recent version of Home Assistant!
 This integration is not part of the default Home Assistant installation.
 
 The easiest way to install it is through [HACS (Home Assistant Community Store)](https://hacs.xyz/). Once you have HACS
-installed you will need to add this repository (`https://github.com/joleys/niko-home-control-II.git`) as a custom
-repository. Follow the steps at [FAQ → Custom Repositories](https://hacs.xyz/docs/faq/custom_repositories/).
+installed you can search for "Niko Home Control II". Make sure you select the correct one. Ours has the following description:
+
+> Home Assistant Custom integration for Niko Home Control II
 
 Once this is done you can install the integration in Home Assistant:
 
