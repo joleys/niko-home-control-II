@@ -147,10 +147,12 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
 
     async def async_set_hvac_mode(self, hvac_mode: str):
         if hvac_mode == HVACMode.OFF:
-            self._device.set_status(self._gateway, PROPERTY_STATUS_VALUE_OFF)
+            self._device.set_status(self._gateway, False)
+
         # switch on the device if it is off
         if hvac_mode != HVACMode.OFF and not self._device.is_status_on:
-            self._device.set_status(self._gateway, PROPERTY_STATUS_VALUE_ON)
+            self._device.set_status(self._gateway, True)
+
         if hvac_mode == HVACMode.HEAT:
             self._device.set_operation_mode(self._gateway, PROPERTY_OPERATION_MODE_VALUE_HEAT)
         if hvac_mode == HVACMode.COOL:
@@ -160,11 +162,11 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
         self.on_change()
 
     async def async_turn_on(self) -> None:
-        self._device.set_status(self._gateway, PROPERTY_STATUS_VALUE_ON)
+        self._device.set_status(self._gateway, True)
         self.on_change()
 
     async def async_turn_off(self) -> None:
-        self._device.set_status(self._gateway, PROPERTY_STATUS_VALUE_OFF)
+        self._device.set_status(self._gateway, False)
         self.on_change()
 
     async def async_set_preset_mode(self, preset_mode: str):
