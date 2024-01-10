@@ -10,7 +10,8 @@ from ..nhccoco.const import PROPERTY_PROGRAM_VALUE_DAY, PROPERTY_PROGRAM_VALUE_E
     PROPERTY_PROGRAM_VALUE_AWAY, PROPERTY_PROGRAM_VALUE_HOME, PROPERTY_STATUS_VALUE_OFF, PROPERTY_STATUS_VALUE_ON, \
     PROPERTY_OPERATION_MODE_VALUE_HEAT, PROPERTY_OPERATION_MODE_VALUE_COOL, PROPERTY_OPERATION_MODE_VALUE_AUTO, \
     PROPERTY_FAN_SPEED_VALUE_OFF, PROPERTY_FAN_SPEED_VALUE_LOW, PROPERTY_FAN_SPEED_VALUE_MEDIUM, \
-    PROPERTY_FAN_SPEED_VALUE_HIGH, PROPERTY_FAN_SPEED_VALUE_AUTO
+    PROPERTY_FAN_SPEED_VALUE_HIGH, PROPERTY_FAN_SPEED_VALUE_AUTO, PROPERTY_OPERATION_MODE_VALUE_DRY, \
+    PROPERTY_OPERATION_MODE_VALUE_FAN
 from ..nhccoco.devices.generic_hvac import CocoGenericHvac
 
 
@@ -37,7 +38,7 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
             HVACMode.OFF
         ]
         self._attr_hvac_modes = self._sanitize_hvac_modes()
-        
+
         self._attr_fan_modes = self._device.possible_fan_speeds or [
             FAN_OFF,
             FAN_LOW,
@@ -59,6 +60,8 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
                     output_values.append(mode)
             except ValueError:
                 continue
+        if HVACMode.OFF not in output_values:
+            output_values.append(HVACMode.OFF)
         return output_values
 
     @property
@@ -103,6 +106,10 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
             return HVACAction.HEATING
         if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_COOL:
             return HVACAction.COOLING
+        if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_FAN:
+            return HVACAction.FAN
+        if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_DRY:
+            return HVACAction.DRYING
 
         return HVACAction.IDLE
 
@@ -110,13 +117,16 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
     def hvac_mode(self):
         if self._device.status == PROPERTY_STATUS_VALUE_OFF:
             return HVACMode.OFF
-
-        if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_AUTO:
-            return HVACMode.AUTO
         if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_HEAT:
             return HVACMode.HEAT
         if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_COOL:
             return HVACMode.COOL
+        if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_AUTO:
+            return HVACMode.AUTO
+        if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_DRY:
+            return HVACMode.DRY
+        if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_FAN:
+            return HVACMode.FAN_ONLY
 
     @property
     def preset_mode(self) -> str:
@@ -178,6 +188,11 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
             self._device.set_operation_mode(self._gateway, PROPERTY_OPERATION_MODE_VALUE_COOL)
         if hvac_mode == HVACMode.AUTO or hvac_mode == HVACMode.HEAT_COOL:
             self._device.set_operation_mode(self._gateway, PROPERTY_OPERATION_MODE_VALUE_AUTO)
+        if hvac_mode == HVACMode.FAN_ONLY:
+            self._device.set_operation_mode(self._gateway, PROPERTY_OPERATION_MODE_VALUE_FAN)
+        if hvac_mode == HVACMode.DRY:
+            self._device.set_operation_mode(self._gateway, PROPERTY_OPERATION_MODE_VALUE_DRY)
+
         self.on_change()
 
     async def async_turn_on(self) -> None:
