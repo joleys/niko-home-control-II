@@ -36,7 +36,8 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
             HVACMode.HEAT_COOL,
             HVACMode.OFF
         ]
-        self._sanitize_hvac_modes()
+        self._attr_hvac_modes = self._sanitize_hvac_modes()
+        
         self._attr_fan_modes = self._device.possible_fan_speeds or [
             FAN_OFF,
             FAN_LOW,
