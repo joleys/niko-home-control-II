@@ -1,3 +1,5 @@
+from typing import List
+
 from homeassistant.components.climate import ClimateEntity, HVACMode, HVACAction, ClimateEntityFeature, \
     ATTR_TEMPERATURE, FAN_OFF, FAN_LOW, FAN_MEDIUM, FAN_HIGH, FAN_AUTO, PRESET_COMFORT, PRESET_AWAY, PRESET_ECO, \
     PRESET_HOME, PRESET_SLEEP
@@ -29,18 +31,19 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
         self._attr_should_poll = False
 
         self._attr_temperature_unit = UnitOfTemperature.CELSIUS
-        self._attr_hvac_modes = [
+        self._attr_hvac_modes = self._device.possible_operation_modes or [
             HVACMode.AUTO,
             HVACMode.HEAT_COOL,
-            HVACMode.OFF,
+            HVACMode.OFF
         ]
-        self._attr_fan_modes = [
+        self._attr_fan_modes = self._device.possible_fan_speeds or [
             FAN_OFF,
             FAN_LOW,
             FAN_MEDIUM,
             FAN_HIGH,
-            FAN_AUTO,
+            FAN_AUTO
         ]
+
 
     @property
     def device_info(self):
@@ -115,7 +118,7 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
         return self._device.program
 
     @property
-    def preset_modes(self) -> list[str]:
+    def preset_modes(self) -> List[str]:
         modes = []
         for program in self._device.possible_programs:
             if program == PROPERTY_PROGRAM_VALUE_ECO:
