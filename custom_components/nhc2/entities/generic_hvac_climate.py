@@ -47,7 +47,7 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
             FAN_AUTO
         ]
 
-    def _sanitize_hvac_modes(self):
+    def _sanitize_hvac_modes(self) -> List[str]:
         """Some HVAC modes returned aren't exactly what HA expects, so attempt to convert them.
            Only tested with modes returned from a Daikin unit (so far)"""
         output_values = []
