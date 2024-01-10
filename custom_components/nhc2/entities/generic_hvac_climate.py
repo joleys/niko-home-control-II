@@ -36,6 +36,7 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
             HVACMode.HEAT_COOL,
             HVACMode.OFF
         ]
+        self._sanitize_hvac_modes()
         self._attr_fan_modes = self._device.possible_fan_speeds or [
             FAN_OFF,
             FAN_LOW,
@@ -44,6 +45,20 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
             FAN_AUTO
         ]
 
+    def _sanitize_hvac_modes(self):
+        """Some HVAC modes returned aren't exactly what HA expects, so attempt to convert them.
+           Only tested with modes returned from a Daikin unit (so far)"""
+        output_values = []
+        for mode in [m.lower() for m in self._attr_hvac_modes]:
+            try:
+                if mode == 'fan':
+                    output_values.append(HVACMode.FAN_ONLY)
+                else:
+                    _ = HVACMode(mode)
+                    output_values.append(mode)
+            except ValueError:
+                continue
+        return output_values
 
     @property
     def device_info(self):
