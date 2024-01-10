@@ -5,7 +5,7 @@ from homeassistant.const import UnitOfTemperature
 
 from ..const import DOMAIN, BRAND
 from ..nhccoco.const import PROPERTY_PROGRAM_VALUE_DAY, PROPERTY_PROGRAM_VALUE_ECO, PROPERTY_PROGRAM_VALUE_NIGHT, \
-    PROPERTY_PROGRAM_VALUE_AWAY, PROPERTY_PROGRAM_VALUE_HOME, PROPERTY_STATUS_VALUE_OFF, \
+    PROPERTY_PROGRAM_VALUE_AWAY, PROPERTY_PROGRAM_VALUE_HOME, PROPERTY_STATUS_VALUE_OFF, PROPERTY_STATUS_VALUE_ON, \
     PROPERTY_OPERATION_MODE_VALUE_HEAT, PROPERTY_OPERATION_MODE_VALUE_COOL, PROPERTY_OPERATION_MODE_VALUE_AUTO, \
     PROPERTY_FAN_SPEED_VALUE_OFF, PROPERTY_FAN_SPEED_VALUE_LOW, PROPERTY_FAN_SPEED_VALUE_MEDIUM, \
     PROPERTY_FAN_SPEED_VALUE_HIGH, PROPERTY_FAN_SPEED_VALUE_AUTO
@@ -148,6 +148,10 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
     async def async_set_hvac_mode(self, hvac_mode: str):
         if hvac_mode == HVACMode.OFF:
             self._device.set_status(self._gateway, PROPERTY_STATUS_VALUE_OFF)
+        # switch on the device if it is off
+        if hvac_mode != HVACMode.OFF and not self._device.is_status_on:
+            self._device.set_status(self._gateway, PROPERTY_STATUS_VALUE_ON)
+
         if hvac_mode == HVACMode.HEAT:
             self._device.set_operation_mode(self._gateway, PROPERTY_OPERATION_MODE_VALUE_HEAT)
         if hvac_mode == HVACMode.COOL:
