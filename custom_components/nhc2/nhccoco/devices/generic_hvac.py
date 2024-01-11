@@ -40,6 +40,10 @@ class CocoGenericHvac(CoCoDevice):
         return self.extract_property_value(PROPERTY_OPERATION_MODE)
 
     @property
+    def possible_operation_modes(self) -> list:
+        return self.extract_property_definition_description_choices(PROPERTY_OPERATION_MODE)
+
+    @property
     def fan_speed(self) -> str:
         return self.extract_property_value(PROPERTY_FAN_SPEED)
 

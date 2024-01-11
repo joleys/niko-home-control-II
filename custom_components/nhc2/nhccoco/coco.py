@@ -155,7 +155,7 @@ class CoCo:
                     except Exception as e:
                         _LOGGER.debug(
                             f'Failed to invoke callback: {device[MQTT_DATA_PARAMS_DEVICES_UUID]}. Topic: {topic} | Data: {device}')
-                        _LOGGER.error(e)
+                        _LOGGER.exception(e)
                         pass
 
         def _on_connect(client, userdata, flags, rc):

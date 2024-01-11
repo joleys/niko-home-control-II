@@ -2,9 +2,10 @@ from ..const import DEVICE_DESCRIPTOR_UUID, DEVICE_DESCRIPTOR_TYPE, DEVICE_DESCR
     DEVICE_DESCRIPTOR_MODEL, DEVICE_DESCRIPTOR_IDENTIFIER, DEVICE_DESCRIPTOR_NAME, DEVICE_DESCRIPTOR_TRAITS, \
     DEVICE_DESCRIPTOR_PARAMETERS, DEVICE_DESCRIPTOR_PROPERTIES, DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS, \
     DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS_DESCRIPTION, DEVICE_DESCRIPTOR_ONLINE, DEVICE_DESCRIPTOR_ONLINE_VALUE_TRUE
-
+from typing import Union
 import re
 import logging
+
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -123,7 +124,7 @@ class CoCoDevice():
                 return property_definition_object[property_key]
         return None
 
-    def extract_property_definition_description_choices(self, property_key: str) -> str:
+    def extract_property_definition_description_choices(self, property_key: str) -> Union[list, None]:
         definition = self.extract_property_definition(property_key)
         if definition and DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS_DESCRIPTION in definition:
             choices = re.findall(r'Choice\((.*?)\)', definition[DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS_DESCRIPTION])
