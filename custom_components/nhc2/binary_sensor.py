@@ -10,6 +10,7 @@ from .entities.accesscontrol_action_decline_call_applied_on_all_devices import \
     Nhc2AccesscontrolActionDeclineCallAppliedOnAllDevicesEntity
 from .entities.alloff_action_active import Nhc2AlloffActionActiveEntity
 from .entities.alloff_action_basicstate import Nhc2AlloffActionBasicStateEntity
+from .entities.alloff_action_started import Nhc2AlloffActionStartedEntity
 from .entities.audiocontrol_action_connected import Nhc2AudiocontrolActionConnectedEntity
 from .entities.audiocontrol_action_title_aligned import Nhc2AudiocontrolActionTitleAlignedEntity
 from .entities.audiocontrol_action_volume_aligned import Nhc2AudiocontrolActionVolumeAlignedEntity
@@ -94,6 +95,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             entities.append(Nhc2AlloffActionActiveEntity(device_instance, hub, gateway))
             entities.append(Nhc2AlloffActionBasicStateEntity(device_instance, hub, gateway))
+
+            if device_instance.supports_all_started:
+                entities.append(Nhc2AlloffActionStartedEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
