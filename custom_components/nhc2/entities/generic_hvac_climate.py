@@ -195,14 +195,6 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
 
         self.on_change()
 
-    async def async_turn_on(self) -> None:
-        self._device.set_status(self._gateway, True)
-        self.on_change()
-
-    async def async_turn_off(self) -> None:
-        self._device.set_status(self._gateway, False)
-        self.on_change()
-
     async def async_set_preset_mode(self, preset_mode: str):
         if preset_mode == PRESET_ECO:
             program = PROPERTY_PROGRAM_VALUE_ECO
