@@ -46,11 +46,11 @@ This action is exposed as a switch (if supported), and a lock (if supported)
 #### Entities
 
 * **Lock**, (only if supported), used to unlock the doorlock.
-* **Basic State Enum Sensor**, (only if supported), This is only available for ring-and-come-in guided action. It
+* **Basic State Enum Sensor**, (only if supported), This is only available for ring-and-come-in routine. It
   indicates if the ring-and-come-in is enabled or not. The switch uses the same information but will not
   take `Intermediate` into account.
-* **Call Answered Binary Sensor**, (only if supported), undocumented.
-* **Call Pending Binary Sensor**, (only if supported), undocumented.
+* **Call Answered Binary Sensor**, (only if supported), Call is picked up.
+* **Call Pending Binary Sensor**, (only if supported), Call is pending.
 * **Decline Call Applied On All Devices Binary Sensor**, which represents the Decline Call Applied On All Devices state.
 
 ### NHC All Off Action
@@ -227,7 +227,7 @@ This is exposed as a cover entity.
 
 * **Aligned Binary Sensor**, this is on when all motors have the same position.
 * **Moving Binary Sensor**, this is on when any motor is running.
-* **Last Direction Sensor** (undocumented).
+* **Last Direction Sensor**, last movement direction. only used to keep the direction for "one button motor".
 
 ### NHC PIR Action
 
@@ -447,7 +447,8 @@ Note: Make sure you have a recent version of Home Assistant!
 This integration is not part of the default Home Assistant installation.
 
 The easiest way to install it is through [HACS (Home Assistant Community Store)](https://hacs.xyz/). Once you have HACS
-installed you can search for "Niko Home Control II". Make sure you select the correct one. Ours has the following description:
+installed you can search for "Niko Home Control II". Make sure you select the correct one. Ours has the following
+description:
 
 > Home Assistant Custom integration for Niko Home Control II
 
