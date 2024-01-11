@@ -16,6 +16,7 @@ from .entities.audiocontrol_action_title_aligned import Nhc2AudiocontrolActionTi
 from .entities.audiocontrol_action_volume_aligned import Nhc2AudiocontrolActionVolumeAlignedEntity
 from .entities.bellbutton_action_decline_call_applied_on_all_devices import \
     Nhc2BellbuttonActionDeclineCallAppliedOnAllDevicesEntity
+from .entities.comfort_action_all_started import Nhc2ComfortActionAllStartedEntity
 from .entities.comfort_action_basicstate import Nhc2ComfortActionBasicStateEntity
 from .entities.comfort_action_mood_active import Nhc2ComfortActionMoodActiveEntity
 from .entities.dimmer_action_aligned import Nhc2DimmerActionAlignedEntity
@@ -182,6 +183,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             entities.append(Nhc2ComfortActionBasicStateEntity(device_instance, hub, gateway))
             entities.append(Nhc2ComfortActionMoodActiveEntity(device_instance, hub, gateway))
+
+            if device_instance.supports_all_started:
+                entities.append(Nhc2ComfortActionAllStartedEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
