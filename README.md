@@ -138,6 +138,7 @@ This action is exposed as a switch.
 
 It has some extra entities that can be used in automations:
 
+* **All Started Binary Sensor**, (only if supported), Is on when all outputs have reached their "Started" value.
 * **Start Active Binary Sensor**, is on upon activation of the action. It is off when one of the assigned participant in
   the action has a state change.
 

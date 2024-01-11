@@ -23,6 +23,7 @@ from .entities.electricalheating_action_basicstate import Nhc2ElectricalheatingA
 from .entities.electricity_clamp_centralmeter_report_instant_usage import \
     Nhc2ElectricityClampCentralmeterReportInstantUsageEntity
 from .entities.garagedoor_action_port_closed import Nhc2GaragedoorActionPortClosedEntity
+from .entities.generic_action_all_started import Nhc2GenericActionAllStartedEntity
 from .entities.generic_action_start_active import Nhc2GenericActionStartActiveEntity
 from .entities.generic_energyhome_electrical_power_production_threshold_exceeded import \
     Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity
@@ -136,6 +137,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2GenericActionStartActiveEntity(device_instance, hub, gateway))
+
+            if device_instance.supports_all_started:
+                entities.append(Nhc2GenericActionAllStartedEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
