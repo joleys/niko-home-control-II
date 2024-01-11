@@ -38,6 +38,7 @@ from .entities.naso_smartplug_feedback_enabled import Nhc2NasoSmartplugFeedbackE
 from .entities.naso_smartplug_measuring_only import Nhc2NasoSmartplugMeasuringOnlyEntity
 from .entities.naso_smartplug_report_instant_usage import Nhc2NasoSmartplugReportInstantUsageEntity
 from .entities.overallcomfort_action_start_active import Nhc2OverallcomfortActionStartActiveEntity
+from .entities.overallcomfort_action_all_started import Nhc2OverallcomfortActionAllStartedEntity
 from .entities.timeschedule_action_active import Nhc2TimeschedulActionActiveEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.alloff_action import CocoAlloffAction
@@ -159,6 +160,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2OverallcomfortActionStartActiveEntity(device_instance, hub, gateway))
+
+            if device_instance.supports_all_started:
+                entities.append(Nhc2OverallcomfortActionAllStartedEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

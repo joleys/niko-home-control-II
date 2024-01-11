@@ -162,6 +162,7 @@ It has some extra entities that can be used in automations:
 
 * **Start Active Binary Sensor**, is on upon activation of the action. It is off when one of the assigned participant in
   the action has a state change.
+* **All Started Binary Sensor**, (only if supported), Is on when all outputs have reached their "Started" value.
 
 ### NHC HVAC Thermostat (untested)
 
