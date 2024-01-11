@@ -1,5 +1,3 @@
-from typing import List
-
 from homeassistant.components.climate import ClimateEntity, HVACMode, HVACAction, ClimateEntityFeature, \
     ATTR_TEMPERATURE, FAN_OFF, FAN_LOW, FAN_MEDIUM, FAN_HIGH, FAN_AUTO, PRESET_COMFORT, PRESET_AWAY, PRESET_ECO, \
     PRESET_HOME, PRESET_SLEEP
@@ -7,10 +5,10 @@ from homeassistant.const import UnitOfTemperature
 
 from ..const import DOMAIN, BRAND
 from ..nhccoco.const import PROPERTY_PROGRAM_VALUE_DAY, PROPERTY_PROGRAM_VALUE_ECO, PROPERTY_PROGRAM_VALUE_NIGHT, \
-    PROPERTY_PROGRAM_VALUE_AWAY, PROPERTY_PROGRAM_VALUE_HOME, PROPERTY_STATUS_VALUE_OFF, PROPERTY_STATUS_VALUE_ON, \
-    PROPERTY_OPERATION_MODE_VALUE_HEAT, PROPERTY_OPERATION_MODE_VALUE_COOL, PROPERTY_OPERATION_MODE_VALUE_AUTO, \
+    PROPERTY_PROGRAM_VALUE_AWAY, PROPERTY_PROGRAM_VALUE_HOME, PROPERTY_STATUS_VALUE_OFF, \
     PROPERTY_FAN_SPEED_VALUE_OFF, PROPERTY_FAN_SPEED_VALUE_LOW, PROPERTY_FAN_SPEED_VALUE_MEDIUM, \
     PROPERTY_FAN_SPEED_VALUE_HIGH, PROPERTY_FAN_SPEED_VALUE_AUTO, PROPERTY_OPERATION_MODE_VALUE_DRY, \
+    PROPERTY_OPERATION_MODE_VALUE_HEAT, PROPERTY_OPERATION_MODE_VALUE_COOL, PROPERTY_OPERATION_MODE_VALUE_AUTO, \
     PROPERTY_OPERATION_MODE_VALUE_FAN
 from ..nhccoco.devices.generic_hvac import CocoGenericHvac
 
@@ -47,7 +45,7 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
             FAN_AUTO
         ]
 
-    def _sanitize_hvac_modes(self) -> List[str]:
+    def _sanitize_hvac_modes(self) -> list:
         """Some HVAC modes returned aren't exactly what HA expects, so attempt to convert them.
            Only tested with modes returned from a Daikin unit (so far)"""
         possible_modes = self._device.possible_operation_modes
@@ -157,7 +155,7 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
         return self._device.program
 
     @property
-    def preset_modes(self) -> List[str]:
+    def preset_modes(self) -> list:
         modes = []
         for program in self._device.possible_programs:
             if program == PROPERTY_PROGRAM_VALUE_ECO:
