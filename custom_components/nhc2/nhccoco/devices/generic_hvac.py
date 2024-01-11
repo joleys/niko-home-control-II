@@ -1,5 +1,3 @@
-from typing import List
-
 from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_PROGRAM, PROPERTY_AMBIENT_TEMPERATURE, \
     PROPERTY_SETPOINT_TEMPERATURE, PROPERTY_OVERRULE_ACTIVE, PROPERTY_OVERRULE_ACTIVE_VALUE_TRUE, \
     PROPERTY_OVERRULE_ACTIVE_VALUE_FALSE, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_ON, PROPERTY_STATUS_VALUE_OFF, \
@@ -42,7 +40,7 @@ class CocoGenericHvac(CoCoDevice):
         return self.extract_property_value(PROPERTY_OPERATION_MODE)
 
     @property
-    def possible_operation_modes(self) -> List[str]:
+    def possible_operation_modes(self) -> list:
         return self.extract_property_definition_description_choices(PROPERTY_OPERATION_MODE)
 
     @property
