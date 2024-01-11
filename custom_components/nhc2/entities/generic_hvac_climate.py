@@ -50,16 +50,29 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
     def _sanitize_hvac_modes(self) -> List[str]:
         """Some HVAC modes returned aren't exactly what HA expects, so attempt to convert them.
            Only tested with modes returned from a Daikin unit (so far)"""
-        output_values = []
-        for mode in [m.lower() for m in self._attr_hvac_modes]:
-            try:
-                if mode == 'fan':
-                    output_values.append(HVACMode.FAN_ONLY)
-                else:
-                    _ = HVACMode(mode)
-                    output_values.append(mode)
-            except ValueError:
-                continue
+        possible_modes = self._device.possible_operation_modes
+
+        # If we didn't get any possible modes, return a default set like previous versions used
+        if not possible_modes:
+            return [
+                HVACMode.AUTO,
+                HVACMode.HEAT_COOL,
+                HVACMode.OFF
+            ]
+
+        # Otherwise, attempt to map these into known HA modes
+        mode_mappings = {
+            'Fan': HVACMode.FAN_ONLY,
+            'Heat': HVACMode.HEAT,
+            'Cool': HVACMode.COOL,
+            'Auto': HVACMode.AUTO,
+            'Dry': HVACMode.DRY
+        }
+
+        # Filter matching values, may need to update the above mapping in future
+        output_values = [mode_mappings[m] for m in possible_modes if m in mode_mappings.keys()]
+
+        # Ensure we can always turn it off
         if HVACMode.OFF not in output_values:
             output_values.append(HVACMode.OFF)
         return output_values
