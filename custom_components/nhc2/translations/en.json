@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Connect to your Niko Connected Controller II",
-        "description": "Configuring controller **{host}**.\n\nThere are 2 ways to authenticate:\n1. Activate the 'Niko Hobby API' on the [Connected Services page](https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview).\n2. Use a touchscreen profile.\n\n'Niko Hobby API' is the easiest method, but you will need to reauthenticate once a year. Touchscreen profiles can be created in the 'Niko Home Control programming software' under Dashboard → Touchscreens.",
+        "description": "Configuring controller **{host}**.\n\nThere are 2 ways to authenticate:\n1. Activate the 'Niko Hobby API' in the Connected Services through the Niko Home Control programming software.\n2. Use a touchscreen profile.\n\n'Niko Hobby API' is the easiest method, but you will need to reauthenticate once a year. Touchscreen profiles can be created in the 'Niko Home Control programming software' under Dashboard → Touchscreens.",
         "data": {
           "username": "Profile",
           "password": "Password",

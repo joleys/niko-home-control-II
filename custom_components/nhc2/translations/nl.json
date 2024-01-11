@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Verbinden met je Niko Connected Controller II",
-        "description": "Controller **{host}** configureren.\n\nEr zijn 2 mogelijkheden om in te loggen:\n1. Je kan 'Niko Hobby API' activeren op de[ Geconnecteerde services pagina](https://mynikohomecontrol.niko.eu/nlbe/ConnectedServices/Overview).\n2. Je gebruikt een touchscreen profiel.\n\n'Niko Hobby API' is de meest eenvoudige manier, maar je moet elk jaar opnieuw aanmelden. Touchsceen profielen kunnen aangemaakt worden in de 'Niko Home Control programming software' onder Dashboard → Touchscreens.",
+        "description": "Controller **{host}** configureren.\n\nEr zijn 2 mogelijkheden om in te loggen:\n1. Je kan 'Niko Hobby API' activeren bij Geconnecteerde services in de Niko Home Control programming software.\n2. Je gebruikt een touchscreen profiel.\n\n'Niko Hobby API' is de meest eenvoudige manier, maar je moet elk jaar opnieuw aanmelden. Touchsceen profielen kunnen aangemaakt worden in de 'Niko Home Control programming software' onder Dashboard → Touchscreens.",
         "data": {
           "username": "Profiel",
           "password": "Wachtwoord",
