@@ -1,5 +1,5 @@
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
-from homeassistant.const import TIME_MINUTES
+from homeassistant.const import UnitOfTime
 
 from ..const import DOMAIN, BRAND
 
@@ -23,7 +23,7 @@ class Nhc2ThermostatHvacOverruleTimeEntity(SensorEntity):
 
         self._attr_device_class = SensorDeviceClass.DURATION
         self._attr_native_value = self._device.overrule_time
-        self._attr_native_unit_of_measurement = TIME_MINUTES
+        self._attr_native_unit_of_measurement = UnitOfTime.MINUTES
         self._attr_state_class = None
 
     @property
