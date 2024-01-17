@@ -26,6 +26,7 @@ from .entities.hvacthermostat_hvac_overrule_active import Nhc2HvacthermostatHvac
 from .entities.hvacthermostat_hvac_protect_mode import Nhc2HvacthermostatHvacProtectModeEntity
 from .entities.naso_smartplug_disable_report_instant_usage_re_enabling import \
     Nhc2NasoSmartplugDisableReportInstantUsageReEnablingEntity
+from .entities.naso_smartplug_status import Nhc2NasoSmartplugStatusEntity
 from .entities.overallcomfort_action_basicstate import Nhc2OverallcomfortActionBasicStateEntity
 from .entities.pir_action_basicstate import Nhc2PirActionBasicStateEntity
 from .entities.relay_action_switch import Nhc2RelayActionSwitchEntity
@@ -186,6 +187,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2NasoSmartplugDisableReportInstantUsageReEnablingEntity(device_instance, hub, gateway))
+            if device_instance.supports_status:
+                entities.append(Nhc2NasoSmartplugStatusEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

@@ -280,7 +280,10 @@ This is exposed as a cover entity.
 
 ### NHC Zigbee Smart plug
 
-This is the energy metering linked to a zigbee smart plug. The smart plug itself is a different device.
+This is the energy metering linked to a zigbee smart plug.
+
+__Remark: The smart plug itself can be controlled through the Status Switch. But it will also be exposed as a NHC Relay
+Action Switch.
 
 #### Entities
 
@@ -288,6 +291,7 @@ This is the energy metering linked to a zigbee smart plug. The smart plug itself
   produced.
 * **Report Instant Usage Binary Sensor**, indicates if the Electrical Power is received. When disabled, it will
   automatically be enabled.
+* **Status Switch**, (only if supported), a switch to turn on/off the Smart plug.
 * **Feedback Enabled Binary Sensor**. On if the feedback led shows the relay status. Off if the feedback led is
   disabled.
 * **Measuring Only Binary Sensor**. If on, the relay will always be on.
@@ -304,7 +308,7 @@ This is the energy metering linked to a generic zigbee smart plug. The smart plu
 
 * **Electrical Power Sensor**, the realtime power usage in W. Positive means power consumed, negative is power
   produced.
-* **Status Switch Sensor**, (only if supported), a switch to turn on/off the Smart plug.
+* **Status Switch**, (only if supported), a switch to turn on/off the Smart plug.
 * **Report Instant Usage Binary Sensor**, indicates if the Electrical Power is received. When disabled, it will
   automatically be enabled.
 * **Disable Report Instant Usage Re-enabling Switch**, a toggle to disable the automatic re-enabling of the
