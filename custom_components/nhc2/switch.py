@@ -19,6 +19,7 @@ from .entities.generic_fan_boost import Nhc2GenericFanBoostEntity
 from .entities.generic_hvac_overrule_active import Nhc2GenericHvacOverruleActiveEntity
 from .entities.generic_smartplug_disable_report_instant_usage_re_enabling import \
     Nhc2GenericSmartplugDisableReportInstantUsageReEnablingEntity
+from .entities.generic_smartplug_status import Nhc2GenericSmartplugStatusEntity
 from .entities.hvacthermostat_hvac_ecosave import Nhc2HvacthermostatHvacEcoSaveEntity
 from .entities.hvacthermostat_hvac_thermostat_on import Nhc2HvacthermostatHvacThermostatOnEntity
 from .entities.hvacthermostat_hvac_overrule_active import Nhc2HvacthermostatHvacOverruleActiveEntity
@@ -196,6 +197,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(
                 Nhc2GenericSmartplugDisableReportInstantUsageReEnablingEntity(device_instance, hub, gateway)
             )
+
+            if device_instance.supports_status:
+                entities.append(Nhc2GenericSmartplugStatusEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

@@ -304,6 +304,7 @@ This is the energy metering linked to a generic zigbee smart plug. The smart plu
 
 * **Electrical Power Sensor**, the realtime power usage in W. Positive means power consumed, negative is power
   produced.
+* **Status Switch Sensor**, (only if supported), a switch to turn on/off the Smart plug.
 * **Report Instant Usage Binary Sensor**, indicates if the Electrical Power is received. When disabled, it will
   automatically be enabled.
 * **Disable Report Instant Usage Re-enabling Switch**, a toggle to disable the automatic re-enabling of the
