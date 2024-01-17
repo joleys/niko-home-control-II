@@ -324,7 +324,7 @@ to '3' and set the 'Metric prefix' to 'k (kilo)'. Leave the time unit at 'Hours'
 At least two helpers are needed: one for the consumption total and one for the production total.
 These helpers can be used in the HA Energy Dashboard.
 
-### Electricity Metering module (with clamp)
+### Electricity Metering module (with clamp) & NHC ZigBee Electricity Metering module (with clamp)
 
 #### Entities
 
