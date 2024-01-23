@@ -58,6 +58,7 @@ from .devices.timeschedule_action import CocoTimescheduleAction
 from .devices.touchswitch_hvac import CocoTouchswitchHvac
 from .devices.velux_action import CocoVeluxAction
 from .devices.venetianblind_action import CocoVenetianblindAction
+from .devices.virtual_hvac import CocoVirtualHvac
 
 from .const import *
 from .helpers import *

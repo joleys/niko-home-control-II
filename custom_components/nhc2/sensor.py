@@ -53,6 +53,9 @@ from .entities.thermoswitchx_multisensor_ambient_temperature import Nhc2Thermosw
 from .entities.thermoswitchx_multisensor_heat_index import Nhc2ThermoswitchxMultisensorHeatIndexEntity
 from .entities.thermoswitchx_multisensor_humidity import Nhc2ThermoswitchxMultisensorHumidityEntity
 from .entities.velux_action_feedback import Nhc2VeluxActionFeedbackEntity
+from .entities.virtual_hvac_setpoint_temperature import Nhc2VirtualHvacSetpointTemperatureEntity
+from .entities.virtual_hvac_overrule_time import Nhc2VirtualHvacOverruleTimeEntity
+from .entities.virtual_hvac_overrule_setpoint import Nhc2VirtualHvacOverruleSetpointEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
 from .nhccoco.devices.alarms_action import CocoAlarmsAction
@@ -79,6 +82,7 @@ from .nhccoco.devices.thermoswitchx_multisensor import CocoThermoswitchxMultisen
 from .nhccoco.devices.touchswitch_hvac import CocoTouchswitchHvac
 from .nhccoco.devices.velux_action import CocoVeluxAction
 from .nhccoco.devices.venetianblind_action import CocoVenetianblindAction
+from .nhccoco.devices.virtual_hvac import CocoVirtualHvac
 
 from .const import DOMAIN, KEY_GATEWAY
 
@@ -343,6 +347,21 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
             if device_instance.supports_humidity:
                 entities.append(Nhc2ThermoswitchxMultisensorHumidityEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoVirtualHvac)
+    _LOGGER.info('→ Found %s NHC Virtual Thermostat', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2VirtualHvacSetpointTemperatureEntity(device_instance, hub, gateway))
+
+            if device_instance.supports_overrule_time:
+                entities.append(Nhc2VirtualHvacOverruleTimeEntity(device_instance, hub, gateway))
+
+            if device_instance.supports_overrule_setpoint:
+                entities.append(Nhc2VirtualHvacOverruleSetpointEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

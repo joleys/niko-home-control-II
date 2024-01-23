@@ -429,6 +429,21 @@ __Remark:__ this is untested as I don't own a device of this type.
 * **Ambient Temperature Sensor**, (only if supported)
 * **Humidity Sensor**, (only if supported)
 
+### NHC Virtual Thermostat
+
+This is exposed as a climate entity.
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+#### Entities
+
+* **Setpoint Temperature Sensor**, the desired setpoint in the current program.
+* **Overrule Active Switch**, marks if the overrule-time will be used instead of setpoint as defined in program mode.
+* **Overrule Setpoint Temperature Sensor**, (only if supported), the current overruled setpoint temperature.
+* **Overrule Time Duration Sensor**, (only if supported), duration of the overrule period in minutes.
+* **EcoSave Switch**, (only if supported), marks if the EcoSave mode is active. When active the program keeps going, but
+  the setpointtemperature is altered (+3 when cooling, -3 when heating).
+
 ### RobinsIP Videodoorstation
 
 __Remark:__ This device is not documented/supported by Niko.
