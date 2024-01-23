@@ -37,6 +37,7 @@ from .entities.hvacthermostat_hvac_overrule_setpoint import Nhc2HvacthermostatHv
 from .entities.hvacthermostat_hvac_overrule_time import Nhc2HvacthermostatHvacOverruleTimeEntity
 from .entities.motor_action_last_direction import Nhc2MotorActionLastDirectionEntity
 from .entities.naso_smartplug_electrical_power import Nhc2NasoSmartplugElectricalPowerEntity
+from .entities.playerstatus_action_feedback_message import Nhc2PlayerstatusActionFeedbackMessageEntity
 from .entities.reynaers_action_status import Nhc2ReynaersActionStatusEntity
 from .entities.robinsip_videodoorstation_call_status_01 import Nhc2RobinsipVideodoorstationCallStatus01Entity
 from .entities.robinsip_videodoorstation_ip_address import Nhc2RobinsipVideodoorstationIpAddressEntity
@@ -63,6 +64,7 @@ from .nhccoco.devices.generic_hvac import CocoGenericHvac
 from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
+from .nhccoco.devices.playerstatus_action import CocoPlayerstatusAction
 from .nhccoco.devices.reynaers_action import CocoReynaersAction
 from .nhccoco.devices.robinsip_videodoorstation import CocoRobinsipVideodoorstation
 from .nhccoco.devices.rolldownshutter_action import CocoRolldownshutterAction
@@ -312,6 +314,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             if device_instance.supports_coupling_status:
                 entities.append(Nhc2GenericDomestichotwaterunitCouplingStatusEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoPlayerstatusAction)
+    _LOGGER.info('→ Found %s NHC Player status action', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2PlayerstatusActionFeedbackMessageEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

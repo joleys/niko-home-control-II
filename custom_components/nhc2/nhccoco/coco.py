@@ -35,6 +35,7 @@ from .devices.light_action import CocoLightAction
 from .devices.naso_smartplug import CocoNasoSmartplug
 from .devices.overallcomfort_action import CocoOverallcomfortAction
 from .devices.pir_action import CocoPirAction
+from .devices.playerstatus_action import CocoPlayerstatusAction
 from .devices.reynaers_action import CocoReynaersAction
 from .devices.robinsip_videodoorstation import CocoRobinsipVideodoorstation
 from .devices.rolldownshutter_action import CocoRolldownshutterAction

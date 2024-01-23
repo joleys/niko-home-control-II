@@ -403,6 +403,15 @@ This is exposed as a climate entity.
 
 * **Overrule Active Binary Sensor**, (only if supported), is the overrule mode active or not.
 
+### NHC Player status action
+
+__Remark:__ This device can not be controlled. It is a virtual device that shows the status for another player.
+
+#### Entities
+
+* **BasicState Binary Sensor**, follows the on/off state of the player.
+* **FeedbackMessage Sensor**, the state description
+
 ### RobinsIP Videodoorstation
 
 __Remark:__ This device is not documented/supported by Niko.

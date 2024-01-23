@@ -40,6 +40,7 @@ from .entities.naso_smartplug_measuring_only import Nhc2NasoSmartplugMeasuringOn
 from .entities.naso_smartplug_report_instant_usage import Nhc2NasoSmartplugReportInstantUsageEntity
 from .entities.overallcomfort_action_start_active import Nhc2OverallcomfortActionStartActiveEntity
 from .entities.overallcomfort_action_all_started import Nhc2OverallcomfortActionAllStartedEntity
+from .entities.playerstatus_action_basicstate import Nhc2PlayerstatusActionBasicStateEntity
 from .entities.timeschedule_action_active import Nhc2TimeschedulActionActiveEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.alloff_action import CocoAlloffAction
@@ -58,6 +59,7 @@ from .nhccoco.devices.heatingcooling_action import CocoHeatingcoolingAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.overallcomfort_action import CocoOverallcomfortAction
+from .nhccoco.devices.playerstatus_action import CocoPlayerstatusAction
 from .nhccoco.devices.rolldownshutter_action import CocoRolldownshutterAction
 from .nhccoco.devices.sunblind_action import CocoSunblindAction
 from .nhccoco.devices.timeschedule_action import CocoTimescheduleAction
@@ -268,5 +270,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2ElectricalheatingActionBasicStateEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoPlayerstatusAction)
+    _LOGGER.info('→ Found %s NHC Player status action', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2PlayerstatusActionBasicStateEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
