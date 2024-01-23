@@ -84,7 +84,7 @@ It has some extra entities that can be used in automations:
 
 * [ ] Setting the favourite
 
-### NHC Basic Alarm Action & NHC Panic Mode Action (untested)
+### NHC Basic Alarm Action & NHC Panic Mode Action
 
 __Remark:__ this is untested as I don't own a device of this type.
 
@@ -96,7 +96,7 @@ It has some extra entities that can be used in automations:
 
 * **Basic State Enum Sensor**, which represents the Basic State. It is on when bell button is press, off when no call
 
-### NHC BellButton Action (untested)
+### NHC BellButton Action
 
 This action exposes a switch and a lock.
 
@@ -164,9 +164,7 @@ It has some extra entities that can be used in automations:
   the action has a state change.
 * **All Started Binary Sensor**, (only if supported), Is on when all outputs have reached their "Started" value.
 
-### NHC HVAC Thermostat (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
+### NHC HVAC Thermostat
 
 This is exposed as a climate entity.
 
@@ -260,7 +258,7 @@ This is exposed as switch.
 
 Lights are exposed as lights. Others are exposed as switches.
 
-### NHC Reynaers Action (untested)
+### NHC Reynaers Action
 
 This is exposed as a cover entity.
 
@@ -316,11 +314,16 @@ This is the energy metering linked to a generic zigbee smart plug. The smart plu
 
 __Remark:__ The totals are not available as they are not (yet) exposed by the API.
 
-Totals are available via a Helper. Goto 'Settings' > 'Devices & Services' and click 'Helpers' at the top. Click the '+
-Create Helper' button at the bottom right and select 'Integration - Riemann sum integral sensor'.
-Type a name for the Helper and select the relevant 'energyhome' entity (i.e. 'Electrical Power to Grid') from the 'Input
-sensor' dropdown. Integration method 'Trapezoidal rule' should give the most accurate integrated value. Set 'Precision'
-to '3' and set the 'Metric prefix' to 'k (kilo)'. Leave the time unit at 'Hours'.
+#### Calculated totals
+
+Totals can be calculated via a Helper:
+
+Goto 'Settings' > 'Devices & Services' and click 'Helpers' at the top. Click the '+ Create Helper' button at the bottom
+right and select 'Integration - Riemann sum integral sensor'. Type a name for the Helper and select the relevant '
+energyhome' entity (i.e. 'Electrical Power to Grid') from the 'Input sensor' dropdown. Integration method 'Trapezoidal
+rule' should give the most accurate integrated value. Set 'Precision' to '3' and set the 'Metric prefix' to 'k (kilo)'.
+Leave the time unit at 'Hours'.
+
 At least two helpers are needed: one for the consumption total and one for the production total.
 These helpers can be used in the HA Energy Dashboard.
 
@@ -397,6 +400,8 @@ This is exposed as a climate entity.
 
 ### Generic ZigBee Heating/Cooling Implementation
 
+__Remark:__ this is untested as I don't own a device of this type.
+
 This is exposed as a climate entity.
 
 #### Entities
@@ -404,6 +409,8 @@ This is exposed as a climate entity.
 * **Overrule Active Binary Sensor**, (only if supported), is the overrule mode active or not.
 
 ### NHC Player status action
+
+__Remark:__ this is untested as I don't own a device of this type.
 
 __Remark:__ This device can not be controlled. It is a virtual device that shows the status for another player.
 
