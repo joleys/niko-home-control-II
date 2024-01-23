@@ -47,6 +47,13 @@ from .devices.switched_generic_action import CocoSwitchedGenericAction
 from .devices.thermostat_hvac import CocoThermostatHvac
 from .devices.thermostat_hvac_zigbee import CocoThermostatHvacZigbee
 from .devices.thermostat_thermostat import CocoThermostatThermostat
+from .devices.thermoswitchx_multisensor import CocoThermoswitchxMultisensor
+from .devices.thermoswitchx1_multisensor import CocoThermoswitchx1Multisensor
+from .devices.thermoswitchx1feedback_multisensor import CocoThermoswitchx1FeedbackMultisensor
+from .devices.thermoswitchx2feedback_multisensor import CocoThermoswitchx2FeedbackMultisensor
+from .devices.thermoswitchx4feedback_multisensor import CocoThermoswitchx4FeedbackMultisensor
+from .devices.thermoswitchx6feedback_multisensor import CocoThermoswitchx6FeedbackMultisensor
+from .devices.thermoventilationcontrollerfeedback_multisensor import CocoThermoventilationcontrollerfeedbackMultisensor
 from .devices.timeschedule_action import CocoTimescheduleAction
 from .devices.touchswitch_hvac import CocoTouchswitchHvac
 from .devices.velux_action import CocoVeluxAction
@@ -315,4 +322,4 @@ class CoCo:
                 instance = getattr(sys.modules[__name__], classname)(json_to_map(device))
                 self._device_instances[instance.uuid] = instance
             except Exception as e:
-                _LOGGER.warning(f"Class {classname} not found {e}, device: {device['Properties']}")
+                _LOGGER.warning(f"Class {classname} not found: {e}, device: {device['Properties']}")

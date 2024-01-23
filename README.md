@@ -419,6 +419,16 @@ __Remark:__ This device can not be controlled. It is a virtual device that shows
 * **BasicState Binary Sensor**, follows the on/off state of the player.
 * **FeedbackMessage Sensor**, the state description
 
+### NHC Thermo switch
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+#### Entities
+
+* **HeatIndex Temperature Sensor**, (only if supported)
+* **Ambient Temperature Sensor**, (only if supported)
+* **Humidity Sensor**, (only if supported)
+
 ### RobinsIP Videodoorstation
 
 __Remark:__ This device is not documented/supported by Niko.
@@ -458,7 +468,7 @@ __Remark:__ This device is not documented/supported by Niko.
 * **Cooling Mode Binary Sensor**
 * **Heating Mode Binary Sensor**
 
-### Electrical Heating Action (untested)
+### Electrical Heating Action
 
 __Remark:__ This device is not documented/supported by Niko.
 

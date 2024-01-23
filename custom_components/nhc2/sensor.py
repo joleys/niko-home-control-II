@@ -49,6 +49,9 @@ from .entities.thermostat_hvac_overrule_setpoint import Nhc2ThermostatHvacOverru
 from .entities.thermostat_thermostat_setpoint_temperature import Nhc2ThermostatThermostatSetpointTemperatureEntity
 from .entities.thermostat_thermostat_overrule_time import Nhc2ThermostatThermostatOverruleTimeEntity
 from .entities.thermostat_thermostat_overrule_setpoint import Nhc2ThermostatThermostatOverruleSetpointEntity
+from .entities.thermoswitchx_multisensor_ambient_temperature import Nhc2ThermoswitchxMultisensorAmbientTemperatureEntity
+from .entities.thermoswitchx_multisensor_heat_index import Nhc2ThermoswitchxMultisensorHeatIndexEntity
+from .entities.thermoswitchx_multisensor_humidity import Nhc2ThermoswitchxMultisensorHumidityEntity
 from .entities.velux_action_feedback import Nhc2VeluxActionFeedbackEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
@@ -72,6 +75,7 @@ from .nhccoco.devices.simulation_action import CocoSimulationAction
 from .nhccoco.devices.sunblind_action import CocoSunblindAction
 from .nhccoco.devices.thermostat_hvac import CocoThermostatHvac
 from .nhccoco.devices.thermostat_thermostat import CocoThermostatThermostat
+from .nhccoco.devices.thermoswitchx_multisensor import CocoThermoswitchxMultisensor
 from .nhccoco.devices.touchswitch_hvac import CocoTouchswitchHvac
 from .nhccoco.devices.velux_action import CocoVeluxAction
 from .nhccoco.devices.venetianblind_action import CocoVenetianblindAction
@@ -323,6 +327,22 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2PlayerstatusActionFeedbackMessageEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoThermoswitchxMultisensor)
+    _LOGGER.info('→ Found %s NHC Thermo switch', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            if device_instance.supports_heat_index:
+                entities.append(Nhc2ThermoswitchxMultisensorHeatIndexEntity(device_instance, hub, gateway))
+
+            if device_instance.supports_ambient_temperature:
+                entities.append(Nhc2ThermoswitchxMultisensorAmbientTemperatureEntity(device_instance, hub, gateway))
+
+            if device_instance.supports_humidity:
+                entities.append(Nhc2ThermoswitchxMultisensorHumidityEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
