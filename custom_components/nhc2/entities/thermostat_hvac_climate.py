@@ -75,9 +75,9 @@ class Nhc2ThermostatHvacClimateEntity(ClimateEntity):
     def hvac_action(self):
         if self._device.program == PROPERTY_PROGRAM_VALUE_OFF:
             return HVACAction.OFF
-        if self._device.is_demand_heating:
+        if self._device.supports_demand and self._device.is_demand_heating:
             return HVACAction.HEATING
-        if self._device.is_demand_cooling:
+        if self._device.supports_demand and self._device.is_demand_cooling:
             return HVACAction.COOLING
 
         return HVACAction.IDLE

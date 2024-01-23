@@ -191,10 +191,10 @@ This is exposed as a climate entity.
 
 * **Setpoint Temperature Sensor**, the desired setpoint in the current program.
 * **Overrule Active Switch**, marks if the overrule-time will be used instead of setpoint as defined in program mode.
-* **Overrule Setpoint Temperature Sensor**, the current overruled setpoint temperature.
-* **Overrule Time Duration Sensor**, duration of the overrule period in minutes.
-* **EcoSave Switch**, marks if the EcoSave mode is active. When active the program keeps going, but the
-  setpointtemperature is altered (+3 when cooling, -3 when heating).
+* **Overrule Setpoint Temperature Sensor**, (only if supported), the current overruled setpoint temperature.
+* **Overrule Time Duration Sensor**, (only if supported), duration of the overrule period in minutes.
+* **EcoSave Switch**, (only if supported), marks if the EcoSave mode is active. When active the program keeps going, but
+  the setpointtemperature is altered (+3 when cooling, -3 when heating).
 
 ### NHC Touch Switch
 

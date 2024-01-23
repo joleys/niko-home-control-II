@@ -45,8 +45,16 @@ class CocoThermostatHvac(CoCoDevice):
         return to_float_or_none(self.extract_property_value(PROPERTY_OVERRULE_SETPOINT))
 
     @property
+    def supports_overrule_setpoint(self) -> bool:
+        return self.has_property(PROPERTY_OVERRULE_SETPOINT)
+
+    @property
     def overrule_time(self) -> int:
         return to_int_or_none(self.extract_property_value(PROPERTY_OVERRULE_TIME))
+
+    @property
+    def supports_overrule_time(self) -> bool:
+        return self.has_property(PROPERTY_OVERRULE_TIME)
 
     @property
     def ecosave(self) -> str:
@@ -55,6 +63,10 @@ class CocoThermostatHvac(CoCoDevice):
     @property
     def is_ecosave(self) -> bool:
         return self.ecosave == PROPERTY_ECOSAVE_VALUE_TRUE
+
+    @property
+    def supports_ecosave(self) -> bool:
+        return self.has_property(PROPERTY_ECOSAVE)
 
     @property
     def demand(self) -> str:
@@ -71,6 +83,10 @@ class CocoThermostatHvac(CoCoDevice):
     @property
     def is_demand_none(self) -> bool:
         return self.demand == PROPERTY_DEMAND_VALUE_NONE
+
+    @property
+    def supports_demand(self) -> bool:
+        return self.has_property(PROPERTY_DEMAND)
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
