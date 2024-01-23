@@ -270,10 +270,14 @@ class CoCo:
                 continue
 
             try:
+                # Try to find the class for the device with the technology included
+                # This is the most specific class, as for some devices the technology is important.
+                # For example the Generic ZigBee Heating/Cooling Implementation is exposed as CocoThermostatHvac, but it
+                # should actually be mapped to CocoGenericHvac, as this is a very similar implementation.
                 classname = str.replace(
                     str.title(
                         str.replace(
-                            'Coco ' + device["Model"] + ' ' + device["Type"],
+                            'Coco ' + device["Model"] + ' ' + device["Type"] + ' ' + device["Technology"].lower(),
                             '-',
                             ' '
                         )
@@ -282,7 +286,23 @@ class CoCo:
                     ''
                 )
 
-                # ignore some devices. These are devices that:
+                try:
+                    getattr(sys.modules[__name__], classname)
+                except AttributeError as e:
+                    # Try to find the class for the device, but **without** the technology included
+                    classname = str.replace(
+                        str.title(
+                            str.replace(
+                                'Coco ' + device["Model"] + ' ' + device["Type"],
+                                '-',
+                                ' '
+                            )
+                        ),
+                        ' ',
+                        ''
+                    )
+
+                # Ignore some devices. These are devices that:
                 # * are not supported by the API / MQTT broker
                 # * don't have any (usefull) properties
                 if classname in [
