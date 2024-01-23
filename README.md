@@ -395,6 +395,14 @@ This is exposed as a climate entity.
 * **Boost Switch**, enable/disable boost mode.
 * **Coupling Status Enum Sensor**, the connectivity status of the system.
 
+### Generic ZigBee Heating/Cooling Implementation
+
+This is exposed as a climate entity.
+
+#### Entities
+
+* **Overrule Active Binary Sensor**, (only if supported), is the overrule mode active or not.
+
 ### RobinsIP Videodoorstation
 
 __Remark:__ This device is not documented/supported by Niko.
