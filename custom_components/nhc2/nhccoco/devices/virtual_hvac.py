@@ -11,7 +11,7 @@ import logging
 _LOGGER = logging.getLogger(__name__)
 
 
-class CocoThermostatHvac(CoCoDevice):
+class CocoVirtualHvac(CoCoDevice):
     @property
     def program(self) -> str:
         return self.extract_property_value(PROPERTY_PROGRAM)

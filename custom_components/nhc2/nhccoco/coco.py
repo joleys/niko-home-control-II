@@ -35,6 +35,7 @@ from .devices.light_action import CocoLightAction
 from .devices.naso_smartplug import CocoNasoSmartplug
 from .devices.overallcomfort_action import CocoOverallcomfortAction
 from .devices.pir_action import CocoPirAction
+from .devices.playerstatus_action import CocoPlayerstatusAction
 from .devices.reynaers_action import CocoReynaersAction
 from .devices.robinsip_videodoorstation import CocoRobinsipVideodoorstation
 from .devices.rolldownshutter_action import CocoRolldownshutterAction
@@ -44,11 +45,20 @@ from .devices.sunblind_action import CocoSunblindAction
 from .devices.switched_fan_action import CocoSwitchedFanAction
 from .devices.switched_generic_action import CocoSwitchedGenericAction
 from .devices.thermostat_hvac import CocoThermostatHvac
+from .devices.thermostat_hvac_zigbee import CocoThermostatHvacZigbee
 from .devices.thermostat_thermostat import CocoThermostatThermostat
+from .devices.thermoswitchx_multisensor import CocoThermoswitchxMultisensor
+from .devices.thermoswitchx1_multisensor import CocoThermoswitchx1Multisensor
+from .devices.thermoswitchx1feedback_multisensor import CocoThermoswitchx1FeedbackMultisensor
+from .devices.thermoswitchx2feedback_multisensor import CocoThermoswitchx2FeedbackMultisensor
+from .devices.thermoswitchx4feedback_multisensor import CocoThermoswitchx4FeedbackMultisensor
+from .devices.thermoswitchx6feedback_multisensor import CocoThermoswitchx6FeedbackMultisensor
+from .devices.thermoventilationcontrollerfeedback_multisensor import CocoThermoventilationcontrollerfeedbackMultisensor
 from .devices.timeschedule_action import CocoTimescheduleAction
 from .devices.touchswitch_hvac import CocoTouchswitchHvac
 from .devices.velux_action import CocoVeluxAction
 from .devices.venetianblind_action import CocoVenetianblindAction
+from .devices.virtual_hvac import CocoVirtualHvac
 
 from .const import *
 from .helpers import *
@@ -270,10 +280,14 @@ class CoCo:
                 continue
 
             try:
+                # Try to find the class for the device with the technology included
+                # This is the most specific class, as for some devices the technology is important.
+                # For example the Generic ZigBee Heating/Cooling Implementation is exposed as CocoThermostatHvac, but it
+                # should actually be mapped to CocoGenericHvac, as this is a very similar implementation.
                 classname = str.replace(
                     str.title(
                         str.replace(
-                            'Coco ' + device["Model"] + ' ' + device["Type"],
+                            'Coco ' + device["Model"] + ' ' + device["Type"] + ' ' + device["Technology"].lower(),
                             '-',
                             ' '
                         )
@@ -282,7 +296,23 @@ class CoCo:
                     ''
                 )
 
-                # ignore some devices. These are devices that:
+                try:
+                    getattr(sys.modules[__name__], classname)
+                except AttributeError as e:
+                    # Try to find the class for the device, but **without** the technology included
+                    classname = str.replace(
+                        str.title(
+                            str.replace(
+                                'Coco ' + device["Model"] + ' ' + device["Type"],
+                                '-',
+                                ' '
+                            )
+                        ),
+                        ' ',
+                        ''
+                    )
+
+                # Ignore some devices. These are devices that:
                 # * are not supported by the API / MQTT broker
                 # * don't have any (usefull) properties
                 if classname in [
@@ -293,4 +323,4 @@ class CoCo:
                 instance = getattr(sys.modules[__name__], classname)(json_to_map(device))
                 self._device_instances[instance.uuid] = instance
             except Exception as e:
-                _LOGGER.warning(f"Class {classname} not found {e}, device: {device['Properties']}")
+                _LOGGER.warning(f"Class {classname} not found: {e}, device: {device['Properties']}")

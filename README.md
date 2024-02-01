@@ -46,11 +46,11 @@ This action is exposed as a switch (if supported), and a lock (if supported)
 #### Entities
 
 * **Lock**, (only if supported), used to unlock the doorlock.
-* **Basic State Enum Sensor**, (only if supported), This is only available for ring-and-come-in guided action. It
+* **Basic State Enum Sensor**, (only if supported), This is only available for ring-and-come-in routine. It
   indicates if the ring-and-come-in is enabled or not. The switch uses the same information but will not
   take `Intermediate` into account.
-* **Call Answered Binary Sensor**, (only if supported), undocumented.
-* **Call Pending Binary Sensor**, (only if supported), undocumented.
+* **Call Answered Binary Sensor**, (only if supported), Call is picked up.
+* **Call Pending Binary Sensor**, (only if supported), Call is pending.
 * **Decline Call Applied On All Devices Binary Sensor**, which represents the Decline Call Applied On All Devices state.
 
 ### NHC All Off Action
@@ -61,10 +61,11 @@ This action is exposed as a button.
 
 It has some extra entities that can be used in automations:
 
+* **Basic State Binary Sensor**, The state is according the state of all assigned players as configured for that action.
 * **AllOff Active Binary Sensor**, Is on only upon activation of the action. Off when one of the assigned participants
   in the action had a state change. Be aware that this state is only updated as the button is pressed, not when all
   devices are off.
-* **Basic State Binary Sensor**, The state is according the state of all assigned players as configured for that action.
+* **AllStarted Binary Sensor**, (only if supported), Is on when all outputs have reached their "Started" value
 
 ### NHC Audio Control Action
 
@@ -83,7 +84,7 @@ It has some extra entities that can be used in automations:
 
 * [ ] Setting the favourite
 
-### NHC Basic Alarm Action & NHC Panic Mode Action (untested)
+### NHC Basic Alarm Action & NHC Panic Mode Action
 
 __Remark:__ this is untested as I don't own a device of this type.
 
@@ -95,7 +96,7 @@ It has some extra entities that can be used in automations:
 
 * **Basic State Enum Sensor**, which represents the Basic State. It is on when bell button is press, off when no call
 
-### NHC BellButton Action (untested)
+### NHC BellButton Action
 
 This action exposes a switch and a lock.
 
@@ -137,6 +138,7 @@ This action is exposed as a switch.
 
 It has some extra entities that can be used in automations:
 
+* **All Started Binary Sensor**, (only if supported), Is on when all outputs have reached their "Started" value.
 * **Start Active Binary Sensor**, is on upon activation of the action. It is off when one of the assigned participant in
   the action has a state change.
 
@@ -160,10 +162,9 @@ It has some extra entities that can be used in automations:
 
 * **Start Active Binary Sensor**, is on upon activation of the action. It is off when one of the assigned participant in
   the action has a state change.
+* **All Started Binary Sensor**, (only if supported), Is on when all outputs have reached their "Started" value.
 
-### NHC HVAC Thermostat (untested)
-
-__Remark:__ this is untested as I don't own a device of this type.
+### NHC HVAC Thermostat
 
 This is exposed as a climate entity.
 
@@ -188,10 +189,10 @@ This is exposed as a climate entity.
 
 * **Setpoint Temperature Sensor**, the desired setpoint in the current program.
 * **Overrule Active Switch**, marks if the overrule-time will be used instead of setpoint as defined in program mode.
-* **Overrule Setpoint Temperature Sensor**, the current overruled setpoint temperature.
-* **Overrule Time Duration Sensor**, duration of the overrule period in minutes.
-* **EcoSave Switch**, marks if the EcoSave mode is active. When active the program keeps going, but the
-  setpointtemperature is altered (+3 when cooling, -3 when heating).
+* **Overrule Setpoint Temperature Sensor**, (only if supported), the current overruled setpoint temperature.
+* **Overrule Time Duration Sensor**, (only if supported), duration of the overrule period in minutes.
+* **EcoSave Switch**, (only if supported), marks if the EcoSave mode is active. When active the program keeps going, but
+  the setpointtemperature is altered (+3 when cooling, -3 when heating).
 
 ### NHC Touch Switch
 
@@ -218,6 +219,7 @@ It has some extra entities that can be used in automations:
   action.
 * **Mood Active Binary Sensor**, is on upon activation of the action. It is off when one of the assigned participant in
   the action had a state change.
+* **All Started Binary Sensor**, (only if supported), Is on when all outputs have reached their "Started" value.
 
 ### NHC Motor Action
 
@@ -227,7 +229,7 @@ This is exposed as a cover entity.
 
 * **Aligned Binary Sensor**, this is on when all motors have the same position.
 * **Moving Binary Sensor**, this is on when any motor is running.
-* **Last Direction Sensor** (undocumented).
+* **Last Direction Sensor**, last movement direction. only used to keep the direction for "one button motor".
 
 ### NHC PIR Action
 
@@ -256,7 +258,7 @@ This is exposed as switch.
 
 Lights are exposed as lights. Others are exposed as switches.
 
-### NHC Reynaers Action (untested)
+### NHC Reynaers Action
 
 This is exposed as a cover entity.
 
@@ -276,7 +278,10 @@ This is exposed as a cover entity.
 
 ### NHC Zigbee Smart plug
 
-This is the energy metering linked to a zigbee smart plug. The smart plug itself is a different device.
+This is the energy metering linked to a zigbee smart plug.
+
+__Remark: The smart plug itself can be controlled through the Status Switch. But it will also be exposed as a NHC Relay
+Action Switch.
 
 #### Entities
 
@@ -284,6 +289,7 @@ This is the energy metering linked to a zigbee smart plug. The smart plug itself
   produced.
 * **Report Instant Usage Binary Sensor**, indicates if the Electrical Power is received. When disabled, it will
   automatically be enabled.
+* **Status Switch**, (only if supported), a switch to turn on/off the Smart plug.
 * **Feedback Enabled Binary Sensor**. On if the feedback led shows the relay status. Off if the feedback led is
   disabled.
 * **Measuring Only Binary Sensor**. If on, the relay will always be on.
@@ -300,6 +306,7 @@ This is the energy metering linked to a generic zigbee smart plug. The smart plu
 
 * **Electrical Power Sensor**, the realtime power usage in W. Positive means power consumed, negative is power
   produced.
+* **Status Switch**, (only if supported), a switch to turn on/off the Smart plug.
 * **Report Instant Usage Binary Sensor**, indicates if the Electrical Power is received. When disabled, it will
   automatically be enabled.
 * **Disable Report Instant Usage Re-enabling Switch**, a toggle to disable the automatic re-enabling of the
@@ -307,15 +314,20 @@ This is the energy metering linked to a generic zigbee smart plug. The smart plu
 
 __Remark:__ The totals are not available as they are not (yet) exposed by the API.
 
-Totals are available via a Helper. Goto 'Settings' > 'Devices & Services' and click 'Helpers' at the top. Click the '+
-Create Helper' button at the bottom right and select 'Integration - Riemann sum integral sensor'.
-Type a name for the Helper and select the relevant 'energyhome' entity (i.e. 'Electrical Power to Grid') from the 'Input
-sensor' dropdown. Integration method 'Trapezoidal rule' should give the most accurate integrated value. Set 'Precision'
-to '3' and set the 'Metric prefix' to 'k (kilo)'. Leave the time unit at 'Hours'.
+#### Calculated totals
+
+Totals can be calculated via a Helper:
+
+Goto 'Settings' > 'Devices & Services' and click 'Helpers' at the top. Click the '+ Create Helper' button at the bottom
+right and select 'Integration - Riemann sum integral sensor'. Type a name for the Helper and select the relevant '
+energyhome' entity (i.e. 'Electrical Power to Grid') from the 'Input sensor' dropdown. Integration method 'Trapezoidal
+rule' should give the most accurate integrated value. Set 'Precision' to '3' and set the 'Metric prefix' to 'k (kilo)'.
+Leave the time unit at 'Hours'.
+
 At least two helpers are needed: one for the consumption total and one for the production total.
 These helpers can be used in the HA Energy Dashboard.
 
-### Electricity Metering module (with clamp)
+### Electricity Metering module (with clamp) & NHC ZigBee Electricity Metering module (with clamp)
 
 #### Entities
 
@@ -386,6 +398,52 @@ This is exposed as a climate entity.
 * **Boost Switch**, enable/disable boost mode.
 * **Coupling Status Enum Sensor**, the connectivity status of the system.
 
+### Generic ZigBee Heating/Cooling Implementation
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+This is exposed as a climate entity.
+
+#### Entities
+
+* **Overrule Active Binary Sensor**, (only if supported), is the overrule mode active or not.
+
+### NHC Player status action
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+__Remark:__ This device can not be controlled. It is a virtual device that shows the status for another player.
+
+#### Entities
+
+* **BasicState Binary Sensor**, follows the on/off state of the player.
+* **FeedbackMessage Sensor**, the state description
+
+### NHC Thermo switch
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+#### Entities
+
+* **HeatIndex Temperature Sensor**, (only if supported)
+* **Ambient Temperature Sensor**, (only if supported)
+* **Humidity Sensor**, (only if supported)
+
+### NHC Virtual Thermostat
+
+This is exposed as a climate entity.
+
+__Remark:__ this is untested as I don't own a device of this type.
+
+#### Entities
+
+* **Setpoint Temperature Sensor**, the desired setpoint in the current program.
+* **Overrule Active Switch**, marks if the overrule-time will be used instead of setpoint as defined in program mode.
+* **Overrule Setpoint Temperature Sensor**, (only if supported), the current overruled setpoint temperature.
+* **Overrule Time Duration Sensor**, (only if supported), duration of the overrule period in minutes.
+* **EcoSave Switch**, (only if supported), marks if the EcoSave mode is active. When active the program keeps going, but
+  the setpointtemperature is altered (+3 when cooling, -3 when heating).
+
 ### RobinsIP Videodoorstation
 
 __Remark:__ This device is not documented/supported by Niko.
@@ -425,7 +483,7 @@ __Remark:__ This device is not documented/supported by Niko.
 * **Cooling Mode Binary Sensor**
 * **Heating Mode Binary Sensor**
 
-### Electrical Heating Action (untested)
+### Electrical Heating Action
 
 __Remark:__ This device is not documented/supported by Niko.
 
@@ -447,7 +505,8 @@ Note: Make sure you have a recent version of Home Assistant!
 This integration is not part of the default Home Assistant installation.
 
 The easiest way to install it is through [HACS (Home Assistant Community Store)](https://hacs.xyz/). Once you have HACS
-installed you can search for "Niko Home Control II". Make sure you select the correct one. Ours has the following description:
+installed you can search for "Niko Home Control II". Make sure you select the correct one. Ours has the following
+description:
 
 > Home Assistant Custom integration for Niko Home Control II
 

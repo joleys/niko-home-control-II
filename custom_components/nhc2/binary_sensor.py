@@ -10,11 +10,13 @@ from .entities.accesscontrol_action_decline_call_applied_on_all_devices import \
     Nhc2AccesscontrolActionDeclineCallAppliedOnAllDevicesEntity
 from .entities.alloff_action_active import Nhc2AlloffActionActiveEntity
 from .entities.alloff_action_basicstate import Nhc2AlloffActionBasicStateEntity
+from .entities.alloff_action_started import Nhc2AlloffActionStartedEntity
 from .entities.audiocontrol_action_connected import Nhc2AudiocontrolActionConnectedEntity
 from .entities.audiocontrol_action_title_aligned import Nhc2AudiocontrolActionTitleAlignedEntity
 from .entities.audiocontrol_action_volume_aligned import Nhc2AudiocontrolActionVolumeAlignedEntity
 from .entities.bellbutton_action_decline_call_applied_on_all_devices import \
     Nhc2BellbuttonActionDeclineCallAppliedOnAllDevicesEntity
+from .entities.comfort_action_all_started import Nhc2ComfortActionAllStartedEntity
 from .entities.comfort_action_basicstate import Nhc2ComfortActionBasicStateEntity
 from .entities.comfort_action_mood_active import Nhc2ComfortActionMoodActiveEntity
 from .entities.dimmer_action_aligned import Nhc2DimmerActionAlignedEntity
@@ -22,6 +24,7 @@ from .entities.electricalheating_action_basicstate import Nhc2ElectricalheatingA
 from .entities.electricity_clamp_centralmeter_report_instant_usage import \
     Nhc2ElectricityClampCentralmeterReportInstantUsageEntity
 from .entities.garagedoor_action_port_closed import Nhc2GaragedoorActionPortClosedEntity
+from .entities.generic_action_all_started import Nhc2GenericActionAllStartedEntity
 from .entities.generic_action_start_active import Nhc2GenericActionStartActiveEntity
 from .entities.generic_energyhome_electrical_power_production_threshold_exceeded import \
     Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity
@@ -36,6 +39,8 @@ from .entities.naso_smartplug_feedback_enabled import Nhc2NasoSmartplugFeedbackE
 from .entities.naso_smartplug_measuring_only import Nhc2NasoSmartplugMeasuringOnlyEntity
 from .entities.naso_smartplug_report_instant_usage import Nhc2NasoSmartplugReportInstantUsageEntity
 from .entities.overallcomfort_action_start_active import Nhc2OverallcomfortActionStartActiveEntity
+from .entities.overallcomfort_action_all_started import Nhc2OverallcomfortActionAllStartedEntity
+from .entities.playerstatus_action_basicstate import Nhc2PlayerstatusActionBasicStateEntity
 from .entities.timeschedule_action_active import Nhc2TimeschedulActionActiveEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.alloff_action import CocoAlloffAction
@@ -54,6 +59,7 @@ from .nhccoco.devices.heatingcooling_action import CocoHeatingcoolingAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.overallcomfort_action import CocoOverallcomfortAction
+from .nhccoco.devices.playerstatus_action import CocoPlayerstatusAction
 from .nhccoco.devices.rolldownshutter_action import CocoRolldownshutterAction
 from .nhccoco.devices.sunblind_action import CocoSunblindAction
 from .nhccoco.devices.timeschedule_action import CocoTimescheduleAction
@@ -95,6 +101,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(Nhc2AlloffActionActiveEntity(device_instance, hub, gateway))
             entities.append(Nhc2AlloffActionBasicStateEntity(device_instance, hub, gateway))
 
+            if device_instance.supports_all_started:
+                entities.append(Nhc2AlloffActionStartedEntity(device_instance, hub, gateway))
+
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoAudiocontrolAction)
@@ -133,6 +142,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             entities.append(Nhc2GenericActionStartActiveEntity(device_instance, hub, gateway))
 
+            if device_instance.supports_all_started:
+                entities.append(Nhc2GenericActionAllStartedEntity(device_instance, hub, gateway))
+
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoGaragedoorAction)
@@ -152,6 +164,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             entities.append(Nhc2OverallcomfortActionStartActiveEntity(device_instance, hub, gateway))
 
+            if device_instance.supports_all_started:
+                entities.append(Nhc2OverallcomfortActionAllStartedEntity(device_instance, hub, gateway))
+
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoHvacthermostatHvac)
@@ -170,6 +185,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             entities.append(Nhc2ComfortActionBasicStateEntity(device_instance, hub, gateway))
             entities.append(Nhc2ComfortActionMoodActiveEntity(device_instance, hub, gateway))
+
+            if device_instance.supports_all_started:
+                entities.append(Nhc2ComfortActionAllStartedEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
@@ -252,5 +270,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2ElectricalheatingActionBasicStateEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoPlayerstatusAction)
+    _LOGGER.info('→ Found %s NHC Player status action', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2PlayerstatusActionBasicStateEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

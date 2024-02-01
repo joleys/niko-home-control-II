@@ -6,14 +6,14 @@ from ..const import DOMAIN, BRAND
 from ..nhccoco.const import PROPERTY_PROGRAM_VALUE_DAY, PROPERTY_PROGRAM_VALUE_ECO, PROPERTY_PROGRAM_VALUE_NIGHT, \
     PROPERTY_PROGRAM_VALUE_OFF, PROPERTY_PROGRAM_VALUE_PROG_1
 
-from ..nhccoco.devices.thermostat_hvac import CocoThermostatHvac
+from ..nhccoco.devices.virtual_hvac import CocoVirtualHvac
 
 
-class Nhc2ThermostatHvacClimateEntity(ClimateEntity):
+class Nhc2VirtualHvacClimateEntity(ClimateEntity):
     _attr_has_entity_name = True
     _attr_name = None
 
-    def __init__(self, device_instance: CocoThermostatHvac, hub, gateway):
+    def __init__(self, device_instance: CocoVirtualHvac, hub, gateway):
         """Initialize a climate entity."""
         self._device = device_instance
         self._hub = hub

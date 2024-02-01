@@ -1,5 +1,6 @@
 from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_BASIC_STATE, PROPERTY_ALL_OFF_ACTIVE, \
-    PROPERTY_ALL_OFF_ACTIVE_VALUE_TRUE, PROPERTY_BASIC_STATE_VALUE_ON, PROPERTY_BASIC_STATE_VALUE_TRIGGERED
+    PROPERTY_ALL_OFF_ACTIVE_VALUE_TRUE, PROPERTY_BASIC_STATE_VALUE_ON, PROPERTY_BASIC_STATE_VALUE_TRIGGERED, \
+    PROPERTY_ALL_STARTED, PROPERTY_ALL_STARTED_VALUE_TRUE
 from .device import CoCoDevice
 
 import logging
@@ -23,6 +24,18 @@ class CocoAlloffAction(CoCoDevice):
     @property
     def is_all_off_active(self) -> bool:
         return self.all_off_active == PROPERTY_ALL_OFF_ACTIVE_VALUE_TRUE
+
+    @property
+    def all_started(self) -> str:
+        return self.extract_property_value(PROPERTY_ALL_STARTED)
+
+    @property
+    def is_all_started(self) -> bool:
+        return self.all_started == PROPERTY_ALL_STARTED_VALUE_TRUE
+
+    @property
+    def supports_all_started(self) -> bool:
+        return self.has_property(PROPERTY_ALL_STARTED)
 
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
