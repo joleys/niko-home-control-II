@@ -16,5 +16,5 @@
     "paho-mqtt==1.6.1",
     "getmac==0.8.3"
   ],
-  "version": "v3.3.3"
+  "version": "v4.0.0"
 }
