@@ -39,7 +39,8 @@ class Nhc2VirtualHvacClimateEntity(ClimateEntity):
             HVACMode.HEAT_COOL,
             HVACMode.OFF,
         ]
-        self._attr_supported_features = ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.PRESET_MODE
+        self._attr_supported_features = (ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.PRESET_MODE
+                                         | ClimateEntityFeature.TURN_OFF)
 
     @property
     def device_info(self):
@@ -135,4 +136,8 @@ class Nhc2VirtualHvacClimateEntity(ClimateEntity):
     async def async_set_temperature(self, **kwargs):
         temperature = float(kwargs.get(ATTR_TEMPERATURE))
         self._device.set_temperature(self._gateway, temperature)
+        self.on_change()
+
+    async def async_turn_off(self):
+        self._device.set_program(self._gateway, PROPERTY_PROGRAM_VALUE_OFF)
         self.on_change()

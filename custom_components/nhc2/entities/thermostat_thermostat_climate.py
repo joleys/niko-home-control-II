@@ -34,12 +34,14 @@ class Nhc2ThermostatThermostatClimateEntity(ClimateEntity):
         self._attr_target_temperature_step = step
         self._attr_max_temp = max_value
         self._attr_min_temp = min_value
+        self._enable_turn_on_off_backwards_compatibility = False
+        self._attr_supported_features = (ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.PRESET_MODE
+                                         | ClimateEntityFeature.TURN_OFF)
         self._attr_hvac_modes = [
             HVACMode.AUTO,
             HVACMode.HEAT_COOL,
             HVACMode.OFF,
         ]
-        self._attr_supported_features = ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.PRESET_MODE
 
     @property
     def device_info(self):
@@ -135,4 +137,8 @@ class Nhc2ThermostatThermostatClimateEntity(ClimateEntity):
     async def async_set_temperature(self, **kwargs):
         temperature = float(kwargs.get(ATTR_TEMPERATURE))
         self._device.set_temperature(self._gateway, temperature)
+        self.on_change()
+
+    async def async_turn_off(self):
+        self._device.set_program(self._gateway, PROPERTY_PROGRAM_VALUE_OFF)
         self.on_change()
