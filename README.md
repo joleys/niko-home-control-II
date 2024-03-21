@@ -280,7 +280,8 @@ This is exposed as a cover entity.
 
 This is the energy metering linked to a zigbee smart plug.
 
-__Remark: The smart plug itself can be controlled through the Status Switch. But it will also be exposed as a NHC Relay
+__Remark__: The smart plug itself can be controlled through the Status Switch. But it will also be exposed as a NHC
+Relay
 Action Switch.
 
 #### Entities
@@ -450,15 +451,35 @@ __Remark:__ This device is not documented/supported by Niko.
 
 This is exposed as a camera.
 
+__Remark:__ Note that this will only work if your camera is not directly connected to the controller. The controller
+uses its own DHCP server and there is nothing in place to connect to the streams. In older versions of the controller
+there was port forwarding, but this is disabled (confirmed by Niko).
+
 #### Entities
 
 * **Call Status 01 Enum Sensor**
 * **IP Adress Sensor**
 * **Status Enum Sensor**
 
-__Remark:__ Note that this will only work if your camera is not directly connected to the controller. The controller
-uses its own DHCP server and there is nothing in place to connect to the streams. In older versions of the controller
-there was port forwarding, but this is disabled (confirmed by Niko).
+#### Mute/Unmute/Hangup
+
+Add the following [Shell Commands](https://www.home-assistant.io/integrations/shell_command/) in
+your `configuration.yaml`.
+
+```yaml
+shell_command:
+  doorphone_hangup: curl -u admin:123qwe http://192.168.X.X/api/v1/call_hangup
+  doorphone_mute: curl -u admin:123qwe http://192.168.X.X/api/v1/mute_set?mute=tones_incoming
+  doorphone_unmute: curl -u admin:123qwe http://192.168.X.X/api/v1/mute_set?mute=off
+```
+
+__Remark:__ Replace the IP address with the IP address of your doorstation. Note that this will only work if your camera
+is not directly connected to the controller.
+
+More information can be found in the API documention and manual of the RobinsIP doorstation:
+
+* [API manual (dutch)](https://www.robintele.com/images/downloads/How-To_The_Robin_API_v3.6.0_NL.pdf)
+* [Manual (dutch)](https://www.robintele.com/images/downloads/Manual-Robin-SV-3211NL.pdf)
 
 ### NHC Condition Action
 
