@@ -6,6 +6,7 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, CONF_ADDRESS, CONF_PORT
 from homeassistant.const import EVENT_HOMEASSISTANT_STOP
+from homeassistant.helpers import device_registry
 
 from .config_flow import Nhc2FlowHandler  # noqa  pylint_disable=unused-import
 from .const import DOMAIN, KEY_GATEWAY, BRAND
@@ -131,7 +132,7 @@ async def async_setup_entry(hass, entry):
     _LOGGER.debug('Connecting to %s with %s', entry.data[CONF_HOST], entry.data[CONF_USERNAME])
     coco.connect(on_connection_refused)
 
-    dev_reg = hass.helpers.device_registry.async_get(hass)
+    dev_reg = device_registry.async_get(hass)
     coco.get_systeminfo(get_process_sysinfo(dev_reg))
 
     return True
