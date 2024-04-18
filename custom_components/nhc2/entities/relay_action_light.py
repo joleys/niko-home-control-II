@@ -23,7 +23,7 @@ class Nhc2RelayActionLightEntity(LightEntity):
         self._attr_should_poll = False
 
         if self._device.support_brightness:
-            self._attr_supported_color_modes = {ColorMode.BRIGHTNESS, ColorMode.ONOFF}
+            self._attr_supported_color_modes = {ColorMode.BRIGHTNESS}
             self._attr_color_mode = ColorMode.BRIGHTNESS
         else:
             self._attr_supported_color_modes = {ColorMode.ONOFF}
