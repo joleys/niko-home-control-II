@@ -106,7 +106,7 @@ async def async_setup_entry(hass, entry):
             )
 
             for platform in FORWARD_PLATFORMS:
-                hass.async_create_task(
+                hass.add_job(
                     hass.config_entries.async_forward_entry_setup(entry, platform)
                 )
 
