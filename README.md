@@ -514,6 +514,19 @@ This action is exposed as a button.
 
 * **Basic State Binary Sensor**, the current status of the action.
 
+### Generic Inverter
+
+__Remark:__ This device is not documented/supported by Niko.
+
+#### Entities
+
+* **Coupling Status Enum Sensor**, (only if supported), the connectivity status of the system.
+* **Electrical Power Production Sensor**, (only if supported), the realtime power production in W.
+* **Report Instant Usage Binary Sensor**, indicates if the Electrical Power is received. When disabled, it will
+  automatically be enabled.
+* **Disable Report Instant Usage Re-enabling Switch**, a toggle to disable the automatic re-enabling of the
+  Report Instant Usage property. This is useful if you don't need Electrical Power reporting.
+
 ## Not yet supported
 
 * Sonos Speaker

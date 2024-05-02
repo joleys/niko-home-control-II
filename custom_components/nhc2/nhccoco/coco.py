@@ -28,6 +28,7 @@ from .devices.generic_domestichotwaterunit import CocoGenericDomestichotwateruni
 from .devices.generic_energyhome import CocoGenericEnergyhome
 from .devices.generic_fan import CocoGenericFan
 from .devices.generic_hvac import CocoGenericHvac
+from .devices.generic_inverter import CocoGenericInverter
 from .devices.generic_smartplug import CocoGenericSmartplug
 from .devices.heatingcooling_action import CocoHeatingcoolingAction
 from .devices.hvacthermostat_hvac import CocoHvacthermostatHvac
