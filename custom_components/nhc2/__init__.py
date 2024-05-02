@@ -93,17 +93,20 @@ async def async_setup_entry(hass, entry):
             coco_image, nhc_version = extract_versions(nhc2_sysinfo)
             _LOGGER.debug('systeminfo.published: NhcVersion: %s - CocoImage %s', nhc_version, coco_image)
 
-            dev_reg.async_get_or_create(
-                config_entry_id=entry.entry_id,
-                connections=set(),
-                identifiers={
-                    (DOMAIN, entry.data[CONF_USERNAME])
-                },
-                manufacturer=BRAND,
-                name='Home Control II',
-                model='Connected controller',
-                sw_version=nhc_version + ' - CoCo Image: ' + coco_image,
-            )
+            def get_or_create_device():
+                return dev_reg.async_get_or_create(
+                    config_entry_id=entry.entry_id,
+                    connections=set(),
+                    identifiers={
+                        (DOMAIN, entry.data[CONF_USERNAME])
+                    },
+                    manufacturer=BRAND,
+                    name='Home Control II',
+                    model='Connected controller',
+                    sw_version=nhc_version + ' - CoCo Image: ' + coco_image,
+                )
+
+            hass.add_job(get_or_create_device)
 
             for platform in FORWARD_PLATFORMS:
                 hass.add_job(
