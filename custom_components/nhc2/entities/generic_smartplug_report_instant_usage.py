@@ -2,8 +2,6 @@ from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.const import STATE_ON
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.devices.generic_smartplug import CocoGenericSmartplug
 
 import logging
@@ -25,6 +23,7 @@ class Nhc2GenericSmartplugReportInstantUsageEntity(BinarySensorEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid + '_report_instant_usage'
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_state = self._device.is_report_instant_usage
         self._attr_state_class = None
@@ -34,18 +33,6 @@ class Nhc2GenericSmartplugReportInstantUsageEntity(BinarySensorEntity):
     def name(self) -> str:
         return 'Report Instant Usage'
 
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': BRAND,
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def is_on(self) -> bool:

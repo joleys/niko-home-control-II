@@ -1,8 +1,6 @@
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
 from homeassistant.const import UnitOfTime
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.devices.thermostat_hvac import CocoThermostatHvac
 
 
@@ -20,6 +18,7 @@ class Nhc2ThermostatHvacOverruleTimeEntity(SensorEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid + '_overrule_time'
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_device_class = SensorDeviceClass.DURATION
         self._attr_native_value = self._device.overrule_time
@@ -29,19 +28,6 @@ class Nhc2ThermostatHvacOverruleTimeEntity(SensorEntity):
     @property
     def name(self) -> str:
         return 'Overrule time'
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': BRAND,
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def native_value(self) -> int:

@@ -1,7 +1,5 @@
 from homeassistant.components.cover import CoverEntity, CoverDeviceClass, CoverEntityFeature, ATTR_POSITION
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.const import PROPERTY_ACTION_VALUE_OPEN, PROPERTY_ACTION_VALUE_CLOSE, PROPERTY_ACTION_VALUE_STOP
 from ..nhccoco.devices.gate_action import CocoGateAction
 from ..nhccoco.devices.motor_action import CocoMotorAction
@@ -25,22 +23,11 @@ class Nhc2MotorActionCoverEntity(CoverEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_supported_features = CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | \
                                         CoverEntityFeature.SET_POSITION | CoverEntityFeature.STOP
 
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': BRAND,
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def current_cover_position(self) -> int | None:

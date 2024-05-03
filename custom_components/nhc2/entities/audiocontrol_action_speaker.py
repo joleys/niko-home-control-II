@@ -1,8 +1,6 @@
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.entity import EntityCategory
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
 
 
@@ -20,6 +18,7 @@ class Nhc2AudiocontrolActionSpeakerEntity(SensorEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid + '_speaker'
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_native_value = self._device.speaker
         self._attr_state_class = None
@@ -28,19 +27,6 @@ class Nhc2AudiocontrolActionSpeakerEntity(SensorEntity):
     @property
     def name(self) -> str:
         return 'Speaker'
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': f'{BRAND} ({self._device.manufacturer})',
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def state(self) -> str:

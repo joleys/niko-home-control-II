@@ -1,7 +1,5 @@
 from homeassistant.components.switch import SwitchEntity
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.devices.bellbutton_action import CocoBellbuttonAction
 
 
@@ -20,19 +18,7 @@ class Nhc2BellbuttonActionBasicStateSwitchEntity(SwitchEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': BRAND,
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
+        self._attr_device_info = self._device.device_info(self._hub)
 
     @property
     def is_on(self) -> bool:

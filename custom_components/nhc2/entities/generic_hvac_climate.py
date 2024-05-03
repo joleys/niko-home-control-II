@@ -3,7 +3,6 @@ from homeassistant.components.climate import ClimateEntity, HVACMode, HVACAction
     PRESET_HOME, PRESET_SLEEP
 from homeassistant.const import UnitOfTemperature
 
-from ..const import DOMAIN, BRAND
 from ..nhccoco.const import PROPERTY_PROGRAM_VALUE_DAY, PROPERTY_PROGRAM_VALUE_ECO, PROPERTY_PROGRAM_VALUE_NIGHT, \
     PROPERTY_PROGRAM_VALUE_AWAY, PROPERTY_PROGRAM_VALUE_HOME, PROPERTY_STATUS_VALUE_OFF, \
     PROPERTY_FAN_SPEED_VALUE_OFF, PROPERTY_FAN_SPEED_VALUE_LOW, PROPERTY_FAN_SPEED_VALUE_MEDIUM, \
@@ -28,6 +27,7 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_temperature_unit = UnitOfTemperature.CELSIUS
         self._attr_hvac_modes = self._device.possible_operation_modes or [
@@ -74,19 +74,6 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
         if HVACMode.OFF not in output_values:
             output_values.append(HVACMode.OFF)
         return output_values
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': f'{BRAND} ({self._device.technology})',
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def current_temperature(self) -> float:

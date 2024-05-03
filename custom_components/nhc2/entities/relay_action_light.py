@@ -1,8 +1,6 @@
 from homeassistant.components.light import LightEntity, ColorMode, ATTR_BRIGHTNESS
 from homeassistant.exceptions import HomeAssistantError
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.devices.relay_action import CocoRelayAction
 
 
@@ -21,6 +19,7 @@ class Nhc2RelayActionLightEntity(LightEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         if self._device.support_brightness:
             self._attr_supported_color_modes = {ColorMode.BRIGHTNESS}
@@ -28,19 +27,6 @@ class Nhc2RelayActionLightEntity(LightEntity):
         else:
             self._attr_supported_color_modes = {ColorMode.ONOFF}
             self._attr_color_mode = ColorMode.ONOFF
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': BRAND,
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def is_on(self) -> bool:

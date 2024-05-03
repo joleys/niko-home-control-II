@@ -1,7 +1,5 @@
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.devices.motor_action import CocoMotorAction
 
 
@@ -19,6 +17,7 @@ class Nhc2MotorActionLastDirectionEntity(SensorEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid + '_last_direction'
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_device_class = SensorDeviceClass.ENUM
         self._attr_options = self._device.possible_last_directions
@@ -28,19 +27,6 @@ class Nhc2MotorActionLastDirectionEntity(SensorEntity):
     @property
     def name(self) -> str:
         return 'Last Direction'
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': BRAND,
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def state(self) -> str:

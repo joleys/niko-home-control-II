@@ -1,8 +1,6 @@
 from homeassistant.components.fan import FanEntity, FanEntityFeature
 from homeassistant.util.percentage import ordered_list_item_to_percentage, percentage_to_ordered_list_item
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.devices.generic_fan import CocoGenericFan
 
 import logging
@@ -25,21 +23,9 @@ class Nhc2GenericFanFanEntity(FanEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = self._device.uuid
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_supported_features = FanEntityFeature.SET_SPEED | FanEntityFeature.PRESET_MODE
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': BRAND,
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def is_on(self) -> bool:

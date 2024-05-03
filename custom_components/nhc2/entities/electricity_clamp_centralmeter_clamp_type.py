@@ -1,8 +1,6 @@
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
 from homeassistant.helpers.entity import EntityCategory
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 
 
@@ -20,6 +18,7 @@ class Nhc2ElectricityClampCentralmeterClampTypeEntity(SensorEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid + '_clamp_type'
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_device_class = SensorDeviceClass.ENUM
         self._attr_options = self._device.possible_clamp_types
@@ -30,19 +29,6 @@ class Nhc2ElectricityClampCentralmeterClampTypeEntity(SensorEntity):
     @property
     def name(self) -> str:
         return 'Clamp Type'
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': BRAND,
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def state(self) -> str:

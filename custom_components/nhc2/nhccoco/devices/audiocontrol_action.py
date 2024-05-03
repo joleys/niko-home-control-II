@@ -87,10 +87,6 @@ class CocoAudiocontrolAction(CoCoDevice):
     def speaker(self) -> str:
         return self.extract_parameter_value(PARAMETER_SPEAKER)
 
-    @property
-    def manufacturer(self) -> str:
-        return self.extract_parameter_value(PARAMETER_MANUFACTURER)
-
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
         if DEVICE_DESCRIPTOR_PROPERTIES in payload:

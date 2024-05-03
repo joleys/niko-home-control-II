@@ -1,7 +1,5 @@
 from homeassistant.components.media_player import MediaPlayerEntity, MediaPlayerEntityFeature, MediaPlayerState
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
 
 
@@ -20,23 +18,11 @@ class Nhc2AudiocontrolActionMediaPlayerEntity(MediaPlayerEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_supported_features = MediaPlayerEntityFeature.PAUSE | MediaPlayerEntityFeature.PLAY | \
                                         MediaPlayerEntityFeature.TURN_OFF | MediaPlayerEntityFeature.TURN_ON | \
                                         MediaPlayerEntityFeature.VOLUME_MUTE | MediaPlayerEntityFeature.VOLUME_SET
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': f'{BRAND} ({self._device.manufacturer})',
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def state(self) -> str:

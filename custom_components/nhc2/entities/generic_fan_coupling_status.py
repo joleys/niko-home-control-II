@@ -1,8 +1,6 @@
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
 from homeassistant.helpers.entity import EntityCategory
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.devices.generic_fan import CocoGenericFan
 
 
@@ -20,6 +18,7 @@ class Nhc2GenericFanCouplingStatusEntity(SensorEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid + '_coupling_status'
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_device_class = SensorDeviceClass.ENUM
         self._attr_options = self._device.possible_coupling_status
@@ -30,19 +29,6 @@ class Nhc2GenericFanCouplingStatusEntity(SensorEntity):
     @property
     def name(self) -> str:
         return 'Coupling Status'
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': f'{BRAND} ({self._device.technology})',
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def state(self) -> str:
