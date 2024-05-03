@@ -2,7 +2,7 @@ from ..const import DEVICE_DESCRIPTOR_UUID, DEVICE_DESCRIPTOR_TYPE, DEVICE_DESCR
     DEVICE_DESCRIPTOR_MODEL, DEVICE_DESCRIPTOR_IDENTIFIER, DEVICE_DESCRIPTOR_NAME, DEVICE_DESCRIPTOR_TRAITS, \
     DEVICE_DESCRIPTOR_PARAMETERS, DEVICE_DESCRIPTOR_PROPERTIES, DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS, \
     DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS_DESCRIPTION, DEVICE_DESCRIPTOR_ONLINE, DEVICE_DESCRIPTOR_ONLINE_VALUE_TRUE, \
-    DEVICE_DESCRIPTOR_TECHNOLOGY_NIKOHOMECONTROL, PARAMETER_MANUFACTURER
+    DEVICE_DESCRIPTOR_TECHNOLOGY_NIKOHOMECONTROL, PARAMETER_LOCATION_NAME, PARAMETER_MANUFACTURER
 from ...const import DOMAIN, BRAND
 from typing import Union
 import re
@@ -75,6 +75,14 @@ class CoCoDevice():
         if self._online is None:
             return None
         return self._online == DEVICE_DESCRIPTOR_ONLINE_VALUE_TRUE
+
+    @property
+    def suggested_area(self) -> str:
+        """Suggested area for the device"""
+        if self.has_parameter(PARAMETER_LOCATION_NAME):
+            return self.extract_parameter_value(PARAMETER_LOCATION_NAME)
+
+        return None
 
     @property
     def manufacturer(self) -> str:
@@ -180,5 +188,6 @@ class CoCoDevice():
             'name': self.name,
             'manufacturer': manufacturer,
             'model': str.title(f'{self.model} ({self.type})'),
-            'via_device': hub
+            'via_device': hub,
+            'suggested_area': self.suggested_area,
         }
