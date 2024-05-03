@@ -29,6 +29,7 @@ from .entities.generic_action_start_active import Nhc2GenericActionStartActiveEn
 from .entities.generic_energyhome_electrical_power_production_threshold_exceeded import \
     Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity
 from .entities.generic_energyhome_report_instant_usage import Nhc2GenericEnergyhomeReportInstantUsageEntity
+from .entities.generic_inverter_report_instant_usage import Nhc2GenericInverterReportInstantUsageEntity
 from .entities.generic_smartplug_report_instant_usage import Nhc2GenericSmartplugReportInstantUsageEntity
 from .entities.heatingcooling_action_cooling_mode import Nhc2HeatingcoolingActionCoolingModeEntity
 from .entities.heatingcooling_action_heating_mode import Nhc2HeatingcoolingActionHeatingModeEntity
@@ -54,6 +55,7 @@ from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
 from .nhccoco.devices.gate_action import CocoGateAction
 from .nhccoco.devices.generic_action import CocoGenericAction
 from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
+from .nhccoco.devices.generic_inverter import CocoGenericInverter
 from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
 from .nhccoco.devices.heatingcooling_action import CocoHeatingcoolingAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
@@ -279,5 +281,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2PlayerstatusActionBasicStateEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericInverter)
+    _LOGGER.info('→ Found %s Generic Inverter Implementations (undocumented)', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            if device_instance.supports_coupling_status:
+                entities.append(Nhc2GenericInverterReportInstantUsageEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
