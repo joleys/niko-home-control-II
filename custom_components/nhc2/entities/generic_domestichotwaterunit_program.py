@@ -1,7 +1,5 @@
 from homeassistant.components.select import SelectEntity
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
 
 
@@ -19,25 +17,13 @@ class Nhc2GenericDomestichotwaterunitProgramEntity(SelectEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid + '_program'
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_options = self._device.possible_programs
 
     @property
     def name(self) -> str:
         return 'Program'
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': f'{BRAND} ({self._device.technology})',
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def current_option(self) -> str:

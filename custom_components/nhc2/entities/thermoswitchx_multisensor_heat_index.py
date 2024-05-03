@@ -1,8 +1,6 @@
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass, SensorStateClass
 from homeassistant.const import UnitOfTemperature
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.devices.thermoswitchx_multisensor import CocoThermoswitchxMultisensor
 
 
@@ -20,6 +18,7 @@ class Nhc2ThermoswitchxMultisensorHeatIndexEntity(SensorEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid + '_heat_index'
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_device_class = SensorDeviceClass.TEMPERATURE
         self._attr_native_value = self._device.heat_index
@@ -31,19 +30,6 @@ class Nhc2ThermoswitchxMultisensorHeatIndexEntity(SensorEntity):
     @property
     def name(self) -> str:
         return 'Heat Index'
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': f'{BRAND} ({self._device.technology})',
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def native_value(self) -> int:

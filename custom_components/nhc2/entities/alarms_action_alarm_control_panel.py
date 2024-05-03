@@ -1,8 +1,6 @@
 from homeassistant.components.alarm_control_panel import AlarmControlPanelEntity, AlarmControlPanelEntityFeature
 from homeassistant.const import STATE_ALARM_DISARMED, STATE_ALARM_ARMED_AWAY, STATE_ALARM_ARMING
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.devices.alarms_action import CocoAlarmsAction
 
 
@@ -21,21 +19,9 @@ class Nhc2AlarmsActionAlarmControlPanelEntity(AlarmControlPanelEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_supported_features = AlarmControlPanelEntityFeature.ARM_AWAY
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': BRAND,
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def state(self) -> str:

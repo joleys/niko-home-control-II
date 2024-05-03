@@ -2,8 +2,6 @@ from homeassistant.components.input_boolean import RestoreEntity
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.const import STATE_OFF, STATE_ON
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.devices.generic_inverter import CocoGenericInverter
 
 import logging
@@ -25,6 +23,7 @@ class Nhc2GenericInverterDisableReportInstantUsageReEnablingEntity(RestoreEntity
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid + '_disable_report_instant_usage_re_enabling'
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
         self._attr_entity_category = EntityCategory.CONFIG
         self._attr_device_class = None
 
@@ -33,19 +32,6 @@ class Nhc2GenericInverterDisableReportInstantUsageReEnablingEntity(RestoreEntity
     @property
     def name(self) -> str:
         return 'Disable Report Instant Usage Re-enabling'
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': BRAND,
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def state(self):

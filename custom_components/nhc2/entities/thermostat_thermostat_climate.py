@@ -2,7 +2,6 @@ from homeassistant.components.climate import ClimateEntity, HVACMode, HVACAction
     ATTR_TEMPERATURE, PRESET_COMFORT, PRESET_ECO, PRESET_SLEEP
 from homeassistant.const import UnitOfTemperature
 
-from ..const import DOMAIN, BRAND
 from ..nhccoco.const import PROPERTY_PROGRAM_VALUE_DAY, PROPERTY_PROGRAM_VALUE_ECO, PROPERTY_PROGRAM_VALUE_NIGHT, \
     PROPERTY_PROGRAM_VALUE_OFF, PROPERTY_PROGRAM_VALUE_PROG_1
 
@@ -24,6 +23,7 @@ class Nhc2ThermostatThermostatClimateEntity(ClimateEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         min_value, max_value, step = self._device.overrule_setpoint_range
 
@@ -42,19 +42,6 @@ class Nhc2ThermostatThermostatClimateEntity(ClimateEntity):
             HVACMode.HEAT_COOL,
             HVACMode.OFF,
         ]
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': BRAND,
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def current_temperature(self) -> float:

@@ -3,8 +3,6 @@ from homeassistant.components.climate import ClimateEntity, HVACMode, HVACAction
 
 from homeassistant.const import UnitOfTemperature
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.const import PROPERTY_OPERATION_MODE_VALUE_HEATING, PROPERTY_OPERATION_MODE_VALUE_COOLING, \
     PROPERTY_FAN_SPEED_VALUE_LOW, PROPERTY_FAN_SPEED_VALUE_MEDIUM, PROPERTY_FAN_SPEED_VALUE_HIGH, \
     PROPERTY_PROGRAM_VALUE_DAY, PROPERTY_PROGRAM_VALUE_ECO, PROPERTY_PROGRAM_VALUE_NIGHT
@@ -27,6 +25,7 @@ class Nhc2HvacthermostatHvacClimateEntity(ClimateEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_temperature_unit = UnitOfTemperature.CELSIUS
         min_value, max_value, step = self._device.ambient_temperature_range
@@ -44,19 +43,6 @@ class Nhc2HvacthermostatHvacClimateEntity(ClimateEntity):
         ]
         self._attr_supported_features = ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.PRESET_MODE \
                                         | ClimateEntityFeature.FAN_MODE
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': BRAND,
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def current_temperature(self) -> float:

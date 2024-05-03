@@ -1,7 +1,5 @@
 from homeassistant.components.binary_sensor import BinarySensorEntity
 
-from ..const import DOMAIN, BRAND
-
 from ..nhccoco.devices.alloff_action import CocoAlloffAction
 
 
@@ -19,6 +17,7 @@ class Nhc2AlloffActionStartedEntity(BinarySensorEntity):
         self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid + '_started'
         self._attr_should_poll = False
+        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_state = self._device.is_all_started
         self._attr_state_class = None
@@ -26,19 +25,6 @@ class Nhc2AlloffActionStartedEntity(BinarySensorEntity):
     @property
     def name(self) -> str:
         return 'All Started'
-
-    @property
-    def device_info(self):
-        """Return the device info."""
-        return {
-            'identifiers': {
-                (DOMAIN, self._device.uuid)
-            },
-            'name': self._device.name,
-            'manufacturer': BRAND,
-            'model': str.title(f'{self._device.model} ({self._device.type})'),
-            'via_device': self._hub
-        }
 
     @property
     def is_on(self) -> bool:
