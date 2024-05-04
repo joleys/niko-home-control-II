@@ -29,6 +29,8 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
         self._attr_should_poll = False
         self._attr_device_info = self._device.device_info(self._hub)
 
+        self._enable_turn_on_off_backwards_compatibility = False
+
         self._attr_temperature_unit = UnitOfTemperature.CELSIUS
         self._attr_hvac_modes = self._device.possible_operation_modes or [
             HVACMode.AUTO,
