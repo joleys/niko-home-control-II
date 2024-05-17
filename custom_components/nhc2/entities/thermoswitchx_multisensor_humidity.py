@@ -32,7 +32,7 @@ class Nhc2ThermoswitchxMultisensorHumidityEntity(SensorEntity):
         return 'Humidity'
 
     @property
-    def native_value(self) -> int:
+    def native_value(self) -> float:
         return self._device.humidity
 
     def on_change(self):

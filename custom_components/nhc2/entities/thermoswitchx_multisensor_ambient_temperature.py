@@ -32,7 +32,7 @@ class Nhc2ThermoswitchxMultisensorAmbientTemperatureEntity(SensorEntity):
         return 'Ambient Temperature'
 
     @property
-    def native_value(self) -> int:
+    def native_value(self) -> float:
         return self._device.ambient_temperature
 
     def on_change(self):
