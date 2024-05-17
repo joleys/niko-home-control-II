@@ -32,7 +32,7 @@ class Nhc2ThermoswitchxMultisensorHeatIndexEntity(SensorEntity):
         return 'Heat Index'
 
     @property
-    def native_value(self) -> float:
+    def native_value(self) -> int:
         return self._device.heat_index
 
     def on_change(self):

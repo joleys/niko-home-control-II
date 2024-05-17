@@ -76,4 +76,4 @@ def to_float_or_none(value) -> float | None:
 def to_int_or_none(value) -> float | None:
     if value is None or value == '':
         return None
-    return int(value)
+    return int(float(value))

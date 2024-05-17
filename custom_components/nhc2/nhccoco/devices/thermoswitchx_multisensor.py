@@ -2,7 +2,7 @@ from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PARAMETER_AMBIENT_TEMPERATURE_
     PARAMETER_AMBIENT_TEMPERATURE_REPORTING_DISABLED, PARAMETER_HEAT_INDEX_REPORTING, \
     PARAMETER_HEAT_INDEX_REPORTING_DISABLED, PARAMETER_HUMIDITY_REPORTING, PARAMETER_HUMIDITY_REPORTING_DISABLED, \
     PROPERTY_HEAT_INDEX, PROPERTY_AMBIENT_TEMPERATURE, PROPERTY_HUMIDITY
-from ..helpers import to_float_or_none
+from ..helpers import to_float_or_none, to_int_or_none
 
 from .device import CoCoDevice
 
@@ -13,8 +13,8 @@ _LOGGER = logging.getLogger(__name__)
 
 class CocoThermoswitchxMultisensor(CoCoDevice):
     @property
-    def heat_index(self) -> float:
-        return to_float_or_none(self.extract_property_value(PROPERTY_HEAT_INDEX))
+    def heat_index(self) -> int:
+        return to_int_or_none(self.extract_property_value(PROPERTY_HEAT_INDEX))
 
     @property
     def supports_heat_index(self) -> bool:
