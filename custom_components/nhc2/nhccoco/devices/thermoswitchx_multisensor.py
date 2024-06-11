@@ -1,9 +1,7 @@
-from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PARAMETER_AMBIENT_TEMPERATURE_REPORTING, \
-    PARAMETER_AMBIENT_TEMPERATURE_REPORTING_DISABLED, PARAMETER_HEAT_INDEX_REPORTING, \
-    PARAMETER_HEAT_INDEX_REPORTING_DISABLED, PARAMETER_HUMIDITY_REPORTING, PARAMETER_HUMIDITY_REPORTING_DISABLED, \
-    PROPERTY_HEAT_INDEX, PROPERTY_AMBIENT_TEMPERATURE, PROPERTY_HUMIDITY
+from ..const import PARAMETER_AMBIENT_TEMPERATURE_REPORTING, PARAMETER_AMBIENT_TEMPERATURE_REPORTING_DISABLED, \
+    PARAMETER_HEAT_INDEX_REPORTING, PARAMETER_HEAT_INDEX_REPORTING_DISABLED, PARAMETER_HUMIDITY_REPORTING, \
+    PARAMETER_HUMIDITY_REPORTING_DISABLED, PROPERTY_HEAT_INDEX, PROPERTY_AMBIENT_TEMPERATURE, PROPERTY_HUMIDITY
 from ..helpers import to_float_or_none, to_int_or_none
-
 from .device import CoCoDevice
 
 import logging
@@ -48,12 +46,3 @@ class CocoThermoswitchxMultisensor(CoCoDevice):
             return False
 
         return self.has_property(PROPERTY_HUMIDITY)
-
-    def on_change(self, topic: str, payload: dict):
-        _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
-        if DEVICE_DESCRIPTOR_PROPERTIES in payload:
-            self.merge_properties(payload[DEVICE_DESCRIPTOR_PROPERTIES])
-
-        if self._after_change_callbacks:
-            for callback in self._after_change_callbacks:
-                callback()

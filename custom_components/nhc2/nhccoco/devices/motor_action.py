@@ -1,12 +1,8 @@
-from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_ACTION, PROPERTY_ALIGNED, PROPERTY_ALIGNED_VALUE_TRUE, \
-    PROPERTY_MOVING, PROPERTY_MOVING_VALUE_TRUE, PROPERTY_POSITION, PROPERTY_LAST_DIRECTION, \
-    PROPERTY_LAST_DIRECTION_VALUE_CLOSE, PROPERTY_LAST_DIRECTION_VALUE_OPEN
+from ..const import PROPERTY_ACTION, PROPERTY_ALIGNED, PROPERTY_ALIGNED_VALUE_TRUE, PROPERTY_MOVING, \
+    PROPERTY_MOVING_VALUE_TRUE, PROPERTY_POSITION, PROPERTY_LAST_DIRECTION, PROPERTY_LAST_DIRECTION_VALUE_CLOSE, \
+    PROPERTY_LAST_DIRECTION_VALUE_OPEN
 from ..helpers import to_int_or_none
 from .device import CoCoDevice
-
-import logging
-
-_LOGGER = logging.getLogger(__name__)
 
 
 class CocoMotorAction(CoCoDevice):
@@ -65,15 +61,6 @@ class CocoMotorAction(CoCoDevice):
             return True
 
         return False
-
-    def on_change(self, topic: str, payload: dict):
-        _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
-        if DEVICE_DESCRIPTOR_PROPERTIES in payload:
-            self.merge_properties(payload[DEVICE_DESCRIPTOR_PROPERTIES])
-
-        if self._after_change_callbacks:
-            for callback in self._after_change_callbacks:
-                callback()
 
     def set_action(self, gateway, action: str):
         gateway.add_device_control(

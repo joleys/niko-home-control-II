@@ -30,6 +30,7 @@ from .entities.generic_energyhome_electrical_power_production_threshold_exceeded
     Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity
 from .entities.generic_energyhome_report_instant_usage import Nhc2GenericEnergyhomeReportInstantUsageEntity
 from .entities.generic_inverter_report_instant_usage import Nhc2GenericInverterReportInstantUsageEntity
+from .entities.generic_smartplug_switching_only import Nhc2GenericSmartplugSwitchingOnlyEntity
 from .entities.generic_smartplug_report_instant_usage import Nhc2GenericSmartplugReportInstantUsageEntity
 from .entities.heatingcooling_action_cooling_mode import Nhc2HeatingcoolingActionCoolingModeEntity
 from .entities.heatingcooling_action_heating_mode import Nhc2HeatingcoolingActionHeatingModeEntity
@@ -38,6 +39,7 @@ from .entities.motor_action_aligned import Nhc2MotorActionAlignedEntity
 from .entities.motor_action_moving import Nhc2MotorActionMovingEntity
 from .entities.naso_smartplug_feedback_enabled import Nhc2NasoSmartplugFeedbackEnabledEntity
 from .entities.naso_smartplug_measuring_only import Nhc2NasoSmartplugMeasuringOnlyEntity
+from .entities.naso_smartplug_switching_only import Nhc2NasoSmartplugSwitchingOnlyEntity
 from .entities.naso_smartplug_report_instant_usage import Nhc2NasoSmartplugReportInstantUsageEntity
 from .entities.overallcomfort_action_start_active import Nhc2OverallcomfortActionStartActiveEntity
 from .entities.overallcomfort_action_all_started import Nhc2OverallcomfortActionAllStartedEntity
@@ -214,6 +216,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(Nhc2NasoSmartplugReportInstantUsageEntity(device_instance, hub, gateway))
             entities.append(Nhc2NasoSmartplugFeedbackEnabledEntity(device_instance, hub, gateway))
             entities.append(Nhc2NasoSmartplugMeasuringOnlyEntity(device_instance, hub, gateway))
+            entities.append(Nhc2NasoSmartplugSwitchingOnlyEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
@@ -223,6 +226,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2GenericSmartplugReportInstantUsageEntity(device_instance, hub, gateway))
+            entities.append(Nhc2GenericSmartplugSwitchingOnlyEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

@@ -1,14 +1,10 @@
-from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_PROGRAM, PROPERTY_AMBIENT_TEMPERATURE, \
-    PROPERTY_SETPOINT_TEMPERATURE, PROPERTY_OVERRULE_ACTIVE, PROPERTY_OVERRULE_ACTIVE_VALUE_TRUE, \
-    PROPERTY_OVERRULE_ACTIVE_VALUE_FALSE, PROPERTY_OVERRULE_SETPOINT, PROPERTY_OVERRULE_TIME, PROPERTY_ECOSAVE, \
-    PROPERTY_ECOSAVE_VALUE_TRUE, PROPERTY_ECOSAVE_VALUE_FALSE, PROPERTY_DEMAND, PROPERTY_DEMAND_VALUE_COOLING, \
-    PROPERTY_DEMAND_VALUE_NONE, PROPERTY_DEMAND_VALUE_HEATING
+from ..const import PROPERTY_PROGRAM, PROPERTY_AMBIENT_TEMPERATURE, PROPERTY_SETPOINT_TEMPERATURE, \
+    PROPERTY_OVERRULE_ACTIVE, PROPERTY_OVERRULE_ACTIVE_VALUE_TRUE, PROPERTY_OVERRULE_ACTIVE_VALUE_FALSE, \
+    PROPERTY_OVERRULE_SETPOINT, PROPERTY_OVERRULE_TIME, PROPERTY_ECOSAVE, PROPERTY_ECOSAVE_VALUE_TRUE, \
+    PROPERTY_ECOSAVE_VALUE_FALSE, PROPERTY_DEMAND, PROPERTY_DEMAND_VALUE_COOLING, PROPERTY_DEMAND_VALUE_NONE, \
+    PROPERTY_DEMAND_VALUE_HEATING
 from ..helpers import to_float_or_none, to_int_or_none
 from .device import CoCoDevice
-
-import logging
-
-_LOGGER = logging.getLogger(__name__)
 
 
 class CocoThermostatThermostat(CoCoDevice):
@@ -71,15 +67,6 @@ class CocoThermostatThermostat(CoCoDevice):
     @property
     def is_demand_none(self) -> bool:
         return self.demand == PROPERTY_DEMAND_VALUE_NONE
-
-    def on_change(self, topic: str, payload: dict):
-        _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
-        if DEVICE_DESCRIPTOR_PROPERTIES in payload:
-            self.merge_properties(payload[DEVICE_DESCRIPTOR_PROPERTIES])
-
-        if self._after_change_callbacks:
-            for callback in self._after_change_callbacks:
-                callback()
 
     def set_program(self, gateway, program: str):
         gateway.add_device_control(

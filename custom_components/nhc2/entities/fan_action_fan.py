@@ -2,24 +2,18 @@ from homeassistant.components.fan import FanEntity, FanEntityFeature
 from homeassistant.util.percentage import ordered_list_item_to_percentage, percentage_to_ordered_list_item
 
 from ..nhccoco.devices.fan_action import CocoFanAction
+from .nhc_entity import NHCBaseEntity
 
 
-class Nhc2FanActionFanEntity(FanEntity):
+class Nhc2FanActionFanEntity(NHCBaseEntity, FanEntity):
     _attr_has_entity_name = True
     _attr_name = None
 
     def __init__(self, device_instance: CocoFanAction, hub, gateway):
         """Initialize a fan."""
-        self._device = device_instance
-        self._hub = hub
-        self._gateway = gateway
+        super().__init__(device_instance, hub, gateway)
 
-        self._device.after_change_callbacks.append(self.on_change)
-
-        self._attr_available = self._device.is_online
         self._attr_unique_id = self._device.uuid
-        self._attr_should_poll = False
-        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_supported_features = FanEntityFeature.SET_SPEED | FanEntityFeature.PRESET_MODE
         self._preset_modes = self._device.possible_fan_speeds
@@ -51,13 +45,10 @@ class Nhc2FanActionFanEntity(FanEntity):
         """Set the fan speed preset based on a given percentage"""
         self._device.set_fan_speed(self._gateway, percentage_to_ordered_list_item(self._preset_modes, percentage))
 
-    def on_change(self):
-        self.schedule_update_ha_state()
-
     async def async_set_preset_mode(self, preset_mode: str) -> None:
         self._device.set_fan_speed(self._gateway, preset_mode)
-        self.on_change()
+        self.schedule_update_ha_state()
 
     async def async_set_percentage(self, percentage: int) -> None:
         self._device.set_fan_speed(self._gateway, percentage_to_ordered_list_item(self._preset_modes, percentage))
-        self.on_change()
+        self.schedule_update_ha_state()

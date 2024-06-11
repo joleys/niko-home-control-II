@@ -19,15 +19,29 @@ class CoCoDevice():
         self._model = json[DEVICE_DESCRIPTOR_MODEL]
         self._identifier = json[DEVICE_DESCRIPTOR_IDENTIFIER]
         self._name = json[DEVICE_DESCRIPTOR_NAME]
-        self._traits = json[DEVICE_DESCRIPTOR_TRAITS] if DEVICE_DESCRIPTOR_TRAITS in json else None
-        self._parameters = json[DEVICE_DESCRIPTOR_PARAMETERS] if DEVICE_DESCRIPTOR_PARAMETERS in json else None
-        self._properties = json[DEVICE_DESCRIPTOR_PROPERTIES] if DEVICE_DESCRIPTOR_PROPERTIES in json else None
-        self._property_definitions = None
+
+        self._property_definitions = {}
         if DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS in json:
-            self._property_definitions = json[DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS]
+            self.obj_arr_to_dict(json[DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS], self._property_definitions)
+
+        self._parameters = {}
+        if DEVICE_DESCRIPTOR_PARAMETERS in json:
+            self.obj_arr_to_dict(json[DEVICE_DESCRIPTOR_PARAMETERS], self._parameters)
+
+        self._properties = {}
+        if DEVICE_DESCRIPTOR_PROPERTIES in json:
+            self.obj_arr_to_dict(json[DEVICE_DESCRIPTOR_PROPERTIES], self._properties)
+
+        self._traits = {}
+        if DEVICE_DESCRIPTOR_TRAITS in json:
+            self.obj_arr_to_dict(json[DEVICE_DESCRIPTOR_TRAITS], self._traits)
 
         self._after_change_callbacks = []
-        self._online = json[DEVICE_DESCRIPTOR_ONLINE] if DEVICE_DESCRIPTOR_ONLINE in json else None
+
+        # When a device is added we don't always have the latest online state yet so better assume it's online by default
+        self._online = json[DEVICE_DESCRIPTOR_ONLINE] == DEVICE_DESCRIPTOR_ONLINE_VALUE_TRUE if DEVICE_DESCRIPTOR_ONLINE in json else True
+        if not self._online:
+            _LOGGER.debug(f"Device {self._uuid} is offline")
 
     @property
     def uuid(self) -> str:
@@ -72,9 +86,7 @@ class CoCoDevice():
     @property
     def is_online(self) -> bool:
         """Device is online"""
-        if self._online is None:
-            return None
-        return self._online == DEVICE_DESCRIPTOR_ONLINE_VALUE_TRUE
+        return self._online
 
     @property
     def suggested_area(self) -> str:
@@ -96,49 +108,24 @@ class CoCoDevice():
         return self._after_change_callbacks
 
     def extract_parameter_value(self, parameter_key: str) -> str:
-        if self._parameters:
-            parameter_object = next(filter((lambda x: x and parameter_key in x), self._parameters), None)
-            if parameter_object and parameter_key in parameter_object:
-                return parameter_object[parameter_key]
-        return None
+        return self._parameters.get(parameter_key, "")
 
     def has_parameter(self, parameter_key: str) -> bool:
-        if self._parameters:
-            parameter_object = next(filter((lambda x: x and parameter_key in x), self._parameters), None)
-            if parameter_object and parameter_key in parameter_object:
-                return True
-        return False
+        return parameter_key in self._parameters
 
     def extract_property_value(self, property_key: str) -> str:
-        if self._properties:
-            property_object = next(filter((lambda x: x and property_key in x), self._properties), None)
-            if property_object and property_key in property_object:
-                return property_object[property_key]
-        return None
+        return self._properties.get(property_key, "")
 
     def has_property(self, property_key: str) -> bool:
-        if self._properties:
-            property_object = next(filter((lambda x: x and property_key in x), self._properties), None)
-            if property_object and property_key in property_object:
-                return True
-        return False
+        return property_key in self._properties
 
-    def merge_properties(self, new_properties: dict):
-        """Merge the properties of the device with the properties of the payload"""
-        for new_property in new_properties:
-            for key, new_value in new_property.items():
-                for index, current_property in enumerate(self._properties):
-                    for current_key, current_value in current_property.items():
-                        if current_key == key:
-                            self._properties[index] = new_property
+    def obj_arr_to_dict(self, obj_arr_in: dict, dict_out: dict):
+        for obj in obj_arr_in:
+            for k, v in obj.items():
+                dict_out[k] = v
 
-    def extract_property_definition(self, property_key: str) -> str:
-        if self._property_definitions:
-            property_definition_object = next(filter((lambda x: x and property_key in x), self._property_definitions),
-                                              None)
-            if property_definition_object and property_key in property_definition_object:
-                return property_definition_object[property_key]
-        return None
+    def extract_property_definition(self, property_key: str) -> str | None:
+        return self._property_definitions.get(property_key, None)
 
     def extract_property_definition_description_choices(self, property_key: str) -> Union[list, None]:
         definition = self.extract_property_definition(property_key)
@@ -166,8 +153,18 @@ class CoCoDevice():
         return None
 
     def on_change(self, topic: str, payload: dict):
-        """Fallback on change method"""
-        _LOGGER.debug(f'{self._name} has not implemented the on_change method')
+        _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
+        if DEVICE_DESCRIPTOR_PROPERTIES in payload:
+            self.obj_arr_to_dict(payload[DEVICE_DESCRIPTOR_PROPERTIES], self._properties)
+
+        if DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS in payload and len(payload[DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS]):
+            self.obj_arr_to_dict(payload[DEVICE_DESCRIPTOR_PROPERTY_DEFINITIONS], self._property_definitions)
+
+        if DEVICE_DESCRIPTOR_ONLINE in payload:
+            self._online = payload[DEVICE_DESCRIPTOR_ONLINE] == DEVICE_DESCRIPTOR_ONLINE_VALUE_TRUE
+
+        for callback in self._after_change_callbacks:
+            callback()
 
     def set_disconnected(self):
         self._online = False

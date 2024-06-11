@@ -2,23 +2,17 @@ from homeassistant.components.sensor import SensorEntity, SensorDeviceClass, Sen
 from homeassistant.const import UnitOfPower
 
 from ..nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
+from .nhc_entity import NHCBaseEntity
 
 
-class Nhc2GenericEnergyhomeElectricalPowerSelfConsumptionEntity(SensorEntity):
+class Nhc2GenericEnergyhomeElectricalPowerSelfConsumptionEntity(NHCBaseEntity, SensorEntity):
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoGenericEnergyhome, hub, gateway):
         """Initialize a sensor."""
-        self._device = device_instance
-        self._hub = hub
-        self._gateway = gateway
+        super().__init__(device_instance, hub, gateway)
 
-        self._device.after_change_callbacks.append(self.on_change)
-
-        self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid + '_electrical_power_self_consumption'
-        self._attr_should_poll = False
-        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_device_class = SensorDeviceClass.POWER
         self._attr_native_value = self._device.electrical_power_self_consumption
@@ -34,6 +28,3 @@ class Nhc2GenericEnergyhomeElectricalPowerSelfConsumptionEntity(SensorEntity):
     @property
     def native_value(self) -> float:
         return self._device.electrical_power_self_consumption
-
-    def on_change(self):
-        self.schedule_update_ha_state()

@@ -1,12 +1,8 @@
-from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_PROGRAM, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_ON, \
-    PROPERTY_STATUS_VALUE_OFF, PROPERTY_FAN_SPEED, PROPERTY_BOOST, PROPERTY_BOOST_VALUE_TRUE, \
-    PROPERTY_BOOST_VALUE_FALSE, PROPERTY_CO2, PROPERTY_HUMIDITY, PROPERTY_COUPLING_STATUS
+from ..const import PROPERTY_PROGRAM, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_ON, PROPERTY_STATUS_VALUE_OFF, \
+    PROPERTY_FAN_SPEED, PROPERTY_BOOST, PROPERTY_BOOST_VALUE_TRUE, PROPERTY_BOOST_VALUE_FALSE, PROPERTY_CO2, \
+    PROPERTY_HUMIDITY, PROPERTY_COUPLING_STATUS
 from ..helpers import to_int_or_none
 from .device import CoCoDevice
-
-import logging
-
-_LOGGER = logging.getLogger(__name__)
 
 
 class CocoGenericFan(CoCoDevice):
@@ -99,15 +95,6 @@ class CocoGenericFan(CoCoDevice):
     @property
     def supports_coupling_status(self) -> bool:
         return self.has_property(PROPERTY_COUPLING_STATUS)
-
-    def on_change(self, topic: str, payload: dict):
-        _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
-        if DEVICE_DESCRIPTOR_PROPERTIES in payload:
-            self.merge_properties(payload[DEVICE_DESCRIPTOR_PROPERTIES])
-
-        if self._after_change_callbacks:
-            for callback in self._after_change_callbacks:
-                callback()
 
     def set_program(self, gateway, program: str):
         gateway.add_device_control(self.uuid, PROPERTY_PROGRAM, program)

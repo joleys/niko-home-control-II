@@ -1,12 +1,6 @@
-from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_BASIC_STATE, PROPERTY_BASIC_STATE_VALUE_ON, \
-    PROPERTY_BASIC_STATE_VALUE_TRIGGERED, PROPERTY_START_ACTIVE, PROPERTY_START_ACTIVE_VALUE_TRUE, PROPERTY_ALL_STARTED, \
-    PROPERTY_ALL_STARTED_VALUE_TRUE
-
+from ..const import PROPERTY_BASIC_STATE, PROPERTY_BASIC_STATE_VALUE_ON, PROPERTY_BASIC_STATE_VALUE_TRIGGERED, \
+    PROPERTY_START_ACTIVE, PROPERTY_START_ACTIVE_VALUE_TRUE, PROPERTY_ALL_STARTED, PROPERTY_ALL_STARTED_VALUE_TRUE
 from .device import CoCoDevice
-
-import logging
-
-_LOGGER = logging.getLogger(__name__)
 
 
 class CocoOverallcomfortAction(CoCoDevice):
@@ -37,15 +31,6 @@ class CocoOverallcomfortAction(CoCoDevice):
     @property
     def supports_all_started(self) -> bool:
         return self.has_property(PROPERTY_ALL_STARTED)
-
-    def on_change(self, topic: str, payload: dict):
-        _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
-        if DEVICE_DESCRIPTOR_PROPERTIES in payload:
-            self.merge_properties(payload[DEVICE_DESCRIPTOR_PROPERTIES])
-
-        if self._after_change_callbacks:
-            for callback in self._after_change_callbacks:
-                callback()
 
     def press(self, gateway):
         gateway.add_device_control(

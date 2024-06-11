@@ -1,11 +1,7 @@
-from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_BOOST, PROPERTY_BOOST_VALUE_FALSE, \
-    PROPERTY_BOOST_VALUE_TRUE, PROPERTY_COUPLING_STATUS, PROPERTY_DOMESTIC_HOT_WATER_TEMPERATURE, PROPERTY_PROGRAM
+from ..const import PROPERTY_BOOST, PROPERTY_BOOST_VALUE_FALSE, PROPERTY_BOOST_VALUE_TRUE, PROPERTY_COUPLING_STATUS, \
+    PROPERTY_DOMESTIC_HOT_WATER_TEMPERATURE, PROPERTY_PROGRAM
 from ..helpers import to_float_or_none
 from .device import CoCoDevice
-
-import logging
-
-_LOGGER = logging.getLogger(__name__)
 
 
 class CocoGenericDomestichotwaterunit(CoCoDevice):
@@ -48,15 +44,6 @@ class CocoGenericDomestichotwaterunit(CoCoDevice):
     @property
     def supports_coupling_status(self) -> bool:
         return self.has_property(PROPERTY_COUPLING_STATUS) and self.coupling_status in self.possible_coupling_status
-
-    def on_change(self, topic: str, payload: dict):
-        _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
-        if DEVICE_DESCRIPTOR_PROPERTIES in payload:
-            self.merge_properties(payload[DEVICE_DESCRIPTOR_PROPERTIES])
-
-        if self._after_change_callbacks:
-            for callback in self._after_change_callbacks:
-                callback()
 
     def set_domestic_hot_water_temperature(self, gateway, temperature: float):
         gateway.add_device_control(self.uuid, PROPERTY_DOMESTIC_HOT_WATER_TEMPERATURE, str(temperature))

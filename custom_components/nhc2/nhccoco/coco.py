@@ -3,6 +3,7 @@ import os
 import threading
 from time import sleep
 import sys
+import uuid
 
 import paho.mqtt.client as mqtt
 
@@ -71,7 +72,7 @@ sem = threading.Semaphore()
 
 
 class CoCo:
-    def __init__(self, address, username, password, port=8884, ca_path=None, switches_as_lights=False):
+    def __init__(self, address, username, password, port=8884, ca_path=None):
         # The device control buffer fields
         self._keep_thread_running = True
         self._device_control_buffer = {}
@@ -85,7 +86,8 @@ class CoCo:
             ca_path = os.path.dirname(os.path.realpath(__file__)) + MQTT_CERT_FILE
 
         # Configure the client
-        client = mqtt.Client(protocol=MQTT_PROTOCOL, transport=MQTT_TRANSPORT)
+        client = mqtt.Client(client_id="homeassistant-" + str(uuid.uuid1()), protocol=MQTT_PROTOCOL,
+                             transport=MQTT_TRANSPORT)
         client.username_pw_set(username, password)
         client.tls_set(ca_path)
         client.tls_insecure_set(True)
@@ -94,15 +96,16 @@ class CoCo:
         self._address = address
         self._port = port
         self._profile_creation_id = username
-        self._all_devices = None
-        self._device_callbacks = {}
-        self._devices = {}
-        self._devices_callback = {}
-        self._system_info = None
         self._system_info_callback = lambda x: None
+        self._devices_list_callback = lambda x: None
         self._device_instances = {
             'controller': CocoController()
         }
+        self._entries_initialized = False
+
+    @property
+    def entries_initialized(self):
+        return self._entries_initialized
 
     @property
     def address(self):
@@ -120,16 +123,18 @@ class CoCo:
             # System info response (/system/rsp, method: systeminfo.publish)
             if topic == self._profile_creation_id + MQTT_TOPIC_PUBLIC_RSP and \
                     response[MQTT_DATA_METHOD] == MQTT_DATA_METHOD_SYSINFO_PUBLISH:
-                self._system_info = response
-                self._system_info_callback(self._system_info)
+                self._system_info_callback(response)
 
             # Device list response (/control/devices/rsp, method: devices.list)
             elif topic == (self._profile_creation_id + MQTT_TOPIC_SUFFIX_RSP) and \
-                    response[MQTT_DATA_METHOD] == MQTT_DATA_METHOD_DEVICES_LIST:
+                    (response[MQTT_DATA_METHOD] == MQTT_DATA_METHOD_DEVICES_LIST):
                 # No need to listen for devices anymore. So unsubscribe.
                 self._client.unsubscribe(self._profile_creation_id + MQTT_TOPIC_SUFFIX_RSP)
-                self._process_devices_list(response)
-                self._device_instances['controller'].on_change(topic, response)
+                if self._process_devices_list(response):
+                    self._device_instances['controller'].on_change(topic, response)
+                    if self._devices_list_callback:
+                        self._devices_list_callback()
+                        self._entries_initialized = True
 
             # System info published (/system/evt, method: systeminfo.published)
             elif topic == (self._profile_creation_id + MQTT_TOPIC_SUFFIX_SYS_EVT) and \
@@ -144,6 +149,22 @@ class CoCo:
                     1
                 )
 
+            # Device events (/control/devices/evt, method: devices.added)
+            elif topic == (self._profile_creation_id + MQTT_TOPIC_SUFFIX_EVT) and \
+                    response[MQTT_DATA_METHOD] == MQTT_DATA_METHOD_DEVICES_ADDED:
+                if self._process_devices_list(response):
+                    self._device_instances['controller'].on_change(topic, response)
+                    if self._devices_list_callback:
+                        self._devices_list_callback()
+
+            # Device events (/control/devices/evt, method: devices.removed)
+            elif topic == (self._profile_creation_id + MQTT_TOPIC_SUFFIX_EVT) and \
+                    response[MQTT_DATA_METHOD] == MQTT_DATA_METHOD_DEVICES_REMOVED:
+                if self._remove_from_devices_list(response):
+                    self._device_instances['controller'].on_change(topic, response)
+                    if self._devices_list_callback:
+                        self._devices_list_callback()
+
             # Device events (/control/devices/evt, method: devices.status or devices.changed)
             elif topic == (self._profile_creation_id + MQTT_TOPIC_SUFFIX_EVT) and (
                     response[MQTT_DATA_METHOD] == MQTT_DATA_METHOD_DEVICES_STATUS or
@@ -153,21 +174,25 @@ class CoCo:
 
                 devices = extract_devices(response)
 
+                changes_processed = False
                 for device in devices:
                     if MQTT_DATA_PARAMS_DEVICES_UUID not in device:
                         continue
 
                     try:
                         self._device_instances[device[MQTT_DATA_PARAMS_DEVICES_UUID]].on_change(topic, device)
+                        changes_processed = True
                     except KeyError as e:
                         _LOGGER.debug(
                             f'Device not in our instances list, therefor failed to invoke callback: {device[MQTT_DATA_PARAMS_DEVICES_UUID]}. Topic: {topic} | Data: {device}')
-                        pass
                     except Exception as e:
                         _LOGGER.debug(
                             f'Failed to invoke callback: {device[MQTT_DATA_PARAMS_DEVICES_UUID]}. Topic: {topic} | Data: {device}')
                         _LOGGER.exception(e)
-                        pass
+
+                if changes_processed and response[
+                    MQTT_DATA_METHOD] == MQTT_DATA_METHOD_DEVICES_CHANGED and self._devices_list_callback:
+                    self._devices_list_callback()
 
         def _on_connect(client, userdata, flags, rc):
             if rc == 0:
@@ -193,7 +218,7 @@ class CoCo:
                     1
                 )
 
-            elif rc in [1, 2, 3, 4, 5] and on_connection_refused is not None:
+            elif rc in (1, 2, 3, 4, 5) and on_connection_refused is not None:
                 # Possible reasons for Connection refused:
                 # 1: Connection refused - incorrect protocol version
                 # 2: Connection refused - invalid client identifier
@@ -223,23 +248,8 @@ class CoCo:
         self._client.loop_stop()
         self._client.disconnect()
 
-    def get_systeminfo(self, callback):
-        self._system_info_callback = callback
-        if self._system_info:
-            self._system_info_callback(self._system_info)
-
     def get_device_instances(self, device_class):
-        if len(self._device_instances) == 0:
-            _LOGGER.warning(f'No devices yet, probably waiting for device list.')
-            sleep(0.05)
-            return self.get_device_instances(device_class)
-
-        devices = []
-        for device in self._device_instances.values():
-            if isinstance(device, device_class):
-                devices.append(device)
-
-        return devices
+        return [device for device in self._device_instances.values() if isinstance(device, device_class)]
 
     def _publish_device_control_commands(self):
         while self._keep_thread_running:
@@ -271,15 +281,22 @@ class CoCo:
         self._device_control_buffer[uuid][property_key] = property_value
         sem.release()
 
-    def _process_devices_list(self, response):
-        """Convert the response of devices.list into device instances."""
-        _LOGGER.debug(f'Received device list: {response}')
+    def _remove_from_devices_list(self, response):
+        changes = False
         devices = extract_devices(response)
         for device in devices:
-            if 'Properties' not in device or len(device['Properties']) == 0:
-                _LOGGER.debug(f"Skip device ({device['Uuid']}) as it has no Properties")
-                continue
+            if device[MQTT_DATA_PARAMS_DEVICES_UUID] in self._device_instances:
+                _LOGGER.info(f"Removing device {device[MQTT_DATA_PARAMS_DEVICES_UUID]} from devices list")
+                self._device_instances.pop(device[MQTT_DATA_PARAMS_DEVICES_UUID])
+                changes = True
+        return changes
 
+    def _process_devices_list(self, response):
+        """Convert the response of devices.list or devices.added into device instances."""
+        _LOGGER.debug(f'Received device list: {response}')
+        devices = extract_devices(response)
+        changes = False
+        for device in devices:
             try:
                 # Try to find the class for the device with the technology included
                 # This is the most specific class, as for some devices the technology is important.
@@ -317,11 +334,45 @@ class CoCo:
                 # * are not supported by the API / MQTT broker
                 # * don't have any (usefull) properties
                 if classname in [
+                    'CocoBatterypoweredmotiondetectorMotiondetector',
+                    'CocoBatterypushbuttonx1Smartpanel',
+                    'CocoBatterypushbuttonx2Smartpanel',
+                    'CocoBatterypushbuttonx4Smartpanel',
+                    'CocoDimcontrollerSmartpanel',
+                    'CocoDimcontrollerfeedbackSmartpanel',
+                    'CocoDimmerSmartdimmer',
+                    'CocoExtensionbuttonx1Smartextensionpanel',
+                    'CocoGenericAudiocontrol',
+                    'CocoGenericBrick',
                     'CocoGenericGatewayfw',
+                    'CocoGenericRadio',
+                    'CocoGenericStick',
+                    'CocoLightRelay',
+                    'CocoLightSmartrelay',
+                    'CocoNhc2301RTouchswitch',
+                    'CocoNhcElectricitymeter',
+                    'CocoNhcGasmeter',
+                    'CocoPushbuttonx1FeedbackSmartpanel',
+                    'CocoPushbuttonx2FeedbackSmartpanel',
+                    'CocoPushbuttonx4FeedbackSmartpanel',
+                    'CocoPushbuttonx1Smartpanel',
+                    'CocoPushbuttonx2Smartpanel',
+                    'CocoVdsVds'
                 ]:
+                    _LOGGER.debug(f"Skipping {device[MQTT_DATA_PARAMS_DEVICES_UUID]} of {classname}")
                     continue
 
                 instance = getattr(sys.modules[__name__], classname)(json_to_map(device))
                 self._device_instances[instance.uuid] = instance
+                _LOGGER.debug(f"Added device {instance.uuid} of class {classname}")
+                changes = True
             except Exception as e:
-                _LOGGER.warning(f"Class {classname} not found: {e}, device: {device['Properties']}")
+                _LOGGER.warning(f"Class {classname} not found: {e}")
+
+        return changes
+
+    def set_devices_list_callback(self, callback):
+        self._devices_list_callback = callback
+
+    def set_systeminfo_callback(self, callback):
+        self._system_info_callback = callback
