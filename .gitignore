@@ -15,3 +15,8 @@ scenes.yaml
 scripts.yaml
 secrets.yaml
 debugging
+
+# Local python venv
+bin
+lib
+pyvenv.cfg
