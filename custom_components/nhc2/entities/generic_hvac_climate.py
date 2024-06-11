@@ -10,24 +10,18 @@ from ..nhccoco.const import PROPERTY_PROGRAM_VALUE_DAY, PROPERTY_PROGRAM_VALUE_E
     PROPERTY_OPERATION_MODE_VALUE_HEAT, PROPERTY_OPERATION_MODE_VALUE_COOL, PROPERTY_OPERATION_MODE_VALUE_AUTO, \
     PROPERTY_OPERATION_MODE_VALUE_FAN
 from ..nhccoco.devices.generic_hvac import CocoGenericHvac
+from .nhc_entity import NHCBaseEntity
 
 
-class Nhc2GenericHvacClimateEntity(ClimateEntity):
+class Nhc2GenericHvacClimateEntity(NHCBaseEntity, ClimateEntity):
     _attr_has_entity_name = True
     _attr_name = None
 
     def __init__(self, device_instance: CocoGenericHvac, hub, gateway):
         """Initialize a climate entity."""
-        self._device = device_instance
-        self._hub = hub
-        self._gateway = gateway
+        super().__init__(device_instance, hub, gateway)
 
-        self._device.after_change_callbacks.append(self.on_change)
-
-        self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid
-        self._attr_should_poll = False
-        self._attr_device_info = self._device.device_info(self._hub)
 
         self._enable_turn_on_off_backwards_compatibility = False
 
@@ -169,13 +163,10 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
     def fan_mode(self) -> str:
         return self._device.fan_speed
 
-    def on_change(self):
-        self.schedule_update_ha_state()
-
     async def async_set_temperature(self, **kwargs):
         temperature = float(kwargs.get(ATTR_TEMPERATURE))
         self._device.set_temperature(self._gateway, temperature)
-        self.on_change()
+        self.schedule_update_ha_state()
 
     async def async_set_hvac_mode(self, hvac_mode: str):
         if hvac_mode == HVACMode.OFF:
@@ -196,7 +187,7 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
         if hvac_mode == HVACMode.DRY:
             self._device.set_operation_mode(self._gateway, PROPERTY_OPERATION_MODE_VALUE_DRY)
 
-        self.on_change()
+        self.schedule_update_ha_state()
 
     async def async_set_preset_mode(self, preset_mode: str):
         if preset_mode == PRESET_ECO:
@@ -213,7 +204,7 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
             program = preset_mode
 
         self._device.set_program(self._gateway, program)
-        self.on_change()
+        self.schedule_update_ha_state()
 
     async def async_set_fan_mode(self, fan_mode: str):
         if fan_mode == FAN_OFF:
@@ -230,4 +221,4 @@ class Nhc2GenericHvacClimateEntity(ClimateEntity):
             fan_mode = fan_mode
 
         self._device.set_fan_speed(self._gateway, fan_mode)
-        self.on_change()
+        self.schedule_update_ha_state()

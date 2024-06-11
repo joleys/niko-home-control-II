@@ -11,7 +11,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class Nhc2ControllerLatestConfigLoadedUpdateEntity(UpdateEntity):
-    """ The timestamp for  the first and last time the devices.list is received are used as version information. """
+    """ The timestamp for the first and last time the devices.list is received are used as version information. """
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoController, hub, gateway):

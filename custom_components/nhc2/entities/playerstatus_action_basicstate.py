@@ -1,26 +1,18 @@
 from homeassistant.components.binary_sensor import BinarySensorEntity
 
 from ..nhccoco.devices.playerstatus_action import CocoPlayerstatusAction
+from .nhc_entity import NHCBaseEntity
 
 
-class Nhc2PlayerstatusActionBasicStateEntity(BinarySensorEntity):
+class Nhc2PlayerstatusActionBasicStateEntity(NHCBaseEntity, BinarySensorEntity):
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoPlayerstatusAction, hub, gateway):
         """Initialize a binary sensor."""
-        self._device = device_instance
-        self._hub = hub
-        self._gateway = gateway
+        super().__init__(device_instance, hub, gateway)
 
-        self._device.after_change_callbacks.append(self.on_change)
-
-        self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid + '_basic_state'
-        self._attr_should_poll = False
-        self._attr_device_info = self._device.device_info(self._hub)
-
         self._attr_state = self._device.is_basic_state_on
-        self._attr_state_class = None
 
     @property
     def name(self) -> str:
@@ -29,6 +21,3 @@ class Nhc2PlayerstatusActionBasicStateEntity(BinarySensorEntity):
     @property
     def is_on(self) -> bool:
         return self._device.is_basic_state_on
-
-    def on_change(self):
-        self.schedule_update_ha_state()

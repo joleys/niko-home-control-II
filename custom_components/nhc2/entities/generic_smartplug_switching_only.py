@@ -1,26 +1,25 @@
 from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.helpers.entity import EntityCategory
 
-from ..nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
+from ..nhccoco.devices.generic_smartplug import CocoGenericSmartplug
 from .nhc_entity import NHCBaseEntity
 
 
-class Nhc2AudiocontrolActionConnectedEntity(NHCBaseEntity, BinarySensorEntity):
+class Nhc2GenericSmartplugSwitchingOnlyEntity(NHCBaseEntity, BinarySensorEntity):
     _attr_has_entity_name = True
 
-    def __init__(self, device_instance: CocoAudiocontrolAction, hub, gateway):
+    def __init__(self, device_instance: CocoGenericSmartplug, hub, gateway):
         """Initialize a binary sensor."""
         super().__init__(device_instance, hub, gateway)
 
-        self._attr_unique_id = device_instance.uuid + '_connected'
-
-        self._attr_state = self._device.is_connected
+        self._attr_unique_id = device_instance.uuid + '_switching_only'
+        self._attr_state = self._device.is_switching_only
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
 
     @property
     def name(self) -> str:
-        return 'Connected'
+        return 'Switching Only'
 
     @property
     def is_on(self) -> bool:
-        return self._device.is_connected
+        return self._device.is_switching_only
