@@ -44,5 +44,28 @@
       "login_check_fail_4": "Verbinding geweigerd - onjuiste gebruikersnaam of wachtwoord",
       "login_check_fail_5": "Verbinding geweigerd - niet geautoriseerd"
     }
+  },
+  "issues": {
+    "not_authorised": {
+      "title": "Niet geautoriseerd",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Niet geautoriseerd",
+            "description": "De loginggegevens gaven een fout.\n\nVermoedelijk is je Niko Hobby API wachtwoord verlopen. Haal een nieuw wachtwoord op via Geconnecteerde services in de Niko Home Control programming software.\n\nHome Assistant zal nadien herstart worden.",
+            "data": {
+              "password": "Password"
+            }
+          }
+        },
+        "error": {
+          "login_check_fail_1": "Verbinding geweigerd - onjuiste protocolversie",
+          "login_check_fail_2": "Verbinding geweigerd - ongeldige client-ID",
+          "login_check_fail_3": "Verbinding geweigerd - server niet beschikbaar",
+          "login_check_fail_4": "Verbinding geweigerd - onjuiste gebruikersnaam of wachtwoord",
+          "login_check_fail_5": "Verbinding geweigerd - niet geautoriseerd"
+        }
+      }
+    }
   }
 }
