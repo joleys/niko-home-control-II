@@ -529,6 +529,16 @@ __Remark:__ This device is not documented/supported by Niko.
 * **Disable Report Instant Usage Re-enabling Switch**, a toggle to disable the automatic re-enabling of the
   Report Instant Usage property. This is useful if you don't need Electrical Power reporting.
 
+### Peakmode Action
+
+This action is exposed as a button.
+
+#### Entities
+
+It has some extra entities that can be used in automations:
+
+* **Basic State Binary Sensor**, The state is according the state of all assigned players as configured for that action.
+
 ## Not yet supported
 
 * Sonos Speaker

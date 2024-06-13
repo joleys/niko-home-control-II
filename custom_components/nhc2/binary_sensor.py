@@ -43,6 +43,7 @@ from .entities.naso_smartplug_switching_only import Nhc2NasoSmartplugSwitchingOn
 from .entities.naso_smartplug_report_instant_usage import Nhc2NasoSmartplugReportInstantUsageEntity
 from .entities.overallcomfort_action_start_active import Nhc2OverallcomfortActionStartActiveEntity
 from .entities.overallcomfort_action_all_started import Nhc2OverallcomfortActionAllStartedEntity
+from .entities.peakmode_action_basicstate import Nhc2PeakmodeActionBasicStateEntity
 from .entities.playerstatus_action_basicstate import Nhc2PlayerstatusActionBasicStateEntity
 from .entities.timeschedule_action_active import Nhc2TimeschedulActionActiveEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
@@ -63,6 +64,7 @@ from .nhccoco.devices.heatingcooling_action import CocoHeatingcoolingAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.overallcomfort_action import CocoOverallcomfortAction
+from .nhccoco.devices.peakmode_action import CocoPeakmodeAction
 from .nhccoco.devices.playerstatus_action import CocoPlayerstatusAction
 from .nhccoco.devices.rolldownshutter_action import CocoRolldownshutterAction
 from .nhccoco.devices.sunblind_action import CocoSunblindAction
@@ -295,5 +297,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             if device_instance.supports_coupling_status:
                 entities.append(Nhc2GenericInverterReportInstantUsageEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoPeakmodeAction)
+    _LOGGER.info('→ Found %s Peakmode Actions (undocumented)', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2PeakmodeActionBasicStateEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
