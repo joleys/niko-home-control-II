@@ -121,10 +121,9 @@ async def async_setup_entry(hass, entry):
                         hass.config_entries.async_forward_entry_unload(entry, platform)
                     )
 
-            for platform in FORWARD_PLATFORMS:
-                hass.add_job(
-                    hass.config_entries.async_forward_entry_setup(entry, platform)
-                )
+            hass.add_job(
+                hass.config_entries.async_forward_entry_setups(entry, FORWARD_PLATFORMS)
+            )
 
         return do_reload_entities
 
