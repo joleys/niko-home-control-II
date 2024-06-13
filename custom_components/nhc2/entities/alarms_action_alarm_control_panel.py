@@ -8,6 +8,7 @@ from .nhc_entity import NHCBaseEntity
 class Nhc2AlarmsActionAlarmControlPanelEntity(NHCBaseEntity, AlarmControlPanelEntity):
     _attr_has_entity_name = True
     _attr_name = None
+    _attr_code_arm_required = False
 
     def __init__(self, device_instance: CocoAlarmsAction, hub, gateway):
         """Initialize a lock sensor."""
