@@ -62,6 +62,7 @@ from .devices.touchswitch_hvac import CocoTouchswitchHvac
 from .devices.velux_action import CocoVeluxAction
 from .devices.venetianblind_action import CocoVenetianblindAction
 from .devices.virtual_hvac import CocoVirtualHvac
+from .devices.virtual_thermostat import CocoVirtualThermostat
 
 from .const import *
 from .helpers import *
