@@ -27,7 +27,7 @@
     },
     "abort": {
       "single_instance_allowed": "Deze controller en profiel zijn reeds toegevoegd. Je kan deze geen 2 keer toevoegen.",
-      "no_controller_found": "Geen controller gevonden.",
+      "no_controller_found": "Geen controller gevonden."
     },
     "error": {
       "login_check_fail_1": "Verbinding geweigerd - onjuiste protocolversie",
