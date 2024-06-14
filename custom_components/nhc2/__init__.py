@@ -7,7 +7,7 @@ from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, CONF_ADDRESS, CONF_PORT, \
     EVENT_HOMEASSISTANT_STOP
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers import device_registry
+from homeassistant.helpers import device_registry, issue_registry
 from homeassistant.core import HomeAssistant
 
 from .config_flow import Nhc2FlowHandler  # noqa  pylint_disable=unused-import
@@ -139,7 +139,15 @@ async def async_setup_entry(hass, entry):
 
         if connection_result in (4, 5):
             coco.disconnect()
-            entry.async_start_reauth(hass)
+            issue_registry.create_issue(
+                hass,
+                DOMAIN,
+                "not_authorised",
+                is_fixable=True,
+                severity=issue_registry.IssueSeverity.ERROR,
+                translation_key="not_authorised",
+                data={'entry': entry}
+            )
 
     hass.data.setdefault(KEY_GATEWAY, {})[entry.entry_id] = coco
     hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, on_hass_stop)
