@@ -2,23 +2,17 @@ from homeassistant.components.number import NumberEntity, NumberDeviceClass
 from homeassistant.const import UnitOfTemperature
 
 from ..nhccoco.devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
+from .nhc_entity import NHCBaseEntity
 
 
-class Nhc2GenericDomestichotwaterunitDomesticHotWaterTemperatureEntity(NumberEntity):
+class Nhc2GenericDomestichotwaterunitDomesticHotWaterTemperatureEntity(NHCBaseEntity, NumberEntity):
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoGenericDomestichotwaterunit, hub, gateway):
         """Initialize a number entity."""
-        self._device = device_instance
-        self._hub = hub
-        self._gateway = gateway
+        super().__init__(device_instance, hub, gateway)
 
-        self._device.after_change_callbacks.append(self.on_change)
-
-        self._attr_available = self._device.is_online
         self._attr_unique_id = device_instance.uuid + '_domestic_hot_water_temperature'
-        self._attr_should_poll = False
-        self._attr_device_info = self._device.device_info(self._hub)
 
         self._attr_device_class = NumberDeviceClass.TEMPERATURE
         min_value, max_value, step = self._device.domestic_hot_water_temperature_range
@@ -35,9 +29,6 @@ class Nhc2GenericDomestichotwaterunitDomesticHotWaterTemperatureEntity(NumberEnt
     def native_value(self) -> float:
         return self._device.domestic_hot_water_temperature
 
-    def on_change(self):
-        self.schedule_update_ha_state()
-
     async def async_set_native_value(self, value: float) -> None:
         self._device.set_domestic_hot_water_temperature(self._gateway, value)
-        self.on_change()
+        self.schedule_update_ha_state()

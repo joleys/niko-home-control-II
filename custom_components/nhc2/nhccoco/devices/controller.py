@@ -31,9 +31,15 @@ class CocoController:
             if self._first_time_devices_list_received is None:
                 self._first_time_devices_list_received = self._last_time_devices_list_received
 
-        if self._after_change_callbacks:
-            for callback in self._after_change_callbacks:
-                callback()
+        for callback in self._after_change_callbacks:
+            callback()
 
     def set_disconnected(self):
         return
+
+    @property
+    def is_online(self) -> bool:
+        return True
+
+    def device_info(self, hub: str):
+        return {}

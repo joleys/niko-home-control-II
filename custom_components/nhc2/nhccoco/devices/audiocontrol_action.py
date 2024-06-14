@@ -1,17 +1,13 @@
-from ..const import DEVICE_DESCRIPTOR_PROPERTIES, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_ON, PROPERTY_STATUS_VALUE_OFF, \
+from ..const import PROPERTY_STATUS, PROPERTY_STATUS_VALUE_ON, PROPERTY_STATUS_VALUE_OFF, \
     PROPERTY_PLAYBACK, PROPERTY_PLAYBACK_VALUE_BUFFERING, PROPERTY_PLAYBACK_VALUE_PAUSED, \
     PROPERTY_PLAYBACK_VALUE_PLAYING, PROPERTY_VOLUME, PROPERTY_MUTED, PROPERTY_MUTED_VALUE_TRUE, \
     PROPERTY_MUTED_VALUE_FALSE, PROPERTY_TITLE, PROPERTY_VOLUME_ALIGNED, PROPERTY_VOLUME_ALIGNED_VALUE_TRUE, \
     PROPERTY_TITLE_ALIGNED, PROPERTY_TITLE_ALIGNED_VALUE_TRUE, PROPERTY_CONNECTED, PROPERTY_CONNECTED_VALUE_TRUE, \
-    PARAMETER_SPEAKER, PARAMETER_MANUFACTURER
+    PARAMETER_SPEAKER
 
 from ..helpers import to_int_or_none
 
 from .device import CoCoDevice
-
-import logging
-
-_LOGGER = logging.getLogger(__name__)
 
 
 class CocoAudiocontrolAction(CoCoDevice):
@@ -86,15 +82,6 @@ class CocoAudiocontrolAction(CoCoDevice):
     @property
     def speaker(self) -> str:
         return self.extract_parameter_value(PARAMETER_SPEAKER)
-
-    def on_change(self, topic: str, payload: dict):
-        _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
-        if DEVICE_DESCRIPTOR_PROPERTIES in payload:
-            self.merge_properties(payload[DEVICE_DESCRIPTOR_PROPERTIES])
-
-        if self._after_change_callbacks:
-            for callback in self._after_change_callbacks:
-                callback()
 
     def turn_on(self, gateway):
         gateway.add_device_control(self.uuid, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_ON)

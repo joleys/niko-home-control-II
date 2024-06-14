@@ -16,6 +16,7 @@ from .nhccoco.devices.thermostat_hvac import CocoThermostatHvac
 from .nhccoco.devices.thermostat_thermostat import CocoThermostatThermostat
 from .nhccoco.devices.touchswitch_hvac import CocoTouchswitchHvac
 from .nhccoco.devices.virtual_hvac import CocoVirtualHvac
+from .nhccoco.devices.virtual_thermostat import CocoVirtualThermostat
 
 from .const import DOMAIN, KEY_GATEWAY
 
@@ -52,7 +53,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoThermostatThermostat)
-    _LOGGER.info('→ Found %s NHC Touch Switch', len(device_instances))
+    device_instances += gateway.get_device_instances(CocoVirtualThermostat)
+    _LOGGER.info('→ Found %s NHC Touch Switch, Virtual Thermostat', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:

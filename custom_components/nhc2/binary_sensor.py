@@ -30,6 +30,7 @@ from .entities.generic_energyhome_electrical_power_production_threshold_exceeded
     Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity
 from .entities.generic_energyhome_report_instant_usage import Nhc2GenericEnergyhomeReportInstantUsageEntity
 from .entities.generic_inverter_report_instant_usage import Nhc2GenericInverterReportInstantUsageEntity
+from .entities.generic_smartplug_switching_only import Nhc2GenericSmartplugSwitchingOnlyEntity
 from .entities.generic_smartplug_report_instant_usage import Nhc2GenericSmartplugReportInstantUsageEntity
 from .entities.heatingcooling_action_cooling_mode import Nhc2HeatingcoolingActionCoolingModeEntity
 from .entities.heatingcooling_action_heating_mode import Nhc2HeatingcoolingActionHeatingModeEntity
@@ -38,9 +39,11 @@ from .entities.motor_action_aligned import Nhc2MotorActionAlignedEntity
 from .entities.motor_action_moving import Nhc2MotorActionMovingEntity
 from .entities.naso_smartplug_feedback_enabled import Nhc2NasoSmartplugFeedbackEnabledEntity
 from .entities.naso_smartplug_measuring_only import Nhc2NasoSmartplugMeasuringOnlyEntity
+from .entities.naso_smartplug_switching_only import Nhc2NasoSmartplugSwitchingOnlyEntity
 from .entities.naso_smartplug_report_instant_usage import Nhc2NasoSmartplugReportInstantUsageEntity
 from .entities.overallcomfort_action_start_active import Nhc2OverallcomfortActionStartActiveEntity
 from .entities.overallcomfort_action_all_started import Nhc2OverallcomfortActionAllStartedEntity
+from .entities.peakmode_action_basicstate import Nhc2PeakmodeActionBasicStateEntity
 from .entities.playerstatus_action_basicstate import Nhc2PlayerstatusActionBasicStateEntity
 from .entities.timeschedule_action_active import Nhc2TimeschedulActionActiveEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
@@ -61,6 +64,7 @@ from .nhccoco.devices.heatingcooling_action import CocoHeatingcoolingAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.overallcomfort_action import CocoOverallcomfortAction
+from .nhccoco.devices.peakmode_action import CocoPeakmodeAction
 from .nhccoco.devices.playerstatus_action import CocoPlayerstatusAction
 from .nhccoco.devices.rolldownshutter_action import CocoRolldownshutterAction
 from .nhccoco.devices.sunblind_action import CocoSunblindAction
@@ -214,6 +218,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(Nhc2NasoSmartplugReportInstantUsageEntity(device_instance, hub, gateway))
             entities.append(Nhc2NasoSmartplugFeedbackEnabledEntity(device_instance, hub, gateway))
             entities.append(Nhc2NasoSmartplugMeasuringOnlyEntity(device_instance, hub, gateway))
+            entities.append(Nhc2NasoSmartplugSwitchingOnlyEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
@@ -223,6 +228,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2GenericSmartplugReportInstantUsageEntity(device_instance, hub, gateway))
+            entities.append(Nhc2GenericSmartplugSwitchingOnlyEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
@@ -291,5 +297,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             if device_instance.supports_coupling_status:
                 entities.append(Nhc2GenericInverterReportInstantUsageEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoPeakmodeAction)
+    _LOGGER.info('→ Found %s Peakmode Actions (undocumented)', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2PeakmodeActionBasicStateEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

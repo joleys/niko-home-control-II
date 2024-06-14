@@ -1,30 +1,21 @@
-from datetime import datetime
-from homeassistant.components.update import UpdateEntity, UpdateEntityFeature
+from homeassistant.components.update import UpdateEntity
 
-from ..const import DOMAIN, BRAND
+from ..const import DOMAIN
 
 from ..nhccoco.devices.controller import CocoController
-
-import logging
-
-_LOGGER = logging.getLogger(__name__)
+from .nhc_entity import NHCBaseEntity
 
 
-class Nhc2ControllerLatestConfigLoadedUpdateEntity(UpdateEntity):
+class Nhc2ControllerLatestConfigLoadedUpdateEntity(NHCBaseEntity, UpdateEntity):
     """ The timestamp for  the first and last time the devices.list is received are used as version information. """
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoController, hub, gateway):
         """Initialize a update."""
-        self._device = device_instance
-        self._hub = hub
-        self._gateway = gateway
-
-        self._device.after_change_callbacks.append(self.on_change)
+        super().__init__(device_instance, hub, gateway)
 
         self._attr_available = True
         self._attr_unique_id = 'controller_has_newer_config'
-        self._attr_should_poll = False
         self._attr_auto_update = True
         self._attr_title = 'Controller Config'
 
@@ -63,7 +54,4 @@ class Nhc2ControllerLatestConfigLoadedUpdateEntity(UpdateEntity):
         using the integration in Home Assistant, **please restart Home Assistant**."""
 
     def on_change(self):
-        if self.hass is None:
-            return
-
-        self.schedule_update_ha_state()
+        pass

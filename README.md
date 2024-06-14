@@ -296,6 +296,7 @@ Action Switch.
 * **Measuring Only Binary Sensor**. If on, the relay will always be on.
 * **Disable Report Instant Usage Re-enabling Switch**, a toggle to disable the automatic re-enabling of the
   Report Instant Usage property. This is useful if you don't need Electrical Power reporting.
+* **Switching Only Binary Sensor**
 
 __Remark:__ The totals are not available as they are not (yet) exposed by the API.
 
@@ -312,6 +313,7 @@ This is the energy metering linked to a generic zigbee smart plug. The smart plu
   automatically be enabled.
 * **Disable Report Instant Usage Re-enabling Switch**, a toggle to disable the automatic re-enabling of the
   Report Instant Usage property. This is useful if you don't need Electrical Power reporting.
+* **Switching Only Binary Sensor**
 
 __Remark:__ The totals are not available as they are not (yet) exposed by the API.
 
@@ -526,6 +528,16 @@ __Remark:__ This device is not documented/supported by Niko.
   automatically be enabled.
 * **Disable Report Instant Usage Re-enabling Switch**, a toggle to disable the automatic re-enabling of the
   Report Instant Usage property. This is useful if you don't need Electrical Power reporting.
+
+### Peakmode Action
+
+This action is exposed as a button.
+
+#### Entities
+
+It has some extra entities that can be used in automations:
+
+* **Basic State Binary Sensor**, The state is according the state of all assigned players as configured for that action.
 
 ## Not yet supported
 
