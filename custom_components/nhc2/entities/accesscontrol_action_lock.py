@@ -12,6 +12,8 @@ class Nhc2AccesscontrolActionLockEntity(NHCBaseEntity, LockEntity):
         """Initialize a lock sensor."""
         super().__init__(device_instance, hub, gateway)
 
+        self._attr_unique_id = device_instance.uuid
+
     @property
     def is_locked(self) -> bool:
         return self._device.is_doorlock_closed
