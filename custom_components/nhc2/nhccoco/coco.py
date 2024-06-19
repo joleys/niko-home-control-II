@@ -357,6 +357,7 @@ class CoCo:
                     'CocoGenericAudiocontrol',
                     'CocoGenericBrick',
                     'CocoGenericGatewayfw',
+                    'CocoGenericLightsensor',
                     'CocoGenericRadio',
                     'CocoGenericStick',
                     'CocoHeatingcoolingsystemHvac',
