@@ -586,6 +586,13 @@ The Electricity Metering module (with clamp), Energy Home, NHC Zigbee Smart plug
 report their power usage for 30 seconds when the "Report Instant Usage" is enabled. So as soon as it becomes disabled
 this integration re-enables it.
 
+### I see "Class CocoXXX not found" in the log
+
+This is because this device is not supported (yet) or this device can't be controlled through the API.
+
+Feel free to create an [issue on Github](https://github.com/joleys/niko-home-control-II/issues). Please include your
+[device list](#i-need-to-see-the-device-list).
+
 ### I don't have/use the Energy Home, but it is present in the integration
 
 Each installation exposes an Energy Home device. At this point there is no good way to detect if the Energy Home is
