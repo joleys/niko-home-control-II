@@ -11,8 +11,10 @@ class Nhc2AlarmsActionAlarmControlPanelEntity(NHCBaseEntity, AlarmControlPanelEn
     _attr_code_arm_required = False
 
     def __init__(self, device_instance: CocoAlarmsAction, hub, gateway):
-        """Initialize a lock sensor."""
+        """Initialize a alarm lock panel."""
         super().__init__(device_instance, hub, gateway)
+
+        self._attr_unique_id = device_instance.uuid
 
         self._attr_supported_features = AlarmControlPanelEntityFeature.ARM_AWAY
 
