@@ -12,11 +12,12 @@ class Nhc2ComfortActionMoodActiveEntity(NHCBaseEntity, BinarySensorEntity):
         super().__init__(device_instance, hub, gateway)
 
         self._attr_unique_id = device_instance.uuid + '_mood_active'
+
         self._attr_state = self._device.is_mood_active
 
     @property
     def name(self) -> str:
-        return 'Start Active'
+        return 'Mood Active'
 
     @property
     def is_on(self) -> bool:

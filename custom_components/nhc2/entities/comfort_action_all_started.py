@@ -12,6 +12,7 @@ class Nhc2ComfortActionAllStartedEntity(NHCBaseEntity, BinarySensorEntity):
         super().__init__(device_instance, hub, gateway)
 
         self._attr_unique_id = device_instance.uuid + '_all_started'
+
         self._attr_state = self._device.is_all_started
 
     @property
