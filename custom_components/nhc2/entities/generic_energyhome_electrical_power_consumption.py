@@ -23,7 +23,7 @@ class Nhc2GenericEnergyhomeElectricalPowerConsumptionEntity(NHCBaseEntity, Senso
 
     @property
     def name(self) -> str:
-        return 'Electrical Power to Grid'
+        return 'Electrical Power Consumption'
 
     @property
     def native_value(self) -> float:

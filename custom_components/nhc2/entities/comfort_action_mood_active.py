@@ -17,7 +17,7 @@ class Nhc2ComfortActionMoodActiveEntity(NHCBaseEntity, BinarySensorEntity):
 
     @property
     def name(self) -> str:
-        return 'Start Active'
+        return 'Mood Active'
 
     @property
     def is_on(self) -> bool:
