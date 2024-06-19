@@ -66,7 +66,7 @@ class CocoGaragedoorAction(CoCoDevice):
 
     def on_change(self, topic: str, payload: dict):
         self._previous_state = self.basic_state
-        super.on_change(topic, payload)
+        super().on_change(topic, payload)
 
     def trigger(self, gateway):
         gateway.add_device_control(
