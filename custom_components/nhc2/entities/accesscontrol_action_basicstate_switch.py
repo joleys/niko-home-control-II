@@ -12,6 +12,8 @@ class Nhc2AccesscontrolActionBasicStateSwitchEntity(NHCBaseEntity, SwitchEntity)
         """Initialize a switch."""
         super().__init__(device_instance, hub, gateway)
 
+        self._attr_unique_id = device_instance.uuid + '_basic_switch'
+
     @property
     def is_on(self) -> bool:
         return self._device.is_basic_state_on
