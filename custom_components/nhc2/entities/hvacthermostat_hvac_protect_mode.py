@@ -12,6 +12,7 @@ class Nhc2HvacthermostatHvacProtectModeEntity(NHCBaseEntity, SwitchEntity):
         super().__init__(device_instance, hub, gateway)
 
         self._attr_unique_id = device_instance.uuid + '_protect_mode'
+
         self._attr_device_class = SwitchDeviceClass.SWITCH
 
     @property

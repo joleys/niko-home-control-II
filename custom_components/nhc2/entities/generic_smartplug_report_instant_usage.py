@@ -18,6 +18,7 @@ class Nhc2GenericSmartplugReportInstantUsageEntity(NHCBaseEntity, BinarySensorEn
         super().__init__(device_instance, hub, gateway)
 
         self._attr_unique_id = self._device.uuid + '_report_instant_usage'
+
         self._attr_state = self._device.is_report_instant_usage
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
 

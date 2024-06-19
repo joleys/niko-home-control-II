@@ -12,6 +12,7 @@ class Nhc2GenericHvacOverruleActiveEntity(NHCBaseEntity, SwitchEntity):
         super().__init__(device_instance, hub, gateway)
 
         self._attr_unique_id = device_instance.uuid + '_overrule_active'
+
         self._attr_device_class = SwitchDeviceClass.SWITCH
 
     @property

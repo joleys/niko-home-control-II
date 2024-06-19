@@ -13,6 +13,7 @@ class Nhc2AudiocontrolActionMediaPlayerEntity(NHCBaseEntity, MediaPlayerEntity):
         super().__init__(device_instance, hub, gateway)
 
         self._attr_unique_id = device_instance.uuid
+
         self._attr_supported_features = MediaPlayerEntityFeature.PAUSE | MediaPlayerEntityFeature.PLAY | \
                                         MediaPlayerEntityFeature.TURN_OFF | MediaPlayerEntityFeature.TURN_ON | \
                                         MediaPlayerEntityFeature.VOLUME_MUTE | MediaPlayerEntityFeature.VOLUME_SET

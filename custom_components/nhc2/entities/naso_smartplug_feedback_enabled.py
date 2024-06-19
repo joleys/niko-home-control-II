@@ -13,6 +13,7 @@ class Nhc2NasoSmartplugFeedbackEnabledEntity(BinarySensorEntity, NHCBaseEntity):
         super().__init__(device_instance, hub, gateway)
 
         self._attr_unique_id = self._device.uuid + '_feedback_enabled'
+
         self._attr_state = self._device.is_feedback_enabled
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
 

@@ -21,6 +21,7 @@ class Nhc2RobinsipVideodoorstationCameraEntity(NHCBaseEntity, MjpegCamera):
         super().__init__(device_instance, hub, gateway)
 
         self._attr_unique_id = device_instance.uuid
+
         self._attr_is_streaming = True
 
         self._username = 'admin'

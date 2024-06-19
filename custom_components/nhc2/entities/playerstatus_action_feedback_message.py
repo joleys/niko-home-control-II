@@ -12,6 +12,7 @@ class Nhc2PlayerstatusActionFeedbackMessageEntity(NHCBaseEntity, SensorEntity):
         super().__init__(device_instance, hub, gateway)
 
         self._attr_unique_id = device_instance.uuid + '_feedback_message'
+
         self._attr_native_value = self._device.feedback_message
 
     @property

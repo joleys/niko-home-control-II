@@ -18,6 +18,7 @@ class Nhc2GenericFanFanEntity(NHCBaseEntity, FanEntity):
         super().__init__(device_instance, hub, gateway)
 
         self._attr_unique_id = self._device.uuid
+
         self._attr_supported_features = FanEntityFeature.SET_SPEED | FanEntityFeature.PRESET_MODE
 
     @property

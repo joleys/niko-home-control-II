@@ -12,6 +12,7 @@ class Nhc2PlayerstatusActionBasicStateEntity(NHCBaseEntity, BinarySensorEntity):
         super().__init__(device_instance, hub, gateway)
 
         self._attr_unique_id = device_instance.uuid + '_basic_state'
+
         self._attr_state = self._device.is_basic_state_on
 
     @property

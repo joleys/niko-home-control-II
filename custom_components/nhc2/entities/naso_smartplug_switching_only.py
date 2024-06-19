@@ -13,6 +13,7 @@ class Nhc2NasoSmartplugSwitchingOnlyEntity(NHCBaseEntity, BinarySensorEntity):
         super().__init__(device_instance, hub, gateway)
 
         self._attr_unique_id = device_instance.uuid + '_switching_only'
+
         self._attr_state = self._device.is_switching_only
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
 

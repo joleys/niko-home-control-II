@@ -12,6 +12,7 @@ class Nhc2GenericDomestichotwaterunitProgramEntity(NHCBaseEntity, SelectEntity):
         super().__init__(device_instance, hub, gateway)
 
         self._attr_unique_id = device_instance.uuid + '_program'
+
         self._attr_options = self._device.possible_programs
 
     @property
