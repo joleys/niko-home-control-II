@@ -357,6 +357,7 @@ class CoCo:
                     'CocoGasCentralmeter',
                     'CocoGenericAudiocontrol',
                     'CocoGenericBrick',
+                    'CocoGenericChargingstation',
                     'CocoGenericGatewayfw',
                     'CocoGenericLightsensor',
                     'CocoGenericRadio',
