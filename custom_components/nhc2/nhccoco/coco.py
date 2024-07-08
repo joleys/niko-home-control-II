@@ -17,6 +17,7 @@ from .devices.comfort_action import CocoComfortAction
 from .devices.condition_action import CocoConditionAction
 from .devices.controller import CocoController
 from .devices.dimmer_action import CocoDimmerAction
+from .devices.easee_chargingstation import CocoEaseeChargingstation
 from .devices.electricalheating_action import CocoElectricalheatingAction
 from .devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .devices.fan_action import CocoFanAction

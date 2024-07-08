@@ -8,6 +8,10 @@ from .entities.accesscontrol_action_basicstate import Nhc2AccesscontrolActionBas
 from .entities.audiocontrol_action_speaker import Nhc2AudiocontrolActionSpeakerEntity
 from .entities.alarms_action_basicstate import Nhc2AlarmsActionBasicStateEntity
 from .entities.bellbutton_action_basicstate import Nhc2BellbuttonActionBasicStateEntity
+from .entities.easee_chargingstation_charging_status import Nhc2EaseeChargingstationChargingStatusEntity
+from .entities.easee_chargingstation_coupling_status import Nhc2EaseeChargingstationCouplingStatusEntity
+from .entities.easee_chargingstation_electrical_power import Nhc2EaseeChargingstationElectricalPowerEntity
+from .entities.easee_chargingstation_ev_status import Nhc2EaseeChargingstationEvStatusEntity
 from .entities.electricity_clamp_centralmeter_electrical_power import \
     Nhc2ElectricityClampCentralmeterElectricalPowerEntity
 from .entities.electricity_clamp_centralmeter_electrical_power_consumption import \
@@ -62,6 +66,7 @@ from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
 from .nhccoco.devices.alarms_action import CocoAlarmsAction
 from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
+from .nhccoco.devices.easee_chargingstation import CocoEaseeChargingstation
 from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .nhccoco.devices.gate_action import CocoGateAction
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
@@ -390,5 +395,21 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                 entities.append(Nhc2GenericInverterCouplingStatusEntity(device_instance, hub, gateway))
             if device_instance.supports_electrical_power_production:
                 entities.append(Nhc2GenericInverterElectricalPowerProductionEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoEaseeChargingstation)
+    _LOGGER.info('→ Found %s Easee Chargingstation Implementations (undocumented)', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            if device_instance.supports_coupling_status:
+                entities.append(Nhc2EaseeChargingstationCouplingStatusEntity(device_instance, hub, gateway))
+            if device_instance.supports_electrical_power:
+                entities.append(Nhc2EaseeChargingstationElectricalPowerEntity(device_instance, hub, gateway))
+            if device_instance.supports_ev_status:
+                entities.append(Nhc2EaseeChargingstationEvStatusEntity(device_instance, hub, gateway))
+            if device_instance.supports_charging_status:
+                entities.append(Nhc2EaseeChargingstationChargingStatusEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

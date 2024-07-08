@@ -539,6 +539,20 @@ It has some extra entities that can be used in automations:
 
 * **Basic State Binary Sensor**, The state is according the state of all assigned players as configured for that action.
 
+### Easee Chargingstation
+
+__Remark:__ This device is not documented/supported by Niko.
+
+This is exposed as a switch.
+
+#### Entities
+
+* **Charging Mode Select**, (only if supported), select the charging mode.
+* **Charging Status Enum sensor**, (only if supported), The current charging status.
+* **Electrical Power sensor**, (only if supported).
+* **EV Status Enum sensor**, (only if supported).
+* **Coupling Status Enum Sensor**, (only if supported), the connectivity status of the system.
+
 ## Not yet supported
 
 * Sonos Speaker

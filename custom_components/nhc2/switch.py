@@ -8,6 +8,7 @@ from .nhccoco.coco import CoCo
 from .entities.accesscontrol_action_basicstate_switch import Nhc2AccesscontrolActionBasicStateSwitchEntity
 from .entities.bellbutton_action_basicstate_switch import Nhc2BellbuttonActionBasicStateSwitchEntity
 from .entities.condition_action_switch import Nhc2ConditionActionSwitchEntity
+from .entities.easee_chargingstation_status import Nhc2EaseeChargingstationStatusEntity
 from .entities.flag_action_switch import Nhc2FlagActionSwitchEntity
 from .entities.electricity_clamp_centralmeter_disable_report_instant_usage_re_enabling import \
     Nhc2ElectricityClampCentralmeterDisableReportInstantUsageReEnablingEntity
@@ -42,6 +43,7 @@ from .entities.virtual_hvac_overrule_active import Nhc2VirtualHvacOverruleActive
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
 from .nhccoco.devices.condition_action import CocoConditionAction
+from .nhccoco.devices.easee_chargingstation import CocoEaseeChargingstation
 from .nhccoco.devices.flag_action import CocoFlagAction
 from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .nhccoco.devices.generic_action import CocoGenericAction
@@ -307,5 +309,16 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             if device_instance.supports_coupling_status:
                 entities.append(
                     Nhc2GenericInverterDisableReportInstantUsageReEnablingEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoEaseeChargingstation)
+    _LOGGER.info('→ Found %s Easee Chargingstation Implementations (undocumented)', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            # if device_instance.supports_stat:
+            entities.append(
+                Nhc2EaseeChargingstationStatusEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
