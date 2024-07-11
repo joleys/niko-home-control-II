@@ -8,6 +8,9 @@ You can use a touchscreen profile or the Hobby API account.
 This integration communicates directly with the controller. You only need internet when activating/renewing the Hobby
 API. If you use a touch screen profile, this isn't even needed.
 
+**IMPORTANT**: There is an issue with the touch profiles, so the only supported way to configure the controller is the
+Niko Hobby API.
+
 ## Acknowledgements
 
 This custom component is a [spin-off of the hard and excellent work by @filipvh](https://github.com/filipvh/hass-nhc2).
