@@ -92,11 +92,21 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
     async def async_step_manual_host(self, user_input=None):
         self._errors = {}
 
-        disc = CoCoDiscoverProfiles(user_input[CONF_HOST])
-        self._all_cocos = await disc.get_all_profiles()
+        # Disabled for now, as it goes wrong in HA 2024.7.x
+        # See https://github.com/joleys/niko-home-control-II/issues/168 for more information
+        # disc = CoCoDiscoverProfiles(user_input[CONF_HOST])
+        # self._all_cocos = await disc.get_all_profiles()
+        self._all_cocos = [
+            (
+                user_input[CONF_HOST],
+                None,
+                [],
+                None
+            )
+        ]
+
         if self._all_cocos is not None and len(self._all_cocos) == 1:
             self._selected_coco = self._all_cocos[0]
-            _LOGGER.debug(str(self._all_cocos))
             for coco in self._all_cocos:
                 if coco[2] is None:
                     return self.async_abort(reason="no_controller_found")
