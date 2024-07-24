@@ -2,7 +2,7 @@
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, CONF_ADDRESS, CONF_PORT
-from .nhccoco.coco_discover_profiles import CoCoDiscoverProfiles
+from .nhccoco.coco_profiles import CoCoProfiles
 from .nhccoco.coco_login_validation import CoCoLoginValidation
 from .const import DOMAIN
 
@@ -92,16 +92,20 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
     async def async_step_manual_host(self, user_input=None):
         self._errors = {}
 
-        # Disabled for now, as it goes wrong in HA 2024.7.x
-        # See https://github.com/joleys/niko-home-control-II/issues/168 for more information
-        # disc = CoCoDiscoverProfiles(user_input[CONF_HOST])
-        # self._all_cocos = await disc.get_all_profiles()
+        user_input_host = user_input[CONF_HOST]
+        profiles = await CoCoProfiles(user_input_host).get_all_profiles()
+
+        try:
+            host = socket.gethostbyaddr(user_input_host)[0]
+        except:
+            host = None
+
         self._all_cocos = [
             (
-                user_input[CONF_HOST],
+                user_input_host,
                 None,
-                [],
-                None
+                profiles,
+                host
             )
         ]
 
