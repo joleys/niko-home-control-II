@@ -19,7 +19,7 @@ class Nhc2GenericFanFanEntity(NHCBaseEntity, FanEntity):
 
         self._attr_unique_id = self._device.uuid
 
-        self._attr_supported_features = FanEntityFeature.SET_SPEED | FanEntityFeature.PRESET_MODE
+        self._attr_supported_features = FanEntityFeature.SET_SPEED | FanEntityFeature.PRESET_MODE | FanEntityFeature.TURN_OFF | FanEntityFeature.TURN_ON
 
     @property
     def is_on(self) -> bool:
