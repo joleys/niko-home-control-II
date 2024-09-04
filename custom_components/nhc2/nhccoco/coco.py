@@ -20,6 +20,7 @@ from .devices.dimmer_action import CocoDimmerAction
 from .devices.easee_chargingstation import CocoEaseeChargingstation
 from .devices.electricalheating_action import CocoElectricalheatingAction
 from .devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
+from .devices.eve_chargingstation import CocoEveChargingstation
 from .devices.fan_action import CocoFanAction
 from .devices.flag_action import CocoFlagAction
 from .devices.flag_virtual import CocoFlagVirtual

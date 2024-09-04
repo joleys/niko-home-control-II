@@ -1,5 +1,5 @@
 from .generic_chargingstation import CocoGenericChargingstation
 
 
-class CocoEaseeChargingstation(CocoGenericChargingstation):
+class CocoEveChargingstation(CocoGenericChargingstation):
     pass
