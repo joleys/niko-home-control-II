@@ -4,7 +4,7 @@ from ..nhccoco.devices.easee_chargingstation import CocoEaseeChargingstation
 from .nhc_entity import NHCBaseEntity
 
 
-class Nhc2EaseeChargingstationStatusEntity(NHCBaseEntity, SwitchEntity):
+class Nhc2GenericChargingstationStatusEntity(NHCBaseEntity, SwitchEntity):
     _attr_has_entity_name = True
     _attr_name = None
 

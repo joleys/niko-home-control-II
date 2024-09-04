@@ -5,7 +5,7 @@ from ..nhccoco.devices.easee_chargingstation import CocoEaseeChargingstation
 from .nhc_entity import NHCBaseEntity
 
 
-class Nhc2EaseeChargingstationElectricalPowerEntity(NHCBaseEntity, SensorEntity):
+class Nhc2GenericChargingstationElectricalPowerEntity(NHCBaseEntity, SensorEntity):
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoEaseeChargingstation, hub, gateway):
