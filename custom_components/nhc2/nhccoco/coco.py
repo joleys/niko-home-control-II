@@ -372,6 +372,7 @@ class CoCo:
                     'CocoMoodbuttonPanel',
                     'CocoMotorcontrollerfeedbackPanel',
                     'CocoMotorcontrollerPanel',
+                    'CocoMotorcontrollerSmartpanel',
                     'CocoMotorcontrollerx2FeedbackPanel',
                     'CocoMotorcontrollerx2Panel',
                     'CocoNhc2301RTouchswitch',
