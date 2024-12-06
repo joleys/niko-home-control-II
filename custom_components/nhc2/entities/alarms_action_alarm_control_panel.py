@@ -1,5 +1,5 @@
-from homeassistant.components.alarm_control_panel import AlarmControlPanelEntity, AlarmControlPanelEntityFeature
-from homeassistant.const import STATE_ALARM_DISARMED, STATE_ALARM_ARMED_AWAY, STATE_ALARM_ARMING
+from homeassistant.components.alarm_control_panel import AlarmControlPanelEntity, AlarmControlPanelEntityFeature, \
+  AlarmControlPanelState
 
 from ..nhccoco.devices.alarms_action import CocoAlarmsAction
 from .nhc_entity import NHCBaseEntity
@@ -21,11 +21,11 @@ class Nhc2AlarmsActionAlarmControlPanelEntity(NHCBaseEntity, AlarmControlPanelEn
     @property
     def state(self) -> str:
         if self._device.is_basic_state_off:
-            return STATE_ALARM_DISARMED
+            return AlarmControlPanelState.DISARMED
         if self._device.is_basic_state_on:
-            return STATE_ALARM_ARMED_AWAY
+            return AlarmControlPanelState.ARMED_AWAY
         if self._device.is_basic_state_intermediate:
-            return STATE_ALARM_ARMING
+            return AlarmControlPanelState.ARMING
 
     async def async_alarm_arm_away(self, code=None) -> None:
         self._device.arm(self._gateway)
