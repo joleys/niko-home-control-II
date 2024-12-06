@@ -398,6 +398,7 @@ class CoCo:
                     'CocoRolldownshutterMotor',
                     'CocoSocketRelay',
                     'CocoSunblindMotor',
+                    'CocoSunblindSmartmotor',
                     'CocoSwitchedFanRelay',
                     'CocoSwitchedGenericRelay',
                     'CocoVdsVds',
