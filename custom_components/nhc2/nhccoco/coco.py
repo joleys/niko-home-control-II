@@ -40,6 +40,7 @@ from .devices.naso_smartplug import CocoNasoSmartplug
 from .devices.overallcomfort_action import CocoOverallcomfortAction
 from .devices.pir_action import CocoPirAction
 from .devices.peakmode_action import CocoPeakmodeAction
+from .devices.solarmode_action import CocoSolarmodeAction
 from .devices.playerstatus_action import CocoPlayerstatusAction
 from .devices.reynaers_action import CocoReynaersAction
 from .devices.robinsip_videodoorstation import CocoRobinsipVideodoorstation
