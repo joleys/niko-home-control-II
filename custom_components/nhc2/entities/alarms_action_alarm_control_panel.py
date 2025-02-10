@@ -19,7 +19,7 @@ class Nhc2AlarmsActionAlarmControlPanelEntity(NHCBaseEntity, AlarmControlPanelEn
         self._attr_supported_features = AlarmControlPanelEntityFeature.ARM_AWAY
 
     @property
-    def state(self) -> str:
+    def alarm_state(self) -> str:
         if self._device.is_basic_state_off:
             return AlarmControlPanelState.DISARMED
         if self._device.is_basic_state_on:
