@@ -76,6 +76,14 @@ FORWARD_PLATFORMS = (
     "update",
 )
 
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
+    for platform in FORWARD_PLATFORMS:
+        hass.add_job(
+            hass.config_entries.async_forward_entry_unload(entry, platform)
+        )
+    coco: CoCo = hass.data[KEY_GATEWAY][entry.entry_id]
+    coco.disconnect()
+    return True
 
 async def async_setup_entry(hass, entry):
     """Create a NHC2 gateway."""
