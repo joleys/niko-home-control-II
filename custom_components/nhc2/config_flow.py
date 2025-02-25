@@ -1,4 +1,5 @@
 """Config flow to configure component."""
+import socket
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, CONF_ADDRESS, CONF_PORT
@@ -97,7 +98,8 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
 
         try:
             host = socket.gethostbyaddr(user_input_host)[0]
-        except:
+        except Exception as e:
+            _LOGGER.warning(e)
             host = None
 
         self._all_cocos = [
