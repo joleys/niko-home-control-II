@@ -1,11 +1,9 @@
-import json
-import os
-import threading
-from time import sleep
 import sys
-import uuid
+import json
+import threading
 
-import paho.mqtt.client as mqtt
+from time import sleep
+from .mqtt import NHCMQTTClient
 
 from .devices.accesscontrol_action import CocoAccesscontrolAction
 from .devices.airco_hvac import CocoAircoHvac
@@ -77,7 +75,7 @@ sem = threading.Semaphore()
 
 
 class CoCo:
-    def __init__(self, address, username, password, port=8884, ca_path=None):
+    def __init__(self, address, username, password, port=8884):
         # The device control buffer fields
         self._keep_thread_running = True
         self._device_control_buffer = {}
@@ -87,17 +85,8 @@ class CoCo:
         self._device_control_buffer_thread = threading.Thread(target=self._publish_device_control_commands)
         self._device_control_buffer_thread.start()
 
-        if ca_path is None:
-            ca_path = os.path.dirname(os.path.realpath(__file__)) + MQTT_CERT_FILE
-
         # Configure the client
-        client = mqtt.Client(client_id="homeassistant-" + str(uuid.uuid1()), protocol=MQTT_PROTOCOL,
-                             transport=MQTT_TRANSPORT)
-        client.username_pw_set(username, password)
-        client.tls_set(ca_path)
-        client.tls_insecure_set(True)
-
-        self._client = client
+        self._client = NHCMQTTClient.create(username, password)
         self._address = address
         self._port = port
         self._profile_creation_id = username
