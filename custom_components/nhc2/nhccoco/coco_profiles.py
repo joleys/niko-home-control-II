@@ -1,22 +1,18 @@
 import json
-import os
 import asyncio
 
-import paho.mqtt.client as mqtt
+from .mqtt import NHCMQTTClient
 
-from .const import MQTT_TOPIC_PUBLIC_AUTH_RSP, MQTT_PROTOCOL, MQTT_TRANSPORT, MQTT_TOPIC_PUBLIC_AUTH_CMD
+from .const import MQTT_TOPIC_PUBLIC_AUTH_RSP, MQTT_TOPIC_PUBLIC_AUTH_CMD
 
 
 class CoCoProfiles:
-    """CoCoDiscover will collect a list of profiles on a NHC2
+    """CoCoProfiles will collect a list of profiles on a NHC2
     """
 
-    def __init__(self, address, port=8883, ca_path=None):
-        if ca_path is None:
-            ca_path = os.path.dirname(os.path.realpath(__file__)) + '/coco_ca.pem'
-        client = mqtt.Client(protocol=MQTT_PROTOCOL, transport=MQTT_TRANSPORT)
-        client.tls_set(ca_path)
-        client.tls_insecure_set(True)
+    def __init__(self, address, port=8883):
+        client = NHCMQTTClient.create()
+
         self._client = client
         self._address = address
         self._loop = 0
