@@ -1,23 +1,17 @@
 import asyncio
-import os
 
-import paho.mqtt.client as mqtt
-
-from .const import MQTT_PROTOCOL, MQTT_TRANSPORT
-
-loop = asyncio.get_event_loop()
+from .mqtt import NHCMQTTClient
 
 
 class CoCoLoginValidation:
     """ Validate one can login on the CoCo
     """
 
-    def __init__(self, address, username, password, port=8883, ca_path=None):
+    def __init__(self, address, username, password, port=8883):
         self._address = address
         self._username = username
         self._password = password
         self._port = port
-        self._ca_path = ca_path
 
     """
         Try to connect with given parameters
@@ -34,7 +28,8 @@ class CoCoLoginValidation:
     async def check_connection(self, timeout=10):
         result_code = 0
         done_testing = asyncio.Event()
-        client = self._generate_client()
+        loop = asyncio.get_running_loop()
+        client = NHCMQTTClient.create(self._username, self._password)
 
         def done():
             nonlocal done_testing
@@ -47,7 +42,7 @@ class CoCoLoginValidation:
 
         client.on_connect = on_connect
         client.loop_start()
-        client.connect_async(self._address, self._port, keepalive=timeout)
+        client.connect_async(self._address, self._port)
 
         try:
             await asyncio.wait_for(done_testing.wait(), timeout + 2)
@@ -57,12 +52,3 @@ class CoCoLoginValidation:
         client.disconnect()
         client.loop_stop()
         return result_code
-
-    def _generate_client(self):
-        if self._ca_path is None:
-            self._ca_path = os.path.dirname(os.path.realpath(__file__)) + '/coco_ca.pem'
-        client = mqtt.Client(protocol=MQTT_PROTOCOL, transport=MQTT_TRANSPORT)
-        client.username_pw_set(self._username, self._password)
-        client.tls_set(self._ca_path)
-        client.tls_insecure_set(True)
-        return client
