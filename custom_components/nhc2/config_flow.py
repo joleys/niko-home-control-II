@@ -1,16 +1,25 @@
 """Config flow to configure component."""
 import socket
+from typing import Any, Mapping
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, CONF_ADDRESS, CONF_PORT
-from .nhccoco.coco_profiles import CoCoProfiles
+from homeassistant.data_entry_flow import FlowResult
+from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, CONF_PORT
 from .nhccoco.coco_login_validation import CoCoLoginValidation
-from .const import DOMAIN
+from.hobbytoken import HobbyToken
+from .const import DOMAIN, DEFAULT_USERNAME, DEFAULT_PORT
 
 import logging
 
 _LOGGER = logging.getLogger(__name__)
 
+
+REAUTH_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_USERNAME, default=DEFAULT_USERNAME): vol.In([DEFAULT_USERNAME]), # username isn't actually editable
+        vol.Required(CONF_PASSWORD): str,
+    }
+)
 
 @config_entries.HANDLERS.register(DOMAIN)
 class Nhc2FlowHandler(config_entries.ConfigFlow):
@@ -21,9 +30,8 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
 
     def __init__(self):
         """Init NHC2FlowHandler."""
-        self._all_cocos = []
-        self._selected_coco = None
         self._errors = {}
+        self._host = None
 
     async def async_step_import(self, user_input):
         """Import a config entry."""
@@ -36,117 +44,113 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
 
     async def async_step_user(self, user_input=None):
         """Handle a flow initialized by the user."""
+        if user_input is None:
+            return await self._show_host_config_form()
+
         self._errors = {}
 
-        if user_input is not None:
-            # Make sure the controller is not already configured
-            matches = list(filter(lambda x: ((x.data[CONF_ADDRESS] == self._selected_coco[1]) and (
-                    x.data[CONF_USERNAME] == user_input[CONF_USERNAME])),
-                                  self.hass.config_entries.async_entries(DOMAIN)))
-            if len(matches) > 0:
-                return self.async_abort(reason="single_instance_allowed")
+        # Make sure the controller is not already configured
+        matches = list(filter(lambda x: ((x.data[CONF_HOST] == user_input[CONF_HOST])),
+                                self.hass.config_entries.async_entries(DOMAIN)))
+        if len(matches) > 0:
+            return self.async_abort(reason="single_instance_allowed")
 
-            user_name = list(filter(lambda x: (x.get('Uuid') == user_input[CONF_USERNAME]),
-                                    self._selected_coco[2]))[0].get('Name')
-            host = self._selected_coco[0] if self._selected_coco[3] is None else self._selected_coco[3]
-            username = user_input[CONF_USERNAME]
-            password = user_input[CONF_PASSWORD]
-            port = 8884 if user_input[CONF_USERNAME] == 'hobby' else 8883
-            validator = CoCoLoginValidation(host, username, password, port)
-            check = await validator.check_connection()
+        host = self._host
+        password = user_input[CONF_PASSWORD]
 
-            if check > 0:
-                self._errors["base"] = ("login_check_fail_%d" % check)
-                return await self._show_user_config_form()
+        if not HobbyToken(password).is_a_token():
+            self._errors["base"] = ("password_not_a_token")
+            return await self._show_user_config_form(user_input)
+    
+        validator = CoCoLoginValidation(host, DEFAULT_USERNAME, password, DEFAULT_PORT)
+        check = await validator.check_connection()
+        if check > 0:
+            self._errors["base"] = ("login_check_fail_%d" % check)
+            return await self._show_user_config_form(user_input)
 
-            return self.async_create_entry(
-                title=user_name + ' (' + host + ')',
-                data={
-                    CONF_HOST: host,
-                    CONF_ADDRESS: self._selected_coco[1],
-                    CONF_PORT: port,
-                    CONF_USERNAME: username,
-                    CONF_PASSWORD: password
-                }
-            )
+        return self.async_create_entry(
+            title=DEFAULT_USERNAME + ' (' + host + ')',
+            data={
+                CONF_HOST: host,
+                CONF_PORT: DEFAULT_PORT,
+                CONF_USERNAME: DEFAULT_USERNAME,
+                CONF_PASSWORD: password
+            }
+        )
 
-        for coco in self._all_cocos:
-            if coco[2] is not None:
-                coco[2].insert(0, {
-                    'Uuid': 'hobby',
-                    'Name': 'hobby',
-                    'Type': 'hobby'
-                })
-
-        return await self._show_manual_host_config_form()
-
-    async def _show_manual_host_config_form(self):
+    async def _show_host_config_form(self):
         """Show the form to manually enter an IP / hostname."""
         return self.async_show_form(
-            step_id='manual_host',
+            step_id='host',
             errors=self._errors,
             data_schema=vol.Schema({
                 vol.Required(CONF_HOST, default=None): str
-            }),
+            })
         )
 
-    async def async_step_manual_host(self, user_input=None):
+    async def async_step_host(self, user_input=None):
+        if user_input is None:
+            return True
+
         self._errors = {}
-
-        user_input_host = user_input[CONF_HOST]
-        profiles = await CoCoProfiles(user_input_host).get_all_profiles()
-
         try:
-            host = socket.gethostbyaddr(user_input_host)[0]
+            host = socket.gethostbyaddr(user_input[CONF_HOST])[0]
         except Exception as e:
-            _LOGGER.warning(e)
             host = None
 
-        self._all_cocos = [
-            (
-                user_input_host,
-                None,
-                profiles,
-                host
-            )
-        ]
-
-        if self._all_cocos is not None and len(self._all_cocos) == 1:
-            self._selected_coco = self._all_cocos[0]
-            for coco in self._all_cocos:
-                if coco[2] is None:
-                    return self.async_abort(reason="no_controller_found")
-
-                if coco[2] is not None:
-                    coco[2].insert(0, {
-                        'Uuid': 'hobby',
-                        'Name': 'hobby',
-                        'Type': 'hobby'
-                    })
-
-            return await self._show_user_config_form()
-        else:
+        if host is None:
             return self.async_abort(reason="no_controller_found")
+
+        self._host = user_input[CONF_HOST]
+        return await self._show_user_config_form()
 
     async def _show_user_config_form(self):
         """Show form to enter the credentials."""
-        profile_listing = {}
-        profiles = self._selected_coco[2]
-        first = None
-        for i, x in enumerate(profiles):
-            dkey = x.get('Uuid')
-            profile_listing[dkey] = x.get('Name')
-            if i == 0:
-                first = dkey
-
+        errors: dict[str, str] = {}
         return self.async_show_form(
             step_id='user',
-            errors=self._errors,
+            errors=errors,
             description_placeholders={
-                "host": self._selected_coco[3] if self._selected_coco[3] is not None else self._selected_coco[0]
+                "host": self._host
             },
-            data_schema=vol.Schema({
-                vol.Required(CONF_USERNAME, default=first): vol.In(profile_listing),
-                vol.Required(CONF_PASSWORD, default=None): str
-            }),
+            data_schema=REAUTH_SCHEMA
         )
+
+    async def async_step_reconfigure(self, user_input: dict[str, Any] | None = None):
+        errors = {}
+        config_entry = self._get_reconfigure_entry()
+        self._host = config_entry.data[CONF_HOST]
+
+        if user_input is not None:
+            if not HobbyToken(user_input[CONF_PASSWORD]).is_a_token():
+                errors[CONF_PASSWORD] = ("password_not_a_token")
+            else:
+                validator = CoCoLoginValidation(config_entry.data[CONF_HOST], DEFAULT_USERNAME, user_input[CONF_PASSWORD], DEFAULT_PORT)
+                check = await validator.check_connection()
+                if check > 0:
+                    errors["base"] = ("login_check_fail_%d" % check)
+                else:
+                    return self.async_update_reload_and_abort(
+                        self._get_reconfigure_entry(),
+                        data_updates={CONF_PASSWORD: user_input[CONF_PASSWORD]},
+                    )
+
+        if config_entry.data[CONF_USERNAME] == DEFAULT_USERNAME:
+            return self.async_show_form(
+                step_id="reconfigure",
+                errors=errors,
+                description_placeholders={
+                    "host": config_entry.data[CONF_HOST],
+                    "expiration": HobbyToken(config_entry.data[CONF_PASSWORD]).get_expiration_date().strftime("%d/%m/%y")
+                },
+                data_schema=REAUTH_SCHEMA
+            )
+        else:
+            return self.async_show_form(
+                step_id="reconfigure_use_token",
+                errors=errors,
+                description_placeholders={
+                    "host": config_entry.data[CONF_HOST]
+                },
+                data_schema=REAUTH_SCHEMA
+            )

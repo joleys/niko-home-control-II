@@ -2,50 +2,61 @@
   "config": {
     "step": {
       "user": {
-        "title": "Connect to your Niko Connected Controller II",
-        "description": "Configuring controller **{host}**.\n\nThere are 2 ways to authenticate:\n1. Activate the 'Niko Hobby API' in the Connected Services through the Niko Home Control programming software.\n2. Use a touchscreen profile.\n\n'Niko Hobby API' is the easiest method, but you will need to reauthenticate once a year. Touchscreen profiles can be created in the 'Niko Home Control programming software' under Dashboard → Touchscreens.",
+        "title": "Connect to your installation",
+        "description": "Configuring controller **{host}**.\n\nActivate the 'Niko Hobby API' in the Connected Services through the Niko Home Control programming software.\n",
         "data": {
-          "username": "Profile",
-          "password": "Password",
-          "switches_as_lights": "Import switches (relays) as lights"
+          "username": "Username",
+          "password": "Password"
         }
       },
       "host": {
-        "title": "Choose a Niko Connected Controller II",
-        "description": "If you use an IP address, make sure it does not change.",
-        "data": {
-          "host": "Controller"
-        }
-      },
-      "manual_host": {
-        "title": "Niko Connected Controller II",
-        "description": "Provide the host or IP address for the Niko Connected Controller II. If you use an IP address, make sure it does not change.",
+        "title": "Connect to your installation",
+        "description": "Provide the host or IP address for the Niko Home Control installation. If you use an IP address, make sure it does not change.",
         "data": {
           "host": "Address/IP"
+        }
+      },
+      "reconfigure": {
+        "title": "Update your configuration",
+        "description": "Reconfiguring controller **{host}**.\n\nYour current Hobby API token will expire on **{expiration}**\n",
+        "data": {
+          "username": "Username",
+          "password": "Password"
+        }
+      },
+      "reconfigure_use_token": {
+        "title": "Update your configuration",
+        "description": "Reconfiguring controller **{host}**.\n\nDue to upcoming cybersecurity regulations, it will no longer be possible to control you Niko Home Control setup using username/password from version 2.23 onwards. Please switch to token-based authentication.\n\nA Hobby API token can be retrieved via the Connected Services section in the Niko Home Control programming software.",
+        "data": {
+          "username": "Username",
+          "password": "Password"
         }
       }
     },
     "abort": {
-      "single_instance_allowed": "This controller and profile was already added. You can only add it once.",
-      "no_controller_found": "No controller was found."
+      "single_instance_allowed": "This controller was already added. You can only add it once.",
+      "no_controller_found": "No controller was found.",
+      "reconfigure_successful": "Re-configuration was successful."
     },
     "error": {
       "login_check_fail_1": "Connection refused - incorrect protocol version",
       "login_check_fail_2": "Connection refused - invalid client identifier",
       "login_check_fail_3": "Connection refused - server unavailable",
       "login_check_fail_4": "Connection refused - bad username or password",
-      "login_check_fail_5": "Connection refused - not authorised"
+      "login_check_fail_5": "Connection refused - not authorised",
+      "password_not_a_token": "The password entered is not a valid token"
     }
   },
   "issues": {
     "not_authorised": {
-      "title": "Authentication failed",
+      "title": "Re-authentication required",
       "fix_flow": {
         "step": {
           "confirm": {
-            "title": "Authentication failed",
-            "description": "We could not authenticate with the given credentials.\n\nProbably your Niko Hobby API has expired. Please retrieve a new password via the Connected Services in the Niko Home Control programming software.\n\nHome Assistant will be restarted afterwards.",
+            "title": "Re-authentication required",
+            "description": "We could not authenticate to **{host}** with the given credentials.\n\nProbably your Hobby API token has expired. Please retrieve a new token via the Connected Services in the Niko Home Control programming software.",
             "data": {
+              "username": "Username",
               "password": "Password"
             }
           }
@@ -55,7 +66,54 @@
           "login_check_fail_2": "Connection refused - invalid client identifier",
           "login_check_fail_3": "Connection refused - server unavailable",
           "login_check_fail_4": "Connection refused - bad username or password",
-          "login_check_fail_5": "Connection refused - not authorised"
+          "login_check_fail_5": "Connection refused - not authorised",
+          "password_not_a_token": "The password entered is not a valid token"
+        }
+      }
+    },
+    "token_about_to_expire": {
+      "title": "Token about to expire",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Token about to expire",
+            "description": "Your token is about to expire (**{expiration}**). Please retrieve a new Hobby API token via the Connected Services in the Niko Home Control programming software.",
+            "data": {
+              "username": "Username",
+              "password": "Password"
+            }
+          }
+        },
+        "error": {
+          "login_check_fail_1": "Connection refused - incorrect protocol version",
+          "login_check_fail_2": "Connection refused - invalid client identifier",
+          "login_check_fail_3": "Connection refused - server unavailable",
+          "login_check_fail_4": "Connection refused - bad username or password",
+          "login_check_fail_5": "Connection refused - not authorised",
+          "password_not_a_token": "The password entered is not a valid token"
+        }
+      }
+    },
+    "migrate_to_token_auth": {
+      "title": "Migrate to token-based authentication",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Migrate to token-based authentication",
+            "description": "Due to upcoming cybersecurity regulations, it will no longer be possible to control you Niko Home Control setup using username/password from version 2.23 onwards. Please switch to token-based authentication.\n\nA Hobby API token can be retrieved via the Connected Services section in the Niko Home Control programming software.",
+            "data": {
+              "username": "Username",
+              "password": "Password"
+            }
+          }
+        },
+        "error": {
+          "login_check_fail_1": "Connection refused - incorrect protocol version",
+          "login_check_fail_2": "Connection refused - invalid client identifier",
+          "login_check_fail_3": "Connection refused - server unavailable",
+          "login_check_fail_4": "Connection refused - bad username or password",
+          "login_check_fail_5": "Connection refused - not authorised",
+          "password_not_a_token": "The password entered is not a valid token"
         }
       }
     }
