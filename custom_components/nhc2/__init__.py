@@ -4,21 +4,17 @@ import logging
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, CONF_PORT, \
+from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, CONF_ADDRESS, CONF_PORT, \
     EVENT_HOMEASSISTANT_STOP
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers import device_registry, issue_registry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.event import async_track_time_interval
-
-from datetime import timedelta
 
 from .config_flow import Nhc2FlowHandler  # noqa  pylint_disable=unused-import
-from .const import DEFAULT_USERNAME, DOMAIN, KEY_GATEWAY, KEY_TIMER_CANCEL, BRAND
+from .const import DOMAIN, KEY_GATEWAY, BRAND
 from .nhccoco.helpers import extract_versions
 from .nhccoco.const import MQTT_RC_CODES
 from .nhccoco.coco import CoCo
-from .hobbytoken import HobbyToken
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -27,6 +23,7 @@ CONFIG_SCHEMA = vol.Schema({
         vol.Required(CONF_HOST): cv.string,
         vol.Required(CONF_USERNAME): cv.string,
         vol.Required(CONF_PASSWORD): cv.string,
+        vol.Optional(CONF_ADDRESS): cv.string,
         vol.Optional(CONF_PORT): vol.All(vol.Coerce(int), vol.Range(min=0, max=65535))
     })
 }, extra=vol.ALLOW_EXTRA)
@@ -42,6 +39,7 @@ async def async_setup(hass, config):
     host = conf.get(CONF_HOST)
     username = conf.get(CONF_USERNAME)
     password = conf.get(CONF_PASSWORD)
+    address = conf.get(CONF_ADDRESS)
     port = conf.get(CONF_PORT)
 
     hass.async_create_task(
@@ -51,6 +49,7 @@ async def async_setup(hass, config):
                 CONF_HOST: host,
                 CONF_USERNAME: username,
                 CONF_PASSWORD: password,
+                CONF_ADDRESS: address,
                 CONF_PORT: port
             }
         )
@@ -83,48 +82,17 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
             hass.config_entries.async_forward_entry_unload(entry, platform)
         )
     coco: CoCo = hass.data[KEY_GATEWAY][entry.entry_id]
-    if coco:
-        coco.disconnect()
-    timer_cancel = hass.data[KEY_TIMER_CANCEL][entry.entry_id]
-    if timer_cancel:
-        timer_cancel()
+    coco.disconnect()
     return True
 
 async def async_setup_entry(hass, entry):
-    timer_cancel = None
-    if entry.data[CONF_USERNAME] != DEFAULT_USERNAME:
-        issue_registry.async_create_issue(
-                    hass,
-                    DOMAIN,
-                    "migrate_to_token_auth",
-                    is_fixable=True,
-                    severity=issue_registry.IssueSeverity.WARNING,
-                    translation_key="migrate_to_token_auth",
-                    data={'entry': entry}
-            )
-    else:
-        token = HobbyToken(entry.data[CONF_PASSWORD])
-        def check_token_expiration(timestamp):
-            _LOGGER.info("Token is valid until %s", token.get_expiration_date())
-            if token.will_expire_soon():
-                issue_registry.create_issue(
-                        hass,
-                        DOMAIN,
-                        "token_about_to_expire",
-                        is_fixable=True,
-                        severity=issue_registry.IssueSeverity.WARNING,
-                        translation_key="token_about_to_expire",
-                        data={'entry': entry}
-                )
+    """Create a NHC2 gateway."""
 
-        timer_cancel = async_track_time_interval(hass, check_token_expiration, timedelta(days=1), cancel_on_shutdown=True)
-
-    """Create an NHC2 gateway."""
     coco = CoCo(
         address=entry.data[CONF_HOST],
         username=entry.data[CONF_USERNAME],
         password=entry.data[CONF_PASSWORD],
-        port=entry.data[CONF_PORT] if CONF_PORT in entry.data else 8884
+        port=entry.data[CONF_PORT] if CONF_PORT in entry.data else 8883
     )
 
     async def on_hass_stop(event):
@@ -184,20 +152,19 @@ async def async_setup_entry(hass, entry):
                 DOMAIN,
                 "not_authorised",
                 is_fixable=True,
-                severity=issue_registry.IssueSeverity.CRITICAL,
+                severity=issue_registry.IssueSeverity.ERROR,
                 translation_key="not_authorised",
                 data={'entry': entry}
             )
 
     hass.data.setdefault(KEY_GATEWAY, {})[entry.entry_id] = coco
-    hass.data.setdefault(KEY_TIMER_CANCEL, {})[entry.entry_id] = timer_cancel
     hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, on_hass_stop)
 
     dev_reg = device_registry.async_get(hass)
     coco.set_systeminfo_callback(process_sysinfo(dev_reg))
     coco.set_devices_list_callback(reload_entities())
 
-    _LOGGER.debug('Connecting to %s', entry.data[CONF_HOST])
+    _LOGGER.debug('Connecting to %s with %s', entry.data[CONF_HOST], entry.data[CONF_USERNAME])
     coco.connect(on_connection_refused)
 
     return True

@@ -7,7 +7,8 @@ from .const import MQTT_TOPIC_PUBLIC_AUTH_RSP, MQTT_TOPIC_PUBLIC_AUTH_CMD
 
 
 class CoCoProfiles:
-    """CoCoProfiles will collect a list of profiles on a NHC2."""
+    """CoCoProfiles will collect a list of profiles on a NHC2
+    """
 
     def __init__(self, address, port=8883):
         client = NHCMQTTClient.create()
