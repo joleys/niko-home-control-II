@@ -7,7 +7,7 @@ class CoCoLoginValidation:
     """ Validate one can login on the CoCo
     """
 
-    def __init__(self, address, username, password, port=8883):
+    def __init__(self, address, username, password, port=8884):
         self._address = address
         self._username = username
         self._password = password
