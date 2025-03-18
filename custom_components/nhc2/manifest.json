@@ -16,5 +16,5 @@
     "paho-mqtt>=1.6.1",
     "pyjwt"
   ],
-  "version": "v4.7.0"
+  "version": "v4.8.0"
 }
