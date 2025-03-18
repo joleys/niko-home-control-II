@@ -31,6 +31,7 @@ from .devices.generic_fan import CocoGenericFan
 from .devices.generic_hvac import CocoGenericHvac
 from .devices.generic_inverter import CocoGenericInverter
 from .devices.generic_smartplug import CocoGenericSmartplug
+from .devices.generic_thermometer import CocoGenericThermometer
 from .devices.heatingcooling_action import CocoHeatingcoolingAction
 from .devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .devices.light_action import CocoLightAction
