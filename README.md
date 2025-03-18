@@ -556,6 +556,12 @@ This is exposed as a switch.
 * **EV Status Enum sensor**, (only if supported).
 * **Coupling Status Enum Sensor**, (only if supported), the connectivity status of the system.
 
+### Generic Thermometer
+
+__Remark:__ This device is not documented/supported by Niko.
+
+This is exposed as a temperature sensor.
+
 ## Not yet supported
 
 * Sonos Speaker

@@ -38,6 +38,7 @@ from .entities.generic_hvac_coupling_status import Nhc2GenericHvacCouplingStatus
 from .entities.generic_inverter_coupling_status import Nhc2GenericInverterCouplingStatusEntity
 from .entities.generic_inverter_electrical_power_production import Nhc2GenericInverterElectricalPowerProductionEntity
 from .entities.generic_smartplug_electrical_power import Nhc2GenericSmartplugElectricalPowerEntity
+from .entities.generic_thermometer_ambient_temperature import Nhc2GenericThermometerAmbientTemperatureEntity
 from .entities.hvacthermostat_hvac_setpoint_temperature import Nhc2HvacthermostatHvacSetpointTemperatureEntity
 from .entities.hvacthermostat_hvac_overrule_setpoint import Nhc2HvacthermostatHvacOverruleSetpointEntity
 from .entities.hvacthermostat_hvac_overrule_time import Nhc2HvacthermostatHvacOverruleTimeEntity
@@ -76,6 +77,7 @@ from .nhccoco.devices.generic_fan import CocoGenericFan
 from .nhccoco.devices.generic_hvac import CocoGenericHvac
 from .nhccoco.devices.generic_inverter import CocoGenericInverter
 from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
+from .nhccoco.devices.generic_thermometer import CocoGenericThermometer
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.playerstatus_action import CocoPlayerstatusAction
@@ -411,5 +413,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                 entities.append(Nhc2GenericChargingstationEvStatusEntity(device_instance, hub, gateway))
             if device_instance.supports_charging_status:
                 entities.append(Nhc2GenericChargingstationChargingStatusEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoGenericThermometer)
+    _LOGGER.info('→ Found %s Generic Thermometer Implementations (undocumented)', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2GenericThermometerAmbientTemperatureEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
