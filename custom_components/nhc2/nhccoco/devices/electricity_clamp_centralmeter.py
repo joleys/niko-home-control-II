@@ -1,4 +1,5 @@
-from ..const import PROPERTY_ELECTRICAL_POWER, PROPERTY_REPORT_INSTANT_USAGE, PROPERTY_REPORT_INSTANT_USAGE_VALUE_TRUE, \
+from ..const import PROPERTY_ELECTRICAL_POWER, PROPERTY_ELECTRICAL_POWER1, PROPERTY_ELECTRICAL_POWER2, \
+    PROPERTY_ELECTRICAL_POWER3, PROPERTY_REPORT_INSTANT_USAGE, PROPERTY_REPORT_INSTANT_USAGE_VALUE_TRUE, \
     PARAMETER_FLOW, PARAMETER_SEGMENT, PARAMETER_CLAMP_TYPE
 from ..helpers import to_float_or_none
 from .device import CoCoDevice
@@ -8,6 +9,30 @@ class CocoElectricityClampCentralmeter(CoCoDevice):
     @property
     def electrical_power(self) -> float:
         return to_float_or_none(self.extract_property_value(PROPERTY_ELECTRICAL_POWER))
+
+    @property
+    def electrical_power1(self) -> float:
+        return to_float_or_none(self.extract_property_value(PROPERTY_ELECTRICAL_POWER1))
+
+    @property
+    def supports_electrical_power1(self) -> bool:
+        return self.has_property(PROPERTY_ELECTRICAL_POWER1)
+
+    @property
+    def electrical_power2(self) -> float:
+        return to_float_or_none(self.extract_property_value(PROPERTY_ELECTRICAL_POWER2))
+
+    @property
+    def supports_electrical_power2(self) -> bool:
+        return self.has_property(PROPERTY_ELECTRICAL_POWER2)
+
+    @property
+    def electrical_power3(self) -> float:
+        return to_float_or_none(self.extract_property_value(PROPERTY_ELECTRICAL_POWER3))
+
+    @property
+    def supports_electrical_power3(self) -> bool:
+        return self.has_property(PROPERTY_ELECTRICAL_POWER3)
 
     @property
     def is_report_instant_usage(self) -> bool:

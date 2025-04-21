@@ -10,6 +10,12 @@ from .entities.alarms_action_basicstate import Nhc2AlarmsActionBasicStateEntity
 from .entities.bellbutton_action_basicstate import Nhc2BellbuttonActionBasicStateEntity
 from .entities.electricity_clamp_centralmeter_electrical_power import \
     Nhc2ElectricityClampCentralmeterElectricalPowerEntity
+from .entities.electricity_clamp_centralmeter_electrical_power1 import \
+    Nhc2ElectricityClampCentralmeterElectricalPower1Entity
+from .entities.electricity_clamp_centralmeter_electrical_power2 import \
+    Nhc2ElectricityClampCentralmeterElectricalPower2Entity
+from .entities.electricity_clamp_centralmeter_electrical_power3 import \
+    Nhc2ElectricityClampCentralmeterElectricalPower3Entity
 from .entities.electricity_clamp_centralmeter_electrical_power_consumption import \
     Nhc2ElectricityClampCentralmeterElectricalPowerConsumptionEntity
 from .entities.electricity_clamp_centralmeter_electrical_power_production import \
@@ -269,6 +275,12 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2ElectricityClampCentralmeterElectricalPowerEntity(device_instance, hub, gateway))
+            if device_instance.supports_electrical_power1:
+                entities.append(Nhc2ElectricityClampCentralmeterElectricalPower1Entity(device_instance, hub, gateway))
+            if device_instance.supports_electrical_power2:
+                entities.append(Nhc2ElectricityClampCentralmeterElectricalPower2Entity(device_instance, hub, gateway))
+            if device_instance.supports_electrical_power3:
+                entities.append(Nhc2ElectricityClampCentralmeterElectricalPower3Entity(device_instance, hub, gateway))
             entities.append(
                 Nhc2ElectricityClampCentralmeterElectricalPowerConsumptionEntity(device_instance, hub, gateway)
             )
