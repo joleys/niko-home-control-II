@@ -31,9 +31,11 @@ from .entities.naso_smartplug_disable_report_instant_usage_re_enabling import \
     Nhc2NasoSmartplugDisableReportInstantUsageReEnablingEntity
 from .entities.naso_smartplug_status import Nhc2NasoSmartplugStatusEntity
 from .entities.overallcomfort_action_basicstate import Nhc2OverallcomfortActionBasicStateEntity
+from .entities.peakmode_action_switch import Nhc2PeakmodeSwitchEntity
 from .entities.pir_action_basicstate import Nhc2PirActionBasicStateEntity
 from .entities.relay_action_switch import Nhc2RelayActionSwitchEntity
 from .entities.simulation_action_basicstate_switch import Nhc2SimulationActionBasicStateSwitchEntity
+from .entities.solarmode_action_switch import Nhc2SolarmodeSwitchEntity
 from .entities.thermostat_hvac_ecosave import Nhc2ThermostatHvacEcoSaveEntity
 from .entities.thermostat_hvac_overrule_active import Nhc2ThermostatHvacOverruleActiveEntity
 from .entities.thermostat_thermostat_ecosave import Nhc2ThermostatThermostatEcoSaveEntity
@@ -56,9 +58,11 @@ from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.overallcomfort_action import CocoOverallcomfortAction
+from .nhccoco.devices.peakmode_action import CocoPeakmodeAction
 from .nhccoco.devices.pir_action import CocoPirAction
 from .nhccoco.devices.simulation_action import CocoSimulationAction
 from .nhccoco.devices.socket_action import CocoSocketAction
+from .nhccoco.devices.solarmode_action import CocoSolarmodeAction
 from .nhccoco.devices.switched_fan_action import CocoSwitchedFanAction
 from .nhccoco.devices.switched_generic_action import CocoSwitchedGenericAction
 from .nhccoco.devices.thermostat_hvac import CocoThermostatHvac
@@ -293,11 +297,29 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoConditionAction)
-    _LOGGER.info('→ Found %s Condition actions (undocumented)', len(device_instances))
+    _LOGGER.info('→ Found %s Conditional actions', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2ConditionActionSwitchEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoPeakmodeAction)
+    _LOGGER.info('→ Found %s Peakmode actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2PeakmodeSwitchEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoSolarmodeAction)
+    _LOGGER.info('→ Found %s Solarmode actions', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2SolarmodeSwitchEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

@@ -8,11 +8,9 @@ from .nhccoco.coco import CoCo
 from .entities.alloff_action_button import Nhc2AlloffActionButtonEntity
 from .entities.comfort_action_button import Nhc2ComfortActionButtonEntity
 from .entities.electricalheating_action_button import Nhc2ElectricalHeatingActionButtonEntity
-from .entities.peakmode_action_button import Nhc2PeakmodeActionButtonEntity
 from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.comfort_action import CocoComfortAction
 from .nhccoco.devices.electricalheating_action import CocoElectricalheatingAction
-from .nhccoco.devices.peakmode_action import CocoPeakmodeAction
 
 from .const import DOMAIN, KEY_GATEWAY
 
@@ -53,14 +51,5 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2ElectricalHeatingActionButtonEntity(device_instance, hub, gateway))
-
-        async_add_entities(entities)
-
-    device_instances = gateway.get_device_instances(CocoPeakmodeAction)
-    _LOGGER.info('→ Found %s Peakmode Actions (undocumented)', len(device_instances))
-    if len(device_instances) > 0:
-        entities = []
-        for device_instance in device_instances:
-            entities.append(Nhc2PeakmodeActionButtonEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

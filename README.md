@@ -430,6 +430,14 @@ __Remark:__ This device can not be controlled. It is a virtual device that shows
 This is exposed as a switch. Is "On" when the evaluation is in the IF state, returns value "Off" when he evaluation is
 in the ELSE state.
 
+### NHC PeakMode action
+
+This action is exposed as a switch. Is "On", "Off" according the state of the action (active/inactive).
+
+### NHC SolarMode action
+
+This action is exposed as a switch. Is "On", "Off" according the state of the action (active/inactive).
+
 ### NHC Thermo switch
 
 __Remark:__ this is untested as I don't own a device of this type.
@@ -530,10 +538,6 @@ __Remark:__ This device is not documented/supported by Niko.
   automatically be enabled.
 * **Disable Report Instant Usage Re-enabling Switch**, a toggle to disable the automatic re-enabling of the
   Report Instant Usage property. This is useful if you don't need Electrical Power reporting.
-
-### Peakmode Action
-
-This action is exposed as a button.
 
 #### Entities
 

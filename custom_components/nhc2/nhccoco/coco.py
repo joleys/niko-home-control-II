@@ -289,6 +289,16 @@ class CoCo:
     def _process_devices_list(self, response):
         """Convert the response of devices.list or devices.added into device instances."""
         _LOGGER.debug(f'Received device list: {response}')
+
+        # REMOVE ME START
+        from pathlib import Path
+        import ast
+
+        path = Path(str(Path(__file__).parent.resolve()) + '/../../../debugging/device_lists/fake_device_list.json').resolve()
+        f = open(path)
+        response = ast.literal_eval(f.read())
+        # REMOVE ME END
+
         devices = extract_devices(response)
         changes = False
         for device in devices:
