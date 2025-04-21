@@ -438,6 +438,14 @@ This action is exposed as a switch. Is "On", "Off" according the state of the ac
 
 This action is exposed as a switch. Is "On", "Off" according the state of the action (active/inactive).
 
+### NHC Timeschedule action
+
+__Remark:__ This device can not be controlled.
+
+#### Entities
+
+* **Active Binary Sensor**, Time schedule is active
+
 ### NHC Thermo switch
 
 __Remark:__ this is untested as I don't own a device of this type.
@@ -498,14 +506,6 @@ More information can be found in the API documention and manual of the RobinsIP 
 
 * [API manual (dutch)](https://www.robintele.com/images/downloads/How-To_The_Robin_API_v3.6.0_NL.pdf)
 * [Manual (dutch)](https://www.robintele.com/images/downloads/Manual-Robin-SV-3211NL.pdf)
-
-### NHC Timeschedule Action
-
-__Remark:__ This device is not documented/supported by Niko.
-
-#### Entities
-
-* **Active Binary Sensor**
 
 ### NHC Heating Cooling Action
 
