@@ -422,7 +422,10 @@ there was port forwarding, but this is disabled (confirmed by Niko).
 
 #### Entities
 
-* **Call Status 01 Enum Sensor**, Call status for this VDS bell button
+* **Call Status 01 Enum Sensor**, Call status for this VDS bell button, if supported
+* **Call Status 02 Enum Sensor**, Call status for this VDS bell button, if supported
+* **Call Status 03 Enum Sensor**, Call status for this VDS bell button, if supported
+* **Call Status 04 Enum Sensor**, Call status for this VDS bell button, if supported
 * **Status Enum Sensor**, Connection status for the VDS device
 * **IP Adress Sensor**, Current IP address of the VDS
 

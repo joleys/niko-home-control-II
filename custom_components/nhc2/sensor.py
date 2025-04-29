@@ -52,7 +52,7 @@ from .entities.motor_action_last_direction import Nhc2MotorActionLastDirectionEn
 from .entities.naso_smartplug_electrical_power import Nhc2NasoSmartplugElectricalPowerEntity
 from .entities.playerstatus_action_feedback_message import Nhc2PlayerstatusActionFeedbackMessageEntity
 from .entities.reynaers_action_status import Nhc2ReynaersActionStatusEntity
-from .entities.robinsip_videodoorstation_call_status_01 import Nhc2RobinsipVideodoorstationCallStatus01Entity
+from .entities.robinsip_videodoorstation_call_status import Nhc2RobinsipVideodoorstationCallStatusEntity
 from .entities.robinsip_videodoorstation_ip_address import Nhc2RobinsipVideodoorstationIpAddressEntity
 from .entities.robinsip_videodoorstation_status import Nhc2RobinsipVideodoorstationStatusEntity
 from .entities.simulation_action_basicstate import Nhc2SimulationActionBasicStateEntity
@@ -394,9 +394,16 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2RobinsipVideodoorstationCallStatus01Entity(device_instance, hub, gateway))
+            entities.append(Nhc2RobinsipVideodoorstationCallStatusEntity(device_instance, hub, gateway, 1))
             entities.append(Nhc2RobinsipVideodoorstationIpAddressEntity(device_instance, hub, gateway))
             entities.append(Nhc2RobinsipVideodoorstationStatusEntity(device_instance, hub, gateway))
+
+            if device_instance.supports_call_status_02:
+                entities.append(Nhc2RobinsipVideodoorstationCallStatusEntity(device_instance, hub, gateway, 2))
+            if device_instance.supports_call_status_03:
+                entities.append(Nhc2RobinsipVideodoorstationCallStatusEntity(device_instance, hub, gateway, 3))
+            if device_instance.supports_call_status_04:
+                entities.append(Nhc2RobinsipVideodoorstationCallStatusEntity(device_instance, hub, gateway, 4))
 
         async_add_entities(entities)
 
