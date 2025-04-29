@@ -49,6 +49,7 @@ from .devices.socket_action import CocoSocketAction
 from .devices.sunblind_action import CocoSunblindAction
 from .devices.switched_fan_action import CocoSwitchedFanAction
 from .devices.switched_generic_action import CocoSwitchedGenericAction
+from .devices.terra_chargingstation import CocoTerraChargingstation
 from .devices.thermostat_hvac import CocoThermostatHvac
 from .devices.thermostat_hvac_zigbee import CocoThermostatHvacZigbee
 from .devices.thermostat_thermostat import CocoThermostatThermostat
