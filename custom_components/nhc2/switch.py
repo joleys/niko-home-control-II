@@ -3,6 +3,7 @@ import logging
 
 from homeassistant.const import CONF_USERNAME
 
+from .entities.generic_chargingstation_boost import Nhc2GenericChargingstationBoostEntity
 from .nhccoco.coco import CoCo
 
 from .entities.accesscontrol_action_basicstate_switch import Nhc2AccesscontrolActionBasicStateSwitchEntity
@@ -13,6 +14,7 @@ from .entities.electricity_clamp_centralmeter_disable_report_instant_usage_re_en
     Nhc2ElectricityClampCentralmeterDisableReportInstantUsageReEnablingEntity
 from .entities.generic_action_basicstate import Nhc2GenericActionBasicStateEntity
 from .entities.generic_chargingstation_status import Nhc2GenericChargingstationStatusEntity
+from .entities.generic_chargingstation_boost import Nhc2GenericChargingstationBoostEntity
 from .entities.generic_domestichotwaterunit_boost import Nhc2GenericDomestichotwaterunitBoostEntity
 from .entities.generic_energyhome_disable_report_instant_usage_re_enabling import \
     Nhc2GenericEnergyhomeDisableReportInstantUsageReEnablingEntity
@@ -335,12 +337,12 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoGenericChargingstation)
-    _LOGGER.info('→ Found %s Easee/Eve/Terra Chargingstation Implementations (undocumented)', len(device_instances))
+    _LOGGER.info('→ Found %s Generic Chargingstation Implementation', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            # if device_instance.supports_stat:
-            entities.append(
-                Nhc2GenericChargingstationStatusEntity(device_instance, hub, gateway))
+            entities.append(Nhc2GenericChargingstationStatusEntity(device_instance, hub, gateway))
+            if device_instance.supports_boost:
+                entities.append(Nhc2GenericChargingstationBoostEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
