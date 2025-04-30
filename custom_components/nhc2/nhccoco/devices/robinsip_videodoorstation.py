@@ -1,4 +1,5 @@
-from ..const import PROPERTY_STATUS, PROPERTY_IP_ADDRESS, PROPERTY_CALL_STATUS_01, PARAMETER_MJPEG_URI, PARAMETER_TN_URI
+from ..const import PROPERTY_STATUS, PROPERTY_IP_ADDRESS, PROPERTY_CALL_STATUS_01, PROPERTY_CALL_STATUS_02, \
+    PROPERTY_CALL_STATUS_03, PROPERTY_CALL_STATUS_04, PARAMETER_MJPEG_URI, PARAMETER_TN_URI
 from ..helpers import to_float_or_none
 from .device import CoCoDevice
 
@@ -33,6 +34,42 @@ class CocoRobinsipVideodoorstation(CoCoDevice):
     @property
     def possible_call_statuses_01(self) -> list:
         return self.extract_property_definition_description_choices(PROPERTY_CALL_STATUS_01)
+
+    @property
+    def call_status_02(self) -> str:
+        return self.extract_property_value(PROPERTY_CALL_STATUS_02)
+
+    @property
+    def possible_call_statuses_02(self) -> list:
+        return self.extract_property_definition_description_choices(PROPERTY_CALL_STATUS_02)
+
+    @property
+    def supports_call_status_02(self) -> bool:
+        return self.has_property(PROPERTY_CALL_STATUS_02)
+
+    @property
+    def call_status_03(self) -> str:
+        return self.extract_property_value(PROPERTY_CALL_STATUS_03)
+
+    @property
+    def possible_call_statuses_03(self) -> list:
+        return self.extract_property_definition_description_choices(PROPERTY_CALL_STATUS_03)
+
+    @property
+    def supports_call_status_03(self) -> bool:
+        return self.has_property(PROPERTY_CALL_STATUS_03)
+
+    @property
+    def call_status_04(self) -> str:
+        return self.extract_property_value(PROPERTY_CALL_STATUS_04)
+
+    @property
+    def possible_call_statuses_04(self) -> list:
+        return self.extract_property_definition_description_choices(PROPERTY_CALL_STATUS_04)
+
+    @property
+    def supports_call_status_04(self) -> bool:
+        return self.has_property(PROPERTY_CALL_STATUS_04)
 
     @property
     def mjpeg_uri(self) -> str:
