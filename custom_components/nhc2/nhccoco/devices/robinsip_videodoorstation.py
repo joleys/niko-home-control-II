@@ -1,4 +1,4 @@
-from ..const import PROPERTY_STATUS, PROPERTY_IP_ADDRESS, PROPERTY_CALL_STATUS_01, PARAMETER_MJPEG_URI, PARAMETER_TN_URI
+from ..const import PROPERTY_STATUS, PROPERTY_IP_ADDRESS, PROPERTY_CALL_STATUS_01
 from ..helpers import to_float_or_none
 from .device import CoCoDevice
 
@@ -33,11 +33,3 @@ class CocoRobinsipVideodoorstation(CoCoDevice):
     @property
     def possible_call_statuses_01(self) -> list:
         return self.extract_property_definition_description_choices(PROPERTY_CALL_STATUS_01)
-
-    @property
-    def mjpeg_uri(self) -> str:
-        return self.extract_parameter_value(PARAMETER_MJPEG_URI)
-
-    @property
-    def tn_uri(self) -> str:
-        return self.extract_parameter_value(PARAMETER_TN_URI)
