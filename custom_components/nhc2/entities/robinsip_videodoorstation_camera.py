@@ -26,8 +26,8 @@ class Nhc2RobinsipVideodoorstationCameraEntity(NHCBaseEntity, MjpegCamera):
 
         self._username = 'admin'
         self._password = '123qwe'
-        self._mjpeg_url = f'http://{self._device.ip_address_readable}{self._device.mjpeg_uri}'
-        self._still_image_url = f'http://{self._device.ip_address_readable}{self._device.tn_uri}'
+        self._mjpeg_url = f'http://{self._device.ip_address_readable}/pbhelper/stream.mjpeg'
+        self._still_image_url = f'http://{self._device.ip_address_readable}/camera/frame.jpeg'
 
         self._camera = MjpegCamera.__init__(
             self,
