@@ -10,12 +10,19 @@ from .entities.alarms_action_basicstate import Nhc2AlarmsActionBasicStateEntity
 from .entities.bellbutton_action_basicstate import Nhc2BellbuttonActionBasicStateEntity
 from .entities.electricity_clamp_centralmeter_electrical_power import \
     Nhc2ElectricityClampCentralmeterElectricalPowerEntity
+from .entities.electricity_clamp_centralmeter_electrical_power1 import \
+    Nhc2ElectricityClampCentralmeterElectricalPower1Entity
+from .entities.electricity_clamp_centralmeter_electrical_power2 import \
+    Nhc2ElectricityClampCentralmeterElectricalPower2Entity
+from .entities.electricity_clamp_centralmeter_electrical_power3 import \
+    Nhc2ElectricityClampCentralmeterElectricalPower3Entity
 from .entities.electricity_clamp_centralmeter_electrical_power_consumption import \
     Nhc2ElectricityClampCentralmeterElectricalPowerConsumptionEntity
 from .entities.electricity_clamp_centralmeter_electrical_power_production import \
     Nhc2ElectricityClampCentralmeterElectricalPowerProductionEntity
 from .entities.electricity_clamp_centralmeter_clamp_type import Nhc2ElectricityClampCentralmeterClampTypeEntity
 from .entities.electricity_clamp_centralmeter_flow import Nhc2ElectricityClampCentralmeterFlowEntity
+from .entities.electricity_clamp_centralmeter_inverter_type import Nhc2ElectricityClampCentralmeterInverterTypeEntity
 from .entities.electricity_clamp_centralmeter_segment import Nhc2ElectricityClampCentralmeterSegmentEntity
 from .entities.garagedoor_action_basicstate import Nhc2GaragedoorActionBasicStateEntity
 from .entities.generic_chargingstation_charging_status import Nhc2GenericChargingstationChargingStatusEntity
@@ -46,7 +53,7 @@ from .entities.motor_action_last_direction import Nhc2MotorActionLastDirectionEn
 from .entities.naso_smartplug_electrical_power import Nhc2NasoSmartplugElectricalPowerEntity
 from .entities.playerstatus_action_feedback_message import Nhc2PlayerstatusActionFeedbackMessageEntity
 from .entities.reynaers_action_status import Nhc2ReynaersActionStatusEntity
-from .entities.robinsip_videodoorstation_call_status_01 import Nhc2RobinsipVideodoorstationCallStatus01Entity
+from .entities.robinsip_videodoorstation_call_status import Nhc2RobinsipVideodoorstationCallStatusEntity
 from .entities.robinsip_videodoorstation_ip_address import Nhc2RobinsipVideodoorstationIpAddressEntity
 from .entities.robinsip_videodoorstation_status import Nhc2RobinsipVideodoorstationStatusEntity
 from .entities.simulation_action_basicstate import Nhc2SimulationActionBasicStateEntity
@@ -66,6 +73,7 @@ from .entities.virtual_hvac_overrule_setpoint import Nhc2VirtualHvacOverruleSetp
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
 from .nhccoco.devices.alarms_action import CocoAlarmsAction
+from .nhccoco.devices.battery_clamp_centralmeter import CocoBatteryClampCentralmeter
 from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
 from .nhccoco.devices.generic_chargingstation import CocoGenericChargingstation
 from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
@@ -264,21 +272,32 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoElectricityClampCentralmeter)
-    _LOGGER.info('→ Found %s Electricity Metering modules', len(device_instances))
+    _LOGGER.info('→ Found %s Battery Metering Clamp/Electricity Metering modules', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2ElectricityClampCentralmeterElectricalPowerEntity(device_instance, hub, gateway))
+            if device_instance.supports_electrical_power:
+                entities.append(Nhc2ElectricityClampCentralmeterElectricalPowerEntity(device_instance, hub, gateway))
+            if device_instance.supports_electrical_power1:
+                entities.append(Nhc2ElectricityClampCentralmeterElectricalPower1Entity(device_instance, hub, gateway))
+            if device_instance.supports_electrical_power2:
+                entities.append(Nhc2ElectricityClampCentralmeterElectricalPower2Entity(device_instance, hub, gateway))
+            if device_instance.supports_electrical_power3:
+                entities.append(Nhc2ElectricityClampCentralmeterElectricalPower3Entity(device_instance, hub, gateway))
             entities.append(
                 Nhc2ElectricityClampCentralmeterElectricalPowerConsumptionEntity(device_instance, hub, gateway)
             )
             entities.append(
                 Nhc2ElectricityClampCentralmeterElectricalPowerProductionEntity(device_instance, hub, gateway)
             )
-            entities.append(Nhc2ElectricityClampCentralmeterFlowEntity(device_instance, hub, gateway))
-            entities.append(Nhc2ElectricityClampCentralmeterSegmentEntity(device_instance, hub, gateway))
+            if device_instance.supports_flow:
+                entities.append(Nhc2ElectricityClampCentralmeterFlowEntity(device_instance, hub, gateway))
+            if device_instance.supports_segment:
+                entities.append(Nhc2ElectricityClampCentralmeterSegmentEntity(device_instance, hub, gateway))
             if device_instance.supports_clamp_type:
                 entities.append(Nhc2ElectricityClampCentralmeterClampTypeEntity(device_instance, hub, gateway))
+            if device_instance.supports_inverter_type:
+                entities.append(Nhc2ElectricityClampCentralmeterInverterTypeEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
@@ -382,9 +401,16 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2RobinsipVideodoorstationCallStatus01Entity(device_instance, hub, gateway))
+            entities.append(Nhc2RobinsipVideodoorstationCallStatusEntity(device_instance, hub, gateway, 1))
             entities.append(Nhc2RobinsipVideodoorstationIpAddressEntity(device_instance, hub, gateway))
             entities.append(Nhc2RobinsipVideodoorstationStatusEntity(device_instance, hub, gateway))
+
+            if device_instance.supports_call_status_02:
+                entities.append(Nhc2RobinsipVideodoorstationCallStatusEntity(device_instance, hub, gateway, 2))
+            if device_instance.supports_call_status_03:
+                entities.append(Nhc2RobinsipVideodoorstationCallStatusEntity(device_instance, hub, gateway, 3))
+            if device_instance.supports_call_status_04:
+                entities.append(Nhc2RobinsipVideodoorstationCallStatusEntity(device_instance, hub, gateway, 4))
 
         async_add_entities(entities)
 
@@ -401,7 +427,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoGenericChargingstation)
-    _LOGGER.info('→ Found %s Easee/Eve/Terra Chargingstation Implementations (undocumented)', len(device_instances))
+    _LOGGER.info('→ Found %s Generic Chargingstation Implementation', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:

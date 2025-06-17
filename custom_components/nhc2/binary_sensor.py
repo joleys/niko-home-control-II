@@ -21,11 +21,16 @@ from .entities.comfort_action_basicstate import Nhc2ComfortActionBasicStateEntit
 from .entities.comfort_action_mood_active import Nhc2ComfortActionMoodActiveEntity
 from .entities.dimmer_action_aligned import Nhc2DimmerActionAlignedEntity
 from .entities.electricalheating_action_basicstate import Nhc2ElectricalheatingActionBasicStateEntity
+from .entities.electricity_clamp_centralmeter_inverted import Nhc2ElectricityClampCentralmeterInvertedEntity
+from .entities.electricity_clamp_centralmeter_inverted1 import Nhc2ElectricityClampCentralmeterInverted1Entity
+from .entities.electricity_clamp_centralmeter_inverted2 import Nhc2ElectricityClampCentralmeterInverted2Entity
+from .entities.electricity_clamp_centralmeter_inverted3 import Nhc2ElectricityClampCentralmeterInverted3Entity
 from .entities.electricity_clamp_centralmeter_report_instant_usage import \
     Nhc2ElectricityClampCentralmeterReportInstantUsageEntity
 from .entities.garagedoor_action_port_closed import Nhc2GaragedoorActionPortClosedEntity
 from .entities.generic_action_all_started import Nhc2GenericActionAllStartedEntity
 from .entities.generic_action_start_active import Nhc2GenericActionStartActiveEntity
+from .entities.generic_chargingstation_target_reached import Nhc2GenericChargingstationTargetReachedEntity
 from .entities.generic_energyhome_electrical_power_production_threshold_exceeded import \
     Nhc2GenericEnergyhomeElectricalPowerProductionThresholdExceededEntity
 from .entities.generic_energyhome_report_instant_usage import Nhc2GenericEnergyhomeReportInstantUsageEntity
@@ -43,12 +48,12 @@ from .entities.naso_smartplug_switching_only import Nhc2NasoSmartplugSwitchingOn
 from .entities.naso_smartplug_report_instant_usage import Nhc2NasoSmartplugReportInstantUsageEntity
 from .entities.overallcomfort_action_start_active import Nhc2OverallcomfortActionStartActiveEntity
 from .entities.overallcomfort_action_all_started import Nhc2OverallcomfortActionAllStartedEntity
-from .entities.peakmode_action_basicstate import Nhc2PeakmodeActionBasicStateEntity
 from .entities.playerstatus_action_basicstate import Nhc2PlayerstatusActionBasicStateEntity
 from .entities.timeschedule_action_active import Nhc2TimeschedulActionActiveEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
+from .nhccoco.devices.battery_clamp_centralmeter import CocoBatteryClampCentralmeter
 from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
 from .nhccoco.devices.comfort_action import CocoComfortAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
@@ -57,6 +62,7 @@ from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClamp
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
 from .nhccoco.devices.gate_action import CocoGateAction
 from .nhccoco.devices.generic_action import CocoGenericAction
+from .nhccoco.devices.generic_chargingstation import CocoGenericChargingstation
 from .nhccoco.devices.generic_energyhome import CocoGenericEnergyhome
 from .nhccoco.devices.generic_inverter import CocoGenericInverter
 from .nhccoco.devices.generic_smartplug import CocoGenericSmartplug
@@ -64,7 +70,6 @@ from .nhccoco.devices.heatingcooling_action import CocoHeatingcoolingAction
 from .nhccoco.devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .nhccoco.devices.naso_smartplug import CocoNasoSmartplug
 from .nhccoco.devices.overallcomfort_action import CocoOverallcomfortAction
-from .nhccoco.devices.peakmode_action import CocoPeakmodeAction
 from .nhccoco.devices.playerstatus_action import CocoPlayerstatusAction
 from .nhccoco.devices.rolldownshutter_action import CocoRolldownshutterAction
 from .nhccoco.devices.sunblind_action import CocoSunblindAction
@@ -233,11 +238,19 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoElectricityClampCentralmeter)
-    _LOGGER.info('→ Found %s Electricity Metering modules', len(device_instances))
+    _LOGGER.info('→ Found %s Battery Metering Clamp/Electricity Metering modules', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2ElectricityClampCentralmeterReportInstantUsageEntity(device_instance, hub, gateway))
+            if device_instance.supports_inverted:
+                entities.append(Nhc2ElectricityClampCentralmeterInvertedEntity(device_instance, hub, gateway))
+            if device_instance.supports_inverted1:
+                entities.append(Nhc2ElectricityClampCentralmeterInverted1Entity(device_instance, hub, gateway))
+            if device_instance.supports_inverted2:
+                entities.append(Nhc2ElectricityClampCentralmeterInverted2Entity(device_instance, hub, gateway))
+            if device_instance.supports_inverted3:
+                entities.append(Nhc2ElectricityClampCentralmeterInverted3Entity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
@@ -300,11 +313,12 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
         async_add_entities(entities)
 
-    device_instances = gateway.get_device_instances(CocoPeakmodeAction)
-    _LOGGER.info('→ Found %s Peakmode Actions (undocumented)', len(device_instances))
+    device_instances = gateway.get_device_instances(CocoGenericChargingstation)
+    _LOGGER.info('→ Found %s Generic Chargingstation Implementation', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
-            entities.append(Nhc2PeakmodeActionBasicStateEntity(device_instance, hub, gateway))
+            if device_instance.supports_target_reached:
+                entities.append(Nhc2GenericChargingstationTargetReachedEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

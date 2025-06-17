@@ -14,8 +14,6 @@ class Nhc2ElectricityClampCentralmeterClampTypeEntity(NHCBaseEntity, SensorEntit
 
         self._attr_unique_id = device_instance.uuid + '_clamp_type'
 
-        self._attr_device_class = SensorDeviceClass.ENUM
-        self._attr_options = self._device.possible_clamp_types
         self._attr_native_value = self._device.clamp_type
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
 

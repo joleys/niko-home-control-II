@@ -1,26 +1,29 @@
-from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
+from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.helpers.entity import EntityCategory
 
 from ..nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
 from .nhc_entity import NHCBaseEntity
 
+import logging
 
-class Nhc2ElectricityClampCentralmeterFlowEntity(NHCBaseEntity, SensorEntity):
+_LOGGER = logging.getLogger(__name__)
+
+
+class Nhc2ElectricityClampCentralmeterInverted1Entity(NHCBaseEntity, BinarySensorEntity):
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoElectricityClampCentralmeter, hub, gateway):
-        """Initialize a sensor."""
+        """Initialize a binary sensor."""
         super().__init__(device_instance, hub, gateway)
 
-        self._attr_unique_id = device_instance.uuid + '_flow'
-
-        self._attr_native_value = self._device.flow
+        self._attr_unique_id = self._device.uuid + '_inverted1'
+        self._attr_state = self._device.is_inverted1
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
 
     @property
     def name(self) -> str:
-        return 'Flow'
+        return 'Inverted1'
 
     @property
-    def state(self) -> str:
-        return self._device.flow
+    def is_on(self) -> bool:
+        return self._device.is_inverted1
