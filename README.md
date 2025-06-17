@@ -319,19 +319,30 @@ __Remark:__ this is untested as I don't own a device of this type.
 
 This is exposed as switch.
 
-### NHC ZigBee Electricity Metering module (with clamp) & Electricity Metering module (with clamp)
+### NHC Battery Metering Clamp, ZigBee Battery Metering Clamp, NHC ZigBee Electricity Metering module (with clamp) & NHC Electricity Metering module (with clamp)
 
 #### Entities
 
-* **Electrical Power Sensor**, the realtime power usage in W. Positive means power consumed, negative is power
+* **Electrical Power Sensor**, (only if supported), the realtime power usage in W. Positive means power consumed, negative is power
+  produced.
+* **Electrical Power 1 Sensor**, (only if supported), the realtime power usage in W. Positive means power consumed, negative is power
+  produced.
+* **Electrical Power 2 Sensor**, (only if supported), the realtime power usage in W. Positive means power consumed, negative is power
+  produced.
+* **Electrical Power 2 Sensor**, (only if supported), the realtime power usage in W. Positive means power consumed, negative is power
   produced.
 * **Report Instant Usage Binary Sensor**, indicates if the Electrical Power is received. When disabled, it will
   automatically be enabled.
-* **Flow Sensor**, Producer or Consumer
-* **Segment Sensor**, Central or Subsegment
-* **Clamp Type Sensor**, (only if supported), 63A or 120A
 * **Disable Report Instant Usage Re-enabling Switch**, a toggle to disable the automatic re-enabling of the
   Report Instant Usage property. This is useful if you don't need Electrical Power reporting.
+* **Inverted Binary Sensor**, (only if supported)
+* **Inverted 1 Binary Sensor**, (only if supported), Phase 1 inverted
+* **Inverted 2 Binary Sensor**, (only if supported), Phase 2 inverted
+* **Inverted 3 Binary Sensor**, (only if supported), Phase 3 inverted
+* **Flow Sensor**, (only if supported), Producer or Consumer
+* **Segment Sensor**, (only if supported), Central or Subsegment
+* **Clamp Type Sensor**, (only if supported), 63A, 80A, or 120A
+* **Inverter Type Sensor**, (only if supported), Production, Hybrid or Battery
 
 __Remark:__ The totals are not available as they are not (yet) exposed by the API.
 

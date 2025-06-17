@@ -21,6 +21,10 @@ from .entities.comfort_action_basicstate import Nhc2ComfortActionBasicStateEntit
 from .entities.comfort_action_mood_active import Nhc2ComfortActionMoodActiveEntity
 from .entities.dimmer_action_aligned import Nhc2DimmerActionAlignedEntity
 from .entities.electricalheating_action_basicstate import Nhc2ElectricalheatingActionBasicStateEntity
+from .entities.electricity_clamp_centralmeter_inverted import Nhc2ElectricityClampCentralmeterInvertedEntity
+from .entities.electricity_clamp_centralmeter_inverted1 import Nhc2ElectricityClampCentralmeterInverted1Entity
+from .entities.electricity_clamp_centralmeter_inverted2 import Nhc2ElectricityClampCentralmeterInverted2Entity
+from .entities.electricity_clamp_centralmeter_inverted3 import Nhc2ElectricityClampCentralmeterInverted3Entity
 from .entities.electricity_clamp_centralmeter_report_instant_usage import \
     Nhc2ElectricityClampCentralmeterReportInstantUsageEntity
 from .entities.garagedoor_action_port_closed import Nhc2GaragedoorActionPortClosedEntity
@@ -49,6 +53,7 @@ from .entities.timeschedule_action_active import Nhc2TimeschedulActionActiveEnti
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
+from .nhccoco.devices.battery_clamp_centralmeter import CocoBatteryClampCentralmeter
 from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
 from .nhccoco.devices.comfort_action import CocoComfortAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
@@ -233,11 +238,19 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoElectricityClampCentralmeter)
-    _LOGGER.info('→ Found %s Electricity Metering modules', len(device_instances))
+    _LOGGER.info('→ Found %s Battery Metering Clamp/Electricity Metering modules', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2ElectricityClampCentralmeterReportInstantUsageEntity(device_instance, hub, gateway))
+            if device_instance.supports_inverted:
+                entities.append(Nhc2ElectricityClampCentralmeterInvertedEntity(device_instance, hub, gateway))
+            if device_instance.supports_inverted1:
+                entities.append(Nhc2ElectricityClampCentralmeterInverted1Entity(device_instance, hub, gateway))
+            if device_instance.supports_inverted2:
+                entities.append(Nhc2ElectricityClampCentralmeterInverted2Entity(device_instance, hub, gateway))
+            if device_instance.supports_inverted3:
+                entities.append(Nhc2ElectricityClampCentralmeterInverted3Entity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

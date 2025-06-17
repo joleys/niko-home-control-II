@@ -10,6 +10,7 @@ from .devices.airco_hvac import CocoAircoHvac
 from .devices.alarms_action import CocoAlarmsAction
 from .devices.alloff_action import CocoAlloffAction
 from .devices.audiocontrol_action import CocoAudiocontrolAction
+from .devices.battery_clamp_centralmeter import CocoBatteryClampCentralmeter
 from .devices.bellbutton_action import CocoBellbuttonAction
 from .devices.comfort_action import CocoComfortAction
 from .devices.condition_action import CocoConditionAction

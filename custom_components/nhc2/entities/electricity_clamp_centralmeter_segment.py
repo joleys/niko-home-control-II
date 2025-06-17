@@ -14,8 +14,6 @@ class Nhc2ElectricityClampCentralmeterSegmentEntity(NHCBaseEntity, SensorEntity)
 
         self._attr_unique_id = device_instance.uuid + '_segment'
 
-        self._attr_device_class = SensorDeviceClass.ENUM
-        self._attr_options = self._device.possible_segments
         self._attr_native_value = self._device.segment
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
 
