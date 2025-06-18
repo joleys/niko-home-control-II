@@ -1,3 +1,5 @@
+from datetime import time
+
 from .const import MQTT_DATA_PARAMS, MQTT_DATA_PARAMS_DEVICES, MQTT_DATA_PARAMS_DEVICES_PROPERTIES, \
     MQTT_DATA_PARAMS_DEVICES_UUID, MQTT_DATA_METHOD, MQTT_DATA_METHOD_DEVICES_CONTROL, MQTT_DATA_PARAMS_SYSTEMINFO, \
     MQTT_DATA_PARAMS_SYSTEMINFO_SWVERSIONS, MQTT_DATA_PARAMS_SYSTEMINFO_SWVERSIONS_COCO_IMAGE, \
@@ -73,3 +75,14 @@ def to_int_or_none(value) -> int | None:
     if value is None or value == '':
         return None
     return int(float(value))
+
+
+def to_time_or_none(value) -> time | None:
+    if value is None or value == '':
+        return None
+
+    try:
+        hours, minutes = map(int, value.split(':'))
+        return time(hour=hours, minute=minutes)
+    except ValueError:
+        return None
