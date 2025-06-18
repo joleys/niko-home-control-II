@@ -348,6 +348,7 @@ class CoCo:
                     'CocoDimmerSmartdimmer',
                     'CocoDoorlockLock',
                     'CocoElectricalheatingHvac',
+                    'CocoElectricityPulseCentralmeter',
                     'CocoEnergydisplayPanel',
                     'CocoExtensionbuttonx1Smartextensionpanel',
                     'CocoExternalsystemDigitalsensor',
