@@ -138,7 +138,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         async_add_entities(entities)
 
     device_instances = gateway.get_device_instances(CocoThermostatHvac)
-    _LOGGER.info('→ Found %s NHC Thermostat (thermostat)', len(device_instances))
+    _LOGGER.info('→ Found %s NHC Thermostat (thermostat, touchswitch)', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
@@ -146,16 +146,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
             if device_instance.supports_ecosave:
                 entities.append(Nhc2ThermostatHvacEcoSaveEntity(device_instance, hub, gateway))
-
-        async_add_entities(entities)
-
-    device_instances = gateway.get_device_instances(CocoTouchswitchHvac)
-    _LOGGER.info('→ Found %s NHC Thermostat (touchswitch)', len(device_instances))
-    if len(device_instances) > 0:
-        entities = []
-        for device_instance in device_instances:
-            entities.append(Nhc2ThermostatHvacOverruleActiveEntity(device_instance, hub, gateway))
-            entities.append(Nhc2ThermostatHvacEcoSaveEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
