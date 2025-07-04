@@ -532,12 +532,11 @@ This is exposed as a switch.
 * **Coupling Status Enum Sensor**, (only if supported), the connectivity status of the system.
 * **Boost Switch**, (only if supported), boost mode for capacity tariff Flanders
 * **TargetDistance Number Sensor**, (only if supported), distance to be charged additionally when in Smart mode
+* **TargetTime Time Entity**, (only if supported), charging completion time when in Smart mode
 * **ReachableDistance Number Sensor**, (only if supported), estimated max driving distance that could be charged during
   the Smart mode session
 * **TargetReached Binary Sensor**, (only if supported), charging target is reached during this Smart mode session
-
-__Remark:__ if you have a charging station that supports setting the Target Time or Next Charging Time: please contact
-us
+* **NextChargingTime Time Sensor**, (only if supported), estimated time when charging will start in Smart Mode
 
 ### NHC Heating Cooling Action
 

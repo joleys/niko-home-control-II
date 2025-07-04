@@ -1,9 +1,11 @@
+from datetime import time
+
 from ..const import PROPERTY_BOOST, PROPERTY_BOOST_VALUE_FALSE, PROPERTY_BOOST_VALUE_TRUE, PROPERTY_CHARGING_MODE, \
     PROPERTY_CHARGING_STATUS, PROPERTY_COUPLING_STATUS, PROPERTY_ELECTRICAL_POWER, PROPERTY_EV_STATUS, \
     PROPERTY_NEXT_CHARGING_TIME, PROPERTY_REACHABLE_DISTANCE, PROPERTY_STATUS, PROPERTY_STATUS_VALUE_OFF, \
     PROPERTY_STATUS_VALUE_ON, PROPERTY_TARGET_DISTANCE, PROPERTY_TARGET_TIME, PROPERTY_TARGET_REACHED, \
     PROPERTY_TARGET_REACHED_VALUE_TRUE
-from ..helpers import to_float_or_none, to_int_or_none
+from ..helpers import to_float_or_none, to_int_or_none, to_time_or_none
 from .device import CoCoDevice
 
 
@@ -101,8 +103,8 @@ class CocoGenericChargingstation(CoCoDevice):
         return self.extract_property_definition_description_range(PROPERTY_TARGET_DISTANCE)
 
     @property
-    def target_time(self) -> str | None:
-        return self.extract_property_value(PROPERTY_TARGET_TIME)
+    def target_time(self) -> time | None:
+        return to_time_or_none(self.extract_property_value(PROPERTY_TARGET_TIME))
 
     @property
     def supports_target_time(self) -> bool:
@@ -133,8 +135,8 @@ class CocoGenericChargingstation(CoCoDevice):
         return self.has_property(PROPERTY_TARGET_REACHED)
 
     @property
-    def next_charging_time(self) -> str | None:
-        return self.extract_property_value(PROPERTY_NEXT_CHARGING_TIME)
+    def next_charging_time(self) -> time | None:
+        return to_time_or_none(self.extract_property_value(PROPERTY_NEXT_CHARGING_TIME))
 
     @property
     def supports_next_charging_time(self) -> bool:
@@ -158,11 +160,8 @@ class CocoGenericChargingstation(CoCoDevice):
     def set_target_distance(self, gateway, target_distance: int):
         gateway.add_device_control(self.uuid, PROPERTY_TARGET_DISTANCE, target_distance)
 
-    def set_target_time(self, gateway, target_time: str):
-        gateway.add_device_control(self.uuid, PROPERTY_TARGET_TIME, target_time)
+    def set_target_time(self, gateway, target_time: time):
+        gateway.add_device_control(self.uuid, PROPERTY_TARGET_TIME, target_time.strftime('%H:%M'))
 
     def set_reachable_distance(self, gateway, reachable_distance: int):
         gateway.add_device_control(self.uuid, PROPERTY_REACHABLE_DISTANCE, reachable_distance)
-
-    def set_next_charging_time(self, gateway, next_charging_time: str):
-        gateway.add_device_control(self.uuid, PROPERTY_NEXT_CHARGING_TIME, next_charging_time)
