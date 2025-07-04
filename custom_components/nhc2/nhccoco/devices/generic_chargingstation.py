@@ -165,6 +165,3 @@ class CocoGenericChargingstation(CoCoDevice):
 
     def set_reachable_distance(self, gateway, reachable_distance: int):
         gateway.add_device_control(self.uuid, PROPERTY_REACHABLE_DISTANCE, reachable_distance)
-
-    def set_next_charging_time(self, gateway, next_charging_time: time):
-        gateway.add_device_control(self.uuid, PROPERTY_NEXT_CHARGING_TIME, next_charging_time.strftime('%H:%M'))

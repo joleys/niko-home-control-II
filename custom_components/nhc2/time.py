@@ -5,7 +5,6 @@ from homeassistant.const import CONF_USERNAME
 
 from .nhccoco.coco import CoCo
 
-from .entities.generic_chargingstation_next_charging_time import Nhc2GenericChargingstationNextChargingTimeEntity
 from .entities.generic_chargingstation_target_time import Nhc2GenericChargingstationTargetTimeEntity
 from .nhccoco.devices.generic_chargingstation import CocoGenericChargingstation
 
@@ -31,7 +30,5 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             if device_instance.supports_target_time:
                 entities.append(Nhc2GenericChargingstationTargetTimeEntity(device_instance, hub, gateway))
-            if device_instance.supports_next_charging_time:
-                entities.append(Nhc2GenericChargingstationNextChargingTimeEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

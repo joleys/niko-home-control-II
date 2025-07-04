@@ -1,12 +1,12 @@
 from datetime import time
 
-from homeassistant.components.time import TimeEntity
+from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
 
 from ..nhccoco.devices.generic_chargingstation import CocoGenericChargingstation
 from .nhc_entity import NHCBaseEntity
 
 
-class Nhc2GenericChargingstationNextChargingTimeEntity(NHCBaseEntity, TimeEntity):
+class Nhc2GenericChargingstationNextChargingTimeEntity(NHCBaseEntity, SensorEntity):
     _attr_has_entity_name = True
 
     def __init__(self, device_instance: CocoGenericChargingstation, hub, gateway):
@@ -14,6 +14,8 @@ class Nhc2GenericChargingstationNextChargingTimeEntity(NHCBaseEntity, TimeEntity
         super().__init__(device_instance, hub, gateway)
 
         self._attr_unique_id = device_instance.uuid + '_next_charging_time'
+        self._attr_device_class = SensorDeviceClass.TIMESTAMP
+        self._attr_native_value = self._device.next_charging_time
 
     @property
     def name(self) -> str:
@@ -22,8 +24,3 @@ class Nhc2GenericChargingstationNextChargingTimeEntity(NHCBaseEntity, TimeEntity
     @property
     def state(self) -> time:
         return self._device.next_charging_time
-
-    async def async_set_value(self, value: time) -> None:
-        self._device.set_next_charging_time(self._gateway, value)
-        self.schedule_update_ha_state()
-

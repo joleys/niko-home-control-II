@@ -1,13 +1,13 @@
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
 
-from ..nhccoco.devices.easee_chargingstation import CocoEaseeChargingstation
+from ..nhccoco.devices.generic_chargingstation import CocoGenericChargingstation
 from .nhc_entity import NHCBaseEntity
 
 
 class Nhc2GenericChargingstationChargingStatusEntity(NHCBaseEntity, SensorEntity):
     _attr_has_entity_name = True
 
-    def __init__(self, device_instance: CocoEaseeChargingstation, hub, gateway):
+    def __init__(self, device_instance: CocoGenericChargingstation, hub, gateway):
         """Initialize a sensor."""
         super().__init__(device_instance, hub, gateway)
 
