@@ -36,6 +36,8 @@ from .devices.generic_thermometer import CocoGenericThermometer
 from .devices.heatingcooling_action import CocoHeatingcoolingAction
 from .devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .devices.light_action import CocoLightAction
+from .devices.myvaillant_domestichotwaterunit import CocoMyvaillantDomestichotwaterunit
+from .devices.myvaillant_hvac import CocoMyvaillantHvac
 from .devices.naso_smartplug import CocoNasoSmartplug
 from .devices.overallcomfort_action import CocoOverallcomfortAction
 from .devices.pir_action import CocoPirAction
