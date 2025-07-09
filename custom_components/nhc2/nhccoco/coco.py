@@ -314,8 +314,6 @@ class CoCo:
                     ''
                 )
 
-                _LOGGER.debug(f"Trying to create instance of {classname} for device {device[MQTT_DATA_PARAMS_DEVICES_UUID]}")
-
                 # Ignore some devices. These are devices that:
                 # * are not supported by the API / MQTT broker
                 # * don't have any (usefull) properties
