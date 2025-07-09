@@ -3,12 +3,15 @@ from homeassistant.components.climate import ClimateEntity, HVACMode, HVACAction
     PRESET_HOME, PRESET_SLEEP
 from homeassistant.const import UnitOfTemperature
 
-from ..nhccoco.const import PROPERTY_PROGRAM_VALUE_DAY, PROPERTY_PROGRAM_VALUE_ECO, PROPERTY_PROGRAM_VALUE_NIGHT, \
-    PROPERTY_PROGRAM_VALUE_AWAY, PROPERTY_PROGRAM_VALUE_HOME, PROPERTY_STATUS_VALUE_OFF, \
-    PROPERTY_FAN_SPEED_VALUE_OFF, PROPERTY_FAN_SPEED_VALUE_LOW, PROPERTY_FAN_SPEED_VALUE_MEDIUM, \
-    PROPERTY_FAN_SPEED_VALUE_HIGH, PROPERTY_FAN_SPEED_VALUE_AUTO, PROPERTY_OPERATION_MODE_VALUE_DRY, \
-    PROPERTY_OPERATION_MODE_VALUE_HEAT, PROPERTY_OPERATION_MODE_VALUE_COOL, PROPERTY_OPERATION_MODE_VALUE_AUTO, \
-    PROPERTY_OPERATION_MODE_VALUE_FAN
+from ..nhccoco.const import (PROPERTY_PROGRAM_VALUE_DAY, PROPERTY_PROGRAM_VALUE_ECO, PROPERTY_PROGRAM_VALUE_NIGHT,
+                             PROPERTY_PROGRAM_VALUE_AWAY, PROPERTY_PROGRAM_VALUE_HOME, PROPERTY_PROGRAM_VALUE_OFF,
+                             PROPERTY_PROGRAM_VALUE_MANUAL, PROPERTY_PROGRAM_VALUE_SCHEDULE, PROPERTY_STATUS_VALUE_OFF,
+                             PROPERTY_FAN_SPEED_VALUE_OFF, PROPERTY_FAN_SPEED_VALUE_LOW,
+                             PROPERTY_FAN_SPEED_VALUE_MEDIUM, PROPERTY_FAN_SPEED_VALUE_HIGH,
+                             PROPERTY_FAN_SPEED_VALUE_AUTO,
+                             PROPERTY_OPERATION_MODE_VALUE_DRY, PROPERTY_OPERATION_MODE_VALUE_HEAT,
+                             PROPERTY_OPERATION_MODE_VALUE_COOL, PROPERTY_OPERATION_MODE_VALUE_AUTO,
+                             PROPERTY_OPERATION_MODE_VALUE_FAN)
 from ..nhccoco.devices.generic_hvac import CocoGenericHvac
 from .nhc_entity import NHCBaseEntity
 
@@ -56,11 +59,15 @@ class Nhc2GenericHvacClimateEntity(NHCBaseEntity, ClimateEntity):
 
         # Otherwise, attempt to map these into known HA modes
         mode_mappings = {
+            'Away': HVACMode.AUTO,
+            'Auto': HVACMode.AUTO,
+            'Cool': HVACMode.COOL,
+            'Dry': HVACMode.DRY,
             'Fan': HVACMode.FAN_ONLY,
             'Heat': HVACMode.HEAT,
-            'Cool': HVACMode.COOL,
-            'Auto': HVACMode.AUTO,
-            'Dry': HVACMode.DRY
+            'Off': HVACMode.OFF,
+            'Manual': HVACMode.HEAT_COOL,
+            'Schedule': HVACMode.AUTO
         }
 
         # Filter matching values, may need to update the above mapping in future
@@ -114,16 +121,26 @@ class Nhc2GenericHvacClimateEntity(NHCBaseEntity, ClimateEntity):
     def hvac_mode(self):
         if self._device.status == PROPERTY_STATUS_VALUE_OFF:
             return HVACMode.OFF
-        if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_HEAT:
-            return HVACMode.HEAT
-        if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_COOL:
-            return HVACMode.COOL
         if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_AUTO:
             return HVACMode.AUTO
+        if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_COOL:
+            return HVACMode.COOL
         if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_DRY:
             return HVACMode.DRY
         if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_FAN:
             return HVACMode.FAN_ONLY
+        if self._device.operation_mode == PROPERTY_OPERATION_MODE_VALUE_HEAT:
+            return HVACMode.HEAT
+        if self._device.program == PROPERTY_PROGRAM_VALUE_AWAY:
+            return HVACMode.AUTO
+        if self._device.program == PROPERTY_PROGRAM_VALUE_OFF:
+            return HVACMode.OFF
+        if self._device.program == PROPERTY_PROGRAM_VALUE_SCHEDULE:
+            return HVACMode.AUTO
+        if self._device.program == PROPERTY_PROGRAM_VALUE_MANUAL:
+            return HVACMode.HEAT_COOL
+
+        return HVACMode.AUTO
 
     @property
     def preset_mode(self) -> str:

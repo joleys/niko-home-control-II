@@ -36,6 +36,8 @@ from .devices.generic_thermometer import CocoGenericThermometer
 from .devices.heatingcooling_action import CocoHeatingcoolingAction
 from .devices.hvacthermostat_hvac import CocoHvacthermostatHvac
 from .devices.light_action import CocoLightAction
+from .devices.myvaillant_domestichotwaterunit import CocoMyvaillantDomestichotwaterunit
+from .devices.myvaillant_hvac import CocoMyvaillantHvac
 from .devices.naso_smartplug import CocoNasoSmartplug
 from .devices.overallcomfort_action import CocoOverallcomfortAction
 from .devices.pir_action import CocoPirAction
@@ -311,6 +313,16 @@ class CoCo:
                     ' ',
                     ''
                 )
+
+                # Ignore some devices. These are devices that:
+                # * are not supported by the API / MQTT broker
+                # * don't have any (usefull) properties
+                if classname in [
+                    'CocoGenericDomestichotwaterunitInterface',
+                    'CocoGenericHvacInterface'
+                ]:
+                    _LOGGER.debug(f"Skipping {device[MQTT_DATA_PARAMS_DEVICES_UUID]} of {classname}")
+                    continue
 
                 try:
                     getattr(sys.modules[__name__], classname)
