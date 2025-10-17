@@ -353,6 +353,7 @@ class CoCo:
                     'CocoBatterypushbuttonx4Smartpanel',
                     'CocoChimeRelay',
                     'CocoDalidimmerDimmer',
+                    'CocoDalitunablewhiteandcolorRgbw',
                     'CocoDigitalsensorDigitalsensor',
                     'CocoDimcontrollerSmartpanel',
                     'CocoDimcontrollerfeedbackSmartpanel',
