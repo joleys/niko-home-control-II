@@ -64,6 +64,7 @@ from .devices.thermoswitchx4feedback_multisensor import CocoThermoswitchx4Feedba
 from .devices.thermoswitchx6feedback_multisensor import CocoThermoswitchx6FeedbackMultisensor
 from .devices.thermoventilationcontrollerfeedback_multisensor import CocoThermoventilationcontrollerfeedbackMultisensor
 from .devices.timeschedule_action import CocoTimescheduleAction
+from .devices.tunablewhiteandcolor_action import CocoTunablewhiteandcolorAction
 from .devices.touchswitch_hvac import CocoTouchswitchHvac
 from .devices.velux_action import CocoVeluxAction
 from .devices.venetianblind_action import CocoVenetianblindAction
