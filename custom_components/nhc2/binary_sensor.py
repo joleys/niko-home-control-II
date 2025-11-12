@@ -16,6 +16,8 @@ from .entities.audiocontrol_action_title_aligned import Nhc2AudiocontrolActionTi
 from .entities.audiocontrol_action_volume_aligned import Nhc2AudiocontrolActionVolumeAlignedEntity
 from .entities.bellbutton_action_decline_call_applied_on_all_devices import \
     Nhc2BellbuttonActionDeclineCallAppliedOnAllDevicesEntity
+from .entities.color_action_color_aligned import Nhc2ColorActionColorAlignedEntity
+from .entities.color_action_brightness_aligned import Nhc2ColorActionBrightnessAlignedEntity
 from .entities.comfort_action_all_started import Nhc2ComfortActionAllStartedEntity
 from .entities.comfort_action_basicstate import Nhc2ComfortActionBasicStateEntity
 from .entities.comfort_action_mood_active import Nhc2ComfortActionMoodActiveEntity
@@ -57,6 +59,7 @@ from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
 from .nhccoco.devices.battery_clamp_centralmeter import CocoBatteryClampCentralmeter
 from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
+from .nhccoco.devices.color_action import CocoColorAction
 from .nhccoco.devices.comfort_action import CocoComfortAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
 from .nhccoco.devices.electricalheating_action import CocoElectricalheatingAction
@@ -333,5 +336,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             entities.append(Nhc2TunablewhiteandcolorActionBrightnessAlignedEntity(device_instance, hub, gateway))
             entities.append(Nhc2TunablewhiteandcolorActionColorAlignedEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoColorAction)
+    _LOGGER.info('→ Found %s Color action', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2ColorActionBrightnessAlignedEntity(device_instance, hub, gateway))
+            entities.append(Nhc2ColorActionColorAlignedEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)

@@ -12,6 +12,7 @@ from .devices.alloff_action import CocoAlloffAction
 from .devices.audiocontrol_action import CocoAudiocontrolAction
 from .devices.battery_clamp_centralmeter import CocoBatteryClampCentralmeter
 from .devices.bellbutton_action import CocoBellbuttonAction
+from .devices.color_action import CocoColorAction
 from .devices.comfort_action import CocoComfortAction
 from .devices.condition_action import CocoConditionAction
 from .devices.controller import CocoController

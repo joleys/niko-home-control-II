@@ -8,8 +8,10 @@ from homeassistant.helpers import entity_platform
 
 from .nhccoco.coco import CoCo
 
+from .entities.color_action_light import Nhc2ColorActionLightEntity
 from .entities.relay_action_light import Nhc2RelayActionLightEntity
 from .entities.tunablewhiteandcolor_action_light import Nhc2TunablewhiteandcolorActionLightEntity
+from .nhccoco.devices.color_action import CocoColorAction
 from .nhccoco.devices.light_action import CocoLightAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
 from .nhccoco.devices.tunablewhiteandcolor_action import CocoTunablewhiteandcolorAction
@@ -47,6 +49,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2TunablewhiteandcolorActionLightEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoColorAction)
+    _LOGGER.info('→ Found %s Color action', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2ColorActionLightEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
