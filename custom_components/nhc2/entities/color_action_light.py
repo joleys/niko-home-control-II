@@ -4,6 +4,8 @@ from homeassistant.exceptions import HomeAssistantError
 from ..nhccoco.devices.color_action import CocoColorAction
 from .nhc_entity import NHCBaseEntity
 
+import colorsys
+
 
 class Nhc2ColorActionLightEntity(NHCBaseEntity, LightEntity):
     _attr_has_entity_name = True
@@ -75,6 +77,23 @@ class Nhc2ColorActionLightEntity(NHCBaseEntity, LightEntity):
             return None
 
         return self._device.color
+
+    async def _service_set_light_color(self, light_color) -> bool:
+        if not self._device.support_color:
+            raise HomeAssistantError(f'{self.name} does not support color.')
+
+        # Convert RGB to HSV
+        r, g, b = light_color
+        r_f, g_f, b_f = r / 255.0, g / 255.0, b / 255.0
+        h, s, v = colorsys.rgb_to_hsv(r_f, g_f, b_f)
+        h_deg = int(round(h * 360.0))
+        s_pct = int(round(s * 100.0))
+        v_pct = int(round(v * 100.0))
+
+        light_color = (h_deg, s_pct)
+        light_brightness = int(round(v_pct))
+        self._device.set_color(self._gateway, light_color, light_brightness)
+        return True
 
     @property
     def color_mode(self) -> ColorMode:

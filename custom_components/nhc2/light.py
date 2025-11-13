@@ -16,7 +16,8 @@ from .nhccoco.devices.light_action import CocoLightAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
 from .nhccoco.devices.tunablewhiteandcolor_action import CocoTunablewhiteandcolorAction
 
-from .const import DOMAIN, KEY_GATEWAY, SERVICE_SET_LIGHT_BRIGHTNESS, ATTR_LIGHT_BRIGHTNESS
+from .const import DOMAIN, KEY_GATEWAY, SERVICE_SET_LIGHT_BRIGHTNESS, ATTR_LIGHT_BRIGHTNESS, SERVICE_SET_LIGHT_COLOR, \
+    ATTR_LIGHT_COLOR
 
 KEY_ENTITY = 'nhc2_lights'
 
@@ -68,4 +69,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             vol.Required(ATTR_LIGHT_BRIGHTNESS): vol.Range(0, 100)
         },
         '_service_set_light_brightness',
+    )
+    platform.async_register_entity_service(
+        SERVICE_SET_LIGHT_COLOR,
+        {
+            vol.Required(ATTR_LIGHT_COLOR): vol.All(vol.Coerce(list), vol.Length(min=3, max=3)),
+        },
+        '_service_set_light_color',
     )
