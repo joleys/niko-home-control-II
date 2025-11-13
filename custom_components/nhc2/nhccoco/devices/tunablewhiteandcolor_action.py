@@ -1,7 +1,7 @@
 from ..const import PROPERTY_STATUS, PROPERTY_STATUS_VALUE_ON, PROPERTY_STATUS_VALUE_OFF, PROPERTY_BRIGHTNESS, \
-    PROPERTY_BRIGHTNESS_ALIGNED, PROPERTY_BRIGHTNESS_ALIGNED_VALUE_TRUE, PROPERTY_COLOR_ALIGNED, \
+    PROPERTY_BRIGHTNESS_ALIGNED, PROPERTY_BRIGHTNESS_ALIGNED_VALUE_TRUE, PROPERTY_COLOR, PROPERTY_COLOR_ALIGNED, \
     PROPERTY_COLOR_ALIGNED_VALUE_TRUE
-from ..helpers import to_int_or_none
+from ..helpers import to_int_or_none, to_hs_or_none
 from .device import CoCoDevice
 
 
@@ -36,6 +36,13 @@ class CocoTunablewhiteandcolorAction(CoCoDevice):
     def support_brightness(self) -> bool:
         return True
 
+    def set_brightness(self, gateway, brightness: int):
+        gateway.add_device_control(self.uuid, PROPERTY_BRIGHTNESS, str(brightness))
+
+    @property
+    def color(self) -> tuple[float, float] | None:
+        return to_hs_or_none(self.extract_property_value(PROPERTY_COLOR))
+
     @property
     def color_aligned(self) -> str:
         return self.extract_property_value(PROPERTY_COLOR_ALIGNED)
@@ -44,5 +51,13 @@ class CocoTunablewhiteandcolorAction(CoCoDevice):
     def is_color_aligned(self) -> bool:
         return self.color_aligned == PROPERTY_COLOR_ALIGNED_VALUE_TRUE
 
-    def set_brightness(self, gateway, brightness: int):
-        gateway.add_device_control(self.uuid, PROPERTY_BRIGHTNESS, str(brightness))
+    @property
+    def support_color(self) -> bool:
+        return True
+
+    def set_color(self, gateway, color: tuple[float, float], brightness: int):
+        hue, saturation = color
+        hue = int(round(hue))
+        saturation = int(round(saturation))
+        hsv_str = f'hsv({hue},{saturation},{brightness})'
+        gateway.add_device_control(self.uuid, PROPERTY_COLOR, hsv_str)
