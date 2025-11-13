@@ -105,3 +105,19 @@ def to_hs_or_none(value) -> tuple[float, float] | None:
         return hue, saturation
     except ValueError as e:
         return None
+
+def to_cwww_or_none(value) -> tuple[float, float] | None:
+    if value is None or value == '':
+        return None
+
+    pattern = r'^cwww\(([0-9]{4}),([0-9]{1,3})\)$'
+    matches = re.match(pattern, value, re.IGNORECASE)
+    if not matches:
+        return None
+
+    try:
+        color_temp = float(matches.group(1))
+        brightness = float(matches.group(2))
+        return color_temp, brightness
+    except ValueError as e:
+        return None

@@ -1,10 +1,12 @@
-from homeassistant.components.light import LightEntity, ColorMode, ATTR_BRIGHTNESS, ATTR_HS_COLOR
+from homeassistant.components.light import LightEntity, ColorMode, ATTR_BRIGHTNESS, ATTR_HS_COLOR, \
+    ATTR_COLOR_TEMP_KELVIN
 from homeassistant.exceptions import HomeAssistantError
 
 from ..nhccoco.devices.tunablewhiteandcolor_action import CocoTunablewhiteandcolorAction
 from .nhc_entity import NHCBaseEntity
 
 import colorsys
+
 
 class Nhc2TunablewhiteandcolorActionLightEntity(NHCBaseEntity, LightEntity):
     _attr_has_entity_name = True
@@ -16,15 +18,14 @@ class Nhc2TunablewhiteandcolorActionLightEntity(NHCBaseEntity, LightEntity):
 
         self._attr_unique_id = self._device.uuid
 
-        if self._device.support_color and self._device.support_brightness:
+        if self._device.support_tunable_white and self._device.support_color and self._device.support_brightness:
+            self._attr_supported_color_modes = {ColorMode.HS, ColorMode.COLOR_TEMP}
+        elif self._device.support_color and self._device.support_brightness:
             self._attr_supported_color_modes = {ColorMode.HS}
-            self._attr_color_mode = ColorMode.HS
         elif self._device.support_brightness:
             self._attr_supported_color_modes = {ColorMode.BRIGHTNESS}
-            self._attr_color_mode = ColorMode.BRIGHTNESS
         else:
             self._attr_supported_color_modes = {ColorMode.ONOFF}
-            self._attr_color_mode = ColorMode.ONOFF
 
     @property
     def is_on(self) -> bool:
@@ -33,11 +34,13 @@ class Nhc2TunablewhiteandcolorActionLightEntity(NHCBaseEntity, LightEntity):
     async def async_turn_on(self, **kwargs):
         brightness = kwargs.get(ATTR_BRIGHTNESS)
         color = kwargs.get(ATTR_HS_COLOR)
+        color_temp_kelvin = kwargs.get(ATTR_COLOR_TEMP_KELVIN)
+
+        if self._device.support_tunable_white and color_temp_kelvin is not None:
+            self._device.set_tunable_white(self._gateway, color_temp_kelvin)
 
         if self._device.support_color and color is not None:
-            # use device brightness if no brightness is provided
             brightness_percentage = int(round(self.brightness / 255 * 100))
-
             self._device.set_color(self._gateway, color, brightness_percentage)
 
         if self._device.support_brightness and brightness is not None:
@@ -96,9 +99,41 @@ class Nhc2TunablewhiteandcolorActionLightEntity(NHCBaseEntity, LightEntity):
 
     @property
     def color_mode(self) -> ColorMode:
-        if self._device.support_color and self._device.support_brightness:
+        if self._device.support_tunable_white and self._device.support_color and self._device.support_brightness:
+            if self._device.color_mode == "Color":
+                return ColorMode.HS
+            if self._device.color_mode == "TunableWhite":
+                return ColorMode.COLOR_TEMP
+            return ColorMode.HS
+        elif self._device.support_color and self._device.support_brightness:
             return ColorMode.HS
         elif self._device.support_brightness:
             return ColorMode.BRIGHTNESS
         else:
             return ColorMode.ONOFF
+
+    @property
+    def color_temp_kelvin(self) -> int | None:
+        if not self._device.support_tunable_white:
+            return None
+
+        tunable_white = self._device.tunable_white
+        if tunable_white is None:
+            return None
+
+        color_temp, _brightness = tunable_white
+        return int(round(color_temp))
+
+    @property
+    def max_color_temp_kelvin(self) -> int | None:
+        if not self._device.support_tunable_white:
+            return None
+
+        return 6500
+
+    @property
+    def min_color_temp_kelvin(self) -> int | None:
+        if not self._device.support_tunable_white:
+            return None
+
+        return 2700
