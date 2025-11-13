@@ -1,3 +1,4 @@
+import re
 from datetime import time
 
 from .const import MQTT_DATA_PARAMS, MQTT_DATA_PARAMS_DEVICES, MQTT_DATA_PARAMS_DEVICES_PROPERTIES, \
@@ -85,4 +86,22 @@ def to_time_or_none(value) -> time | None:
         hours, minutes = map(int, value.split(':'))
         return time(hour=hours, minute=minutes)
     except ValueError:
+        return None
+
+
+def to_hs_or_none(value) -> tuple[float, float] | None:
+    if value is None or value == '':
+        return None
+
+    pattern = r'^hsv\(([0-9]{1,3}),([0-9]{1,3}),([0-9]{1,3})\)$'
+    matches = re.match(pattern, value, re.IGNORECASE)
+    if not matches:
+        return None
+
+    try:
+        hue = float(matches.group(1))
+        saturation = float(matches.group(2))
+        brightness = float(matches.group(3))  # brightness is ignored here
+        return hue, saturation
+    except ValueError as e:
         return None

@@ -1,4 +1,4 @@
-from homeassistant.components.light import LightEntity, ColorMode, ATTR_BRIGHTNESS
+from homeassistant.components.light import LightEntity, ColorMode, ATTR_BRIGHTNESS, ATTR_HS_COLOR
 from homeassistant.exceptions import HomeAssistantError
 
 from ..nhccoco.devices.color_action import CocoColorAction
@@ -15,7 +15,10 @@ class Nhc2ColorActionLightEntity(NHCBaseEntity, LightEntity):
 
         self._attr_unique_id = self._device.uuid
 
-        if self._device.support_brightness:
+        if self._device.support_color and self._device.support_brightness:
+            self._attr_supported_color_modes = {ColorMode.HS}
+            self._attr_color_mode = ColorMode.HS
+        elif self._device.support_brightness:
             self._attr_supported_color_modes = {ColorMode.BRIGHTNESS}
             self._attr_color_mode = ColorMode.BRIGHTNESS
         else:
@@ -26,15 +29,15 @@ class Nhc2ColorActionLightEntity(NHCBaseEntity, LightEntity):
     def is_on(self) -> bool:
         return self._device.is_status_on
 
-    @property
-    def brightness(self) -> int:
-        if not self._device.support_brightness:
-            return None
-
-        return int(round(255 * self._device.brightness / 100))
-
     async def async_turn_on(self, **kwargs):
         brightness = kwargs.get(ATTR_BRIGHTNESS)
+        color = kwargs.get(ATTR_HS_COLOR)
+
+        if self._device.support_color and color is not None:
+            # use device brightness if no brightness is provided
+            brightness_percentage = int(round(self.brightness / 255 * 100))
+
+            self._device.set_color(self._gateway, color, brightness_percentage)
 
         if self._device.support_brightness and brightness is not None:
             brightness_percentage = int(round(brightness / 255 * 100))
@@ -52,9 +55,32 @@ class Nhc2ColorActionLightEntity(NHCBaseEntity, LightEntity):
         self._device.turn_off(self._gateway)
         self.schedule_update_ha_state()
 
+    @property
+    def brightness(self) -> int:
+        if not self._device.support_brightness:
+            return None
+
+        return int(round(255 * self._device.brightness / 100))
+
     async def _service_set_light_brightness(self, light_brightness: int) -> bool:
         if not self._device.support_brightness:
             raise HomeAssistantError(f'{self.name} does not support brightness.')
 
         self._device.set_brightness(self._gateway, light_brightness)
         return True
+
+    @property
+    def hs_color(self) -> tuple[float, float] | None:
+        if not self._device.support_color:
+            return None
+
+        return self._device.color
+
+    @property
+    def color_mode(self) -> ColorMode:
+        if self._device.support_color and self._device.support_brightness:
+            return ColorMode.HS
+        elif self._device.support_brightness:
+            return ColorMode.BRIGHTNESS
+        else:
+            return ColorMode.ONOFF
