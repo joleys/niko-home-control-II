@@ -10,10 +10,12 @@ from .nhccoco.coco import CoCo
 
 from .entities.color_action_light import Nhc2ColorActionLightEntity
 from .entities.relay_action_light import Nhc2RelayActionLightEntity
+from .entities.tunablewhite_action_light import Nhc2TunablewhiteActionLightEntity
 from .entities.tunablewhiteandcolor_action_light import Nhc2TunablewhiteandcolorActionLightEntity
 from .nhccoco.devices.color_action import CocoColorAction
 from .nhccoco.devices.light_action import CocoLightAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
+from .nhccoco.devices.tunablewhite_action import CocoTunablewhiteAction
 from .nhccoco.devices.tunablewhiteandcolor_action import CocoTunablewhiteandcolorAction
 
 from .const import DOMAIN, KEY_GATEWAY, SERVICE_SET_LIGHT_BRIGHTNESS, ATTR_LIGHT_BRIGHTNESS, SERVICE_SET_LIGHT_COLOR, \
@@ -44,21 +46,30 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
         async_add_entities(entities)
 
-    device_instances = gateway.get_device_instances(CocoTunablewhiteandcolorAction)
-    _LOGGER.info('→ Found %s Tunable white and color action', len(device_instances))
-    if len(device_instances) > 0:
-        entities = []
-        for device_instance in device_instances:
-            entities.append(Nhc2TunablewhiteandcolorActionLightEntity(device_instance, hub, gateway))
-
-        async_add_entities(entities)
-
     device_instances = gateway.get_device_instances(CocoColorAction)
     _LOGGER.info('→ Found %s Color action', len(device_instances))
     if len(device_instances) > 0:
         entities = []
         for device_instance in device_instances:
             entities.append(Nhc2ColorActionLightEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoTunablewhiteAction)
+    _LOGGER.info('→ Found %s Tunable white action', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2TunablewhiteActionLightEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoTunablewhiteandcolorAction)
+    _LOGGER.info('→ Found %s Tunable white and color action', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2TunablewhiteandcolorActionLightEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 

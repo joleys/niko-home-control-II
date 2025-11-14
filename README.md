@@ -593,6 +593,18 @@ This is exposed as a light entity.
 
 __Remark:__ This device is not documented/supported by Niko.
 
+### Tunable White Action
+
+This is exposed as a light entity.
+
+#### Entities
+
+* **Brightness Aligned Binary Sensor**
+* **Color Aligned Binary Sensor**
+
+__Remark:__ This device is not documented/supported by Niko.
+
+
 ### Tunable White and Color Action
 
 This is exposed as a light entity.
