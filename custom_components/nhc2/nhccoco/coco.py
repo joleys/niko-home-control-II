@@ -245,6 +245,9 @@ class CoCo:
         self._client.loop_start()
 
     def disconnect(self):
+        self._keep_thread_running = False
+        if hasattr(self, '_device_control_buffer_thread') and self._device_control_buffer_thread.is_alive():
+            self._device_control_buffer_thread.join(timeout=5)
         self._client.loop_stop()
         self._client.disconnect()
 
