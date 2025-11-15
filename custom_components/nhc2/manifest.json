@@ -14,7 +14,8 @@
   "issue_tracker": "https://github.com/joleys/niko-home-control-II/issues",
   "requirements": [
     "paho-mqtt>=1.6.1",
-    "pyjwt"
+    "pyjwt",
+    "aiohttp>=3.8.0"
   ],
   "version": "v4.13.0"
 }
