@@ -14,3 +14,16 @@ set_light_brightness:
         number:
           min: 0
           max: 100
+set_light_color:
+  name: Set color for light
+  description: Sets the color for a light.
+  target:
+    entity:
+      domain: light
+  fields:
+    light_color:
+      name: Color
+      description: The color
+      required: true
+      selector:
+        color_rgb:
