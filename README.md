@@ -672,7 +672,7 @@ During initial setup, you can configure:
 
 * **Enable statistics**: Toggle to enable/disable periodical statistics retrieval via REST API
 
-* **Import statistics**: One-time import of historical data (hourlies for the last two months, dailies up to 10 years back)
+* **Import statistics**: One-time import of historical data (hourly data for the last two months, daily data up to 10 years back)
 
 > **⚠️ WARNING: Longterm Statistics Import**
 >
