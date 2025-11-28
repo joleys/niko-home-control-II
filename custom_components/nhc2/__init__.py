@@ -272,11 +272,10 @@ async def async_setup_entry(hass, entry):
         
         # After devices are loaded, start importing statistics
         # Do this in the background to not block device initialization
-        # Use add_job to ensure it's called from the event loop
         async def start_statistics_import():
             await statistics_coordinator.async_setup()
             
-        hass.add_job(start_statistics_import())
+        hass.create_task(start_statistics_import())
     
     coco.set_devices_list_callback(devices_list_callback_with_stats)
 

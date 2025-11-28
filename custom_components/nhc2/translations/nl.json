@@ -126,7 +126,7 @@
       }
     }
   },
-   "options": {
+  "options": {
     "step": {
       "init": {
         "title": "Statistieken Opties",

@@ -1,8 +1,6 @@
 """Coordinator for fetching and importing measurement statistics."""
 import logging
 from datetime import datetime, timedelta, timezone
-import asyncio
-import re
 
 from homeassistant.core import HomeAssistant
 from homeassistant.components.recorder import get_instance
@@ -236,9 +234,18 @@ class StatisticsCoordinator:
 
         return statistic_entries
 
+    def _get_currency_symbol(self) -> str:
+        # Try to get currency from Home Assistant configuration
+        if hasattr(self._hass.config, 'currency') and self._hass.config.currency:
+            _LOGGER.debug(f"Using currency from Home Assistant config: {self._hass.config.currency}")
+            return self._hass.config.currency
+        _LOGGER.debug("No currency configured in Home Assistant, defaulting to EUR")
+        # Default to EUR (Euro currency code)
+        return "EUR"
+
     def _create_metadata(self, device: CoCoDevice, property_name: str, statistic_id: str) -> StatisticMetaData:
         if "Cost" in property_name:
-            unit = "€" # TODO: retrieve currency from gateway settings
+            unit = self._get_currency_symbol()
             unit_class = None
         elif "ElectricalEnergy" in property_name:
             unit = UnitOfEnergy.WATT_HOUR
