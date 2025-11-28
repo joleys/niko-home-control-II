@@ -12,6 +12,9 @@ DEFAULT_PORT = 8884
 SERVICE_SET_LIGHT_BRIGHTNESS = 'set_light_brightness'
 ATTR_LIGHT_BRIGHTNESS = 'light_brightness'
 
+SERVICE_SET_LIGHT_COLOR = 'set_light_color'
+ATTR_LIGHT_COLOR = 'light_color'
+
 CONF_ENABLE_STATISTICS = 'enable_statistics'
 CONF_IMPORT_HISTORICAL_STATISTICS = 'import_statistics'
 CONF_HISTORICAL_STATISTICS_IMPORTED = 'historical_statistics_imported'

@@ -13,6 +13,7 @@ from .devices.amtron_chargingstation import CocoAmtronChargingstation
 from .devices.audiocontrol_action import CocoAudiocontrolAction
 from .devices.battery_clamp_centralmeter import CocoBatteryClampCentralmeter
 from .devices.bellbutton_action import CocoBellbuttonAction
+from .devices.color_action import CocoColorAction
 from .devices.comfort_action import CocoComfortAction
 from .devices.condition_action import CocoConditionAction
 from .devices.controller import CocoController
@@ -65,6 +66,8 @@ from .devices.thermoswitchx4feedback_multisensor import CocoThermoswitchx4Feedba
 from .devices.thermoswitchx6feedback_multisensor import CocoThermoswitchx6FeedbackMultisensor
 from .devices.thermoventilationcontrollerfeedback_multisensor import CocoThermoventilationcontrollerfeedbackMultisensor
 from .devices.timeschedule_action import CocoTimescheduleAction
+from .devices.tunablewhite_action import CocoTunablewhiteAction
+from .devices.tunablewhiteandcolor_action import CocoTunablewhiteandcolorAction
 from .devices.touchswitch_hvac import CocoTouchswitchHvac
 from .devices.velux_action import CocoVeluxAction
 from .devices.venetianblind_action import CocoVenetianblindAction
@@ -355,7 +358,10 @@ class CoCo:
                     'CocoBatterypushbuttonx2Smartpanel',
                     'CocoBatterypushbuttonx4Smartpanel',
                     'CocoChimeRelay',
+                    'CocoDalicolorRgbw',
                     'CocoDalidimmerDimmer',
+                    'CocoDalitunablewhiteandcolorRgbw',
+                    'CocoDalitunablewhiteRgbw',
                     'CocoDigitalsensorDigitalsensor',
                     'CocoDimcontrollerSmartpanel',
                     'CocoDimcontrollerfeedbackSmartpanel',

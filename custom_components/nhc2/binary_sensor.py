@@ -16,6 +16,8 @@ from .entities.audiocontrol_action_title_aligned import Nhc2AudiocontrolActionTi
 from .entities.audiocontrol_action_volume_aligned import Nhc2AudiocontrolActionVolumeAlignedEntity
 from .entities.bellbutton_action_decline_call_applied_on_all_devices import \
     Nhc2BellbuttonActionDeclineCallAppliedOnAllDevicesEntity
+from .entities.color_action_color_aligned import Nhc2ColorActionColorAlignedEntity
+from .entities.color_action_brightness_aligned import Nhc2ColorActionBrightnessAlignedEntity
 from .entities.comfort_action_all_started import Nhc2ComfortActionAllStartedEntity
 from .entities.comfort_action_basicstate import Nhc2ComfortActionBasicStateEntity
 from .entities.comfort_action_mood_active import Nhc2ComfortActionMoodActiveEntity
@@ -50,11 +52,16 @@ from .entities.overallcomfort_action_start_active import Nhc2OverallcomfortActio
 from .entities.overallcomfort_action_all_started import Nhc2OverallcomfortActionAllStartedEntity
 from .entities.playerstatus_action_basicstate import Nhc2PlayerstatusActionBasicStateEntity
 from .entities.timeschedule_action_active import Nhc2TimeschedulActionActiveEntity
+from .entities.tunablewhite_action_brightness_aligned import Nhc2TunablewhiteActionBrightnessAlignedEntity
+from .entities.tunablewhite_action_color_aligned import Nhc2TunablewhiteActionColorAlignedEntity
+from .entities.tunablewhiteandcolor_action_brightness_aligned import Nhc2TunablewhiteandcolorActionBrightnessAlignedEntity
+from .entities.tunablewhiteandcolor_action_color_aligned import Nhc2TunablewhiteandcolorActionColorAlignedEntity
 from .nhccoco.devices.accesscontrol_action import CocoAccesscontrolAction
 from .nhccoco.devices.alloff_action import CocoAlloffAction
 from .nhccoco.devices.audiocontrol_action import CocoAudiocontrolAction
 from .nhccoco.devices.battery_clamp_centralmeter import CocoBatteryClampCentralmeter
 from .nhccoco.devices.bellbutton_action import CocoBellbuttonAction
+from .nhccoco.devices.color_action import CocoColorAction
 from .nhccoco.devices.comfort_action import CocoComfortAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
 from .nhccoco.devices.electricalheating_action import CocoElectricalheatingAction
@@ -74,6 +81,8 @@ from .nhccoco.devices.playerstatus_action import CocoPlayerstatusAction
 from .nhccoco.devices.rolldownshutter_action import CocoRolldownshutterAction
 from .nhccoco.devices.sunblind_action import CocoSunblindAction
 from .nhccoco.devices.timeschedule_action import CocoTimescheduleAction
+from .nhccoco.devices.tunablewhite_action import CocoTunablewhiteAction
+from .nhccoco.devices.tunablewhiteandcolor_action import CocoTunablewhiteandcolorAction
 from .nhccoco.devices.venetianblind_action import CocoVenetianblindAction
 
 from .const import DOMAIN, KEY_GATEWAY
@@ -320,5 +329,35 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             if device_instance.supports_target_reached:
                 entities.append(Nhc2GenericChargingstationTargetReachedEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoColorAction)
+    _LOGGER.info('→ Found %s Color action', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2ColorActionBrightnessAlignedEntity(device_instance, hub, gateway))
+            entities.append(Nhc2ColorActionColorAlignedEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoTunablewhiteAction)
+    _LOGGER.info('→ Found %s Tunable white', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2TunablewhiteActionBrightnessAlignedEntity(device_instance, hub, gateway))
+            entities.append(Nhc2TunablewhiteActionColorAlignedEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoTunablewhiteandcolorAction)
+    _LOGGER.info('→ Found %s Tunable white and color action', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            entities.append(Nhc2TunablewhiteandcolorActionBrightnessAlignedEntity(device_instance, hub, gateway))
+            entities.append(Nhc2TunablewhiteandcolorActionColorAlignedEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
