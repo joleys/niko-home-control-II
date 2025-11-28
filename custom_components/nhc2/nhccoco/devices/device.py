@@ -152,6 +152,15 @@ class CoCoDevice():
 
         return None
 
+    def get_measurement_properties(self, property_filter: list) -> list:
+        matching_properties = []
+        for property_key in self._property_definitions.keys():
+            for filter_prefix in property_filter:
+                if property_key.startswith(filter_prefix):
+                    matching_properties.append(property_key)
+                    break
+        return matching_properties
+
     def on_change(self, topic: str, payload: dict):
         _LOGGER.debug(f'{self.name} changed. Topic: {topic} | Data: {payload}')
         if DEVICE_DESCRIPTOR_PROPERTIES in payload:

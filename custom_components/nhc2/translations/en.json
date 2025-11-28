@@ -16,6 +16,14 @@
           "host": "Address/IP"
         }
       },
+      "statistics_options": {
+        "title": "Statistics Configuration",
+        "description": "Configure how measurements should be retrieved from your controller **{host}**.\n\n**Enable statistics**: Periodically retrieves measurement data via REST API and imports as statistics.\n\n**Import statistics**: One-time import of long term data (up to 10 years back as daily aggregates, last two months as hourlies).\n\n**Note**: Long term import can take some time depending on how much data is available. Recent data will be updated automatically every hour if statistics are enabled.",
+        "data": {
+          "enable_statistics": "Enable statistics",
+          "import_statistics": "Import statistics"
+        }
+      },
       "reconfigure": {
         "title": "Update your configuration",
         "description": "Reconfiguring controller **{host}**.\n\nYour current Hobby API token will expire on **{expiration}**\n",
@@ -114,6 +122,17 @@
           "login_check_fail_4": "Connection refused - bad username or password",
           "login_check_fail_5": "Connection refused - not authorised",
           "password_not_a_token": "The password entered is not a valid token"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Statistics Options",
+        "description": "Configure statistics settings.\n\n**Enable statistics**: Toggle to enable or disable data retrieval. Changes take effect immediately.",
+        "data": {
+          "enable_statistics": "Enable statistics"
         }
       }
     }

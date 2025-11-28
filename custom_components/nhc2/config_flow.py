@@ -7,7 +7,14 @@ from homeassistant.data_entry_flow import FlowResult
 from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, CONF_PORT
 from .nhccoco.coco_login_validation import CoCoLoginValidation
 from.hobbytoken import HobbyToken
-from .const import DOMAIN, DEFAULT_USERNAME, DEFAULT_PORT
+from .const import (
+    DOMAIN,
+    DEFAULT_USERNAME,
+    DEFAULT_PORT,
+    CONF_ENABLE_STATISTICS,
+    CONF_IMPORT_HISTORICAL_STATISTICS,
+    CONF_HISTORICAL_STATISTICS_IMPORTED,
+)
 
 import logging
 
@@ -32,6 +39,12 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
         """Init NHC2FlowHandler."""
         self._errors = {}
         self._host = None
+        self._password = None
+
+    @staticmethod
+    def async_get_options_flow(config_entry):
+        """Get the options flow for this handler."""
+        return Nhc2OptionsFlowHandler(config_entry)
 
     async def async_step_import(self, user_input):
         """Import a config entry."""
@@ -68,13 +81,37 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
             self._errors["base"] = ("login_check_fail_%d" % check)
             return await self._show_user_config_form(user_input)
 
-        return self.async_create_entry(
-            title=DEFAULT_USERNAME + ' (' + host + ')',
-            data={
-                CONF_HOST: host,
-                CONF_PORT: DEFAULT_PORT,
-                CONF_USERNAME: DEFAULT_USERNAME,
-                CONF_PASSWORD: password
+        # Store password for statistics options step
+        self._password = password
+        return await self.async_step_statistics_options()
+
+    async def async_step_statistics_options(self, user_input=None):
+        """Handle statistics configuration."""
+        if user_input is not None:
+            # Create entry with all configuration
+            return self.async_create_entry(
+                title=DEFAULT_USERNAME + ' (' + self._host + ')',
+                data={
+                    CONF_HOST: self._host,
+                    CONF_PORT: DEFAULT_PORT,
+                    CONF_USERNAME: DEFAULT_USERNAME,
+                    CONF_PASSWORD: self._password
+                },
+                options={
+                    CONF_ENABLE_STATISTICS: user_input.get(CONF_ENABLE_STATISTICS, False),
+                    CONF_IMPORT_HISTORICAL_STATISTICS: user_input.get(CONF_IMPORT_HISTORICAL_STATISTICS, False),
+                    CONF_HISTORICAL_STATISTICS_IMPORTED: False,
+                }
+            )
+
+        return self.async_show_form(
+            step_id="statistics_options",
+            data_schema=vol.Schema({
+                vol.Optional(CONF_ENABLE_STATISTICS, default=False): bool,
+                vol.Optional(CONF_IMPORT_HISTORICAL_STATISTICS, default=False): bool,
+            }),
+            description_placeholders={
+                "host": self._host
             }
         )
 
@@ -154,3 +191,34 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
                 },
                 data_schema=REAUTH_SCHEMA
             )
+
+
+class Nhc2OptionsFlowHandler(config_entries.OptionsFlow):
+    """Handle options flow for NHC2."""
+
+    def __init__(self, config_entry: config_entries.ConfigEntry):
+        """Initialize options flow."""
+        self._config_entry = config_entry
+
+    async def async_step_init(self, user_input=None):
+        """Manage the options."""
+        if user_input is not None:
+            # Preserve existing historical import settings
+            # (historical import is only configurable during initial setup)
+            preserved_options = {
+                CONF_IMPORT_HISTORICAL_STATISTICS: self._config_entry.options.get(CONF_IMPORT_HISTORICAL_STATISTICS, False),
+                CONF_HISTORICAL_STATISTICS_IMPORTED: self._config_entry.options.get(CONF_HISTORICAL_STATISTICS_IMPORTED, False),
+            }
+            # Merge user input with preserved options
+            return self.async_create_entry(title="", data={**preserved_options, **user_input})
+
+        # Get current option
+        current_enable = self._config_entry.options.get(CONF_ENABLE_STATISTICS, False)
+
+        # Only show energy measurements toggle
+        return self.async_show_form(
+            step_id="init",
+            data_schema=vol.Schema({
+                vol.Optional(CONF_ENABLE_STATISTICS, default=current_enable): bool,
+            })
+        )
