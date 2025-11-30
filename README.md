@@ -695,6 +695,50 @@ find it by searching for `Received device list:`. The device list itself is a la
 If you don't feel comfortable sharing this device list in a public issue, you can send it to me via
 mail: `niko-ha [at] verkoyen [dot] eu`.
 
+
+## Statistics Import
+
+The integration can import measurement data (energy, gas, water) from devices as Home Assistant statistics. This allows you to track historical usage and view trends over time in the Energy Dashboard or History panel.
+
+### Setup
+
+During initial setup, you can configure:
+
+* **Enable statistics**: Toggle to enable/disable periodical statistics retrieval via REST API
+
+* **Import statistics**: One-time import of historical data (hourly data for the last two months, daily data up to 10 years back)
+
+> **⚠️ WARNING: Longterm Statistics Import**
+>
+> The longterm statistics import does **not** check if the data is already present in Home Assistant.
+> Running this import multiple times will duplicate data and can corrupt or make your statistics unusable.
+> **Only use the longterm import if you are sure there is no previous data for the selected devices and time range.**
+>
+> The recent data import is safe: it will only import new data since the last stored statistic and will not duplicate or overwrite existing statistics.
+
+### Service
+
+The integration also exposes a service to manually import statistics which you can use if you chose not to import data during setup or want to manually control when data is imported:
+
+**Service**: `nhc2.import_statistics`
+
+**Parameters**:
+* `import_type` (optional): Type of import to perform
+  * `recent` - Import only recent data (default)
+  * `longterm` - Import only long term data (see above warning)
+  * `both` - Import both long term and recent data (see above warning)
+
+**Example**:
+```yaml
+service: nhc2.import_statistics
+data:
+  import_type: recent
+```
+
+Use this service if you need to manually trigger a statistics update outside the automatic hourly schedule.
+
+**Note**: Statistics are only imported for devices with measurement properties (electrical energy, gas volume, water volume).
+
 ## Development
 
 ### Adding support for new Device models

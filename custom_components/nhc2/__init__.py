@@ -1,5 +1,7 @@
 """Support for Niko Home Control II - CoCo."""
 import logging
+import ssl
+from pathlib import Path
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
@@ -9,15 +11,27 @@ from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, CONF_PO
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers import device_registry, issue_registry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.event import async_track_time_interval
+from homeassistant.helpers.event import async_track_time_interval, async_track_time_change
 
 from datetime import timedelta
 
 from .config_flow import Nhc2FlowHandler  # noqa  pylint_disable=unused-import
-from .const import DEFAULT_USERNAME, DOMAIN, KEY_GATEWAY, KEY_TIMER_CANCEL, BRAND
+from .const import (
+    DEFAULT_USERNAME,
+    DOMAIN,
+    KEY_GATEWAY,
+    KEY_TOKEN_TIMER_CANCEL,
+    KEY_STATISTICS_TIMER_CANCEL,
+    KEY_MEASUREMENTS_CLIENT,
+    KEY_STATISTICS_COORDINATOR,
+    BRAND,
+    CONF_ENABLE_STATISTICS,
+)
 from .nhccoco.helpers import extract_versions
 from .nhccoco.const import MQTT_RC_CODES
 from .nhccoco.coco import CoCo
+from .nhccoco.measurements_client import MeasurementsClient
+from .statistics_coordinator import StatisticsCoordinator
 from .hobbytoken import HobbyToken
 
 _LOGGER = logging.getLogger(__name__)
@@ -86,13 +100,33 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     coco: CoCo = hass.data[KEY_GATEWAY][entry.entry_id]
     if coco:
         coco.disconnect()
-    timer_cancel = hass.data[KEY_TIMER_CANCEL][entry.entry_id]
-    if timer_cancel:
-        timer_cancel()
+    
+    # Shutdown statistics coordinator if it exists
+    if KEY_STATISTICS_COORDINATOR in hass.data and entry.entry_id in hass.data[KEY_STATISTICS_COORDINATOR]:
+        coordinator: StatisticsCoordinator = hass.data[KEY_STATISTICS_COORDINATOR][entry.entry_id]
+        await coordinator.async_shutdown()
+    
+    # Close measurements client if it exists
+    if KEY_MEASUREMENTS_CLIENT in hass.data and entry.entry_id in hass.data[KEY_MEASUREMENTS_CLIENT]:
+        client: MeasurementsClient = hass.data[KEY_MEASUREMENTS_CLIENT][entry.entry_id]
+        await client.close()
+    
+    if entry.entry_id in hass.data.get(KEY_TOKEN_TIMER_CANCEL, {}):
+        existing_cancel = hass.data[KEY_TOKEN_TIMER_CANCEL][entry.entry_id]
+        if existing_cancel:
+            existing_cancel()
+            hass.data[KEY_TOKEN_TIMER_CANCEL][entry.entry_id] = None
+
+    if entry.entry_id in hass.data.get(KEY_STATISTICS_TIMER_CANCEL, {}):
+        existing_cancel = hass.data[KEY_STATISTICS_TIMER_CANCEL][entry.entry_id]
+        if existing_cancel:
+            existing_cancel()
+            hass.data[KEY_STATISTICS_TIMER_CANCEL][entry.entry_id] = None
+
     return True
 
 async def async_setup_entry(hass, entry):
-    timer_cancel = None
+    token_timer_cancel = None
     if entry.data[CONF_USERNAME] != DEFAULT_USERNAME:
         issue_registry.async_create_issue(
                     hass,
@@ -118,7 +152,7 @@ async def async_setup_entry(hass, entry):
                         data={'entry': entry}
                 )
 
-        timer_cancel = async_track_time_interval(hass, check_token_expiration, timedelta(days=1), cancel_on_shutdown=True)
+        token_timer_cancel = async_track_time_interval(hass, check_token_expiration, timedelta(days=1), cancel_on_shutdown=True)
 
     """Create an NHC2 gateway."""
     coco = CoCo(
@@ -191,17 +225,118 @@ async def async_setup_entry(hass, entry):
             )
 
     hass.data.setdefault(KEY_GATEWAY, {})[entry.entry_id] = coco
-    hass.data.setdefault(KEY_TIMER_CANCEL, {})[entry.entry_id] = timer_cancel
+    hass.data.setdefault(KEY_TOKEN_TIMER_CANCEL, {})[entry.entry_id] = token_timer_cancel 
     hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, on_hass_stop)
+
+    # Create SSL context for REST API (done outside event loop to avoid blocking I/O)
+    async def create_ssl_context():
+        """Create SSL context with certificate in executor."""
+        def _load_ssl_context():
+            cert_path = Path(__file__).parent / 'nhccoco' / 'coco_ca.pem'
+            ssl_context = ssl.create_default_context(cafile=str(cert_path))
+            ssl_context.minimum_version = ssl.TLSVersion.TLSv1_2
+            # Disable hostname checking since we're connecting to an IP address
+            ssl_context.check_hostname = False
+            ssl_context.verify_mode = ssl.CERT_REQUIRED
+            return ssl_context
+        
+        return await hass.async_add_executor_job(_load_ssl_context)
+    
+    ssl_context = await create_ssl_context()
+
+    # Initialize measurements client for REST API access
+    measurements_client = MeasurementsClient(
+        host=entry.data[CONF_HOST],
+        token=entry.data[CONF_PASSWORD],  # Using the password/token for authentication
+        port=443,
+        ssl_context=ssl_context
+    )
+    hass.data.setdefault(KEY_MEASUREMENTS_CLIENT, {})[entry.entry_id] = measurements_client
+
+    # Initialize statistics coordinator for fetching and importing measurements
+    statistics_coordinator = StatisticsCoordinator(
+        hass=hass,
+        gateway=coco,
+        measurements_client=measurements_client,
+        config_entry=entry
+    )
+    hass.data.setdefault(KEY_STATISTICS_COORDINATOR, {})[entry.entry_id] = statistics_coordinator
 
     dev_reg = device_registry.async_get(hass)
     coco.set_systeminfo_callback(process_sysinfo(dev_reg))
-    coco.set_devices_list_callback(reload_entities())
+    
+    # Setup devices list callback that also triggers statistics import
+    def devices_list_callback_with_stats():
+        """Callback when devices list is loaded."""
+        reload_entities()()
+        
+        # After devices are loaded, start importing statistics
+        # Do this in the background to not block device initialization
+        async def start_statistics_import():
+            await statistics_coordinator.async_setup()
+            
+        hass.create_task(start_statistics_import())
+    
+    coco.set_devices_list_callback(devices_list_callback_with_stats)
 
     _LOGGER.debug('Connecting to %s', entry.data[CONF_HOST])
     coco.connect(on_connection_refused)
 
+    # Schedule periodic statistics updates at 2 minutes past each hour
+    # Only if statistics are enabled
+    if entry.options.get(CONF_ENABLE_STATISTICS, False):
+        async def update_statistics_periodically(now):
+            """Periodic task to update statistics."""
+            await statistics_coordinator.async_import_recent_data()
+
+        # Cancel any existing statistics timer before starting a new one
+        if entry.entry_id in hass.data.get(KEY_STATISTICS_TIMER_CANCEL, {}):
+            existing_cancel = hass.data[KEY_STATISTICS_TIMER_CANCEL][entry.entry_id]
+            if existing_cancel:
+                existing_cancel()
+
+        statistics_timer_cancel = async_track_time_change(
+            hass,
+            update_statistics_periodically,
+            hour=None,  # Every hour
+            minute=2,   # At 2 minutes past the hour
+            second=0
+        )
+        hass.data.setdefault(KEY_STATISTICS_TIMER_CANCEL, {})[entry.entry_id] = statistics_timer_cancel
+    else:
+        _LOGGER.debug("Periodic statistics updates disabled")
+    
+    # Listen for options updates
+    entry.async_on_unload(entry.add_update_listener(async_options_updated))
+    
+    # Register service for manual statistics import
+    async def handle_import_statistics(call):
+        """Handle the import_statistics service call."""
+        coordinator = hass.data[KEY_STATISTICS_COORDINATOR][entry.entry_id]
+        if coordinator:
+            import_type = call.data.get("import_type", "recent")
+            
+            if import_type in ["both", "longterm"]:
+                await coordinator.async_import_longterm_data()
+                _LOGGER.info("Long term statistics import completed")
+            
+            if import_type in ["both", "recent"]:
+                await coordinator.async_import_recent_data()
+                _LOGGER.info("Recent statistics update completed")
+                
+            _LOGGER.info("Manual statistics import completed (type: %s)", import_type)
+        else:
+            _LOGGER.error("Statistics coordinator not available")
+
+    hass.services.async_register(DOMAIN, "import_statistics", handle_import_statistics)
+
     return True
+
+
+async def async_options_updated(hass: HomeAssistant, entry: ConfigEntry):
+    """Handle options update."""
+    # Reload the integration to apply new options
+    await hass.config_entries.async_reload(entry.entry_id)
 
 
 async def async_remove_config_entry_device(

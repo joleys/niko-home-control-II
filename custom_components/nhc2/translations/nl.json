@@ -31,6 +31,14 @@
           "username": "Gebruikersnaam",
           "password": "Wachtwoord"
         }
+      },
+      "statistics_options": {
+        "title": "Statistieken Configuratie",
+        "description": "Configureer hoe metingen worden opgehaald van je controller **{host}**.\n\n**Statistieken inschakelen**: Haalt meetgegevens periodiek op via REST API en importeert als statistieken.\n\n**Statistieken importeren**: Eenmalige import van langetermijndata (tot 10 jaar terug als dagelijkse aggregaten, laatste twee maanden als uurlijkse).\n\n**Let op**: Langetermijnimport kan enige tijd duren afhankelijk van hoeveel data beschikbaar is. Recente data wordt automatisch elk uur bijgewerkt als statistieken zijn ingeschakeld.",
+        "data": {
+          "enable_statistics": "Statistieken inschakelen",
+          "import_statistics": "Statistieken importeren"
+        }
       }
     },
     "abort": {
@@ -114,6 +122,17 @@
           "login_check_fail_4": "Verbinding geweigerd - onjuiste gebruikersnaam of wachtwoord",
           "login_check_fail_5": "Verbinding geweigerd - niet geautoriseerd",
           "password_not_a_token": "Het ingegeven wachtwoord is geen geldig token"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Statistieken Opties",
+        "description": "Configureer statistieken instellingen.\n\n**Statistieken inschakelen**: Schakel in of uit om gegevens op te halen. Wijzigingen worden onmiddellijk van kracht.",
+        "data": {
+          "enable_statistics": "Statistieken inschakelen"
         }
       }
     }
