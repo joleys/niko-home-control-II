@@ -31,6 +31,10 @@ TWO_MONTHS_DAYS = 60
 MAX_HOURLY_INTERVAL_DAYS = 63  # API limitation for hourly aggregated data
 MAX_DAILY_INTERVAL_DAYS = 100  # API limitation for daily aggregated data
 
+UNIT_CONVERSIONS = {
+    "WaterVolume": 1000,
+}
+
 
 def align_to_hour(dt: datetime) -> datetime:
     aligned = dt.replace(minute=0, second=0, microsecond=0)
@@ -164,18 +168,30 @@ class StatisticsCoordinator:
     
         _LOGGER.debug(f"Importing data from {start_time} to {end_time} for {statistic_id}")
         return start_time, end_time
-
-    def _process_api_values(self, values: list, adjust_hour: bool = False) -> list[dict]:
+        
+    def _process_api_values(self, values: list, property_name: str, adjust_hour: bool = False) -> list[dict]:
         statistics_data = []
+    
         for value in values:
             if "DateTime" in value and "Value" in value and value["Value"] is not None:
                 dt = datetime.fromisoformat(value["DateTime"])
                 if dt.tzinfo is None:
                     dt = dt.replace(tzinfo=timezone.utc)
+    
                 if adjust_hour:
                     dt = dt - timedelta(hours=1)
-                statistics_data.append({"start": dt, "value": value["Value"]})
+    
+                val = value["Value"]
+                    
+                for key, factor in UNIT_CONVERSIONS.items():
+                    if key in property_name:
+                        val *= factor
+                        break
+
+                statistics_data.append({"start": dt, "value": val})
+    
         return statistics_data
+
 
     async def _fetch_aggregated_data(
         self,
@@ -200,7 +216,9 @@ class StatisticsCoordinator:
             )
             
             if data and "Values" in data:
-                statistics_data.extend(self._process_api_values(data["Values"], adjust_hour))
+                statistics_data.extend(
+                    self._process_api_values(data["Values"], property_name, adjust_hour)
+                )
             
             current_start = chunk_end
             
