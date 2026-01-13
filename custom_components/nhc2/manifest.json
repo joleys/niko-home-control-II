@@ -17,5 +17,5 @@
     "pyjwt",
     "aiohttp>=3.8.0"
   ],
-  "version": "v4.15.1"
+  "version": "v4.15.2"
 }
