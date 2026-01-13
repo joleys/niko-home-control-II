@@ -351,6 +351,7 @@ class CoCo:
                 # * are not supported by the API / MQTT broker
                 # * don't have any (usefull) properties
                 if classname in [
+                    'CocoAvout010VDimmer',
                     'CocoAvout010VFanFan',
                     'CocoAvout110VDimmer',
                     'CocoBatterypoweredmotiondetectorMotiondetector',
