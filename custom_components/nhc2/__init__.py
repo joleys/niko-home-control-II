@@ -9,7 +9,7 @@ from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, CONF_PORT, \
     EVENT_HOMEASSISTANT_STOP
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers import device_registry, issue_registry
+from homeassistant.helpers import device_registry, issue_registry, entity_registry as er
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.event import async_track_time_interval, async_track_time_change
 
@@ -44,6 +44,39 @@ CONFIG_SCHEMA = vol.Schema({
         vol.Optional(CONF_PORT): vol.All(vol.Coerce(int), vol.Range(min=0, max=65535))
     })
 }, extra=vol.ALLOW_EXTRA)
+
+
+async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Migrate old config entries to the latest version.
+
+    Version 1 → 2: update unique_id for controller update entity to be per-host,
+    preventing duplicate IDs when multiple controllers are configured.
+    """
+
+    if entry.version is None or entry.version < 2:
+        registry = er.async_get(hass)
+        old_unique_id = "controller_has_newer_config"
+        new_unique_id = f"{entry.data.get(CONF_HOST)}_controller_has_newer_config"
+
+        # Update any existing entity registry entries using the old unique_id
+        for entity_entry in list(registry.entities.values()):
+            if (
+                entity_entry.config_entry_id == entry.entry_id
+                and entity_entry.domain == "update"
+                and entity_entry.platform == DOMAIN
+                and entity_entry.unique_id == old_unique_id
+            ):
+                registry.async_update_entity(entity_entry.entity_id, new_unique_id=new_unique_id)
+
+        hass.config_entries.async_update_entry(entry, version=2)
+        _LOGGER.debug(
+            "Migrated nhc2 config entry %s to version %s (update unique_id %s)",
+            entry.entry_id,
+            2,
+            new_unique_id,
+        )
+
+    return True
 
 
 async def async_setup(hass, config):

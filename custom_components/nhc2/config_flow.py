@@ -32,7 +32,7 @@ REAUTH_SCHEMA = vol.Schema(
 class Nhc2FlowHandler(config_entries.ConfigFlow):
     """Config flow for NHC2 platform."""
 
-    VERSION = 1
+    VERSION = 2
     CONNECTION_CLASS = config_entries.CONN_CLASS_LOCAL_PUSH
 
     def __init__(self):
@@ -62,24 +62,34 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
 
         self._errors = {}
 
+        # Determine host from stored state (normal path) or fall back to user_input when provided
+        host = self._host or user_input.get(CONF_HOST)
+        if host is None:
+            self._errors["base"] = "no_controller_found"
+            return await self._show_host_config_form()
+
         # Make sure the controller is not already configured
-        matches = list(filter(lambda x: ((x.data[CONF_HOST] == user_input[CONF_HOST])),
-                                self.hass.config_entries.async_entries(DOMAIN)))
+        matches = list(
+            filter(
+                lambda x: x.data.get(CONF_HOST) == host,
+                self.hass.config_entries.async_entries(DOMAIN),
+            )
+        )
         if len(matches) > 0:
             return self.async_abort(reason="single_instance_allowed")
 
-        host = self._host
+        self._host = host
         password = user_input[CONF_PASSWORD]
 
         if not HobbyToken(password).is_a_token():
             self._errors["base"] = ("password_not_a_token")
-            return await self._show_user_config_form(user_input)
+            return await self._show_user_config_form()
     
         validator = CoCoLoginValidation(host, DEFAULT_USERNAME, password, DEFAULT_PORT)
         check = await validator.check_connection()
         if check > 0:
             self._errors["base"] = ("login_check_fail_%d" % check)
-            return await self._show_user_config_form(user_input)
+            return await self._show_user_config_form()
 
         # Store password for statistics options step
         self._password = password
