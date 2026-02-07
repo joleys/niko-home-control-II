@@ -34,6 +34,8 @@ from .entities.generic_domestichotwaterunit_coupling_status import Nhc2GenericDo
 from .entities.generic_energyhome_electrical_power_consumption import \
     Nhc2GenericEnergyhomeElectricalPowerConsumptionEntity
 from .entities.generic_energyhome_electrical_power_from_grid import Nhc2GenericEnergyhomeElectricalPowerFromGridEntity
+from .entities.generic_energyhome_electrical_monthly_peak_power_from_grid import \
+    Nhc2GenericEnergyhomeElectricalMonthlyPeakPowerFromGridEntity
 from .entities.generic_energyhome_electrical_power_production import \
     Nhc2GenericEnergyhomeElectricalPowerProductionEntity
 from .entities.generic_energyhome_electrical_power_self_consumption import \
@@ -300,6 +302,10 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                 entities.append(Nhc2GenericEnergyhomeElectricalPowerToGridEntity(device_instance, hub, gateway))
             if device_instance.supports_electrical_power_from_grid:
                 entities.append(Nhc2GenericEnergyhomeElectricalPowerFromGridEntity(device_instance, hub, gateway))
+            if device_instance.supports_electrical_monthly_peak_power_from_grid:
+                entities.append(
+                    Nhc2GenericEnergyhomeElectricalMonthlyPeakPowerFromGridEntity(device_instance, hub, gateway)
+                )
             if device_instance.supports_electrical_power_production:
                 entities.append(Nhc2GenericEnergyhomeElectricalPowerProductionEntity(device_instance, hub, gateway))
             if device_instance.supports_electrical_power_self_consumption:
