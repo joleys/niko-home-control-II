@@ -15,7 +15,8 @@ class Nhc2ControllerLatestConfigLoadedUpdateEntity(NHCBaseEntity, UpdateEntity):
         super().__init__(device_instance, hub, gateway)
 
         self._attr_available = True
-        self._attr_unique_id = 'controller_has_newer_config'
+        # Ensure uniqueness per configured controller (host) to avoid duplicate entity IDs
+        self._attr_unique_id = f"{gateway.address}_controller_has_newer_config"
         self._attr_auto_update = True
         self._attr_title = 'Controller Config'
 
