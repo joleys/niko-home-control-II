@@ -1,7 +1,8 @@
 from ..const import PROPERTY_ELECTRICAL_POWER_TO_GRID, PROPERTY_ELECTRICAL_POWER_FROM_GRID, \
     PROPERTY_ELECTRICAL_POWER_PRODUCTION, PROPERTY_ELECTRICAL_POWER_SELF_CONSUMPTION, PROPERTY_REPORT_INSTANT_USAGE, \
     PROPERTY_REPORT_INSTANT_USAGE_VALUE_TRUE, PROPERTY_ELECTRICAL_POWER_PRODUCTION_THRESHOLD_EXCEEDED, \
-    PROPERTY_ELECTRICAL_POWER_PRODUCTION_THRESHOLD_EXCEEDED_VALUE_TRUE, PROPERTY_ELECTRICAL_POWER_CONSUMPTION
+    PROPERTY_ELECTRICAL_POWER_PRODUCTION_THRESHOLD_EXCEEDED_VALUE_TRUE, PROPERTY_ELECTRICAL_POWER_CONSUMPTION, \
+    PROPERTY_ELECTRICAL_MONTHLY_PEAK_POWER_FROM_GRID
 from ..helpers import to_float_or_none
 from .device import CoCoDevice
 
@@ -22,6 +23,14 @@ class CocoGenericEnergyhome(CoCoDevice):
     @property
     def supports_electrical_power_from_grid(self) -> bool:
         return self.has_property(PROPERTY_ELECTRICAL_POWER_FROM_GRID)
+
+    @property
+    def electrical_monthly_peak_power_from_grid(self) -> float:
+        return to_float_or_none(self.extract_property_value(PROPERTY_ELECTRICAL_MONTHLY_PEAK_POWER_FROM_GRID))
+
+    @property
+    def supports_electrical_monthly_peak_power_from_grid(self) -> bool:
+        return self.has_property(PROPERTY_ELECTRICAL_MONTHLY_PEAK_POWER_FROM_GRID)
 
     @property
     def electrical_power_production(self) -> float:
