@@ -1,7 +1,8 @@
 from homeassistant.components.input_boolean import RestoreEntity
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.const import STATE_OFF, STATE_ON
-
+import logging
+_LOGGER = logging.getLogger(__name__)
 
 class NHCBaseEntity():
     def __init__(self, device_instance, hub, gateway):
@@ -17,6 +18,15 @@ class NHCBaseEntity():
         self._attr_state_class = None
 
     def on_change(self):
+        if self.hass is None:
+            # This is where we catch the ghost!
+            _LOGGER.warning(
+                "NHC2 Entity '%s' (UUID: %s) received an update but is not linked to Home Assistant. "
+                "This usually happens if the device was removed or is still initializing.",
+                self.name, 
+                self._device.uuid
+            )
+            return
         self._attr_available = self._device.is_online
         self.schedule_update_ha_state()
 
