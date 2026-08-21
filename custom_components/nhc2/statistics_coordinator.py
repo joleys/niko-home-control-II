@@ -12,6 +12,7 @@ from homeassistant.components.recorder.statistics import (
     StatisticMeanType,
 )
 from homeassistant.const import UnitOfEnergy, UnitOfVolume
+from homeassistant.util import dt as dt_util
 
 from .nhccoco.coco import CoCo
 from .nhccoco.measurements_client import MeasurementsClient
@@ -36,23 +37,17 @@ UNIT_CONVERSIONS = {
 }
 
 
+# The measurements API works in the controller's local time: request
+# intervals are interpreted as local time (any UTC offset in the string is
+# ignored) and returned DateTime values are naive local period starts.
+# Align and communicate in HA's configured timezone, convert to UTC only
+# for the recorder.
+
 def align_to_hour(dt: datetime) -> datetime:
-    aligned = dt.replace(minute=0, second=0, microsecond=0)
-    
-    # Ensure timezone info is present (assume UTC if missing)
-    if aligned.tzinfo is None:
-        aligned = aligned.replace(tzinfo=timezone.utc)
-    
-    return aligned
+    return dt_util.as_local(dt).replace(minute=0, second=0, microsecond=0)
 
 def align_to_midnight(dt: datetime) -> datetime:
-    aligned = dt.replace(hour=0, minute=0, second=0, microsecond=0)
-    
-    # Ensure timezone info is present (assume UTC if missing)
-    if aligned.tzinfo is None:
-        aligned = aligned.replace(tzinfo=timezone.utc)
-    
-    return aligned
+    return dt_util.as_local(dt).replace(hour=0, minute=0, second=0, microsecond=0)
 
 class StatisticsCoordinator:
     def __init__(
@@ -162,25 +157,20 @@ class StatisticsCoordinator:
             _LOGGER.info(f"No new data to import for {statistic_id}")
             return None
 
-        if not longterm:
-            start_time = start_time + timedelta(hours=1)
-            end_time = end_time + timedelta(hours=1)
-    
         _LOGGER.debug(f"Importing data from {start_time} to {end_time} for {statistic_id}")
         return start_time, end_time
         
-    def _process_api_values(self, values: list, property_name: str, adjust_hour: bool = False) -> list[dict]:
+    def _process_api_values(self, values: list, property_name: str) -> list[dict]:
         statistics_data = []
-    
+
         for value in values:
             if "DateTime" in value and "Value" in value and value["Value"] is not None:
                 dt = datetime.fromisoformat(value["DateTime"])
                 if dt.tzinfo is None:
-                    dt = dt.replace(tzinfo=timezone.utc)
-    
-                if adjust_hour:
-                    dt = dt - timedelta(hours=1)
-    
+                    # Naive timestamps are local period starts
+                    dt = dt.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)
+                dt = dt_util.as_utc(dt)
+
                 val = value["Value"]
                     
                 for key, factor in UNIT_CONVERSIONS.items():
@@ -201,7 +191,6 @@ class StatisticsCoordinator:
         end_time: datetime,
         period: str,
         max_days: int,
-        adjust_hour: bool = False
     ) -> list[dict]:
         _LOGGER.info(f"Fetching {period} aggregated data from {start_time} to {end_time}")
         statistics_data = []
@@ -211,15 +200,21 @@ class StatisticsCoordinator:
             chunk_end = min(current_start + timedelta(days=max_days), end_time)
             _LOGGER.debug(f"Fetching {period} chunk from {current_start} to {chunk_end}")
 
+            # The API expects naive local timestamps
             data = await self._measurements_client.get_aggregated_measurements(
-                device.uuid, property_name, period, current_start, chunk_end, "sum"
+                device.uuid,
+                property_name,
+                period,
+                dt_util.as_local(current_start).replace(tzinfo=None),
+                dt_util.as_local(chunk_end).replace(tzinfo=None),
+                "sum",
             )
-            
+
             if data and "Values" in data:
                 statistics_data.extend(
-                    self._process_api_values(data["Values"], property_name, adjust_hour)
+                    self._process_api_values(data["Values"], property_name)
                 )
-            
+
             current_start = chunk_end
             
         _LOGGER.debug(f"Retrieved {len(statistics_data)} {period} data points")
@@ -236,7 +231,7 @@ class StatisticsCoordinator:
         self, device: CoCoDevice, property_name: str, start_time: datetime, end_time: datetime
     ) -> list[dict]:
         return await self._fetch_aggregated_data(
-            device, property_name, start_time, end_time, "hour", MAX_HOURLY_INTERVAL_DAYS, adjust_hour=True
+            device, property_name, start_time, end_time, "hour", MAX_HOURLY_INTERVAL_DAYS
         )
 
     def _build_statistic_entries(self, statistics_data: list[dict], initial_sum: float) -> list[StatisticData]:
