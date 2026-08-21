@@ -172,7 +172,9 @@ class CoCoDevice():
         if DEVICE_DESCRIPTOR_ONLINE in payload:
             self._online = payload[DEVICE_DESCRIPTOR_ONLINE] == DEVICE_DESCRIPTOR_ONLINE_VALUE_TRUE
 
-        for callback in self._after_change_callbacks:
+        # Iterate over a snapshot: entities register/deregister their callbacks
+        # from the HA event loop while this runs on the MQTT thread.
+        for callback in list(self._after_change_callbacks):
             callback()
 
     def set_disconnected(self):

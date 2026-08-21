@@ -33,6 +33,9 @@ class Nhc2NasoSmartplugReportInstantUsageEntity(NHCBaseEntity, BinarySensorEntit
     def on_change(self):
         super().on_change()
 
+        if self.hass is None:
+            return
+
         # Re-enable reporting when it is turned off
         if self._device.is_report_instant_usage is False and not self._is_report_instant_usage_re_enabling_disabled():
             self._device.enable_report_instant_usage(self._gateway)
