@@ -1,5 +1,7 @@
 pytest
-pytest-homeassistant-custom-component
+# The tests mock hass, so only Home Assistant itself is needed (for dt_util),
+# not the full pytest-homeassistant-custom-component fixture harness.
+homeassistant>=2026.2
 freezegun
 paho-mqtt>=1.6.1
 pyjwt
