@@ -44,10 +44,10 @@ UNIT_CONVERSIONS = {
 # for the recorder.
 
 def align_to_hour(dt: datetime) -> datetime:
-    return dt_util.as_local(dt).replace(minute=0, second=0, microsecond=0)
+    return dt_util.as_utc(dt_util.as_local(dt).replace(minute=0, second=0, microsecond=0))
 
 def align_to_midnight(dt: datetime) -> datetime:
-    return dt_util.as_local(dt).replace(hour=0, minute=0, second=0, microsecond=0)
+    return dt_util.as_utc(dt_util.as_local(dt).replace(hour=0, minute=0, second=0, microsecond=0))
 
 class StatisticsCoordinator:
     def __init__(

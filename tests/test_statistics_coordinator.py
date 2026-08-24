@@ -45,11 +45,14 @@ class TestAlignment:
         aligned = align_to_hour(datetime(2026, 7, 15, 12, 30, 59, tzinfo=UTC))
         assert aligned == datetime(2026, 7, 15, 12, 0, tzinfo=UTC)
         assert aligned.astimezone(BRUSSELS).minute == 0
+        # returned as a UTC instant, aligned to the local hour boundary
+        assert aligned.utcoffset().total_seconds() == 0
 
     def test_align_to_midnight_uses_local_midnight(self):
         aligned = align_to_midnight(datetime(2026, 7, 15, 12, 30, tzinfo=UTC))
         # local midnight 2026-07-15 CEST == 2026-07-14 22:00 UTC
         assert aligned == datetime(2026, 7, 14, 22, 0, tzinfo=UTC)
+        assert aligned.utcoffset().total_seconds() == 0
 
     def test_align_to_midnight_uses_local_midnight_in_winter(self):
         aligned = align_to_midnight(datetime(2026, 1, 15, 12, 30, tzinfo=UTC))
