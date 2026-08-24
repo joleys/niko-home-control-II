@@ -17,7 +17,8 @@ class NHCBaseEntity():
 
     async def async_added_to_hass(self) -> None:
         await super().async_added_to_hass()
-        self._device.after_change_callbacks.append(self.on_change)
+        if self.on_change not in self._device.after_change_callbacks:
+            self._device.after_change_callbacks.append(self.on_change)
 
     async def async_will_remove_from_hass(self) -> None:
         if self.on_change in self._device.after_change_callbacks:
