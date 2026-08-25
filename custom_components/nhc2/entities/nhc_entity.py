@@ -10,12 +10,20 @@ class NHCBaseEntity():
         self._hub = hub
         self._gateway = gateway
 
-        self._device.after_change_callbacks.append(self.on_change)
-
         self._attr_available = self._device.is_online
         self._attr_should_poll = False
         self._attr_device_info = self._device.device_info(self._hub)
         self._attr_state_class = None
+
+    async def async_added_to_hass(self) -> None:
+        await super().async_added_to_hass()
+        if self.on_change not in self._device.after_change_callbacks:
+            self._device.after_change_callbacks.append(self.on_change)
+
+    async def async_will_remove_from_hass(self) -> None:
+        if self.on_change in self._device.after_change_callbacks:
+            self._device.after_change_callbacks.remove(self.on_change)
+        await super().async_will_remove_from_hass()
 
     def on_change(self):
         if self.hass is None:
@@ -23,7 +31,7 @@ class NHCBaseEntity():
             _LOGGER.warning(
                 "NHC2 Entity '%s' (UUID: %s) received an update but is not linked to Home Assistant. "
                 "This usually happens if the device was removed or is still initializing.",
-                self.name, 
+                self.name,
                 self._device.uuid
             )
             return

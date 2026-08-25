@@ -31,7 +31,9 @@ class CocoController:
             if self._first_time_devices_list_received is None:
                 self._first_time_devices_list_received = self._last_time_devices_list_received
 
-        for callback in self._after_change_callbacks:
+        # Iterate over a snapshot: entities register/deregister their callbacks
+        # from the HA event loop while this runs on the MQTT thread.
+        for callback in list(self._after_change_callbacks):
             callback()
 
     def set_disconnected(self):
