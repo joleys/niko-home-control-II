@@ -21,3 +21,8 @@ bin
 lib
 pyvenv.cfg
 .DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
