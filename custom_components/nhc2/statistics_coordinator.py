@@ -61,6 +61,11 @@ class StatisticsCoordinator:
         self._gateway = gateway
         self._measurements_client = measurements_client
         self._config_entry = config_entry
+        # Statistic ids already reported as empty. A device can advertise a
+        # measurement property the controller has no data for at all (an
+        # unconnected water meter, say), which otherwise warns on every hourly
+        # import for as long as Home Assistant runs.
+        self._reported_empty: set[str] = set()
 
     async def async_setup(self):
         # Check if statistics are enabled
@@ -306,8 +311,14 @@ class StatisticsCoordinator:
             statistics_data = await self._fetch_hourly_data(device, property_name, start_time, end_time)
 
         if not statistics_data:
-            _LOGGER.warning(f"No measurement data retrieved for {statistic_id}")
+            if statistic_id in self._reported_empty:
+                _LOGGER.debug(f"Still no measurement data for {statistic_id}")
+            else:
+                self._reported_empty.add(statistic_id)
+                _LOGGER.warning(f"No measurement data retrieved for {statistic_id}")
             return
+
+        self._reported_empty.discard(statistic_id)
 
         initial_sum = 0
         if statistic_id in last_stats and last_stats[statistic_id]:

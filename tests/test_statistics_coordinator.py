@@ -226,3 +226,66 @@ class TestCalculateTimeRange:
             coordinator._calculate_time_range(statistic_id, last_stats, longterm=False)
             is None
         )
+
+
+class TestEmptyMeasurementLogging:
+    """A property the controller has no data for must not warn every hour.
+
+    Two of the devices on my installation advertise a measurement property
+    (a water meter and a submeter) that the API has never returned a single
+    value for, which warned on every hourly import.
+    """
+
+    def _make_silent_coordinator(self, monkeypatch):
+        coordinator = make_coordinator()
+        statistic_id = "nhc2:abc_watervolume"
+
+        monkeypatch.setattr(
+            StatisticsCoordinator, "_generate_statistic_id", lambda *_: statistic_id
+        )
+        monkeypatch.setattr(
+            StatisticsCoordinator,
+            "_calculate_time_range",
+            lambda *_, **__: (datetime(2026, 9, 13, tzinfo=UTC), datetime(2026, 9, 14, tzinfo=UTC)),
+        )
+        monkeypatch.setattr(
+            StatisticsCoordinator, "_fetch_hourly_data", AsyncMock(return_value=[])
+        )
+        coordinator._hass = MagicMock()
+        return coordinator, statistic_id
+
+    def _import(self, coordinator, monkeypatch):
+        monkeypatch.setattr(
+            "custom_components.nhc2.statistics_coordinator.get_instance",
+            lambda _hass: MagicMock(async_add_executor_job=AsyncMock(return_value={})),
+        )
+        asyncio.run(coordinator._import_property_data(MagicMock(), "WaterVolume"))
+
+    def test_warns_once_then_stays_quiet(self, monkeypatch, caplog):
+        coordinator, statistic_id = self._make_silent_coordinator(monkeypatch)
+
+        for _ in range(4):
+            self._import(coordinator, monkeypatch)
+
+        warnings = [r for r in caplog.records if r.levelname == "WARNING"]
+        assert len(warnings) == 1
+        assert statistic_id in warnings[0].message
+        assert statistic_id in coordinator._reported_empty
+
+    def test_data_coming_back_rearms_the_warning(self, monkeypatch):
+        coordinator, statistic_id = self._make_silent_coordinator(monkeypatch)
+        self._import(coordinator, monkeypatch)
+        assert statistic_id in coordinator._reported_empty
+
+        monkeypatch.setattr(
+            StatisticsCoordinator,
+            "_fetch_hourly_data",
+            AsyncMock(return_value=[{"start": datetime(2026, 9, 13, tzinfo=UTC), "value": 1.0}]),
+        )
+        monkeypatch.setattr(
+            "custom_components.nhc2.statistics_coordinator.async_add_external_statistics",
+            MagicMock(),
+        )
+        self._import(coordinator, monkeypatch)
+
+        assert statistic_id not in coordinator._reported_empty
