@@ -180,7 +180,7 @@ class CoCoDevice():
     def set_disconnected(self):
         self._online = False
 
-    def device_info(self, hub: str):
+    def device_info(self, hub):
         """Return the device info."""
 
         manufacturer = BRAND
@@ -196,6 +196,6 @@ class CoCoDevice():
             'name': self.name,
             'manufacturer': manufacturer,
             'model': str.title(f'{self.model} ({self.type})'),
-            'via_device': hub,
+            'via_device_id': hub.device_id,
             'suggested_area': self.suggested_area,
         }

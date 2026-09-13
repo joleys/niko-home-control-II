@@ -1,8 +1,6 @@
 """Support for NHC2 numbers."""
 import logging
 
-from homeassistant.const import CONF_USERNAME
-
 from .nhccoco.coco import CoCo
 
 from .entities.generic_chargingstation_target_distance import Nhc2GenericChargingstationTargetDistanceEntity
@@ -11,7 +9,9 @@ from .entities.generic_domestichotwaterunit_domestic_hot_water_temperature impor
 from .nhccoco.devices.generic_chargingstation import CocoGenericChargingstation
 from .nhccoco.devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
 
-from .const import DOMAIN, KEY_GATEWAY
+from .const import KEY_GATEWAY
+
+from .hub import async_get_hub
 
 KEY_ENTITY = 'nhc2_numbers'
 
@@ -24,7 +24,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     hass.data.setdefault(KEY_ENTITY, {})[config_entry.entry_id] = []
 
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
-    hub = (DOMAIN, config_entry.data[CONF_USERNAME])
+    hub = async_get_hub(hass, config_entry)
 
     device_instances = gateway.get_device_instances(CocoGenericDomestichotwaterunit)
     _LOGGER.info('→ Found %s Generic Warm Water Implementation', len(device_instances))

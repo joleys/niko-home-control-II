@@ -28,7 +28,7 @@ class Nhc2ControllerLatestConfigLoadedUpdateEntity(NHCBaseEntity, UpdateEntity):
     def device_info(self):
         return {
             'identifiers': {
-                (DOMAIN, self._hub[1])
+                (DOMAIN, self._hub.identifier)
             },
         }
 

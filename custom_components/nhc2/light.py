@@ -3,7 +3,6 @@ import logging
 
 import voluptuous as vol
 
-from homeassistant.const import CONF_USERNAME
 from homeassistant.helpers import entity_platform
 
 from .nhccoco.coco import CoCo
@@ -18,8 +17,10 @@ from .nhccoco.devices.dimmer_action import CocoDimmerAction
 from .nhccoco.devices.tunablewhite_action import CocoTunablewhiteAction
 from .nhccoco.devices.tunablewhiteandcolor_action import CocoTunablewhiteandcolorAction
 
-from .const import DOMAIN, KEY_GATEWAY, SERVICE_SET_LIGHT_BRIGHTNESS, ATTR_LIGHT_BRIGHTNESS, SERVICE_SET_LIGHT_COLOR, \
+from .const import KEY_GATEWAY, SERVICE_SET_LIGHT_BRIGHTNESS, ATTR_LIGHT_BRIGHTNESS, SERVICE_SET_LIGHT_COLOR, \
     ATTR_LIGHT_COLOR
+
+from .hub import async_get_hub
 
 KEY_ENTITY = 'nhc2_lights'
 
@@ -32,7 +33,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     hass.data.setdefault(KEY_ENTITY, {})[config_entry.entry_id] = []
 
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
-    hub = (DOMAIN, config_entry.data[CONF_USERNAME])
+    hub = async_get_hub(hass, config_entry)
 
     device_instances = []
     device_instances += gateway.get_device_instances(CocoLightAction)

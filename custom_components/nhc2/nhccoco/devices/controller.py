@@ -43,5 +43,5 @@ class CocoController:
     def is_online(self) -> bool:
         return True
 
-    def device_info(self, hub: str):
+    def device_info(self, hub):
         return {}

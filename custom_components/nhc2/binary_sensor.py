@@ -1,7 +1,5 @@
 import logging
 
-from homeassistant.const import CONF_USERNAME
-
 from .nhccoco.coco import CoCo
 
 from .entities.accesscontrol_action_call_answered import Nhc2AccesscontrolActionCallAnsweredEntity
@@ -85,7 +83,9 @@ from .nhccoco.devices.tunablewhite_action import CocoTunablewhiteAction
 from .nhccoco.devices.tunablewhiteandcolor_action import CocoTunablewhiteandcolorAction
 from .nhccoco.devices.venetianblind_action import CocoVenetianblindAction
 
-from .const import DOMAIN, KEY_GATEWAY
+from .const import KEY_GATEWAY
+
+from .hub import async_get_hub
 
 KEY_ENTITY = 'nhc2_binary_sensors'
 
@@ -98,7 +98,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     hass.data.setdefault(KEY_ENTITY, {})[config_entry.entry_id] = []
 
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
-    hub = (DOMAIN, config_entry.data[CONF_USERNAME])
+    hub = async_get_hub(hass, config_entry)
 
     device_instances = gateway.get_device_instances(CocoAccesscontrolAction)
     _LOGGER.info('→ Found %s NHC Access Control Actions', len(device_instances))

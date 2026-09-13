@@ -33,6 +33,7 @@ from .nhccoco.coco import CoCo
 from .nhccoco.measurements_client import MeasurementsClient
 from .statistics_coordinator import StatisticsCoordinator
 from .hobbytoken import HobbyToken
+from .hub import async_controller_identifiers
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -208,9 +209,7 @@ async def async_setup_entry(hass, entry):
                 return dev_reg.async_get_or_create(
                     config_entry_id=entry.entry_id,
                     connections=set(),
-                    identifiers={
-                        (DOMAIN, entry.data[CONF_USERNAME])
-                    },
+                    identifiers=async_controller_identifiers(entry),
                     manufacturer=BRAND,
                     name='Home Control II',
                     model='Connected controller',
