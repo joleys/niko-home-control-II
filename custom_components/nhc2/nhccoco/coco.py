@@ -105,6 +105,9 @@ class CoCo:
             'controller': CocoController()
         }
         self._entries_initialized = False
+        # Device types we have already reported as unsupported, so each one is
+        # named once instead of on every devices.list.
+        self._unsupported_classnames = set()
 
     @property
     def entries_initialized(self):
@@ -445,12 +448,33 @@ class CoCo:
                     _LOGGER.debug(f"Skipping {device[MQTT_DATA_PARAMS_DEVICES_UUID]} of {classname} - no properties")
                     continue
 
-                instance = getattr(sys.modules[__name__], classname)(json_to_map(device))
+                device_class = getattr(sys.modules[__name__], classname, None)
+                if device_class is None:
+                    # Niko keeps adding device types and the skip list above
+                    # only covers the ones we know about, so a type we have no
+                    # class for is unsupported rather than broken. Say so once
+                    # per type -- these reports are how device support grows --
+                    # and then stop repeating it on every devices.list.
+                    if classname in self._unsupported_classnames:
+                        _LOGGER.debug(
+                            f"Skipping {device[MQTT_DATA_PARAMS_DEVICES_UUID]} "
+                            f"of unsupported device type {classname}"
+                        )
+                    else:
+                        self._unsupported_classnames.add(classname)
+                        _LOGGER.warning(
+                            f"Device type {classname} is not supported yet, "
+                            f"skipping {device[MQTT_DATA_PARAMS_DEVICES_UUID]}. "
+                            f"Please report it so it can be added."
+                        )
+                    continue
+
+                instance = device_class(json_to_map(device))
                 self._device_instances[instance.uuid] = instance
                 _LOGGER.debug(f"Added device {instance.uuid} of class {classname}")
                 changes = True
             except Exception as e:
-                _LOGGER.warning(f"Class {classname} not found: {e}")
+                _LOGGER.warning(f"Could not add device of class {classname}: {e}")
 
         return changes
 
