@@ -1,14 +1,14 @@
 """Support for NHC2 Camera's."""
 import logging
 
-from homeassistant.const import CONF_USERNAME
-
 from .nhccoco.coco import CoCo
 
 from .entities.robinsip_videodoorstation_camera import Nhc2RobinsipVideodoorstationCameraEntity
 from .nhccoco.devices.robinsip_videodoorstation import CocoRobinsipVideodoorstation
 
-from .const import DOMAIN, KEY_GATEWAY
+from .const import KEY_GATEWAY
+
+from .hub import async_get_hub
 
 KEY_ENTITY = 'nhc2_cameras'
 
@@ -21,7 +21,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     hass.data.setdefault(KEY_ENTITY, {})[config_entry.entry_id] = []
 
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
-    hub = (DOMAIN, config_entry.data[CONF_USERNAME])
+    hub = async_get_hub(hass, config_entry)
 
     device_instances = gateway.get_device_instances(CocoRobinsipVideodoorstation)
     _LOGGER.info('→ Found %s Robinsip Videodoorstations (undocumented)', len(device_instances))

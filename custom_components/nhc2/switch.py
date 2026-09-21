@@ -1,8 +1,6 @@
 """Support for NHC2 switches."""
 import logging
 
-from homeassistant.const import CONF_USERNAME
-
 from .entities.generic_chargingstation_boost import Nhc2GenericChargingstationBoostEntity
 from .nhccoco.coco import CoCo
 
@@ -73,7 +71,9 @@ from .nhccoco.devices.touchswitch_hvac import CocoTouchswitchHvac
 from .nhccoco.devices.virtual_hvac import CocoVirtualHvac
 from .nhccoco.devices.virtual_thermostat import CocoVirtualThermostat
 
-from .const import DOMAIN, KEY_GATEWAY
+from .const import KEY_GATEWAY
+
+from .hub import async_get_hub
 
 KEY_ENTITY = 'nhc2_switches'
 
@@ -86,7 +86,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     hass.data.setdefault(KEY_ENTITY, {})[config_entry.entry_id] = []
 
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
-    hub = (DOMAIN, config_entry.data[CONF_USERNAME])
+    hub = async_get_hub(hass, config_entry)
 
     device_instances = gateway.get_device_instances(CocoAccesscontrolAction)
     _LOGGER.info('→ Found %s NHC Access Control Actions', len(device_instances))

@@ -1,14 +1,14 @@
 """Support for NHC2 time."""
 import logging
 
-from homeassistant.const import CONF_USERNAME
-
 from .nhccoco.coco import CoCo
 
 from .entities.generic_chargingstation_target_time import Nhc2GenericChargingstationTargetTimeEntity
 from .nhccoco.devices.generic_chargingstation import CocoGenericChargingstation
 
-from .const import DOMAIN, KEY_GATEWAY
+from .const import KEY_GATEWAY
+
+from .hub import async_get_hub
 
 KEY_ENTITY = 'nhc2_times'
 
@@ -21,7 +21,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     hass.data.setdefault(KEY_ENTITY, {})[config_entry.entry_id] = []
 
     gateway: CoCo = hass.data[KEY_GATEWAY][config_entry.entry_id]
-    hub = (DOMAIN, config_entry.data[CONF_USERNAME])
+    hub = async_get_hub(hass, config_entry)
 
     device_instances = gateway.get_device_instances(CocoGenericChargingstation)
     _LOGGER.info('→ Found %s Generic Chargingstation Implementation', len(device_instances))
