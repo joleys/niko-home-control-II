@@ -20,6 +20,7 @@ from .entities.comfort_action_all_started import Nhc2ComfortActionAllStartedEnti
 from .entities.comfort_action_basicstate import Nhc2ComfortActionBasicStateEntity
 from .entities.comfort_action_mood_active import Nhc2ComfortActionMoodActiveEntity
 from .entities.dimmer_action_aligned import Nhc2DimmerActionAlignedEntity
+from .entities.flux_fan_filter_status import Nhc2FluxFanFilterStatusEntity
 from .entities.electricalheating_action_basicstate import Nhc2ElectricalheatingActionBasicStateEntity
 from .entities.electricity_clamp_centralmeter_inverted import Nhc2ElectricityClampCentralmeterInvertedEntity
 from .entities.electricity_clamp_centralmeter_inverted1 import Nhc2ElectricityClampCentralmeterInverted1Entity
@@ -64,6 +65,7 @@ from .nhccoco.devices.comfort_action import CocoComfortAction
 from .nhccoco.devices.dimmer_action import CocoDimmerAction
 from .nhccoco.devices.electricalheating_action import CocoElectricalheatingAction
 from .nhccoco.devices.electricity_clamp_centralmeter import CocoElectricityClampCentralmeter
+from .nhccoco.devices.flux_fan import CocoFluxFan
 from .nhccoco.devices.garagedoor_action import CocoGaragedoorAction
 from .nhccoco.devices.gate_action import CocoGateAction
 from .nhccoco.devices.generic_action import CocoGenericAction
@@ -174,6 +176,16 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         for device_instance in device_instances:
             if device_instance.supports_port_closed:
                 entities.append(Nhc2GaragedoorActionPortClosedEntity(device_instance, hub, gateway))
+
+        async_add_entities(entities)
+
+    device_instances = gateway.get_device_instances(CocoFluxFan)
+    _LOGGER.info('→ Found %s Renson Flux Fans', len(device_instances))
+    if len(device_instances) > 0:
+        entities = []
+        for device_instance in device_instances:
+            if device_instance.supports_filter_status:
+                entities.append(Nhc2FluxFanFilterStatusEntity(device_instance, hub, gateway))
 
         async_add_entities(entities)
 
