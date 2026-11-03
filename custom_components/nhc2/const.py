@@ -20,6 +20,6 @@ CONF_IMPORT_HISTORICAL_STATISTICS = 'import_statistics'
 CONF_HISTORICAL_STATISTICS_IMPORTED = 'historical_statistics_imported'
 
 # Properties starting with these prefixes will have their measurements retrieved from REST API
-MEASUREMENT_PROPERTIES_FILTER = ['ElectricalEnergy', 'WaterVolume', 'GasVolume']
+MEASUREMENT_PROPERTIES_FILTER = ['ElectricalEnergy', 'WaterVolume', 'GasVolume', 'GasCost', 'WaterCost']
 # How far back to retrieve historical data (in days)
 MEASUREMENT_HISTORY_DAYS = 3650  # 10 years
