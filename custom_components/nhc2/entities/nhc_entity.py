@@ -1,4 +1,4 @@
-from homeassistant.components.input_boolean import RestoreEntity
+from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.const import STATE_OFF, STATE_ON
 import logging
