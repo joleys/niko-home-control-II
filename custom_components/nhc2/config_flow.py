@@ -33,7 +33,6 @@ class Nhc2FlowHandler(config_entries.ConfigFlow):
     """Config flow for NHC2 platform."""
 
     VERSION = 2
-    CONNECTION_CLASS = config_entries.CONN_CLASS_LOCAL_PUSH
 
     def __init__(self):
         """Init NHC2FlowHandler."""
