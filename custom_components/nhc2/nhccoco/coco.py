@@ -26,6 +26,7 @@ from .devices.fan_action import CocoFanAction
 from .devices.flag_action import CocoFlagAction
 from .devices.flag_virtual import CocoFlagVirtual
 from .devices.garagedoor_action import CocoGaragedoorAction
+from .devices.gas_centralmeter import CocoGasCentralmeter
 from .devices.gate_action import CocoGateAction
 from .devices.generic_action import CocoGenericAction
 from .devices.generic_domestichotwaterunit import CocoGenericDomestichotwaterunit
@@ -74,6 +75,7 @@ from .devices.velux_action import CocoVeluxAction
 from .devices.venetianblind_action import CocoVenetianblindAction
 from .devices.virtual_hvac import CocoVirtualHvac
 from .devices.virtual_thermostat import CocoVirtualThermostat
+from .devices.water_centralmeter import CocoWaterCentralmeter
 
 from .const import *
 from .helpers import *
@@ -383,7 +385,6 @@ class CoCo:
                     'CocoExtensionbuttonx1Smartextensionpanel',
                     'CocoExternalsystemDigitalsensor',
                     'CocoFanFan',
-                    'CocoGasCentralmeter',
                     'CocoGenericAudiocontrol',
                     'CocoGenericBrick',
                     'CocoGenericChargingstation',
@@ -437,7 +438,6 @@ class CoCo:
                     'CocoVeluxKlf200Motor',
                     'CocoVenetianblindMotor',
                     'CocoVentilationcontrollerfeedbackPanel',
-                    'CocoWaterCentralmeter',
                     'CocoZonevalveHvac'
                 ]:
                     _LOGGER.debug(f"Skipping {device[MQTT_DATA_PARAMS_DEVICES_UUID]} of {classname}")
